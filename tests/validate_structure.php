@@ -187,6 +187,19 @@ if ($helperConfig !== null) {
     }
 }
 
+$codeqlWorkflowPath = $root . '/.github/workflows/codeql-analysis.yml';
+$codeqlWorkflow = file_get_contents($codeqlWorkflowPath);
+if ($codeqlWorkflow === false) {
+    $errors[] = 'Cannot read .github/workflows/codeql-analysis.yml';
+} else {
+    if (preg_match('/^\s*-\s+javascript-typescript\s*$/m', $codeqlWorkflow) !== 1) {
+        $errors[] = 'CodeQL must analyze the JavaScript/TypeScript sources.';
+    }
+    if (preg_match('/^\s*-\s+php\s*$/m', $codeqlWorkflow) === 1) {
+        $errors[] = 'CodeQL does not support PHP; PHP compatibility is checked by the Tests workflow.';
+    }
+}
+
 if ($errors !== []) {
     fwrite(STDERR, "JSLive structure validation failed:\n - " . implode("\n - ", $errors) . "\n");
     exit(1);
