@@ -42,10 +42,10 @@ class SymconJSLive extends WebHookModule {
 
         //update all submoduls
         $sendData = array("cmd" => "UpdateCache", "instance" => 0);
-        $this->SendDataToChildren(json_encode([
-            'DataID' => "{79D59629-E9C5-44F1-0F34-0FBC5C88F307}",
-            'Buffer' => utf8_encode(json_encode($sendData))
-        ]));
+        $this->SendDataToChildren($this->EncodeDataFlowMessage(
+            '{79D59629-E9C5-44F1-0F34-0FBC5C88F307}',
+            ['Buffer' => json_encode($sendData, JSON_THROW_ON_ERROR)]
+        ));
     }
 
     /**
@@ -187,10 +187,10 @@ class SymconJSLive extends WebHookModule {
             header('Access-Control-Allow-Origin: *');
 
             $sendData = array("cmd" => $Type, "instance" => $queryData["instance"], "queryData" => $queryData);
-            $contend = $this->SendDataToChildren(json_encode([
-                'DataID' => "{79D59629-E9C5-44F1-0F34-0FBC5C88F307}",
-                'Buffer' => utf8_encode(json_encode($sendData))
-            ]));
+            $contend = $this->SendDataToChildren($this->EncodeDataFlowMessage(
+                '{79D59629-E9C5-44F1-0F34-0FBC5C88F307}',
+                ['Buffer' => json_encode($sendData, JSON_THROW_ON_ERROR)]
+            ));
 
             if (!is_array($contend) || count($contend) == 0){
                 $this->SendDebug("WebHook-".$Type, "NO INSTANCE FOUND!", 0);

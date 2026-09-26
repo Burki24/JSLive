@@ -1,7 +1,11 @@
 <?php
 
+require_once dirname(__DIR__, 2) . '/libs/helper/DataFlowHelper.php';
+
 class JSLiveModule extends IPSModule
 {
+    use \Burki24\SymconModuleHelper\DataFlowHelper;
+
     protected function GetFonts(){
         $font_list = array();
         //alle fonts settings finden
@@ -102,19 +106,19 @@ class JSLiveModule extends IPSModule
     }
     public function GetLink(){
         $sendData = array("InstanceID" => $this->InstanceID, "Type" => "GetLink");
-        $pData = $this->SendDataToParent(json_encode([
-            'DataID' => "{751AABD7-E31D-024C-5CC0-82AC15B84095}",
-            'Buffer' => utf8_encode(json_encode($sendData)),
-        ]));
+        $pData = $this->SendDataToParent($this->EncodeDataFlowMessage(
+            '{751AABD7-E31D-024C-5CC0-82AC15B84095}',
+            ['Buffer' => json_encode($sendData, JSON_THROW_ON_ERROR)]
+        ));
 
         return $pData;
     }
     public function GetLocalLink(){
         $sendData = array("InstanceID" => $this->InstanceID, "Type" => "GetLocalLink");
-        $pData = $this->SendDataToParent(json_encode([
-            'DataID' => "{751AABD7-E31D-024C-5CC0-82AC15B84095}",
-            'Buffer' => utf8_encode(json_encode($sendData)),
-        ]));
+        $pData = $this->SendDataToParent($this->EncodeDataFlowMessage(
+            '{751AABD7-E31D-024C-5CC0-82AC15B84095}',
+            ['Buffer' => json_encode($sendData, JSON_THROW_ON_ERROR)]
+        ));
 
         return $pData;
     }
@@ -327,10 +331,10 @@ class JSLiveModule extends IPSModule
     }
     public function GetConfigurationLink(bool $withScript){
         $sendData = array("InstanceID" => $this->InstanceID, "Type" => "GetConfigurationLink");
-        $pData = $this->SendDataToParent(json_encode([
-            'DataID' => "{751AABD7-E31D-024C-5CC0-82AC15B84095}",
-            'Buffer' => utf8_encode(json_encode($sendData)),
-        ]));
+        $pData = $this->SendDataToParent($this->EncodeDataFlowMessage(
+            '{751AABD7-E31D-024C-5CC0-82AC15B84095}',
+            ['Buffer' => json_encode($sendData, JSON_THROW_ON_ERROR)]
+        ));
 
         if($withScript) $pData .= "&scripts=1";
 
@@ -338,10 +342,10 @@ class JSLiveModule extends IPSModule
     }
     public function GetGlobalConfiguration(){
         $sendData = array("InstanceID" => $this->InstanceID, "Type" => "GetGlobalConfiguartion");
-        $pData = $this->SendDataToParent(json_encode([
-            'DataID' => "{751AABD7-E31D-024C-5CC0-82AC15B84095}",
-            'Buffer' => utf8_encode(json_encode($sendData)),
-        ]));
+        $pData = $this->SendDataToParent($this->EncodeDataFlowMessage(
+            '{751AABD7-E31D-024C-5CC0-82AC15B84095}',
+            ['Buffer' => json_encode($sendData, JSON_THROW_ON_ERROR)]
+        ));
 
         return json_decode($pData, true);
     }
@@ -790,10 +794,10 @@ class JSLiveModule extends IPSModule
         $sendData["Type"] = "UpdateHtml";
         $sendData["ViewPort"] = $this->ReadPropertyBoolean("EnableViewport");
 
-        $pData = json_decode($this->SendDataToParent(json_encode([
-            'DataID' => "{751AABD7-E31D-024C-5CC0-82AC15B84095}",
-            'Buffer' => utf8_encode(json_encode($sendData)),
-        ])), true);
+        $pData = json_decode($this->SendDataToParent($this->EncodeDataFlowMessage(
+            '{751AABD7-E31D-024C-5CC0-82AC15B84095}',
+            ['Buffer' => json_encode($sendData, JSON_THROW_ON_ERROR)]
+        )), true);
 
         if ($this->ReadPropertyBoolean("EnableCache")) {
             $this->SetBuffer("Output", $pData["output"]);

@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+require_once dirname(__DIR__, 2) . '/libs/helper/DataFlowHelper.php';
+
 //Constants will be defined with IP-Symcon 5.0 and newer
 if (!defined('IPS_KERNELMESSAGE')) {
     define('IPS_KERNELMESSAGE', 10100);
@@ -11,6 +13,8 @@ if (!defined('KR_READY')) {
 
 class WebHookModule extends IPSModule
 {
+    use \Burki24\SymconModuleHelper\DataFlowHelper;
+
     private $hook = '';
 
     public function __construct($InstanceID, $hook)
