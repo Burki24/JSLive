@@ -132,6 +132,9 @@ Vorhandene lokale Pruefungen:
 - `tests/public-contracts.php`: maschinenlesbare Charakterisierung von 13
   Modulvertraegen und 15 PHP-Quellen mit derzeit 569 Properties, 10 Variablen,
   7 Actions, 107 oeffentlichen Methoden sowie den bestehenden Hook-Pfaden;
+- `tests/webhook-routing.php`: Verhaltens-Harness fuer Authentisierungs- und
+  Instanz-Gates, Data-ID/JSON-Umschlag, direkte globale Konfiguration und den
+  historischen Standardbefehl `getContend`;
 - `tests/data-flow-integration.php`: statische Charakterisierung der
   DataFlowHelper-Anbindung;
 - `tests/helper_integrity.py`: Versionen, Hashes und Vollstaendigkeit der
@@ -249,6 +252,9 @@ Begonnen: Der erste Vertrags-Snapshot liegt unter
 `tests/public-contracts.php` geprueft. Er fixiert Metadaten, Verbindungen,
 Properties, Variablen, Actions, oeffentliche Methoden und Hook-Pfade, ohne
 bekannte fehlerhafte Fachlogik als Sollverhalten festzuschreiben.
+Das grundlegende Webhook-Routing wird zusaetzlich durch einen synthetischen
+Symcon-Harness geprueft; sensible Debug-Ausgaben und unsichere Asset-Pfade sind
+ausdruecklich nicht als erhaltenswerte Vertraege festgeschrieben.
 
 1. Modul-/Property-/Variablen-/Methoden- und Hook-Vertraege maschinenlesbar
    erfassen.

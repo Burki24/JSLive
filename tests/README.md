@@ -25,3 +25,14 @@ must first be classified as one of the following:
 The snapshot records declarations, not their runtime behavior. It therefore
 does not replace Symcon runtime, webhook, rendering, import/export or migration
 tests.
+
+## Webhook routing harness
+
+`webhook-routing.php` loads the real splitter with a minimal synthetic Symcon
+boundary. It verifies the established child DataID and JSON envelope, password
+and instance gates, the direct global-configuration response and the historical
+default command spelling `getContend`.
+
+The harness intentionally does not assert sensitive debug output, unrestricted
+asset paths or other known security risks. Those behaviors are not compatibility
+requirements and may be tightened without updating a characterization fixture.
