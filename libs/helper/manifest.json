@@ -1,0 +1,12 @@
+{
+    "schema": 1,
+    "source_repository": "Burki24/Symcon_ModuleHelper",
+    "helpers": {
+        "PersistentJsonCacheHelper": {
+            "version": "1.0.0",
+            "sha256": "adbc7680abe814dc6c15a9cda1312cc30023073595052006662716bc0d65f2a4",
+            "path": "libs/helper/PersistentJsonCacheHelper.php",
+            "source_sha": "82a13d236b430c0ffbcb714aed56d9e52c344ff2"
+        }
+    }
+}
