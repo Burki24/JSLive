@@ -12,5 +12,6 @@ Die Dateien in diesem Verzeichnis stammen aus dem gemeinsamen Repository
 | `PersistentJsonCacheHelper.php` | 1.0.0 | `adbc7680abe814dc6c15a9cda1312cc30023073595052006662716bc0d65f2a4` |
 | `ResponsiveVisualizationHelper.php` | 1.0.0 | `0cebd0f08e6416a6d7d4d5fdbb19bf96d457d3e2d51fcf2a1d3e6adf5e967451` |
 | `VariableHelper.php` | 1.2.0 | `43b205a2ca87553a3a59a9e94f1c5c72fc4643cebedb080a9706139d98b30624` |
+| `VariablePresentationHelper.php` | 2.0.0 | `ce620078e72bcbffed1adfdd02e8f64baf5f2b2e8e1531e3bb1ae7b32b390fb8` |
 
 Die Kopien werden bewusst mit der Library ausgeliefert; zur Laufzeit besteht keine externe Abhängigkeit.
