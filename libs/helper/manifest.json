@@ -1,0 +1,12 @@
+{
+    "schema": 1,
+    "source_repository": "Burki24/Symcon_ModuleHelper",
+    "helpers": {
+        "DebugHelper": {
+            "version": "1.0.1",
+            "sha256": "c5433bf0cd7141c93d98f16ae23325a7f00ab9d11438c44fbfd12ad239e21373",
+            "path": "libs/helper/DebugHelper.php",
+            "source_sha": "82a13d236b430c0ffbcb714aed56d9e52c344ff2"
+        }
+    }
+}
