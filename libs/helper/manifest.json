@@ -1,0 +1,12 @@
+{
+    "schema": 1,
+    "source_repository": "Burki24/Symcon_ModuleHelper",
+    "helpers": {
+        "ResponsiveVisualizationHelper": {
+            "version": "1.0.0",
+            "sha256": "0cebd0f08e6416a6d7d4d5fdbb19bf96d457d3e2d51fcf2a1d3e6adf5e967451",
+            "path": "libs/helper/ResponsiveVisualizationHelper.php",
+            "source_sha": "82a13d236b430c0ffbcb714aed56d9e52c344ff2"
+        }
+    }
+}
