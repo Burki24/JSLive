@@ -135,6 +135,9 @@ Vorhandene lokale Pruefungen:
 - `tests/webhook-routing.php`: Verhaltens-Harness fuer Authentisierungs- und
   Instanz-Gates, Data-ID/JSON-Umschlag, direkte globale Konfiguration und den
   historischen Standardbefehl `getContend`;
+- `tests/configuration-transfer.php`: vollstaendiger und formulargefilterter
+  Export sowie nebenwirkungsfreie Ablehnung leerer, fehlerhafter,
+  unvollstaendiger und modulfremder Importe;
 - `tests/data-flow-integration.php`: statische Charakterisierung der
   DataFlowHelper-Anbindung;
 - `tests/helper_integrity.py`: Versionen, Hashes und Vollstaendigkeit der
@@ -255,6 +258,9 @@ bekannte fehlerhafte Fachlogik als Sollverhalten festzuschreiben.
 Das grundlegende Webhook-Routing wird zusaetzlich durch einen synthetischen
 Symcon-Harness geprueft; sensible Debug-Ausgaben und unsichere Asset-Pfade sind
 ausdruecklich nicht als erhaltenswerte Vertraege festgeschrieben.
+Export und sichere Import-Ablehnung sind ebenfalls charakterisiert. Der
+erfolgreiche Import gueltiger Werte bleibt bis zur separaten Korrektur seiner
+nachgewiesenen Schluesselpruefung bewusst ausserhalb des Bestandssnapshots.
 
 1. Modul-/Property-/Variablen-/Methoden- und Hook-Vertraege maschinenlesbar
    erfassen.
