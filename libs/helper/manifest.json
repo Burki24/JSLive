@@ -31,6 +31,12 @@
             "sha256": "adbc7680abe814dc6c15a9cda1312cc30023073595052006662716bc0d65f2a4",
             "path": "libs/helper/PersistentJsonCacheHelper.php",
             "source_sha": "82a13d236b430c0ffbcb714aed56d9e52c344ff2"
+        },
+        "ResponsiveVisualizationHelper": {
+            "version": "1.0.0",
+            "sha256": "0cebd0f08e6416a6d7d4d5fdbb19bf96d457d3e2d51fcf2a1d3e6adf5e967451",
+            "path": "libs/helper/ResponsiveVisualizationHelper.php",
+            "source_sha": "82a13d236b430c0ffbcb714aed56d9e52c344ff2"
         }
     }
 }
