@@ -19,6 +19,12 @@
             "sha256": "c5433bf0cd7141c93d98f16ae23325a7f00ab9d11438c44fbfd12ad239e21373",
             "path": "libs/helper/DebugHelper.php",
             "source_sha": "82a13d236b430c0ffbcb714aed56d9e52c344ff2"
+        },
+        "HttpResponseHelper": {
+            "version": "1.1.0",
+            "sha256": "be4fae4c23f757ab462237d8e74d2a9dca1b504937ed4d4b51c7ff76004cf1cd",
+            "path": "libs/helper/HttpResponseHelper.php",
+            "source_sha": "82a13d236b430c0ffbcb714aed56d9e52c344ff2"
         }
     }
 }
