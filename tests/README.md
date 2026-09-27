@@ -17,6 +17,13 @@ The legacy style migration is tracked separately from behavioral changes. The
 style check becomes a required workflow only after that mechanical migration is
 reviewed and the command succeeds for the complete configured file set.
 
+All PHP sources below `tests` already pass the official configuration. This
+subset can be checked independently with:
+
+```text
+php-cs-fixer fix --dry-run --using-cache=no --allow-risky=yes --config=.style/.php-cs-fixer.php --path-mode=intersection tests
+```
+
 ## Public contract snapshot
 
 `fixtures/public-contracts.json` is the reviewed baseline for externally

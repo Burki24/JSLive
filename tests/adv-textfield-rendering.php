@@ -187,14 +187,14 @@ function resetAdvTextfieldRenderingInteractions(): void
 
 $state = &$GLOBALS['jsliveRenderingState'];
 $state['properties'] = [
-    'Debug'           => false,
-    'Template'        => 'Textfield1',
+    'Debug'            => false,
+    'Template'         => 'Textfield1',
     'TemplateScriptID' => 0,
-    'EnableCache'     => false,
-    'EnableViewport'  => true,
-    'CreateOutput'    => false,
-    'CreateIPSView'   => false,
-    'IFrameHeight'    => 0
+    'EnableCache'      => false,
+    'EnableViewport'   => true,
+    'CreateOutput'     => false,
+    'CreateIPSView'    => false,
+    'IFrameHeight'     => 0
 ];
 $state['configuration'] = [
     'Template'                       => 'Textfield1',

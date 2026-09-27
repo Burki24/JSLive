@@ -44,8 +44,8 @@ $harness = new DataFlowHarness();
 $cases = [
     [$parentDataID, ['InstanceID' => 42, 'Type' => 'GetLink']],
     [$parentDataID, ['InstanceID' => 42, 'Type' => 'UpdateHtml', 'ViewPort' => true]],
-    [$childDataID, ['cmd' => 'UpdateCache', 'instance' => 0]],
-    [$childDataID, ['cmd' => 'getContend', 'instance' => '42', 'queryData' => ['instance' => '42']]],
+    [$childDataID, ['cmd'         => 'UpdateCache', 'instance' => 0]],
+    [$childDataID, ['cmd'         => 'getContend', 'instance' => '42', 'queryData' => ['instance' => '42']]],
 ];
 
 foreach ($cases as [$dataID, $innerPayload]) {

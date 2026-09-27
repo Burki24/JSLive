@@ -1,7 +1,7 @@
 # PROJECT_CONTEXT - JSLive
 
 Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
-`8a555105a9d94fd15afbb931e828dbea85465f93`.
+`44fd7829f616f63aaad771482fe2b1875f3a4f14`.
 
 ## 1. Zweck und Zielbild
 
@@ -159,9 +159,12 @@ JavaScript/TypeScript. Der aktuelle Commit war in beiden Workflows erfolgreich.
 Das offizielle `symcon/StylePHP`-Repository ist als `.style`-Submodul auf Commit
 `ec73bf742e18b049ad5c90de09033987d3ce671e` eingebunden. Der erste lokale
 php-cs-fixer-Prueflauf mit dieser Konfiguration weist 20 von 23 erfassten
-PHP-Dateien als noch zu formatieren aus. Der verpflichtende Style-Workflow wird
-daher erst nach einem getrennten, rein mechanischen und vollstaendig geprueften
-Formatierungsschritt aktiviert.
+PHP-Dateien als noch zu formatieren aus. Als erste isolierte Gruppe wurden die
+Testquellen mechanisch formatiert: Alle acht PHP-Dateien unter `tests` bestehen
+nun den StylePHP-Prueflauf; Vertrags- und Verhaltenstests bleiben unveraendert
+gruen. Im Produktionsbestand sind noch 15 Dateien zu bearbeiten. Der
+verpflichtende Style-Workflow wird daher erst nach der vollstaendigen,
+schrittweise geprueften Formatierung aktiviert.
 
 Noch nicht abgedeckt sind Symcon-Laufzeitverhalten, Webhook-Authentisierung und
 Pfadbehandlung, modulspezifische Formulardynamik ausserhalb des gemeinsamen
@@ -285,6 +288,8 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    HTML-Erzeugung und Import/Export ergaenzen.
 3. CI an den zentralen Standard angleichen:
    - offizielles `.style`-Submodul anbinden und Altbestand messen;
+   - Testquellen als erste mechanische Gruppe formatieren und pruefen
+     (abgeschlossen);
    - bestehenden PHP-Code in einer getrennten mechanischen Aenderung mit
       Vertrags- und Verhaltenstests formatieren;
    - `Symcon_ModuleCI/style@v1.0.0` als verpflichtenden, getrennt erkennbaren

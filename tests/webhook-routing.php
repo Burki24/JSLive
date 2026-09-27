@@ -28,6 +28,11 @@ require_once dirname(__DIR__) . '/SymconJSLive/module.php';
 
 final class WebhookRoutingHarness extends SymconJSLive
 {
+    /** @var list<string> */
+    public array $childMessages = [];
+
+    /** @var list<array{message: string, data: string}> */
+    public array $debugMessages = [];
     /** @var array<string, bool|int|string> */
     private array $properties = [
         'Debug'             => false,
@@ -41,12 +46,6 @@ final class WebhookRoutingHarness extends SymconJSLive
 
     /** @var list<string> */
     private array $childResponses = [];
-
-    /** @var list<string> */
-    public array $childMessages = [];
-
-    /** @var list<array{message: string, data: string}> */
-    public array $debugMessages = [];
 
     public function __construct()
     {
@@ -186,10 +185,10 @@ $harness->resetCapturedData();
 $harness->setChildResponses([
     json_encode(
         [
-            'InstanceID'    => '42',
-            'Contend'       => '<div>fixture</div>',
-            'lastModify'    => 'Mon, 01 Jan 2024 00:00:00 GMT',
-            'EnableCache'   => true,
+            'InstanceID'     => '42',
+            'Contend'        => '<div>fixture</div>',
+            'lastModify'     => 'Mon, 01 Jan 2024 00:00:00 GMT',
+            'EnableCache'    => true,
             'EnableViewport' => true
         ],
         JSON_THROW_ON_ERROR

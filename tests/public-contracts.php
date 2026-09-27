@@ -103,7 +103,7 @@ function decodeContractString(string $expression): ?string
 
     $value = substr($expression, 1, -1);
     if ($quote === "'") {
-        return str_replace(["\\\\", "\\'"], ["\\", "'"], $value);
+        return str_replace(['\\\\', "\\'"], ['\\', "'"], $value);
     }
 
     return stripcslashes($value);

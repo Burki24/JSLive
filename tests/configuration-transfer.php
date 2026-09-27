@@ -15,11 +15,11 @@ if (!class_exists('IPSModule')) {
 }
 
 $GLOBALS['jsliveConfigTransferState'] = [
-    'configuration'    => [],
+    'configuration'     => [],
     'configurationForm' => [],
-    'instances'        => [],
-    'setConfiguration' => [],
-    'applyChanges'     => []
+    'instances'         => [],
+    'setConfiguration'  => [],
+    'applyChanges'      => []
 ];
 
 if (!function_exists('IPS_GetInstance')) {
