@@ -511,6 +511,7 @@
         },
         "SymconJSLiveConfigStore/module.php": {
             "properties": [
+                "Debug:boolean",
                 "ForumUsername:string",
                 "UserID:string"
             ],
@@ -936,6 +937,7 @@
         },
         "SymconJSLiveSyncModule/module.php": {
             "properties": [
+                "Debug:boolean",
                 "InstanceList:string",
                 "Parameterlist:string",
                 "SelectType:string"

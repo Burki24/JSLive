@@ -18,6 +18,7 @@ class SymconJSLiveModuleSync extends IPSModule
         $this->RegisterPropertyString('SelectType', '{4713B9C2-22C8-7A45-060C-8C678DE05CC6}');
         $this->RegisterPropertyString('InstanceList', '[]');
         $this->RegisterPropertyString('Parameterlist', '[]');
+        $this->RegisterPropertyBoolean('Debug', false);
 
         $this->SetBuffer('onChange_InstanceList', []);
         $this->SetBuffer('allowSync', true);
@@ -71,11 +72,29 @@ class SymconJSLiveModuleSync extends IPSModule
 
         $formData['elements'] = $elements;
 
+        if ($this->ReadPropertyBoolean('Debug')) {
+            $this->SendSafeDebug('GetConfigurationForm', [
+                'selectType'   => $this->ReadPropertyString('SelectType'),
+                'instanceList' => $this->ReadPropertyString('InstanceList'),
+                'parameters'   => $this->ReadPropertyString('Parameterlist'),
+                'form'         => $formData
+            ], PHP_INT_MAX, ['pw']);
+        }
+
         return json_encode($formData);
     }
 
     public function MessageSink($TimeStamp, $SenderID, $Message, $Data)
     {
+        if ($this->ReadPropertyBoolean('Debug')) {
+            $this->SendSafeDebug(__FUNCTION__, [
+                'timestamp' => $TimeStamp,
+                'senderID'  => $SenderID,
+                'message'   => $Message,
+                'data'      => $Data
+            ], PHP_INT_MAX, ['pw']);
+        }
+
         //on Change Instance
         if ($Message == 10506) {
             $syncList = $this->GetBuffer('onChange_InstanceList');
@@ -441,6 +460,10 @@ class SymconJSLiveModuleSync extends IPSModule
 
     private function GetWebData($url, $postdata = [])
     {
+        if ($this->ReadPropertyBoolean('Debug')) {
+            $this->SendSafeDebug('GetWebData', ['url' => $url, 'post' => $postdata], PHP_INT_MAX, ['pw']);
+        }
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -453,6 +476,10 @@ class SymconJSLiveModuleSync extends IPSModule
 
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); // On dev server only!
         $result = curl_exec($ch);
+
+        if ($this->ReadPropertyBoolean('Debug')) {
+            $this->SendSafeDebug('GetWebData', ['response' => $result === false ? '' : $result], PHP_INT_MAX, ['pw']);
+        }
 
         return $result;
     }

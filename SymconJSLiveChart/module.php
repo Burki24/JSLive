@@ -519,7 +519,6 @@ class SymconJSLiveChart extends JSLiveModule
         $buffer = json_decode($jsonData['Buffer'], true);
 
         //if($buffer["instance"] != $this->InstanceID) return;
-        //$this->SendDebug("ReceiveData", $jsonData['Buffer']. " =>" . $this->InstanceID, 0);
 
         switch ($buffer['cmd']) {
             case 'getConfiguration':
@@ -540,7 +539,7 @@ class SymconJSLiveChart extends JSLiveModule
                 return $this->GetData($buffer['queryData']);
             default:
                 if ($buffer['cmd'] != 'UpdateCache')
-                    $this->SendDebug('ReceiveData', 'ACTION ' . $buffer['cmd'] . ' FOR THIS MODULE NOT DEFINED!', 0);
+                    $this->SendSafeDebug('ReceiveData', 'ACTION FOR THIS MODULE NOT DEFINED!');
                 break;
         }
     }
@@ -578,6 +577,9 @@ class SymconJSLiveChart extends JSLiveModule
             if ($intData['ModuleInfo']['ModuleID'] != IPS_GetInstance($this->InstanceID)['ModuleInfo']['ModuleID']) return 'Only Allowed at the same Modul!';
 
             $confData = json_decode(IPS_GetConfiguration($id), true);
+            if ($this->ReadPropertyBoolean('Debug')) {
+                $this->SendSafeDebug('LoadOtherConfiguration', $confData, PHP_INT_MAX, ['pw']);
+            }
 
             //bestimmte aktuelle einstellungen beibehalten
             $confData['title_text'] = $this->ReadPropertyString('title_text');
@@ -591,6 +593,9 @@ class SymconJSLiveChart extends JSLiveModule
             $config = [];
             try {
                 $chartData = json_decode(base64_decode(IPS_GetMediaContent($id)), true);
+                if ($this->ReadPropertyBoolean('Debug')) {
+                    $this->SendSafeDebug('LoadOtherConfiguration', $chartData, PHP_INT_MAX, ['pw']);
+                }
 
                 $lineType = 'line';
                 if ($chartData['type'] == 'bar') $lineType = 'bar';
@@ -598,7 +603,7 @@ class SymconJSLiveChart extends JSLiveModule
                 foreach ($chartData['datasets'] as $chartItem) {
                     $c_Item = [];
 
-                    $this->SendDebug('LoadOtherConfiguration', json_encode($chartItem), 0);
+                    $this->SendSafeDebug('LoadOtherConfiguration', 'Chart dataset imported');
 
                     $title = '';
                     if (array_key_exists('title', $chartItem))$title = $chartItem['title'];
@@ -650,21 +655,20 @@ class SymconJSLiveChart extends JSLiveModule
         $scriptID = $this->ReadPropertyInteger('TemplateScriptID');
         if (empty($scriptID)) {
             if ($this->ReadPropertyBoolean('Debug'))
-                $this->SendDebug('GetWebpage', 'load default template!', 0);
+                $this->SendSafeDebug('GetWebpage', 'load default template!');
             $scriptData = file_get_contents(__DIR__ . '/../SymconJSLive/templates/Chart.html');
         }else {
             if (!IPS_ScriptExists($scriptID)) {
-                $this->SendDebug('GetWebpage', 'Template NOT FOUND!', 0);
+                $this->SendSafeDebug('GetWebpage', 'Template NOT FOUND!');
                 return '';
             }
 
             $scriptData = IPS_GetScriptContent($scriptID);
             if ($scriptData == '') {
-                $this->SendDebug('GetWebpage', 'Template IS EMPTY!', 0);
+                $this->SendSafeDebug('GetWebpage', 'Template IS EMPTY!');
             }
         }
 
-        //$this->SendDebug('GetWebpage', $scriptData, 0);
         $scriptData = $this->ReplacePlaceholder($scriptData);
 
         return $scriptData;
@@ -677,7 +681,6 @@ class SymconJSLiveChart extends JSLiveModule
         $precision = $this->ReadPropertyInteger('data_precision');
 
         if (!array_key_exists('var', $querydata)) {
-            //$this->SendDebug("GetData", "PARAMETER VARIABLE NOT SET!(" . json_encode($querydata). ")", 0);
             //load all variables
             $load_vars = json_decode($this->GetBuffer('IdentIDList'), true);
 
@@ -694,14 +697,14 @@ class SymconJSLiveChart extends JSLiveModule
             $o_item = [];
             $o_item['Variable'] = $var;
             if (!IPS_VariableExists($var)) {
-                $this->SendDebug('GetData', 'VARIABLE NOT EXIST!', 0);
+                $this->SendSafeDebug('GetData', 'VARIABLE NOT EXIST!');
                 continue;
             }
 
             $identIdlist = json_decode($this->GetBuffer('IdentIDList'), true);
             $key = array_search($var, array_column($datasets, 'Variable'));
             if ($key === false && !in_array($var, $identIdlist)) {
-                $this->SendDebug('GetData', 'VARIABLE NOT IN INSTANCE!', 0);
+                $this->SendSafeDebug('GetData', 'VARIABLE NOT IN INSTANCE!');
                 continue;
             }
 
@@ -746,7 +749,7 @@ class SymconJSLiveChart extends JSLiveModule
             $o_item['Value'] = round((float) GetValue($var), $precision);
 
             if ($this->ReadPropertyBoolean('Debug'))
-                $this->SendDebug('GetData', json_encode($querydata), 0);
+                $this->SendSafeDebug('GetData', ['value' => $o_item['Value']]);
 
             if (array_key_exists('start', $querydata) && array_key_exists('end', $querydata)) {
                 $hires = 7;
@@ -908,13 +911,13 @@ class SymconJSLiveChart extends JSLiveModule
         $datasets = json_decode($this->ReadPropertyString('Datasets'), true);
         $axes = json_decode($this->ReadPropertyString('Axes'), true);
         if (!is_array($datasets)) {
-            $this->SendDebug('GenerateDataSet', 'No Variables set!', 0);
+            $this->SendSafeDebug('GenerateDataSet', 'No Variables set!');
             return $output;
         }
 
         if (count($datasets) > 0 && $index >= 0) {
             if ($index > count($datasets)) {
-                $this->SendDebug('GenerateDataSet', 'INDEX OVERFLOW!', 0);
+                $this->SendSafeDebug('GenerateDataSet', 'INDEX OVERFLOW!');
                 return $output;
             }
             $new_datasets[$index] = $datasets[$index];
@@ -923,7 +926,6 @@ class SymconJSLiveChart extends JSLiveModule
             /*foreach($datasets as $key => $id)
             {
                 if($var != $id["Variable"]){
-                    //$this->SendDebug("GenerateDataSet", "ITEM(".$key.") " . $id["Variable"], 0);
                     unset($datasets[$key]);
                 }
             }*/
@@ -938,10 +940,10 @@ class SymconJSLiveChart extends JSLiveModule
 
         foreach ($datasets as $key => $item) {
             if ($this->ReadPropertyBoolean('Debug'))
-                $this->SendDebug('GenerateDataSet', 'ITEM ' . json_encode($item), 0);
+                $this->SendSafeDebug('GenerateDataSet', 'Dataset processing');
 
             if (!IPS_VariableExists($item['Variable'])) {
-                $this->SendDebug('GenerateDataSet', 'VARIABLE ' . $item['Variable'] . ' NOT EXIST!', 0);
+                $this->SendSafeDebug('GenerateDataSet', 'VARIABLE NOT EXIST!');
                 continue;
             }
 
@@ -1146,7 +1148,7 @@ class SymconJSLiveChart extends JSLiveModule
 
         $axes = json_decode($this->ReadPropertyString('Axes'), true);
         if (!is_array($axes)) {
-            $this->SendDebug(__FUNCTION__, 'No Axes set!', 0);
+            $this->SendSafeDebug(__FUNCTION__, 'No Axes set!');
             return $output;
         }
 
@@ -1413,7 +1415,8 @@ class SymconJSLiveChart extends JSLiveModule
 
         if ($output['type'] != 'realtime') {
             $starData = $this->GetCorrectStartDate();
-            $this->SendDebug(__FUNCTION__, 'Start_Date: ' . date('d.M.Y H:i:s', $starData['start']) . ' | End_Date: ' . date('d.M.Y H:i:s', $starData['end']), 0);
+            if ($this->ReadPropertyBoolean('Debug'))
+                $this->SendSafeDebug(__FUNCTION__, 'Date range computed');
             $output['suggestedMin'] = ($starData['start'] * 1000);
             $output['suggestedMax'] = (($starData['end']) * 1000);
         }
@@ -1459,7 +1462,7 @@ class SymconJSLiveChart extends JSLiveModule
             $counter = true;
         }
 
-        if ($this->ReadPropertyBoolean('Debug')) $this->SendDebug('GetArchivData', 'Start_Date: ' . $date_start . ' | End_Date: ' . $date_end, 0);
+        if ($this->ReadPropertyBoolean('Debug')) $this->SendSafeDebug('GetArchivData', 'Archive range computed');
 
         $output = [];
         $archivData = [];
@@ -1486,6 +1489,7 @@ class SymconJSLiveChart extends JSLiveModule
 
         $i = $highResSteps;
         $oldVal = 0;
+        $skippedPoints = 0;
 
         foreach ($archivData as $item) {
             $i--;
@@ -1495,8 +1499,7 @@ class SymconJSLiveChart extends JSLiveModule
 
             //highres datenreduktion
             if ($mode == 'Value' && $period != 7 && $i < $highResSteps) {
-                if ($this->ReadPropertyBoolean('Debug'))
-                    $this->SendDebug('GetArchivData', '(' . $i . '|' . $highResSteps . ') Skip Data: ' . date('d.m.Y H:i:s', $item['TimeStamp']) . ' => ' . $item[$mode], 0);
+                $skippedPoints++;
                 continue;
             }
 
@@ -1513,7 +1516,6 @@ class SymconJSLiveChart extends JSLiveModule
                 if ($counter && $mode == 'Value') {
                     if ($oldVal > 0.0) {
                         $val = $oldVal - $item[$mode];
-                        //$this->SendDebug("TEST", "cur=>" . $item[$mode]. " | OV=>" . $oldVal . " | val=>" . $val, 0);
                     } else {
                         $cur = GetValue($varId);
                         $val = $val - $cur;
@@ -1528,11 +1530,13 @@ class SymconJSLiveChart extends JSLiveModule
 
             if (count($output) == 0) {
                 //start interpolation
-                //$this->SendDebug("TEST", $val, 0);
                 $timestamp = $date_start + $intval_offset;
                 //$output[] = array("x" => (($date_start-60) * 1000), "y" => 0);
                 //$output[] = array("x" => ($timestamp * 1000), "y" => $val);
             }
+
+            if ($this->ReadPropertyBoolean('Debug') && (is_int($val) || is_float($val)))
+                $this->SendSafeDebug('GetArchivData', ['value' => $val]);
 
             $timestamp = $item['TimeStamp'] + $intval_offset;
             $output[] = ['x' => ($timestamp * 1000), 'y' => $val];
@@ -1542,7 +1546,6 @@ class SymconJSLiveChart extends JSLiveModule
             //interpolation when Null to last value
             $val = GetValue($varId);
             if (is_bool($val)) $val = (int) $val;
-            //$this->SendDebug("TEST", $val, 0);
             $output[] = ['x' => (($date_start) * 1000), 'y' => $val];
             $output[] = ['x' => (time() * 1000), 'y' => $val];
         }
@@ -1556,15 +1559,14 @@ class SymconJSLiveChart extends JSLiveModule
             $output[count($output) - 1]['c'] = $lastDatasets;
         }
 
-        //$this->SendDebug("GetArchivData", json_encode($output), 0);
-
         /*if(count($archivData) > 0){
             if(!$relativ){
                 $output = array_merge($output, $this->FillUpData($archivData[0]["TimeStamp"] , $date_end));
             }
         }*/
-        if ($this->ReadPropertyBoolean('Debug'))
-            $this->SendDebug('GetArchivData', 'OUTPUT ' . json_encode($output), 0);
+        if ($this->ReadPropertyBoolean('Debug')) {
+            $this->SendSafeDebug('GetArchivData', ['pointCount' => count($output), 'skippedPoints' => $skippedPoints]);
+        }
 
         return $output;
     }
@@ -1847,7 +1849,7 @@ class SymconJSLiveChart extends JSLiveModule
         }
 
         if ($this->ReadPropertyBoolean('Debug'))
-            $this->SendDebug('GetCorrectStartDate', 'Realtiv: ' . $relativ . ' | Period: ' . $period . ' | Start_Date: ' . $date_start->format('d.m.Y H:i:s') . ' | End_Date: ' . $date_end->format('d.m.Y H:i:s'), 0);
+            $this->SendSafeDebug('GetCorrectStartDate', 'Date range computed');
 
         return ['start' => $date_start->getTimestamp(), 'end' => $date_end->getTimestamp(), 'stufe' => $Aggregationsstufe, 'datasets' => $curVales];
     }
@@ -1961,7 +1963,7 @@ class SymconJSLiveChart extends JSLiveModule
         }
 
         if ($this->ReadPropertyBoolean('Debug'))
-            $this->SendDebug('GetOffsetDate', 'Start_Date: ' . $date_start->format('d.m.Y H:i:s') . '(' . $date_start->getTimestamp() . ') | End_Date: ' . $date_end->format('d.m.Y H:i:s') . '(' . $date_end->getTimestamp() . ') | Interval: ' . $seconds, 0);
+            $this->SendSafeDebug('GetOffsetDate', 'Offset range computed');
 
         return ['start' => $date_start->getTimestamp(), 'end' => $date_end->getTimestamp(), 'interval' => $seconds];
     }

@@ -61,10 +61,12 @@ class SymconJSLive extends WebHookModule
         $rData = json_decode($JSONString, true);
         $jsonData = json_decode($rData['Buffer'], true);
 
-        $this->SendSafeDebug('ForwardData', [
-            'request' => $rData,
-            'data'    => $jsonData
-        ], 16_384, ['pw']);
+        if ($this->ReadPropertyBoolean('Debug')) {
+            $this->SendSafeDebug('ForwardData', [
+                'request' => $rData,
+                'data'    => $jsonData
+            ], PHP_INT_MAX, ['pw']);
+        }
 
         switch ($jsonData['Type']) {
             case 'UpdateHtml':
@@ -127,7 +129,11 @@ class SymconJSLive extends WebHookModule
                 }
                 // No break. Add additional comment above this line if intentional
             case 'GetGlobalConfiguartion':
-                return IPS_GetConfiguration($this->InstanceID);
+                $configuration = IPS_GetConfiguration($this->InstanceID);
+                if ($this->ReadPropertyBoolean('Debug')) {
+                    $this->SendSafeDebug('GetGlobalConfiguartion', json_decode($configuration, true), PHP_INT_MAX, ['pw']);
+                }
+                return $configuration;
                 break;
         }
     }
@@ -196,18 +202,16 @@ class SymconJSLive extends WebHookModule
     {
 
         if ($this->ReadPropertyBoolean('Debug')) {
+            parse_str((string) ($_SERVER['QUERY_STRING'] ?? ''), $debugQuery);
             $this->SendSafeDebug('WebHook', [
-                'server' => [
-                    'scriptName'          => $_SERVER['SCRIPT_NAME'] ?? null,
-                    'requestMethod'       => $_SERVER['REQUEST_METHOD'] ?? null,
-                    'queryStringPresent'  => array_key_exists('QUERY_STRING', $_SERVER),
-                    'acceptEncoding'      => $_SERVER['HTTP_ACCEPT_ENCODING'] ?? null
-                ]
-            ], 16_384, ['pw']);
+                'scriptName'    => $_SERVER['SCRIPT_NAME'] ?? null,
+                'requestMethod' => $_SERVER['REQUEST_METHOD'] ?? null,
+                'queryData'     => $debugQuery,
+                'post'          => $_POST
+            ], PHP_INT_MAX, ['pw']);
         }
 
         if (strpos($_SERVER['SCRIPT_NAME'], '/hook/JSLive/WS') !== false) {
-            $this->SendSafeDebug('WebHook', ['post' => $_POST], 16_384, ['pw']);
         } elseif (strpos($_SERVER['SCRIPT_NAME'], '/hook/JSLive/js') !== false) {
             //get javascript files load from webhook
             $subpath = substr($_SERVER['SCRIPT_NAME'], strlen('/hook/JSLive/'));
@@ -240,8 +244,6 @@ class SymconJSLive extends WebHookModule
                         $queryData[strtolower($p_arr[0])] = $p_arr[1];
                     }
                 }
-
-                $this->SendSafeDebug('WebHook', ['queryData' => $queryData], 16_384, ['pw']);
 
                 $contend = file_get_contents($path);
                 $contend = str_replace('{INSTANCEID}', $queryData['intid'], $contend);
@@ -322,7 +324,11 @@ class SymconJSLive extends WebHookModule
 
             //abrufen der Globalen Config
             if (strtolower($Type) == 'getglobalconfig') {
-                echo IPS_GetConfiguration($this->InstanceID);
+                $configuration = IPS_GetConfiguration($this->InstanceID);
+                if ($this->ReadPropertyBoolean('Debug')) {
+                    $this->SendSafeDebug('GetGlobalConfig', json_decode($configuration, true), PHP_INT_MAX, ['pw']);
+                }
+                echo $configuration;
                 return;
             }
 

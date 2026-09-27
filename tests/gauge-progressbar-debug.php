@@ -5,6 +5,11 @@ declare(strict_types=1);
 if (!class_exists('IPSModule')) {
     class IPSModule
     {
+        public function ReadPropertyBoolean(string $name): bool
+        {
+            return false;
+        }
+
         public function ReceiveData($JSONString)
         {
         }

@@ -22,6 +22,10 @@ class JSLiveModule extends IPSModule
 
             $confData = json_decode(IPS_GetConfiguration($id), true);
 
+            if ($this->ReadPropertyBoolean('Debug')) {
+                $this->SendSafeDebug('LoadOtherConfiguration', $confData, PHP_INT_MAX, ['pw']);
+            }
+
             IPS_SetConfiguration($this->InstanceID, json_encode($confData));
             IPS_ApplyChanges($this->InstanceID);
         }else return 'A Instance must be selected!';
@@ -119,6 +123,10 @@ class JSLiveModule extends IPSModule
             }
         }
 
+        if ($this->ReadPropertyBoolean('Debug')) {
+            $this->SendSafeDebug('ExportConfiguration', $output, PHP_INT_MAX, ['pw']);
+        }
+
         return json_encode($output, JSON_PRETTY_PRINT);
     }
     public function GetAllowConfigurationExportList(array $arr, array $r_arr = [], string $column_name = '')
@@ -163,6 +171,10 @@ class JSLiveModule extends IPSModule
         if (json_last_error() !== JSON_ERROR_NONE) return 'Not valid json File!(1)';
         if (!array_key_exists('Config', $confdata) || !array_key_exists('ModuleID', $confdata) || !array_key_exists('ModuleName', $confdata)) return 'Not valid json File!(2)';
         if ($confdata['ModuleID'] != IPS_GetInstance($this->InstanceID)['ModuleInfo']['ModuleID']) return 'Configuration only allowed for ' . $confdata['ModuleName'];
+
+        if ($this->ReadPropertyBoolean('Debug')) {
+            $this->SendSafeDebug('LoadConfigurationFile', $confdata, PHP_INT_MAX, ['pw']);
+        }
 
         $output = json_decode(IPS_GetConfiguration($this->InstanceID), true);
         $output['LastUploadedConfig'] = $filename;
@@ -387,6 +399,18 @@ class JSLiveModule extends IPSModule
     {
         $jsonData = json_decode($JSONString, true);
         $buffer = json_decode($jsonData['Buffer'], true);
+
+        if ($this->ReadPropertyBoolean('Debug')) {
+            $this->SendSafeDebug('ReceiveData', $buffer, PHP_INT_MAX, ['pw']);
+            if ($buffer['cmd'] === 'getConfiguration') {
+                $this->SendSafeDebug(
+                    'GetConfiguration',
+                    json_decode(IPS_GetConfiguration($this->InstanceID), true),
+                    PHP_INT_MAX,
+                    ['pw']
+                );
+            }
+        }
 
         if ($buffer['cmd'] === 'UpdateCache') {
             $this->SetBuffer('Output', '');

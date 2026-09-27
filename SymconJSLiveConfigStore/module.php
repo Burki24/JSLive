@@ -25,6 +25,7 @@ class SymconJSLiveConfigStore extends IPSModule
 
         $this->RegisterPropertyString('ForumUsername', '');
         $this->RegisterPropertyString('UserID', $this->GetUserID());
+        $this->RegisterPropertyBoolean('Debug', false);
         $this->SetBuffer('SearchInstance', '');
 
         $this->RegisterTimer('CheckStatus', 0, 'SymconJSLiveConfigStore_CheckPending($_IPS[\'TARGET\']);');
@@ -90,6 +91,10 @@ class SymconJSLiveConfigStore extends IPSModule
         //$print_r($storeData["items"][1]);
 
         $formData['actions'][1]['items'][1] = $storeData;
+
+        if ($this->ReadPropertyBoolean('Debug')) {
+            $this->SendSafeDebug('GetConfigurationForm', $formData, PHP_INT_MAX, ['pw']);
+        }
 
         return json_encode($formData);
     }
@@ -864,6 +869,10 @@ class SymconJSLiveConfigStore extends IPSModule
 
     private function GetWebData($url, $postdata = [])
     {
+        if ($this->ReadPropertyBoolean('Debug')) {
+            $this->SendSafeDebug('GetWebData', ['url' => $url, 'post' => $postdata], PHP_INT_MAX, ['pw']);
+        }
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -876,6 +885,10 @@ class SymconJSLiveConfigStore extends IPSModule
 
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); // On dev server only!
         $result = curl_exec($ch);
+
+        if ($this->ReadPropertyBoolean('Debug')) {
+            $this->SendSafeDebug('GetWebData', ['response' => $result === false ? '' : $result], PHP_INT_MAX, ['pw']);
+        }
 
         return $result === false ? '' : $result;
     }

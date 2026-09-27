@@ -14,6 +14,11 @@ if (!class_exists('IPSModule')) {
         {
         }
 
+        public function ReadPropertyBoolean(string $name): bool
+        {
+            return false;
+        }
+
         public function ReadPropertyString(string $name): string
         {
             if ($name === 'Datasets') {

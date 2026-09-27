@@ -36,6 +36,11 @@
                     ]
                 }
             ]
+        },
+        {
+            "type": "CheckBox",
+            "name": "Debug",
+            "caption": "Debug"
         }
     ],
     "actions": [

@@ -298,6 +298,9 @@ class SymconJSLiveCalendar extends JSLiveModule
             if ($intData['ModuleInfo']['ModuleID'] != IPS_GetInstance($this->InstanceID)['ModuleInfo']['ModuleID']) return 'Only Allowed at the same Modul!';
 
             $confData = json_decode(IPS_GetConfiguration($id), true);
+            if ($this->ReadPropertyBoolean('Debug')) {
+                $this->SendSafeDebug('LoadOtherConfiguration', $confData, PHP_INT_MAX, ['pw']);
+            }
 
             IPS_SetConfiguration($this->InstanceID, json_encode($confData));
             IPS_ApplyChanges($this->InstanceID);

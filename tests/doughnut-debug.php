@@ -66,7 +66,7 @@ if (str_contains(json_encode($module->debug, JSON_THROW_ON_ERROR), 'synthetic-se
 
 $module->debug = [];
 $result = $module->ReceiveData(debugRequest(['instance' => 1, 'cmd' => 'unknown?password=synthetic-secret']));
-if ($result !== null || count($module->debug) !== 1) {
+if ($result !== null || count($module->debug) !== 2) {
     throw new RuntimeException('DoughnutPie changed its unknown-command handling.');
 }
 if (str_contains($module->debug[0]['data'], 'synthetic-secret')) {

@@ -485,6 +485,10 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
 
 1. TLS-Pruefung in Store/Sync aktivieren und Fehlerbehandlung ergaenzen.
 2. Kennwoerter und private Payloads aus Logs entfernen; `DebugHelper` nutzen.
+   Numerische Messwerte gelten in keinem JSLive-Modul als schutzbeduerftig und
+   duerfen bei aktiviertem Debug einzeln ohne kuenstliche Anzahlbegrenzung
+   erscheinen. Frei eingegebene Texte, Zugangsdaten und rohe Browser- oder
+   Konfigurations-Payloads bleiben davon ausgenommen.
 3. Webhook-Pfade kanonisch begrenzen, Query-Verarbeitung und HTTP-Antworten
    haerten; `HttpResponseHelper`/`VisualizationAssetHelper` gezielt integrieren.
 4. CORS-, Authentisierungs- und Schreibberechtigungsmodell dokumentieren und

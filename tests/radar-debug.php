@@ -128,8 +128,8 @@ $GLOBALS['radarArchiveValues'] = array_map(static fn (int $index): array => [
     'average'
 );
 $sampleEntries = array_filter($module->debug, static fn (array $entry): bool => str_contains($entry['data'], '"sample"'));
-if (count($sampleEntries) !== 10 || str_contains(json_encode($module->debug, JSON_THROW_ON_ERROR), '12010')) {
-    throw new RuntimeException('RadarChart exceeded its numeric sample debug limit.');
+if (count($sampleEntries) !== 11 || !str_contains(json_encode($module->debug, JSON_THROW_ON_ERROR), '12010')) {
+    throw new RuntimeException('RadarChart must log every numeric archive value.');
 }
 
 $module->debug = [];
@@ -148,8 +148,8 @@ $result = (new ReflectionMethod(SymconJSLiveRadarChart::class, 'GetArchivData'))
     0,
     'average'
 );
-if ($result !== [0, 0] || str_contains(json_encode($module->debug, JSON_THROW_ON_ERROR), '30010')) {
-    throw new RuntimeException('RadarChart logged an out-of-range value beyond its sample limit.');
+if ($result !== [0, 0] || !str_contains(json_encode($module->debug, JSON_THROW_ON_ERROR), '30010')) {
+    throw new RuntimeException('RadarChart must log numeric out-of-range values without changing its result.');
 }
 unset($GLOBALS['radarArchiveValues']);
 
@@ -168,7 +168,7 @@ if (str_contains(json_encode($module->debug, JSON_THROW_ON_ERROR), 'synthetic-pr
 
 $module->debug = [];
 $result = $module->ReceiveData(debugRequest(['cmd' => 'unknown?password=synthetic-secret']));
-if ($result !== null || count($module->debug) !== 1) {
+if ($result !== null || count($module->debug) !== 2) {
     throw new RuntimeException('RadarChart changed its unknown-command handling.');
 }
 if (str_contains(json_encode($module->debug, JSON_THROW_ON_ERROR), 'synthetic-secret')) {

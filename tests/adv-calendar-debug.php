@@ -19,6 +19,11 @@ if (!class_exists('IPSModule')) {
             $this->debug[] = compact('message', 'data', 'format');
         }
 
+        public function ReadPropertyBoolean(string $name): bool
+        {
+            return false;
+        }
+
         public function ReadPropertyString(string $name): string
         {
             return $this->properties[$name] ?? '';

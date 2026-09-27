@@ -90,6 +90,11 @@ final class ConfigurationTransferHarness extends JSLiveModule
         return 0;
     }
 
+    public function ReadPropertyBoolean(string $name): bool
+    {
+        return false;
+    }
+
     public function SendDebug(string $message, string $data, int $format): void
     {
         $this->debugMessages[] = ['message' => $message, 'data' => $data];

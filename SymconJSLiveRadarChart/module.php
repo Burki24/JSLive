@@ -209,6 +209,9 @@ class SymconJSLiveRadarChart extends JSLiveModule
         if ($intData['ModuleInfo']['ModuleID'] != IPS_GetInstance($this->InstanceID)['ModuleInfo']['ModuleID']) return 'Only Allowed at the same Modul!';
 
         $confData = json_decode(IPS_GetConfiguration($id), true);
+        if ($this->ReadPropertyBoolean('Debug')) {
+            $this->SendSafeDebug('LoadOtherConfiguration', $confData, PHP_INT_MAX, ['pw']);
+        }
 
         //bestimmte aktuelle einstellungen beibehalten
         $confData['title_text'] = $this->ReadPropertyString('title_text');
@@ -721,7 +724,7 @@ class SymconJSLiveRadarChart extends JSLiveModule
             if ($VariableType == 2) {
                 $ref = round($ref, $precision);
             }
-            if ($this->ReadPropertyBoolean('Debug') && $a_key < 10) {
+            if ($this->ReadPropertyBoolean('Debug') && (is_int($val) || is_float($val)) && (is_int($ref) || is_float($ref))) {
                 $this->SendSafeDebug('GetArchivData', ['sample' => $a_key, 'value' => $val, 'reference' => $ref]);
             }
             if ($VariableType == 1 || $VariableType == 2) {
