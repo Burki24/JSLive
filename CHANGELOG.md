@@ -31,6 +31,8 @@ Patchstelle, beispielsweise `v0.10.0`.
   Browser-Abfragen und unbekannte Befehlsnamen werden nicht mehr geloggt.
 - Custom verwendet `DebugHelper` fuer seine eigenen Diagnosen; eingebettete
   Bibliotheken, Objekt- und Schreibwerte werden nicht mehr geloggt.
+- ConfigStore verwendet `DebugHelper` fuer seine Diagnose einer ungueltigen
+  Modulauswahl; der uebergebene Index wird nicht mehr geloggt.
 
 ### Added
 

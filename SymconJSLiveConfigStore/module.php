@@ -2,8 +2,12 @@
 
 declare(strict_types=1);
 
+require_once dirname(__DIR__) . '/libs/helper/DebugHelper.php';
+
 class SymconJSLiveConfigStore extends IPSModule
 {
+    use \Burki24\SymconModuleHelper\DebugHelper;
+
     private const APILINK = 'https://jslive.babenschneider.net/';
     private const MODULIDLIST = ['Calendar' => '{46B41C3B-DDAE-BA35-2A1E-6CF4B7F9BF7A}',
         'Chart'                             => '{4713B9C2-22C8-7A45-060C-8C678DE05CC6}',
@@ -136,7 +140,6 @@ class SymconJSLiveConfigStore extends IPSModule
 
     public function CheckPending()
     {
-        //$this->SendDebug(__FUNCTION__, "TEST", 0);
         $this->UpdateFormField('UploadPending', 'items', $this->GetUploadPending());
     }
 
@@ -802,7 +805,7 @@ class SymconJSLiveConfigStore extends IPSModule
         $this->SetBuffer('Selected_Instance_List', []); //alle selectierten Instancen entfernen
 
         if ($indexModulType < 0 || $indexModulType >= count($this->GetBuffer('Modulelist'))) {
-            $this->SendDebug(__FUNCTION__, 'Select Type (' . $indexModulType . ') is wrong!', 0);
+            $this->SendSafeDebug(__FUNCTION__, 'Invalid module type selection');
         }
 
         if (count($this->GetBuffer('Modulelist')) == 0)return $instanceList;
