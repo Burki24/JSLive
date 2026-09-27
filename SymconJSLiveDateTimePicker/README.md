@@ -45,9 +45,9 @@ Variablenzuordnung.
 
 Der Browserwert wird gegen die konfigurierte Variablen-ID geprüft. Trotzdem
 sollten nur passende und bewusst beschreibbare Variablen verwendet werden.
-Debug-Ausgaben können Ziel-ID und Wert enthalten. Die bestehende
-`~HTMLBox`-/IPSView-Ausgabe bleibt kompatibel; die native Symcon-Kachel ist
-eine spätere Migrationsstufe.
+Die Debug-Ausgabe protokolliert beim Schreiben keinen übergebenen Zeitwert.
+Die bestehende `~HTMLBox`-/IPSView-Ausgabe bleibt kompatibel; die native
+Symcon-Kachel ist eine spätere Migrationsstufe.
 
 ## Technische Daten
 

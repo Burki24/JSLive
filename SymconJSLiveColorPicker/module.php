@@ -58,8 +58,6 @@ class SymconJSLiveColorPicker extends JSLiveModule
         $buffer = json_decode($jsonData['Buffer'], true);
 
         //if($buffer["instance"] != $this->InstanceID) return;
-        //$this->SendDebug("ReceiveData", $jsonData['Buffer']. " =>" . $this->InstanceID, 0);
-
         switch ($buffer['cmd']) {
             case 'exportConfiguration':
                 return $this->ExportConfiguration();
@@ -71,7 +69,7 @@ class SymconJSLiveColorPicker extends JSLiveModule
                 return $this->SetData($buffer['queryData']);
             default:
                 if ($buffer['cmd'] != 'UpdateCache')
-                    $this->SendDebug('ReceiveData', 'ACTION ' . $buffer['cmd'] . ' FOR THIS MODULE NOT DEFINED!', 0);
+                    $this->SendSafeDebug('ReceiveData', 'ACTION FOR THIS MODULE NOT DEFINED!');
                 break;
         }
 
@@ -100,25 +98,24 @@ class SymconJSLiveColorPicker extends JSLiveModule
         $scriptID = $this->ReadPropertyInteger('TemplateScriptID');
         if (empty($scriptID)) {
             if ($this->ReadPropertyBoolean('Debug'))
-                $this->SendDebug('GetWebpage', 'load default template!', 0);
+                $this->SendSafeDebug('GetWebpage', 'load default template!');
             $scriptData = file_get_contents(__DIR__ . '/../SymconJSLive/templates/ColorPicker.html');
         }else {
             if (!IPS_ScriptExists($scriptID)) {
-                $this->SendDebug('GetWebpage', 'Template NOT FOUND!', 0);
+                $this->SendSafeDebug('GetWebpage', 'Template NOT FOUND!');
                 return 'Template NOT FOUND!';
             }
 
             $scriptData = IPS_GetScriptContent($scriptID);
             if ($scriptData == '') {
                 return 'Template IS EMPTY!';
-                $this->SendDebug('GetWebpage', 'Template IS EMPTY!', 0);
             }
         }
 
         $scriptData = $this->ReplacePlaceholder($scriptData);
 
         if ($this->ReadPropertyBoolean('Debug'))
-            $this->SendDebug('GetWebpage', $scriptData, 0);
+            $this->SendSafeDebug('GetWebpage', ['renderedBytes' => strlen($scriptData)]);
 
         return $scriptData;
     }
@@ -129,7 +126,7 @@ class SymconJSLiveColorPicker extends JSLiveModule
     private function SetData(array $querydata)
     {
         if (!array_key_exists('var', $querydata) || !array_key_exists('val', $querydata)) {
-            $this->SendDebug('SetData', 'NO VARIABLE, OR VALUE SET!', 0);
+            $this->SendSafeDebug('SetData', 'NO VARIABLE, OR VALUE SET!');
             return 'NO VARIABLE, OR VALUE SET!';
         }
 
@@ -141,13 +138,12 @@ class SymconJSLiveColorPicker extends JSLiveModule
         }
 
         if (!in_array($querydata['var'], $var_ids)) {
-            $this->SendDebug('SetData', 'VARIABLE NOT IN LIST SET!', 0);
+            $this->SendSafeDebug('SetData', 'VARIABLE NOT IN LIST SET!');
             return 'VARIABLE NOT IN LIST SET!';
         }
 
-        $this->SendDebug('SetData', 'Update Variable ' . $querydata['var'] . ' => ' . $querydata['val'], 0);
+        $this->SendSafeDebug('SetData', 'Update Variable');
         RequestAction($querydata['var'], $querydata['val']);
-        //$this->SendDebug("SetData", "Update Variable => OK", 0 );
         return 'OK';
     }
 

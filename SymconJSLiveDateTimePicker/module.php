@@ -66,8 +66,6 @@ class SymconJSLiveDateTimePicker extends JSLiveModule
         $buffer = json_decode($jsonData['Buffer'], true);
 
         //if($buffer["instance"] != $this->InstanceID) return;
-        //$this->SendDebug("ReceiveData", $jsonData['Buffer']. " =>" . $this->InstanceID, 0);
-
         switch ($buffer['cmd']) {
             case 'exportConfiguration':
                 return $this->ExportConfiguration();
@@ -79,7 +77,7 @@ class SymconJSLiveDateTimePicker extends JSLiveModule
                 return $this->SetData($buffer['queryData']);
             default:
                 if ($buffer['cmd'] != 'UpdateCache')
-                    $this->SendDebug('ReceiveData', 'ACTION ' . $buffer['cmd'] . ' FOR THIS MODULE NOT DEFINED!', 0);
+                    $this->SendSafeDebug('ReceiveData', 'ACTION FOR THIS MODULE NOT DEFINED!');
                 break;
         }
     }
@@ -107,21 +105,20 @@ class SymconJSLiveDateTimePicker extends JSLiveModule
         $scriptID = $this->ReadPropertyInteger('TemplateScriptID');
         if (empty($scriptID)) {
             if ($this->ReadPropertyBoolean('Debug'))
-                $this->SendDebug('GetWebpage', 'load default template!', 0);
+                $this->SendSafeDebug('GetWebpage', 'load default template!');
             $scriptData = file_get_contents(__DIR__ . '/../SymconJSLive/templates/' . $this->ReadPropertyString('Template') . '.html');
         }else {
             if (!IPS_ScriptExists($scriptID)) {
-                $this->SendDebug('GetWebpage', 'Template NOT FOUND!', 0);
+                $this->SendSafeDebug('GetWebpage', 'Template NOT FOUND!');
                 return '';
             }
 
             $scriptData = IPS_GetScriptContent($scriptID);
             if ($scriptData == '') {
-                $this->SendDebug('GetWebpage', 'Template IS EMPTY!', 0);
+                $this->SendSafeDebug('GetWebpage', 'Template IS EMPTY!');
             }
         }
 
-        //$this->SendDebug('GetWebpage', $scriptData, 0);
         $scriptData = $this->ReplacePlaceholder($scriptData);
 
         return $scriptData;
@@ -133,7 +130,7 @@ class SymconJSLiveDateTimePicker extends JSLiveModule
         if (IPS_VariableExists($this->ReadPropertyInteger('Variable'))) {
             $output['Value'] = GetValue($this->ReadPropertyInteger('Variable'));
         }else {
-            $this->SendDebug('SetData', 'VARIABLE NOT EXIST!', 0);
+            $this->SendSafeDebug('SetData', 'VARIABLE NOT EXIST!');
             $output['Value'] = 0;
         }
         return json_encode($output);
@@ -141,17 +138,17 @@ class SymconJSLiveDateTimePicker extends JSLiveModule
     private function SetData(array $querydata)
     {
         if (!array_key_exists('var', $querydata) || !array_key_exists('val', $querydata)) {
-            $this->SendDebug('SetData', 'NO VARIABLE, OR VALUE SET!', 0);
+            $this->SendSafeDebug('SetData', 'NO VARIABLE, OR VALUE SET!');
             return 'NO VARIABLE, OR VALUE SET!';
         }
 
         if ($querydata['var'] != $this->ReadPropertyInteger('Variable')) {
-            $this->SendDebug('SetData', 'VARIABLE NOT SET!', 0);
+            $this->SendSafeDebug('SetData', 'VARIABLE NOT SET!');
             return 'VARIABLE NOT SET!';
         }
 
         if (!IPS_VariableExists($this->ReadPropertyInteger('Variable'))) {
-            $this->SendDebug('SetData', 'VARIABLE NOT EXIST!', 0);
+            $this->SendSafeDebug('SetData', 'VARIABLE NOT EXIST!');
             return 'VARIABLE NOT EXIST!';
         }
 
@@ -160,7 +157,7 @@ class SymconJSLiveDateTimePicker extends JSLiveModule
         $timeVal->setTimestamp($querydata['val']);
         $timeVal->sub(new DateInterval('PT' . $timeVal->getOffset() . 'S'));
 
-        $this->SendDebug('SetData', 'Update Variable ' . $querydata['var'] . ' => ' . $timeVal->format('Y-m-d H:i:s') . ' (' . $timeVal->getTimestamp() . '/' . $querydata['val'] . ')', 0);
+        $this->SendSafeDebug('SetData', 'Update Variable');
 
         if (IPS_GetVariable($querydata['var'])['VariableAction'] > 0) {
             RequestAction($querydata['var'], $timeVal->getTimestamp());
@@ -180,7 +177,7 @@ class SymconJSLiveDateTimePicker extends JSLiveModule
         if (IPS_VariableExists($this->ReadPropertyInteger('Variable'))) {
             $htmlData = str_replace('{VALUE}', GetValue($this->ReadPropertyInteger('Variable')), $htmlData);
         }else {
-            $this->SendDebug('SetData', 'VARIABLE NOT EXIST!', 0);
+            $this->SendSafeDebug('SetData', 'VARIABLE NOT EXIST!');
             $htmlData = str_replace('{VALUE}', 0, $htmlData);
         }
 

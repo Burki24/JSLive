@@ -23,6 +23,8 @@ Patchstelle, beispielsweise `v0.10.0`.
   strukturiert maskiert und nicht mehr ungefiltert protokolliert.
 - Gauge und Progressbar verwenden ebenfalls `DebugHelper` fuer ihre eigenen
   Diagnosen; unbekannte Befehlsnamen gelangen nicht mehr in die Debug-Ausgabe.
+- ColorPicker und DateTimePicker verwenden `DebugHelper` fuer ihre eigenen
+  Diagnosen; uebergebene Werte und gerendertes HTML werden nicht mehr geloggt.
 
 ### Added
 
