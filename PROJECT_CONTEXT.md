@@ -1,7 +1,7 @@
 # PROJECT_CONTEXT - JSLive
 
 Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
-`7c1a9cca61b84a99bd4fa52dfb83f8fee7fc3d81`.
+`8720389bbbeb985043f5c9d188cd1875f9e938f3`.
 
 ## 1. Zweck und Zielbild
 
@@ -166,10 +166,11 @@ gruen. Als erste Produktionsgruppe folgen die verwandten Einzelwertmodule
 `SymconJSLiveGauge` und `SymconJSLiveProgressbar`. Beide bestehen nun ebenfalls
 den StylePHP-Prueflauf; die oeffentlichen Vertraege bleiben unveraendert. Als
 zweite Produktionsgruppe wurden `SymconJSLiveColorPicker` und
-`SymconJSLiveDateTimePicker` entsprechend bearbeitet. Im Produktionsbestand
-sind noch 11 Dateien zu bearbeiten. Der verpflichtende Style-Workflow wird
-daher erst nach der vollstaendigen, schrittweise geprueften Formatierung
-aktiviert.
+`SymconJSLiveDateTimePicker` entsprechend bearbeitet. Danach wurde
+`SymconJSLiveAdvTextfield` einzeln formatiert und mit seinem gezielten
+Rendering-Harness geprueft. Im Produktionsbestand sind noch 10 Dateien zu
+bearbeiten. Der verpflichtende Style-Workflow wird daher erst nach der
+vollstaendigen, schrittweise geprueften Formatierung aktiviert.
 
 Noch nicht abgedeckt sind Symcon-Laufzeitverhalten, Webhook-Authentisierung und
 Pfadbehandlung, modulspezifische Formulardynamik ausserhalb des gemeinsamen
@@ -302,6 +303,8 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
      pruefen (abgeschlossen; Symcon-Laufzeitpruefung weiterhin ausstehend);
    - `ColorPicker` und `DateTimePicker` als zweite Produktionsgruppe formatieren
      und pruefen (abgeschlossen; Symcon-Laufzeitpruefung weiterhin ausstehend);
+   - `AdvTextfield` einzeln formatieren und mit dem Rendering-Harness pruefen
+     (abgeschlossen; Symcon-Laufzeitpruefung weiterhin ausstehend);
    - bestehenden PHP-Code in einer getrennten mechanischen Aenderung mit
       Vertrags- und Verhaltenstests formatieren;
    - `Symcon_ModuleCI/style@v1.0.0` als verpflichtenden, getrennt erkennbaren
