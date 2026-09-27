@@ -1,7 +1,7 @@
 # PROJECT_CONTEXT - JSLive
 
 Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
-`cd09785ed0e737a7250900db971bac9e972e223f`.
+`b0d839139994d45204bb5480657c673e32077d8a`.
 
 ## 1. Zweck und Zielbild
 
@@ -152,6 +152,9 @@ Vorhandene lokale Pruefungen:
 - `tests/chart-dates.php`: Datumsbereiche und Offset-Berechnung des Chart fuer
   alle acht Perioden in beiden Zeitmodi sowie numerische Webhook-Querywerte fuer
   Dataset- und Variablen-IDs;
+- `tests/custom-data.php`: RGBA-Aufbereitung numerischer Stringwerte und sichere
+  Ablehnung eines unbekannten numerischen Webhook-Objektparameters im
+  Custom-Modul, ohne schreibende Aktionen auszufuehren;
 - `tests/data-flow-integration.php`: statische Charakterisierung der
   DataFlowHelper-Anbindung;
 - `tests/helper_integrity.py`: Versionen, Hashes und Vollstaendigkeit der
@@ -191,7 +194,9 @@ Integer-Konvertierungen der `DateTime`-Bestandteile sind durch einen neuen Test
 fuer alle Perioden und beide Zeitmodi abgesichert. Danach wurde
 `SymconJSLiveChart` entsprechend isoliert formatiert. Sein neuer Test deckt
 zusaetzlich den konfigurierten Startzeitpunkt und numerische Webhook-Querywerte
-ab. Im Produktionsbestand sind noch 2 Dateien zu bearbeiten. Der
+ab. Danach wurde `SymconJSLiveCustom` isoliert formatiert und seine numerischen
+Konfigurations- und Webhook-Grenzen ohne schreibende Aktionen geprueft. Im
+Produktionsbestand ist noch 1 Datei zu bearbeiten. Der
 verpflichtende Style-Workflow wird daher erst nach der vollstaendigen,
 schrittweise geprueften Formatierung aktiviert.
 
@@ -217,6 +222,9 @@ StylePHP und ein php-cs-fixer-Check sind noch nicht Teil der JSLive-Workflowdate
   Datumskonvertierungen. Zusaetzlich werden der konfigurierte Startzeitpunkt,
   numerische Webhook-Querywerte und zuvor implizit konvertierte Variablenwerte
   an ihren bestehenden Typgrenzen explizit normalisiert.
+- `SymconJSLiveCustom` normalisiert numerische Stringwerte fuer Alpha-Kanaele
+  und Webhook-Objekt-IDs explizit. Der Test fuehrt dabei keine Variablen-,
+  Skript- oder Medienschreiboperation aus.
 - Alle Module verwenden noch `IPSModule`; der Webhook basiert auf einer lokalen
   `WebHookModule`-Basisklasse. Symcon 9 empfiehlt fuer neue Module
   `IPSModuleStrict` und dessen native Hook-API. Eine Umstellung ist wegen der
@@ -372,6 +380,9 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    - `Chart` isoliert formatieren und Datums-, Offset- und Webhook-Querygrenzen
      fuer PHP 8.5 absichern (abgeschlossen; Archivdaten-, Rendering-, Browser-
      und Symcon-Laufzeitpruefung ausstehend);
+   - `Custom` isoliert formatieren und numerische Konfigurations- und
+     Webhook-Grenzen fuer PHP 8.5 absichern (abgeschlossen; schreibende Objekt-,
+     Skript-, Medien-, Browser- und Symcon-Laufzeitpruefung ausstehend);
    - bestehenden PHP-Code in einer getrennten mechanischen Aenderung mit
       Vertrags- und Verhaltenstests formatieren;
    - `Symcon_ModuleCI/style@v1.0.0` als verpflichtenden, getrennt erkennbaren
