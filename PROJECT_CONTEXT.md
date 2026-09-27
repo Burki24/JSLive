@@ -1,7 +1,7 @@
 # PROJECT_CONTEXT - JSLive
 
 Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
-`8a33ded186e5a41876050ee39006624cea83fc26`.
+`cd09785ed0e737a7250900db971bac9e972e223f`.
 
 ## 1. Zweck und Zielbild
 
@@ -149,6 +149,9 @@ Vorhandene lokale Pruefungen:
 - `tests/radar-chart-dates.php`: Datumsbereiche und Offset-Berechnung des
   RadarChart fuer alle acht Perioden in relativem und absolutem Modus sowie
   numerische Labels im Custom-Data-Pfad;
+- `tests/chart-dates.php`: Datumsbereiche und Offset-Berechnung des Chart fuer
+  alle acht Perioden in beiden Zeitmodi sowie numerische Webhook-Querywerte fuer
+  Dataset- und Variablen-IDs;
 - `tests/data-flow-integration.php`: statische Charakterisierung der
   DataFlowHelper-Anbindung;
 - `tests/helper_integrity.py`: Versionen, Hashes und Vollstaendigkeit der
@@ -185,8 +188,10 @@ geprueft. Danach wurde `SymconJSLiveSyncModule` isoliert formatiert und gegen de
 Vertrags-Snapshot sowie die Gesamtsuite geprueft. Danach wurde
 `SymconJSLiveRadarChart` isoliert formatiert. Die durch `strict_types` notwendigen
 Integer-Konvertierungen der `DateTime`-Bestandteile sind durch einen neuen Test
-fuer alle Perioden und beide Zeitmodi abgesichert. Im Produktionsbestand sind
-noch 3 Dateien zu bearbeiten. Der
+fuer alle Perioden und beide Zeitmodi abgesichert. Danach wurde
+`SymconJSLiveChart` entsprechend isoliert formatiert. Sein neuer Test deckt
+zusaetzlich den konfigurierten Startzeitpunkt und numerische Webhook-Querywerte
+ab. Im Produktionsbestand sind noch 2 Dateien zu bearbeiten. Der
 verpflichtende Style-Workflow wird daher erst nach der vollstaendigen,
 schrittweise geprueften Formatierung aktiviert.
 
@@ -208,6 +213,10 @@ StylePHP und ein php-cs-fixer-Check sind noch nicht Teil der JSLive-Workflowdate
   `DateTime::format()` sowie explizite String-Konvertierungen fuer numerische
   Diagrammwerte. Der RadarChart-Test prueft alle Perioden in beiden Zeitmodi und
   den isolierten Custom-Data-Pfad auf erneute PHP-8.5-`TypeError`.
+- `SymconJSLiveChart` benoetigt unter `strict_types` dieselben expliziten
+  Datumskonvertierungen. Zusaetzlich werden der konfigurierte Startzeitpunkt,
+  numerische Webhook-Querywerte und zuvor implizit konvertierte Variablenwerte
+  an ihren bestehenden Typgrenzen explizit normalisiert.
 - Alle Module verwenden noch `IPSModule`; der Webhook basiert auf einer lokalen
   `WebHookModule`-Basisklasse. Symcon 9 empfiehlt fuer neue Module
   `IPSModuleStrict` und dessen native Hook-API. Eine Umstellung ist wegen der
@@ -286,11 +295,11 @@ Prioritaet mittel:
 - `SymconJSLiveDoughnutPie::GetData()` prueft neue Variablen gegen die falsche
   Liste und verwendet `array_column()` auf einer Liste skalarer Variablen-IDs;
   der Pfad benoetigt vor einer Korrektur einen gezielten Datensatztest;
-- `SymconJSLiveRadarChart::GetCorrectStartDate()` verwendet in mehreren
-  absoluten Perioden das Jahr eines neu erzeugten `DateTime`-Objekts statt
-  durchgaengig das Jahr des uebergebenen Zeitstempels. Dieses bestehende
-  Zeitverhalten benoetigt vor einer fachlichen Korrektur eine eigene Entscheidung
-  und Regressionstests;
+- `SymconJSLiveRadarChart::GetCorrectStartDate()` und
+  `SymconJSLiveChart::GetCorrectStartDate()` verwenden in mehreren absoluten
+  Perioden das Jahr eines neu erzeugten `DateTime`-Objekts statt durchgaengig das
+  Jahr des uebergebenen Zeitstempels. Dieses bestehende Zeitverhalten benoetigt
+  vor einer fachlichen Korrektur eine eigene Entscheidung und Regressionstests;
 - Abhaengigkeit des ConfigStore von `jslive.babenschneider.net` und einem dort
   betriebenen Protokoll ohne lokale Schnittstellendokumentation.
 
@@ -358,6 +367,9 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
      Gesamtsuite pruefen (abgeschlossen; Netzwerk-, TLS- und
      Symcon-Laufzeitpruefung ausstehend);
    - `RadarChart` isoliert formatieren und seine Datums- und Offset-Berechnung
+     fuer PHP 8.5 absichern (abgeschlossen; Archivdaten-, Rendering-, Browser-
+     und Symcon-Laufzeitpruefung ausstehend);
+   - `Chart` isoliert formatieren und Datums-, Offset- und Webhook-Querygrenzen
      fuer PHP 8.5 absichern (abgeschlossen; Archivdaten-, Rendering-, Browser-
      und Symcon-Laufzeitpruefung ausstehend);
    - bestehenden PHP-Code in einer getrennten mechanischen Aenderung mit
