@@ -27,6 +27,8 @@ Patchstelle, beispielsweise `v0.10.0`.
   Diagnosen; uebergebene Werte und gerendertes HTML werden nicht mehr geloggt.
 - AdvTextfield und Calendar verwenden `DebugHelper` fuer ihre eigenen Diagnosen;
   Textinhalte, Quellnamen und iCalendar-URLs werden nicht mehr geloggt.
+- DoughnutPie verwendet `DebugHelper` fuer seine eigenen Diagnosen;
+  Browser-Abfragen und unbekannte Befehlsnamen werden nicht mehr geloggt.
 
 ### Added
 

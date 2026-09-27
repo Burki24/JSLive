@@ -20,7 +20,8 @@ $tests = [
     __DIR__ . '/jslive-module-debug-helper.php',
     __DIR__ . '/gauge-progressbar-debug.php',
     __DIR__ . '/color-datetime-debug.php',
-    __DIR__ . '/adv-calendar-debug.php'
+    __DIR__ . '/adv-calendar-debug.php',
+    __DIR__ . '/doughnut-debug.php'
 ];
 
 $commands = [

@@ -101,7 +101,7 @@ class SymconJSLiveDoughnutPie extends JSLiveModule
                 return $this->GetData($buffer['queryData']);
             default:
                 if ($buffer['cmd'] != 'UpdateCache')
-                    $this->SendDebug('ReceiveData', 'ACTION ' . $buffer['cmd'] . ' FOR THIS MODULE NOT DEFINED!', 0);
+                    $this->SendSafeDebug('ReceiveData', 'ACTION FOR THIS MODULE NOT DEFINED!');
                 break;
         }
 
@@ -140,21 +140,20 @@ class SymconJSLiveDoughnutPie extends JSLiveModule
         $scriptID = $this->ReadPropertyInteger('TemplateScriptID');
         if (empty($scriptID)) {
             if ($this->ReadPropertyBoolean('Debug'))
-                $this->SendDebug('GetWebpage', 'load default template!', 0);
+                $this->SendSafeDebug('GetWebpage', 'load default template!');
             $scriptData = file_get_contents(__DIR__ . '/../SymconJSLive/templates/Doughnut-PIE.html');
         }else {
             if (!IPS_ScriptExists($scriptID)) {
-                $this->SendDebug('GetWebpage', 'Template NOT FOUND!', 0);
+                $this->SendSafeDebug('GetWebpage', 'Template NOT FOUND!');
                 return '';
             }
 
             $scriptData = IPS_GetScriptContent($scriptID);
             if ($scriptData == '') {
-                $this->SendDebug('GetWebpage', 'Template IS EMPTY!', 0);
+                $this->SendSafeDebug('GetWebpage', 'Template IS EMPTY!');
             }
         }
 
-        //$this->SendDebug('GetWebpage', $scriptData, 0);
         $scriptData = $this->ReplacePlaceholder($scriptData);
 
         return $scriptData;
@@ -176,7 +175,6 @@ class SymconJSLiveDoughnutPie extends JSLiveModule
         }
 
         if (!array_key_exists('var', $querydata)) {
-            //$this->SendDebug("GetData", "PARAMETER VARIABLE NOT SET!(" . json_encode($querydata). ")", 0);
             $load_vars = $registered_vars;
         }else {
             $load_vars[] = $querydata['var'];
@@ -186,20 +184,20 @@ class SymconJSLiveDoughnutPie extends JSLiveModule
             $o_item = [];
             $o_item['Variable'] = $var;
             if (!IPS_VariableExists($var)) {
-                $this->SendDebug('GetData', 'VARIABLE NOT EXIST!', 0);
+                $this->SendSafeDebug('GetData', 'VARIABLE NOT EXIST!');
                 continue;
             }
 
             $key = array_search($var, array_column($registered_vars, 'Variable'));
             if (!in_array($var, $registered_vars)) {
-                $this->SendDebug('GetData', 'VARIABLE NOT IN INSTANCE!', 0);
+                $this->SendSafeDebug('GetData', 'VARIABLE NOT IN INSTANCE!');
                 continue;
             }
 
             $o_item['Value'] = round(GetValue($var), $this->ReadPropertyInteger('data_precision'));
 
             if ($this->ReadPropertyBoolean('Debug'))
-                $this->SendDebug('GetData', json_encode($querydata), 0);
+                $this->SendSafeDebug('GetData', 'Variable data requested');
 
             $output[] = $o_item;
         }
@@ -313,12 +311,12 @@ class SymconJSLiveDoughnutPie extends JSLiveModule
         array_multisort($arr_order, SORT_ASC, $datasets);
 
         if (!is_array($datasets)) {
-            $this->SendDebug('GenerateDataSet', 'No Datasets set!', 0);
+            $this->SendSafeDebug('GenerateDataSet', 'No Datasets set!');
             return '{}';
         }
         foreach ($datasets as $item) {
             if (count($item['Variables']) == 0) {
-                $this->SendDebug('GenerateDataSet', 'No Variables set! Jump to next Dataset!', 0);
+                $this->SendSafeDebug('GenerateDataSet', 'No Variables set! Jump to next Dataset!');
                 continue;
             }
 
@@ -340,7 +338,7 @@ class SymconJSLiveDoughnutPie extends JSLiveModule
 
             foreach ($item['Variables'] as $varitem) {
                 if (!IPS_VariableExists($varitem['Variable'])) {
-                    $this->SendDebug('GenerateDataSet', 'VARIABLE ' . $varitem['Variable'] . ' NOT EXIST!', 0);
+                    $this->SendSafeDebug('GenerateDataSet', 'VARIABLE NOT EXIST!');
                     continue;
                 }
 
@@ -463,7 +461,6 @@ class SymconJSLiveDoughnutPie extends JSLiveModule
                         $c++;
 
                         if ((count($output['datasets']) - 1) >= $c) {
-                            //$this->SendDebug("VAR", json_encode($output["datasets"][$c]["variables"]), 0);
                             $end = count($output['datasets'][$c]['variables']) - 1;
                         } else {
                             $end = $start;
@@ -478,10 +475,6 @@ class SymconJSLiveDoughnutPie extends JSLiveModule
 
                     $output['datasets'][$key]['variables'][] = null;
                     $output['datasets'][$key]['data'][] = null;
-
-                    //$this->SendDebug("Count", "C=".$c ." | Start=" . $start . " | END=". $end, 0);
-                    //$this->SendDebug("Test", json_encode($output["datasets"][$c]["backgroundColor"]), 0);
-                    //$this->SendDebug("Test", $output["datasets"][$c]["backgroundColor"][$start], 0);
 
                     $output['datasets'][$key]['borderWidth'][] = $output['datasets'][$c]['borderWidth'][$start];
                     $output['datasets'][$key]['backgroundColor'][] = $output['datasets'][$c]['backgroundColor'][$start];
