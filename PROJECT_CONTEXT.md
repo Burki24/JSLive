@@ -1,7 +1,7 @@
 # PROJECT_CONTEXT - JSLive
 
 Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
-`b43ec42ffaba305cda563d5dadf644ce9463ae0c`.
+`c7e07f7974c14acce73d3958cb4f6774b1b4d733`.
 
 ## 1. Zweck und Zielbild
 
@@ -176,9 +176,11 @@ fuer Konfigurationstransfer, Formulare, Rendering und DataFlow geprueft. Danach
 wurde der zentrale Splitter `SymconJSLive/module.php` isoliert formatiert und mit
 Webhook-Routing, DataFlow und Vertragspruefung abgesichert. Danach wurde
 `SymconJSLiveDoughnutPie` einzeln formatiert und gegen den Vertrags-Snapshot und
-die Gesamtsuite geprueft. Im Produktionsbestand sind noch 6 Dateien zu
-bearbeiten. Der verpflichtende Style-Workflow wird daher erst nach der
-vollstaendigen, schrittweise geprueften Formatierung aktiviert.
+die Gesamtsuite geprueft. Danach wurde `SymconJSLiveCalendar` isoliert formatiert
+und mit seinem realen Konfigurationsformular-Harness sowie dem Vertrags-Snapshot
+geprueft. Im Produktionsbestand sind noch 5 Dateien zu bearbeiten. Der
+verpflichtende Style-Workflow wird daher erst nach der vollstaendigen,
+schrittweise geprueften Formatierung aktiviert.
 
 Noch nicht abgedeckt sind Symcon-Laufzeitverhalten, Webhook-Authentisierung und
 Pfadbehandlung, modulspezifische Formulardynamik ausserhalb des gemeinsamen
@@ -330,6 +332,9 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
      Symcon-Laufzeitpruefung ausstehend);
    - `DoughnutPie` einzeln formatieren und gegen Vertrags-Snapshot und
      Gesamtsuite pruefen (abgeschlossen; Rendering-, Browser- und
+     Symcon-Laufzeitpruefung ausstehend);
+   - `Calendar` isoliert formatieren und mit Formular- und Vertragspruefung
+     absichern (abgeschlossen; ICS-, Event-, Browser- und
      Symcon-Laufzeitpruefung ausstehend);
    - bestehenden PHP-Code in einer getrennten mechanischen Aenderung mit
       Vertrags- und Verhaltenstests formatieren;
