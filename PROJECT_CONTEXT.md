@@ -1,7 +1,7 @@
 # PROJECT_CONTEXT - JSLive
 
 Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
-`36b10c84dda69f70e1be8a1202e3c0c53bc6d5ea`.
+`81490d1d28b91ba47d423840ba31da85d4e6f21f`.
 
 ## 1. Zweck und Zielbild
 
@@ -167,7 +167,8 @@ Vorhandene lokale Pruefungen:
 
 GitHub Actions fuehrt die Tests ueber
 `Burki24/Symcon_ModuleCI/php-tests@v1.0.0` mit PHP 8.5 aus. CodeQL prueft
-JavaScript/TypeScript. Der aktuelle Commit war in beiden Workflows erfolgreich.
+JavaScript/TypeScript. Tests, StylePHP und CodeQL waren fuer den aktuellen
+Commit erfolgreich.
 
 Das offizielle `symcon/StylePHP`-Repository ist als `.style`-Submodul auf Commit
 `ec73bf742e18b049ad5c90de09033987d3ce671e` eingebunden. Der erste lokale
@@ -219,8 +220,6 @@ Noch nicht abgedeckt sind Symcon-Laufzeitverhalten, Webhook-Authentisierung und
 Pfadbehandlung, modulspezifische Formulardynamik ausserhalb des gemeinsamen
 Metadatenvertrags, Migrationen, Renderausgaben der weiteren Module,
 Browserbibliotheken, einzelne Modulaktionen sowie Store-/Sync-Netzwerkpfade.
-Der erneute GitHub-Lauf des Style-Workflows ist erst nach dem Push der
-JSON-Formatierung verifizierbar.
 
 ## 8. Symcon-9-/PHP-8.5-Stand
 
@@ -334,8 +333,8 @@ Prioritaet mittel:
 
 Dokumentationsluecken:
 
-- Root-README nennt nur einen Teil der 13 Module, verwendet einen falschen
-  RadarChart-Pfad und nennt noch IP-Symcon 5.3 als Ziel;
+- Die Root-README beschreibt nun alle 13 Module, den Modernisierungsstatus,
+  Installation, CI und bekannte Sicherheits-/Betriebseinschraenkungen;
 - sechs Module besitzen keine README; vorhandene README-Dateien enthalten
   teilweise kopierte Namen und GUIDs;
 - Datenfluss, Hook-Protokoll, oeffentliche Methoden, Migrationsregeln,
@@ -413,9 +412,13 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
      Workflow aktivieren (abgeschlossen; der erste Lauf deckte 41
      JSON-Styleabweichungen auf);
    - alle vom offiziellen StylePHP-JSON-Pruefer erfassten Dateien mechanisch
-     formatieren und ihre kanonischen Inhalte vergleichen (lokal abgeschlossen;
-     erneuter GitHub-Lauf nach Push ausstehend).
-4. Root- und Modul-Dokumentation auf den Ist-Stand bringen.
+     formatieren und ihre kanonischen Inhalte vergleichen (abgeschlossen; CI
+     erfolgreich).
+4. Root- und Modul-Dokumentation auf den Ist-Stand bringen:
+   - Root-README mit allen 13 Modulen, Zielplattform, Installation, CI und
+     bekannten Einschraenkungen aktualisieren (abgeschlossen);
+   - fehlende und fehlerhafte Modul-READMEs schrittweise ueberarbeiten
+     (ausstehend).
 
 ### Phase 1 - Sicherheitsgrenzen
 

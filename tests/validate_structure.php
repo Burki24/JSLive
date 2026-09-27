@@ -21,6 +21,18 @@ $expectedModules = [
     'SymconJSLiveSyncModule'          => 3
 ];
 
+$readmePath = $root . '/README.md';
+$readme = file_get_contents($readmePath);
+if ($readme === false) {
+    $errors[] = 'Cannot read README.md';
+} else {
+    foreach (array_keys($expectedModules) as $moduleDirectory) {
+        if (!str_contains($readme, '](' . $moduleDirectory . ')')) {
+            $errors[] = 'README.md does not link module directory: ' . $moduleDirectory;
+        }
+    }
+}
+
 /**
  * Reads a JSON object and records a useful validation error on failure.
  *

@@ -1,51 +1,101 @@
-[![Version](https://img.shields.io/badge/Symcon-PHPModul-red.svg)](https://www.symcon.de/service/dokumentation/entwicklerbereich/sdk-tools/sdk-php/)
-[![Version](https://img.shields.io/badge/Modul%20Version-0.9-blue.svg)]()
-[![Version](https://img.shields.io/badge/Symcon%20Version-5.3%20%3E-green.svg)](https://www.symcon.de/forum/threads/30857-IP-Symcon-5-3-%28Stable%29-Changelog)
+# JSLive
 
-# JSlive
-Die Bibiliotek dient zum verteilen der JSLive-Module im Modulstore
-Alle meine Module unter: https://github.com/Acer90/SymconModule
+[![Tests](https://github.com/Burki24/JSLive/actions/workflows/tests.yml/badge.svg?branch=dev)](https://github.com/Burki24/JSLive/actions/workflows/tests.yml)
+[![Style](https://github.com/Burki24/JSLive/actions/workflows/style.yml/badge.svg?branch=dev)](https://github.com/Burki24/JSLive/actions/workflows/style.yml)
+[![CodeQL](https://github.com/Burki24/JSLive/actions/workflows/codeql-analysis.yml/badge.svg?branch=dev)](https://github.com/Burki24/JSLive/actions/workflows/codeql-analysis.yml)
 
-## Dokumentation
+JSLive ist eine IP-Symcon-Modulbibliothek für browserbasierte Visualisierungen.
+Ein zentraler Splitter stellt den Webhook, gemeinsame Konfiguration und statische
+Assets bereit. Die Visualisierungsmodule erzeugen daraus HTML-, CSS- und
+JavaScript-Ausgaben für IP-Symcon und bestehende IPSView-Installationen.
 
-**Inhaltsverzeichnis**
+Das Bestandsprojekt wird derzeit auf IP-Symcon 9.0/9.1 und PHP 8.5 vorbereitet.
+Die öffentlichen Modulverträge und vorhandenen Installationen sollen während
+der Modernisierung kompatibel bleiben.
 
-1. [Funktionsumfang](#1-funktionsumfang)  
-2. [Voraussetzungen](#2-voraussetzungen)  
-3. [Lizenz](#6-lizenz)
+## Projektstatus
 
-## 1. Funktionsumfang
+- Entwicklungszweig: `dev`
+- Bibliotheksversion: `0.9.9.9`, Build 35
+- Zielplattform: IP-Symcon 9.0/9.1 und PHP 8.5
+- Lokale Vertrags-, Struktur- und Verhaltenstests sowie StylePHP laufen in der
+  GitHub-CI.
+- Eine vollständige Laufzeitmatrix auf realen Symcon-9-Installationen und die
+  Freigabe als modernisierte stabile Version stehen noch aus.
+- Die bestehende Ausgabe über `~HTMLBox` und IPSView bleibt vorerst erhalten.
+  Eine native Kacheldarstellung wird später schrittweise ergänzt.
 
-- __SymconJSLive__ ([Dokumentation](SymconJSLive))  
-	Splitter für alle JSLive Module
-	
-- __SymconJSLiveChart__ ([Dokumentation](SymconJSLiveChart))  
-	Modul zum erstellen von Balken- und Liniendiagrammen
-	
-- __SymconJSLiveChartRadar__ ([Dokumentation](SymconJSLiveChartRadar))  
-	Modul zum erstellen von Radardiagrammen
-	
-- __SymconJSLiveColorPicker__ ([Dokumentation](SymconJSLiveColorPicker))  
-	Modul zum erstellen von Colorpicker
-	
-- __SymconJSLiveCustom__ ([Dokumentation](SymconJSLiveCustom))  
-	Modul zum erstellen von Eigner Javasriptausgaben auf basis von JSLive
-	
-- __SymconJSLiveDoughnutPie__ ([Dokumentation](SymconJSLiveDoughnutPie))  
-	Modul zum erstellen von Donat- und Tortendiagrammen
-	
-- __SymconJSLiveGauge__ ([Dokumentation](SymconJSLiveGauge))  
-	Modul zum erstellen von animierte Messinstrumente(Gauges)
-	
-- __SymconJSLiveProgressbar__ ([Dokumentation](SymconJSLiveProgressbar))  
-	Modul zum erstellen von anpassbaren Progressbars
+## Module
 
-## 2. Voraussetzungen
+| Modul | Aufgabe |
+| --- | --- |
+| [`SymconJSLive`](SymconJSLive) | Splitter, Webhook `/hook/JSLive`, gemeinsame Links, Konfiguration und Assets |
+| [`SymconJSLiveAdvTextfield`](SymconJSLiveAdvTextfield) | Erweitertes Textfeld mit HTML-/Skript-Template |
+| [`SymconJSLiveCalendar`](SymconJSLiveCalendar) | Kalenderdarstellung und ICS-Quellen |
+| [`SymconJSLiveChart`](SymconJSLiveChart) | Linien- und Balkendiagramme mit Archivdaten |
+| [`SymconJSLiveColorPicker`](SymconJSLiveColorPicker) | Farbauswahl und Rückschreiben von Werten |
+| [`SymconJSLiveCustom`](SymconJSLiveCustom) | Benutzerdefinierte HTML-/JavaScript-Ausgaben und Objektaktionen |
+| [`SymconJSLiveDateTimePicker`](SymconJSLiveDateTimePicker) | Datum-/Zeitauswahl und Rückschreiben von Werten |
+| [`SymconJSLiveDoughnutPie`](SymconJSLiveDoughnutPie) | Doughnut- und Tortendiagramme |
+| [`SymconJSLiveGauge`](SymconJSLiveGauge) | Animierte Messinstrumente |
+| [`SymconJSLiveProgressbar`](SymconJSLiveProgressbar) | Konfigurierbare Fortschrittsanzeigen und SVG-Import |
+| [`SymconJSLiveRadarChart`](SymconJSLiveRadarChart) | Radardiagramme mit Archivdaten |
+| [`SymconJSLiveConfigStore`](SymconJSLiveConfigStore) | Austausch und Import von Modulkonfigurationen über einen externen Dienst |
+| [`SymconJSLiveSyncModule`](SymconJSLiveSyncModule) | Synchronisation ausgewählter Konfigurationsparameter zwischen Instanzen |
 
- - IPS 5.3 oder höher  
+Die zehn Visualisierungsmodule verwenden den JSLive-Splitter als übergeordnete
+Instanz. ConfigStore und SyncModule sind eigenständige Sondermodule.
 
-## 3. Lizenz
+## Installation und Verwendung
 
-  IPS-Modul:  
-  [GNU GENERAL PUBLIC LICENSE](http://www.gnu.org/licenses/)  
- 
+Für Entwicklungs- und Testinstallationen kann das Repository
+`https://github.com/Burki24/JSLive` in der IP-Symcon-Modulverwaltung eingebunden
+und der Zweig `dev` gewählt werden.
+
+Für ein Visualisierungsmodul wird eine JSLive-Splitterinstanz benötigt. Beim
+Anlegen eines Kindmoduls kann IP-Symcon die fehlende Splitterinstanz automatisch
+erzeugen. Im Splitter werden insbesondere die erreichbare Adresse und ein
+Webhook-Kennwort konfiguriert. Die erzeugten Links beziehungsweise
+Ausgabevariablen können anschließend in der Visualisierung oder in IPSView
+verwendet werden.
+
+Die detaillierte Modulkonfiguration ist in den jeweiligen Modulverzeichnissen
+dokumentiert. Diese Dokumentation wird im Zuge der Modernisierung schrittweise
+überarbeitet.
+
+## Bekannte Einschränkungen
+
+- Die Symcon-9-Laufzeitprüfung aller Module ist noch nicht abgeschlossen.
+- ConfigStore und SyncModule deaktivieren derzeit bei ihren externen
+  HTTPS-Aufrufen die Zertifikatsprüfung. Diese Netzwerkpfade sind noch nicht für
+  einen produktiven Einsatz freigegeben.
+- Die Webhook-Authentisierung und sensible Debugausgaben werden in einer
+  eigenen Sicherheitsphase überarbeitet. Der Webhook sollte nicht ungeschützt
+  öffentlich erreichbar sein.
+- Calendar und ColorPicker beziehen noch einzelne Frontend-Ressourcen von
+  externen CDNs. Die vollständige lokale und reproduzierbare Auslieferung ist
+  geplant.
+- Mehrere Frontend-Bibliotheken liegen derzeit in unterschiedlichen Versionen
+  im Repository. Aktualisierungen erfolgen erst nach einer Nutzungs- und
+  Lizenzinventur.
+
+Weitere technische Details, Risiken und der priorisierte Modernisierungsplan
+stehen in [`PROJECT_CONTEXT.md`](PROJECT_CONTEXT.md).
+
+## Entwicklung und Prüfungen
+
+Die lokale Mindestprüfung besteht aus:
+
+```text
+php tests/run.php
+php-cs-fixer fix --dry-run --using-cache=no --allow-risky=yes --config=.style/.php-cs-fixer.php
+php .style/json-check.php
+```
+
+GitHub Actions führt zusätzlich die gemeinsamen Prüfungen aus
+`Burki24/Symcon_ModuleCI` mit PHP 8.5 sowie CodeQL für die
+JavaScript-/TypeScript-Quellen aus.
+
+## Lizenz
+
+JSLive steht unter der [GNU General Public License Version 3](LICENSE).
