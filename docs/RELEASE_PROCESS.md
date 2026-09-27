@@ -11,9 +11,9 @@ keine voneinander abweichenden Versionen.
 - Der Git-Tag ergaenzt die SemVer-Patchstelle: `v0.10.0`.
 - Tag, Release-Titel, `library.json` und Changelog muessen dieselbe Version
   nennen.
-- Nach Aktivierung der Metadatenautomatik aktualisiert der Bot auf `dev`
-  Version, Build und Datum. Sein Lauf muss abgeschlossen sein, bevor der
-  endgueltige Kandidaten-Commit gewaehlt wird.
+- Die Metadatenautomatik aktualisiert auf `dev` Version, Build und Datum. Ihr
+  Lauf muss abgeschlossen sein, bevor der endgueltige Kandidaten-Commit
+  gewaehlt wird.
 
 ## Kandidat vorbereiten
 

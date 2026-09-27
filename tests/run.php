@@ -17,7 +17,8 @@ $tests = [
 ];
 
 $commands = [
-    ['Verify vendored helper integrity', 'python3 tests/helper_integrity.py']
+    ['Verify vendored helper integrity', 'python3 tests/helper_integrity.py'],
+    ['Test library metadata updater', 'python3 tests/test_update_library_metadata.py']
 ];
 
 foreach ($tests as $test) {

@@ -1,7 +1,7 @@
 # PROJECT_CONTEXT - JSLive
 
 Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
-`83dbab0df5bf5dec553633477bd936bcdb0e0ea4`.
+`25fd163340dac13cafdb5b39d32dd14cada2cbb1`.
 
 ## 1. Zweck und Zielbild
 
@@ -28,8 +28,9 @@ Architektur oder ein gleichzeitiger Austausch aller Frontend-Bibliotheken.
   `dev`, ohne eigene Abweichung.
 - Bibliotheksversion: `0.10`, Build 35. Die Version wurde als isolierter
   Bootstrap vom historischen Stand `0.9.9.9` auf das kuenftige Schema
-  `Hauptversion.Nebenstand` umgestellt. Build und Datum bleiben bis zur
-  Aktivierung des Metadatenworkflows unveraendert.
+  `Hauptversion.Nebenstand` umgestellt. Der vorbereitete Metadatenworkflow wird
+  diese drei Felder nach dem ersten nicht vom Bot erzeugten Push auf `dev`
+  aktualisieren.
 - Gegenueber `main` enthaelt `dev` im Wesentlichen CI, Struktur-/Integritaetstests,
   den zentral bezogenen Helper-Bestand und die bereits erfolgte Anbindung des
   `DataFlowHelper`.
@@ -131,8 +132,11 @@ Die Ueberschneidung liegt bei Standards, CI und Helper-Infrastruktur.
 Vorhandene lokale Pruefungen:
 
 - `tests/validate_structure.php`: Bibliothek, 13 Module, Metadaten,
-  Helper-Konfiguration, CodeQL-Sprache und die feste Einbindung des gemeinsamen
-  Style-Workflows;
+  Helper-Konfiguration, CodeQL-Sprache sowie die feste Einbindung der
+  gemeinsamen Style- und Metadatenworkflows;
+- `tests/test_update_library_metadata.py`: Erhoehung der gemeinsamen
+  Library-Version ab `0.10`, Build-Ableitung aus dem Quell-SHA, Commit-Zeit und
+  Schutz vor einer Rueckstufung;
 - `tests/public-contracts.php`: maschinenlesbare Charakterisierung von 13
   Modulvertraegen und 15 PHP-Quellen mit derzeit 569 Properties, 10 Variablen,
   7 Actions, 107 oeffentlichen Methoden sowie den bestehenden Hook-Pfaden;
@@ -430,7 +434,7 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
      Bootstrap vollziehen (umgesetzt; `0.10` ist nach PHP-/Symcon-
      Versionsvergleich neuer als `0.9.9.9`);
    - Workflow, Python-Updater und Regressionstest aus dem Referenzverfahren
-     projektspezifisch uebernehmen;
+     projektspezifisch uebernehmen (lokal umgesetzt und geprueft);
    - bei nicht vom Bot erzeugten Pushes nach `dev` den Nebenstand pro
      Quellcommit erhoehen, `build` aus den ersten sieben Zeichen des Quell-SHA
      und `date` aus dessen Commit-Zeit bilden;
@@ -439,8 +443,9 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
      jeder Metadatenaktualisierung die gemeinsame Testsuite ausfuehren;
    - fuer den schreibenden Bot die vorhandene GitHub-App-Konvention mit
      `HELPER_SYNC_APP_CLIENT_ID` und `HELPER_SYNC_APP_PRIVATE_KEY` verwenden;
-     die Pruefung am 27.09.2026 ergab, dass beide Eintraege im
-     JSLive-Repository noch fehlen und vor Aktivierung einzurichten sind;
+     die App `Burki24 Helper Sync` ist fuer JSLive installiert, die Pruefung am
+     27.09.2026 ergab jedoch, dass beide Repository-Eintraege noch fehlen und
+     vor dem ersten Push des Workflows einzurichten sind;
    - die generierten Felder in `library.json` nicht mehr manuell pflegen und
      diese Regel in `AGENTS.md`, Strukturtests und Projektdokumentation sichern;
    - ein `CHANGELOG.md` mit einem dauerhaft gepflegten Abschnitt `Unreleased`
@@ -540,11 +545,12 @@ erst nach den Sicherheits-, Kompatibilitaets- und Migrationsgrundlagen.
 
 ## 13. Entschiedene Punkte und offene Entscheidungen
 
-- Der einmalige Versionsuebergang von `0.9.9.9` auf `0.10` ist entschieden und
-  als getrennter Bootstrap vorbereitet.
+- Der einmalige Versionsuebergang von `0.9.9.9` auf `0.10` wurde als getrennter
+  Bootstrap committed und erfolgreich in der CI geprueft.
 - Die GitHub-App-Variable `HELPER_SYNC_APP_CLIENT_ID` und das Secret
-  `HELPER_SYNC_APP_PRIVATE_KEY` fehlen im JSLive-Repository. Ihre Einrichtung
-  ist ein externes Gate vor der Aktivierung des schreibenden Workflows.
+  `HELPER_SYNC_APP_PRIVATE_KEY` fehlen im JSLive-Repository. Die App
+  `Burki24 Helper Sync` ist bereits installiert; die beiden Eintraege bleiben
+  das externe Gate vor dem ersten Push des schreibenden Workflows.
 - Welche der 13 Module werden produktiv noch benoetigt, und welche werden nur
   kompatibel erhalten oder stillgelegt?
 - Soll `ConfigStore` weiter betrieben werden, und wer betreibt/dokumentiert den

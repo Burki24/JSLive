@@ -18,6 +18,8 @@ der Modernisierung kompatibel bleiben.
 - Entwicklungszweig: `dev`
 - Bibliotheksversion: `0.10` (Migrationsstand für die automatische
   Versionierung; noch keine Produktfreigabe), Build 35
+- Nicht vom Bot erzeugte Pushes nach `dev` erhalten automatisch eine gemeinsame
+  neue Library-Version für alle 13 Module; der Workflow erzeugt keine Releases.
 - Zielplattform: IP-Symcon 9.0/9.1 und PHP 8.5
 - Lokale Vertrags-, Struktur- und Verhaltenstests sowie StylePHP laufen in der
   GitHub-CI.

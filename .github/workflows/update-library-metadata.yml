@@ -1,0 +1,122 @@
+name: Update library metadata
+
+on:
+  push:
+    branches:
+      - dev
+
+permissions:
+  contents: read
+
+concurrency:
+  group: update-library-metadata-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  update-library-metadata:
+    if: "${{ github.event.head_commit == null || !startsWith(github.event.head_commit.message, 'CHORE: Update library metadata') }}"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.HELPER_SYNC_APP_CLIENT_ID }}
+          private-key: ${{ secrets.HELPER_SYNC_APP_PRIVATE_KEY }}
+          permission-contents: write
+
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref_name }}
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Get GitHub App user ID
+        id: app-user
+        shell: bash
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          echo "user-id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
+
+      - name: Run shared module tests
+        uses: Burki24/Symcon_ModuleCI/php-tests@v1.0.0
+
+      - name: Determine source commit metadata
+        id: source
+        shell: bash
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          if [[ "$BEFORE_SHA" =~ ^0+$ ]] || ! git cat-file -e "${BEFORE_SHA}^{commit}" 2>/dev/null; then
+            base_ref=$(git rev-parse "${SOURCE_SHA}^" 2>/dev/null || true)
+          else
+            base_ref="$BEFORE_SHA"
+          fi
+
+          if [[ -n "$base_ref" ]] && git cat-file -e "${base_ref}:library.json" 2>/dev/null; then
+            base_version=$(git show "${base_ref}:library.json" | python3 -c 'import json, sys; print(json.load(sys.stdin)["version"])')
+          else
+            base_version=$(python3 -c 'import json; print(json.load(open("library.json", encoding="utf-8"))["version"])')
+          fi
+
+          if [[ "$BEFORE_SHA" =~ ^0+$ ]] || ! git cat-file -e "${BEFORE_SHA}^{commit}" 2>/dev/null; then
+            increment=1
+          else
+            increment=$(
+              git log --format=%s "${BEFORE_SHA}..${SOURCE_SHA}" |
+                grep -vc '^CHORE: Update library metadata' || true
+            )
+
+            if (( increment < 1 )); then
+              increment=1
+            fi
+          fi
+
+          commit_date=$(git show -s --format=%ct "$SOURCE_SHA")
+          short_sha=${SOURCE_SHA:0:7}
+
+          echo "base_version=$base_version" >> "$GITHUB_OUTPUT"
+          echo "increment=$increment" >> "$GITHUB_OUTPUT"
+          echo "commit_date=$commit_date" >> "$GITHUB_OUTPUT"
+          echo "short_sha=$short_sha" >> "$GITHUB_OUTPUT"
+
+      - name: Update library.json
+        shell: bash
+        run: |
+          python3 .github/scripts/update_library_metadata.py \
+            --file library.json \
+            --sha "${{ github.sha }}" \
+            --date "${{ steps.source.outputs.commit_date }}" \
+            --increment "${{ steps.source.outputs.increment }}" \
+            --base-version "${{ steps.source.outputs.base_version }}"
+
+      - name: Commit and push metadata
+        shell: bash
+        env:
+          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
+          APP_USER_ID: ${{ steps.app-user.outputs.user-id }}
+          SHORT_SHA: ${{ steps.source.outputs.short_sha }}
+        run: |
+          set -euo pipefail
+
+          if git diff --quiet -- library.json; then
+            echo "library.json is already up to date."
+            exit 0
+          fi
+
+          git config user.name "${APP_SLUG}[bot]"
+          git config user.email "${APP_USER_ID}+${APP_SLUG}[bot]@users.noreply.github.com"
+
+          version=$(
+            python3 -c 'import json; print(json.load(open("library.json", encoding="utf-8"))["version"])'
+          )
+
+          git add library.json
+          git commit -m "CHORE: Update library metadata to v${version} (${SHORT_SHA})"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

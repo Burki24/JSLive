@@ -33,10 +33,10 @@ JSLive. Projektspezifische Fakten und offene Entscheidungen stehen in
 - Die Library verwendet eine gemeinsame Version im Format
   `Hauptversion.Nebenstand` fuer alle 13 Module. Git-Tags ergaenzen die
   Patchstelle als `v<Library-Version>.0`.
-- `library.json` steht seit dem einmaligen Bootstrap auf `0.10`. Sobald der
-  Metadatenworkflow aktiviert ist, werden `version`, `build` und `date` nur
-  noch durch diesen Workflow gepflegt; manuelle Aenderungen sind dann allein
-  Teil einer ausdruecklichen Metadaten- oder Migrationsaufgabe.
+- `library.json` stand fuer den einmaligen Bootstrap auf `0.10`. Der
+  Metadatenworkflow pflegt auf `dev` anschliessend `version`, `build` und
+  `date`; manuelle Aenderungen dieser Felder sind allein Teil einer
+  ausdruecklichen Metadaten- oder Migrationsaufgabe.
 - Wesentliche Aenderungen werden im Abschnitt `Unreleased` von `CHANGELOG.md`
   gepflegt. Der verbindliche Ablauf fuer `dev` nach `main`, Tag, GitHub Release
   und Ruecksynchronisierung steht in `docs/RELEASE_PROCESS.md`.

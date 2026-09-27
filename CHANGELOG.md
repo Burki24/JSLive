@@ -25,6 +25,9 @@ Patchstelle, beispielsweise `v0.10.0`.
   Bestandsarchitektur, Konfigurationspfade und ausgewaehlte Render-/Datenfluesse.
 - Gemeinsame GitHub-Actions-Pruefungen fuer Tests und Style sowie CodeQL fuer
   JavaScript-/TypeScript-Quellen sind eingerichtet.
+- Der Metadatenworkflow erhoeht auf `dev` die gemeinsame Library-Version pro
+  Quellcommit und erzeugt Build und Datum reproduzierbar aus dessen Git-Daten.
+  Ein Regressionstest sichert Berechnung und Rueckwaertsschutz ab.
 
 ### Verified
 

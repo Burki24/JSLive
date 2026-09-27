@@ -243,6 +243,48 @@ if ($styleWorkflow === false) {
     }
 }
 
+foreach ([
+    '.github/scripts/update_library_metadata.py',
+    'tests/test_update_library_metadata.py'
+] as $requiredMetadataFile) {
+    if (!is_file($root . '/' . $requiredMetadataFile)) {
+        $errors[] = 'Missing library metadata automation file: ' . $requiredMetadataFile;
+    }
+}
+
+$metadataWorkflowPath = $root . '/.github/workflows/update-library-metadata.yml';
+$metadataWorkflow = file_get_contents($metadataWorkflowPath);
+if ($metadataWorkflow === false) {
+    $errors[] = 'Cannot read .github/workflows/update-library-metadata.yml';
+} else {
+    foreach ([
+        'branches:',
+        '- dev',
+        'concurrency:',
+        "'CHORE: Update library metadata'",
+        'uses: actions/create-github-app-token@v3',
+        'client-id: ${{ vars.HELPER_SYNC_APP_CLIENT_ID }}',
+        'private-key: ${{ secrets.HELPER_SYNC_APP_PRIVATE_KEY }}',
+        'uses: actions/checkout@v6',
+        'uses: Burki24/Symcon_ModuleCI/php-tests@v1.0.0',
+        'python3 .github/scripts/update_library_metadata.py',
+        'git push origin "HEAD:${GITHUB_REF_NAME}"'
+    ] as $requiredWorkflowContent) {
+        if (!str_contains($metadataWorkflow, $requiredWorkflowContent)) {
+            $errors[] = '.github/workflows/update-library-metadata.yml is missing required content: '
+                . $requiredWorkflowContent;
+        }
+    }
+}
+
+$testRunnerPath = $root . '/tests/run.php';
+$testRunner = file_get_contents($testRunnerPath);
+if ($testRunner === false) {
+    $errors[] = 'Cannot read tests/run.php';
+} elseif (!str_contains($testRunner, 'python3 tests/test_update_library_metadata.py')) {
+    $errors[] = 'tests/run.php must execute the library metadata updater regression test.';
+}
+
 if ($errors !== []) {
     fwrite(STDERR, "JSLive structure validation failed:\n - " . implode("\n - ", $errors) . "\n");
     exit(1);
