@@ -283,7 +283,7 @@ class SymconJSLiveCalendar extends JSLiveModule
                 return $this->GetICS($buffer['queryData']['md5']);
             default:
                 if ($buffer['cmd'] != 'UpdateCache')
-                    $this->SendDebug('ReceiveData', 'ACTION ' . $buffer['cmd'] . ' FOR THIS MODULE NOT DEFINED!', 0);
+                    $this->SendSafeDebug('ReceiveData', 'ACTION FOR THIS MODULE NOT DEFINED!');
                 break;
         }
     }
@@ -323,21 +323,20 @@ class SymconJSLiveCalendar extends JSLiveModule
         $scriptID = $this->ReadPropertyInteger('TemplateScriptID');
         if (empty($scriptID)) {
             if ($this->ReadPropertyBoolean('Debug'))
-                $this->SendDebug('GetWebpage', 'load default template!', 0);
+                $this->SendSafeDebug('GetWebpage', 'load default template!');
             $scriptData = file_get_contents(__DIR__ . '/../SymconJSLive/templates/Calendar.html');
         }else {
             if (!IPS_ScriptExists($scriptID)) {
-                $this->SendDebug('GetWebpage', 'Template NOT FOUND!', 0);
+                $this->SendSafeDebug('GetWebpage', 'Template NOT FOUND!');
                 return '';
             }
 
             $scriptData = IPS_GetScriptContent($scriptID);
             if ($scriptData == '') {
-                $this->SendDebug('GetWebpage', 'Template IS EMPTY!', 0);
+                $this->SendSafeDebug('GetWebpage', 'Template IS EMPTY!');
             }
         }
 
-        //$this->SendDebug('GetWebpage', $scriptData, 0);
         $scriptData = $this->ReplacePlaceholder($scriptData);
 
         return $scriptData;
@@ -391,7 +390,7 @@ class SymconJSLiveCalendar extends JSLiveModule
             }
 
             if ($this->ReadPropertyBoolean('Debug'))
-                $this->SendDebug('GetOutput', 'Get Data form Cache!', 0);
+                $this->SendSafeDebug('GetOutput', 'Get Data form Cache!');
             return json_encode(['Contend' => $this->GetBuffer('OutputCSS'), 'lastModify' => $this->GetBuffer('LastModifed'), 'EnableCache' => $EnableCache, 'InstanceID' => $this->InstanceID]);
         }else {
             return json_encode(['Contend' => $this->GenerateCSS(), 'lastModify' => time(), 'EnableCache' => $EnableCache, 'InstanceID' => $this->InstanceID]);
@@ -405,12 +404,12 @@ class SymconJSLiveCalendar extends JSLiveModule
         foreach ($data as $item) {
             if (!empty($item['moduleInstance'])) continue;
             if (!empty($item['ical']) && md5($item['ical']) === $md5) {
-                $this->SendDebug('GetICS', 'Loading File => ' . $item['Name'], 0);
+                $this->SendSafeDebug('GetICS', 'Loading File');
 
                 $fileData = base64_decode($item['ical']);
                 break;
             }elseif (!empty($item['icalLink']) && md5($item['icalLink']) === $md5) {
-                $this->SendDebug('GetICS', 'Loading Link => ' . $item['icalLink'], 0);
+                $this->SendSafeDebug('GetICS', 'Loading Link');
 
                 $fileData = file_get_contents($item['icalLink']);
                 break;

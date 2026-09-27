@@ -25,6 +25,8 @@ Patchstelle, beispielsweise `v0.10.0`.
   Diagnosen; unbekannte Befehlsnamen gelangen nicht mehr in die Debug-Ausgabe.
 - ColorPicker und DateTimePicker verwenden `DebugHelper` fuer ihre eigenen
   Diagnosen; uebergebene Werte und gerendertes HTML werden nicht mehr geloggt.
+- AdvTextfield und Calendar verwenden `DebugHelper` fuer ihre eigenen Diagnosen;
+  Textinhalte, Quellnamen und iCalendar-URLs werden nicht mehr geloggt.
 
 ### Added
 

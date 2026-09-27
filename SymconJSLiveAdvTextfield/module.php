@@ -77,7 +77,7 @@ class SymconJSLiveAdvTextfield extends JSLiveModule
                 return $this->SetData($buffer['queryData']);
             default:
                 if ($buffer['cmd'] != 'UpdateCache')
-                    $this->SendDebug('ReceiveData', 'ACTION ' . $buffer['cmd'] . ' FOR THIS MODULE NOT DEFINED!', 0);
+                    $this->SendSafeDebug('ReceiveData', 'ACTION FOR THIS MODULE NOT DEFINED!');
                 break;
         }
     }
@@ -102,21 +102,20 @@ class SymconJSLiveAdvTextfield extends JSLiveModule
         $scriptID = $this->ReadPropertyInteger('TemplateScriptID');
         if (empty($scriptID)) {
             if ($this->ReadPropertyBoolean('Debug'))
-                $this->SendDebug('GetWebpage', 'load default template!', 0);
+                $this->SendSafeDebug('GetWebpage', 'load default template!');
             $scriptData = file_get_contents(__DIR__ . '/../SymconJSLive/templates/' . $this->ReadPropertyString('Template') . '.html');
         }else {
             if (!IPS_ScriptExists($scriptID)) {
-                $this->SendDebug('GetWebpage', 'Template NOT FOUND!', 0);
+                $this->SendSafeDebug('GetWebpage', 'Template NOT FOUND!');
                 return '';
             }
 
             $scriptData = IPS_GetScriptContent($scriptID);
             if ($scriptData == '') {
-                $this->SendDebug('GetWebpage', 'Template IS EMPTY!', 0);
+                $this->SendSafeDebug('GetWebpage', 'Template IS EMPTY!');
             }
         }
 
-        //$this->SendDebug('GetWebpage', $scriptData, 0);
         $scriptData = $this->ReplacePlaceholder($scriptData);
 
         return $scriptData;
@@ -131,12 +130,12 @@ class SymconJSLiveAdvTextfield extends JSLiveModule
     private function SetData(array $querydata)
     {
         if (!array_key_exists('val', $querydata)) {
-            $this->SendDebug('SetData', 'NO VALUE SET!', 0);
+            $this->SendSafeDebug('SetData', 'NO VALUE SET!');
             return 'NO VALUE SET!';
         }
 
         $val = urldecode($querydata['val']);
-        $this->SendDebug('SetData', 'Update Content => ' . $val, 0);
+        $this->SendSafeDebug('SetData', 'Update Content');
         $this->SetValue('Content', $val);
         return 'OK';
     }

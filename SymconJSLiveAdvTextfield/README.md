@@ -44,9 +44,11 @@ AdvTextfield-Instanz desselben Modultyps.
 ## Hinweise und Sicherheit
 
 Eigene Vorlagen werden als HTML/JavaScript im Browser ausgeführt und dürfen nur
-aus vertrauenswürdigen Quellen stammen. Debug-Ausgaben können Konfigurations-
-und Inhaltsdaten enthalten. Die bestehende `~HTMLBox`-/IPSView-Kompatibilität
-bleibt erhalten; eine native Kacheldarstellung ist eine spätere Ausbaustufe.
+aus vertrauenswürdigen Quellen stammen. Die modulspezifische Diagnose für
+`setData` protokolliert den geschriebenen Inhalt nicht; andere Diagnosepfade
+können weiterhin Konfigurationsdaten enthalten. Die bestehende `~HTMLBox`-/
+IPSView-Kompatibilität bleibt erhalten; eine native Kacheldarstellung ist eine
+spätere Ausbaustufe.
 
 ## Technische Daten
 
