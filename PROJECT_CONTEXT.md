@@ -1,7 +1,7 @@
 # PROJECT_CONTEXT - JSLive
 
 Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
-`914f571d1fd93518fbc735daeeda56d4dd141282`.
+`83e4876cebc2f9de43b0feb113ecc0742edfb095`.
 
 ## 1. Zweck und Zielbild
 
@@ -170,9 +170,12 @@ zweite Produktionsgruppe wurden `SymconJSLiveColorPicker` und
 `SymconJSLiveAdvTextfield` einzeln formatiert und mit seinem gezielten
 Rendering-Harness geprueft. Anschliessend wurde die sicherheitsnahe Basisklasse
 `SymconJSLive/libs/WebHookModule.php` isoliert formatiert und mit dem
-Webhook-Routing-Harness geprueft. Im Produktionsbestand sind noch 9 Dateien zu
-bearbeiten. Der verpflichtende Style-Workflow wird daher erst nach der
-vollstaendigen, schrittweise geprueften Formatierung aktiviert.
+Webhook-Routing-Harness geprueft. Danach wurde die zentrale Kindmodul-Basisklasse
+`SymconJSLive/libs/JSLiveModule.php` isoliert formatiert und mit den Harnesses
+fuer Konfigurationstransfer, Formulare, Rendering und DataFlow geprueft. Im
+Produktionsbestand sind noch 8 Dateien zu bearbeiten. Der verpflichtende
+Style-Workflow wird daher erst nach der vollstaendigen, schrittweise geprueften
+Formatierung aktiviert.
 
 Noch nicht abgedeckt sind Symcon-Laufzeitverhalten, Webhook-Authentisierung und
 Pfadbehandlung, modulspezifische Formulardynamik ausserhalb des gemeinsamen
@@ -184,6 +187,9 @@ StylePHP und ein php-cs-fixer-Check sind noch nicht Teil der JSLive-Workflowdate
 
 - Die vorhandenen Tests laufen lokal und in der CI unter PHP 8.5.
 - Der zuvor problematische Datenfluss verwendet kein `utf8_encode` mehr.
+- Die Aktivierung von `strict_types` in `JSLiveModule.php` deckte eine implizite
+  Float-zu-Integer-Konvertierung beim Aufruf von `srand()` auf. Der Seed wird nun
+  explizit nach `int` konvertiert; der Formular-Harness sichert diesen Pfad ab.
 - Alle Module verwenden noch `IPSModule`; der Webhook basiert auf einer lokalen
   `WebHookModule`-Basisklasse. Symcon 9 empfiehlt fuer neue Module
   `IPSModuleStrict` und dessen native Hook-API. Eine Umstellung ist wegen der
@@ -309,6 +315,10 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
      (abgeschlossen; Symcon-Laufzeitpruefung weiterhin ausstehend);
    - `WebHookModule.php` isoliert formatieren und mit dem Routing-Harness pruefen
      (abgeschlossen; Sicherheits- und Symcon-Laufzeitpruefung ausstehend);
+   - `JSLiveModule.php` isoliert formatieren und mit Konfigurations-, Formular-,
+     Rendering- und DataFlow-Harnesses pruefen (abgeschlossen; ein notwendiger
+     expliziter `srand()`-Seed-Cast ist enthalten, Symcon-Laufzeitpruefung steht
+     weiterhin aus);
    - bestehenden PHP-Code in einer getrennten mechanischen Aenderung mit
       Vertrags- und Verhaltenstests formatieren;
    - `Symcon_ModuleCI/style@v1.0.0` als verpflichtenden, getrennt erkennbaren
