@@ -1,8 +1,7 @@
 {
-  "translations": {
-    "de": {
-	  "Status OK!": "Status Ok!"
+    "translations": {
+        "de": {
+            "Status OK!": "Status Ok!"
+        }
     }
-  }
 }
-

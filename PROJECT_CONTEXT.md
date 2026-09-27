@@ -1,7 +1,7 @@
 # PROJECT_CONTEXT - JSLive
 
 Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
-`9d47ce611ad02fca62f2b0d426a44b6ef89dc2e0`.
+`36b10c84dda69f70e1be8a1202e3c0c53bc6d5ea`.
 
 ## 1. Zweck und Zielbild
 
@@ -210,14 +210,17 @@ Produktionsbestand vollstaendig formatiert. Der repositoryweite Prueflauf findet
 verpflichtende Workflow `.github/workflows/style.yml` fuehrt nun bei Pushes,
 Pull Requests und manueller Ausloesung den gemeinsamen Check
 `Burki24/Symcon_ModuleCI/style@v1.0.0` aus. Die Strukturpruefung sichert diese
-Versionierung ab.
+Versionierung ab. Der erste GitHub-Lauf deckte zusaetzlich 41 bislang nicht nach
+StylePHP formatierte JSON-Dateien auf. Sie wurden mit dem offiziellen
+`json-check.php fix` rein mechanisch formatiert; ein kanonischer Inhaltsvergleich
+gegen den Ausgangscommit bestaetigt unveraenderte JSON-Daten.
 
 Noch nicht abgedeckt sind Symcon-Laufzeitverhalten, Webhook-Authentisierung und
 Pfadbehandlung, modulspezifische Formulardynamik ausserhalb des gemeinsamen
 Metadatenvertrags, Migrationen, Renderausgaben der weiteren Module,
 Browserbibliotheken, einzelne Modulaktionen sowie Store-/Sync-Netzwerkpfade.
-Der erste GitHub-Lauf des neuen Style-Workflows ist erst nach dem Push
-verifizierbar.
+Der erneute GitHub-Lauf des Style-Workflows ist erst nach dem Push der
+JSON-Formatierung verifizierbar.
 
 ## 8. Symcon-9-/PHP-8.5-Stand
 
@@ -407,8 +410,11 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    - bestehenden PHP-Code schrittweise mit Vertrags- und Verhaltenstests
      formatieren (abgeschlossen; repositoryweit 0 von 27 Style-Abweichungen);
    - `Symcon_ModuleCI/style@v1.0.0` als verpflichtenden, getrennt erkennbaren
-     Workflow aktivieren (lokal abgeschlossen; erster GitHub-Lauf nach Push
-     ausstehend).
+     Workflow aktivieren (abgeschlossen; der erste Lauf deckte 41
+     JSON-Styleabweichungen auf);
+   - alle vom offiziellen StylePHP-JSON-Pruefer erfassten Dateien mechanisch
+     formatieren und ihre kanonischen Inhalte vergleichen (lokal abgeschlossen;
+     erneuter GitHub-Lauf nach Push ausstehend).
 4. Root- und Modul-Dokumentation auf den Ist-Stand bringen.
 
 ### Phase 1 - Sicherheitsgrenzen
