@@ -1,7 +1,7 @@
 # PROJECT_CONTEXT - JSLive
 
 Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
-`322a4454cdcef74f1118be0fda1dfa7c12752f8b`.
+`9d47ce611ad02fca62f2b0d426a44b6ef89dc2e0`.
 
 ## 1. Zweck und Zielbild
 
@@ -128,7 +128,8 @@ Die Ueberschneidung liegt bei Standards, CI und Helper-Infrastruktur.
 Vorhandene lokale Pruefungen:
 
 - `tests/validate_structure.php`: Bibliothek, 13 Module, Metadaten,
-  Helper-Konfiguration und CodeQL-Sprache;
+  Helper-Konfiguration, CodeQL-Sprache und die feste Einbindung des gemeinsamen
+  Style-Workflows;
 - `tests/public-contracts.php`: maschinenlesbare Charakterisierung von 13
   Modulvertraegen und 15 PHP-Quellen mit derzeit 569 Properties, 10 Variablen,
   7 Actions, 107 oeffentlichen Methoden sowie den bestehenden Hook-Pfaden;
@@ -206,14 +207,17 @@ API-Werte, Instanz-IDs und fehlgeschlagene cURL-Rueckgaben werden an den durch
 Importe und die bestehende TLS-Konfiguration blieben unveraendert. Damit ist der
 Produktionsbestand vollstaendig formatiert. Der repositoryweite Prueflauf findet
 0 von 27 erfassten PHP-Dateien mit verbleibender StylePHP-Abweichung. Der
-verpflichtende Style-Workflow kann als naechste isolierte Aenderung aktiviert
-werden.
+verpflichtende Workflow `.github/workflows/style.yml` fuehrt nun bei Pushes,
+Pull Requests und manueller Ausloesung den gemeinsamen Check
+`Burki24/Symcon_ModuleCI/style@v1.0.0` aus. Die Strukturpruefung sichert diese
+Versionierung ab.
 
 Noch nicht abgedeckt sind Symcon-Laufzeitverhalten, Webhook-Authentisierung und
 Pfadbehandlung, modulspezifische Formulardynamik ausserhalb des gemeinsamen
 Metadatenvertrags, Migrationen, Renderausgaben der weiteren Module,
 Browserbibliotheken, einzelne Modulaktionen sowie Store-/Sync-Netzwerkpfade.
-StylePHP und ein php-cs-fixer-Check sind noch nicht Teil der JSLive-Workflowdatei.
+Der erste GitHub-Lauf des neuen Style-Workflows ist erst nach dem Push
+verifizierbar.
 
 ## 8. Symcon-9-/PHP-8.5-Stand
 
@@ -403,7 +407,8 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    - bestehenden PHP-Code schrittweise mit Vertrags- und Verhaltenstests
      formatieren (abgeschlossen; repositoryweit 0 von 27 Style-Abweichungen);
    - `Symcon_ModuleCI/style@v1.0.0` als verpflichtenden, getrennt erkennbaren
-      Workflow aktivieren.
+     Workflow aktivieren (lokal abgeschlossen; erster GitHub-Lauf nach Push
+     ausstehend).
 4. Root- und Modul-Dokumentation auf den Ist-Stand bringen.
 
 ### Phase 1 - Sicherheitsgrenzen

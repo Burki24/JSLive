@@ -200,6 +200,21 @@ if ($codeqlWorkflow === false) {
     }
 }
 
+$styleWorkflowPath = $root . '/.github/workflows/style.yml';
+$styleWorkflow = file_get_contents($styleWorkflowPath);
+if ($styleWorkflow === false) {
+    $errors[] = 'Cannot read .github/workflows/style.yml';
+} else {
+    foreach ([
+        'uses: actions/checkout@v6',
+        'uses: Burki24/Symcon_ModuleCI/style@v1.0.0'
+    ] as $requiredWorkflowContent) {
+        if (!str_contains($styleWorkflow, $requiredWorkflowContent)) {
+            $errors[] = '.github/workflows/style.yml is missing required content: ' . $requiredWorkflowContent;
+        }
+    }
+}
+
 if ($errors !== []) {
     fwrite(STDERR, "JSLive structure validation failed:\n - " . implode("\n - ", $errors) . "\n");
     exit(1);
