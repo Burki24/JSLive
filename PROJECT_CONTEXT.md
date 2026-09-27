@@ -1,7 +1,7 @@
 # PROJECT_CONTEXT - JSLive
 
 Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
-`83e4876cebc2f9de43b0feb113ecc0742edfb095`.
+`ebfa4dbef6116df0dfd221237a7fef5125e64677`.
 
 ## 1. Zweck und Zielbild
 
@@ -172,10 +172,11 @@ Rendering-Harness geprueft. Anschliessend wurde die sicherheitsnahe Basisklasse
 `SymconJSLive/libs/WebHookModule.php` isoliert formatiert und mit dem
 Webhook-Routing-Harness geprueft. Danach wurde die zentrale Kindmodul-Basisklasse
 `SymconJSLive/libs/JSLiveModule.php` isoliert formatiert und mit den Harnesses
-fuer Konfigurationstransfer, Formulare, Rendering und DataFlow geprueft. Im
-Produktionsbestand sind noch 8 Dateien zu bearbeiten. Der verpflichtende
-Style-Workflow wird daher erst nach der vollstaendigen, schrittweise geprueften
-Formatierung aktiviert.
+fuer Konfigurationstransfer, Formulare, Rendering und DataFlow geprueft. Danach
+wurde der zentrale Splitter `SymconJSLive/module.php` isoliert formatiert und mit
+Webhook-Routing, DataFlow und Vertragspruefung abgesichert. Im Produktionsbestand
+sind noch 7 Dateien zu bearbeiten. Der verpflichtende Style-Workflow wird daher
+erst nach der vollstaendigen, schrittweise geprueften Formatierung aktiviert.
 
 Noch nicht abgedeckt sind Symcon-Laufzeitverhalten, Webhook-Authentisierung und
 Pfadbehandlung, modulspezifische Formulardynamik ausserhalb des gemeinsamen
@@ -319,6 +320,9 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
      Rendering- und DataFlow-Harnesses pruefen (abgeschlossen; ein notwendiger
      expliziter `srand()`-Seed-Cast ist enthalten, Symcon-Laufzeitpruefung steht
      weiterhin aus);
+   - den zentralen Splitter isoliert formatieren und mit Webhook-, DataFlow- und
+     Vertragspruefungen absichern (abgeschlossen; Sicherheits- und
+     Symcon-Laufzeitpruefung ausstehend);
    - bestehenden PHP-Code in einer getrennten mechanischen Aenderung mit
       Vertrags- und Verhaltenstests formatieren;
    - `Symcon_ModuleCI/style@v1.0.0` als verpflichtenden, getrennt erkennbaren
