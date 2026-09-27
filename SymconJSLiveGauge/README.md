@@ -1,83 +1,52 @@
-[![Version](https://img.shields.io/badge/Symcon-PHPModul-red.svg)](https://www.symcon.de/service/dokumentation/entwicklerbereich/sdk-tools/sdk-php/)
-[![Version](https://img.shields.io/badge/Symcon%20Version-5.3%20%3E-green.svg)](https://www.symcon.de/forum/threads/30857-IP-Symcon-5-3-%28Stable%29-Changelog)
+# SymconJSLiveGauge
 
-# SymconJSLive Gauge
-Verwendet https://canvas-gauges.com/ um animierte Messinstrumente(Gauges) dazustellen.
-![Animierte Gauge](https://github.com/Acer90/SymconModule/blob/alpha/imgs/Gauge.gif?raw=true)
+Das Modul visualisiert den Wert einer Symcon-Variable als animiertes
+Messinstrument. Unterstützt werden die mitgelieferten radialen und linearen
+Canvas-Gauge-Vorlagen sowie konfigurierbare Skalen, Zeiger, Wertanzeige,
+Fortschrittsbalken und Hervorhebungsbereiche.
 
-## Dokumentation
-**Inhaltsverzeichnis**
+## Voraussetzungen und Installation
 
-1. [Funktionsumfang](#1-funktionsumfang)
-2. [Voraussetzungen](#2-voraussetzungen)
-3. [Installation](#3-installation)
-4. [Hinweise zur Verwendung](#4-hinweise-zur-verwendung)
-5. [Einrichten](#5-einrichten)
-6. [PHP-Befehlsreferenz](#6-php-befehlsreferenz)
-7. [Parameter / Modul-Infos](#7-parameter--modul-infos)
-8. [Datenaustausch](#8-datenaustausch)
-9. [Anhang](#9-anhang)
-10. [Lizenz](#10-lizenz)
+- IP-Symcon 9.0 oder 9.1 mit PHP 8.5
+- eine JSLive-Splitterinstanz (`SymconJSLive`)
+- eine numerische Symcon-Variable als Datenquelle
 
-## 1. Funktionsumfang
-  Mit hilfe dieses Modules können Animierte Gauges für IP-Symcon erstellt werden.
+Eine `SymconJSLiveGauge`-Instanz anlegen, `Variable`, `min`, `max` und
+`precision` setzen und den Splitter verbinden.
 
-## 2. Voraussetzungen
-  - IPS ab Version 5.3
+## Konfiguration
 
-## 3. Installation
-   Die installation des Module ist über den Symcon Modulstore **kostenlos** möglich
+| Bereich | Eigenschaften |
+| --- | --- |
+| Datenquelle | `Variable`, Wertebereich `min`/`max`, `precision` und optionale automatische Konvertierung |
+| Vorlage | `template` (`CanvasGauges-Radial`, `CanvasGauges-Linear` oder `CanvasGauges-Compass`) |
+| Skala | Ticks, Zwischenwerte, Hervorhebungen sowie radiale/lineare Winkel und Seiten |
+| Anzeige | Titel, Einheit, Platte, Nadel, ValueBox und Fortschrittsbalken |
+| Ausgabe | HTMLBox/IPSView, eigene Vorlage über `TemplateScriptID`, Viewport und IFrame-Größe |
+| Betrieb | Browser-Cache und Debug |
 
-## 4. Hinweise zur Verwendung
+## Daten- und Webhook-Befehle
 
-## 5. Einrichten und Aktionen
-- Für die Verwendung des Moduls wird die Splitter instance benötigt, diese wird so fern noch nicht angelegt automatisch beim anlegen des Moduls mit erstellt.
+Der bestehende Vertrag umfasst `getContend`, `getData` und
+`exportConfiguration`. `GetData(array $querydata)` liefert die aktuelle
+Gauge-Konfiguration; `LoadOtherConfiguration(int $id)` übernimmt eine andere
+Gauge-Instanz.
 
-**Öffne Link**
-- Öffnet den Ausgabe link im Browser
-- Der Button "Öffne Link" funktioniert nur wenn im Splitter eine Adresse gesetzt ist!
+## Frontend und Sicherheit
 
-## 6. PHP-Befehlsreferenz
-Keine PHP-Befehlsreferenz nötig
+Die Standardvorlagen verwenden die lokal im JSLive-Hook ausgelieferte
+Canvas-Gauges-Bibliothek. Eigene Vorlagen laufen als HTML/JavaScript im Browser
+und müssen vertrauenswürdig sein.
 
-## 7. Parameter / Modul-Infos
-GUID des Modules (z.B. wenn Instanz per PHP angelegt werden soll):  
+## Technische Daten
 
-| Instanz           | GUID                                   |
-| :---------------: | :------------------------------------: |
-| Device            | {71B93700-9659-97C6-AD83-984C2B44139F} |
+| Eintrag | Wert |
+| --- | --- |
+| Modul-ID | `{71B93700-9659-97C6-AD83-984C2B44139F}` |
+| Prefix | `SymconJSLiveGauge` |
+| Parent-Anforderung | `{751AABD7-E31D-024C-5CC0-82AC15B84095}` |
+| Kindmodul-Schnittstelle | `{79D59629-E9C5-44F1-0F34-0FBC5C88F307}` |
 
-**Allgemeine Einstellungen**
+## Lizenz
 
-![Gauge Overview](https://github.com/Acer90/SymconModule/blob/alpha/imgs/Gauge-Overview.png?raw=true)
-
-1. Titel
-2. Platte (Plate)
-3. Nadel/Zeiger (Needle)
-4. Wert (ValueBox)
-5. Fortschrittsbalken (Progressbar)
-6. Schritte/Zwischenwerte (Ticks)
-
-Weitere Infos:
-https://canvas-gauges.com/documentation/user-guide/configuration#gauge-specific-configuration-options
-
-**Expert Einstellungen**
-
-| Eigenschaft       | Typ       | Standardwert  | Info                                                                      |
-| :---------------: | :-------: | :-----------: | :-----------------------------------------------------------------------: |
-| Debug             | bool      | false         | Dienst zur erweiterten Ausgabe in Symcon
-| Verwende Cache    | bool      | true          | Aktiviert den Cache-Support des Browsers
-| Erstelle HTMLBox  | bool      | true          | erstellt eine Htmlbox mit Iframe zur Instance
-| Vorlage Skript    | int       |               | Hier kann eine Custom Vorlage importiert werden, für weiter Informationen siehe Export von Vorlagen im Splitter Modul
-| Viewport aktivieren | bool    | true          | Damit Engräte die Ausgabe der Module automatisch skalieren können
-| Iframe Höhe       | int       | 0             | 0 = Auto, sonnst kann hier die höhe in Px angegeben werden.
-
-## 8. Datenaustausch
- folgt später...
-
-## 9. Anhang
-- [canvas-gauges](https://canvas-gauges.com/)
-
-## 10. Lizenz
-  IPS-Modul:  
-  [GNU GENERAL PUBLIC LICENSE](http://www.gnu.org/licenses/)  
+JSLive steht unter der [GNU General Public License Version 3](../LICENSE).

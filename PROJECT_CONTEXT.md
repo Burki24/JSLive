@@ -344,9 +344,9 @@ Dokumentationsluecken:
 - Die Root-README beschreibt nun alle 13 Module, den Modernisierungsstatus,
   Installation, CI und bekannte Sicherheits-/Betriebseinschraenkungen;
 - Alle 13 Module besitzen jetzt eine README. Die sechs zuvor fehlenden Dateien
-  wurden aus dem tatsächlichen Modulvertrag erstellt; sieben vorhandene
-  README-Dateien enthalten weiterhin teilweise kopierte Namen und GUIDs und
-  müssen in einem separaten Dokumentationsschritt bereinigt werden;
+  wurden aus dem tatsächlichen Modulvertrag erstellt; die sieben vorhandenen
+  README-Dateien wurden anschließend auf korrekte Titel, GUIDs, Zielplattform,
+  Datenverträge und bekannte Frontend-Einschränkungen synchronisiert.
 - Datenfluss, Hook-Protokoll, oeffentliche Methoden, Migrationsregeln,
   Frontend-Lizenzen und Store-/Sync-Protokolle sind nicht vollstaendig
   dokumentiert.
@@ -427,9 +427,8 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
 4. Root- und Modul-Dokumentation auf den Ist-Stand bringen:
    - Root-README mit allen 13 Modulen, Zielplattform, Installation, CI und
      bekannten Einschraenkungen aktualisieren (abgeschlossen);
-   - fehlende Modul-READMEs erstellen (abgeschlossen); die sieben vorhandenen
-     Modul-READMEs mit kopierten Namen, GUIDs und veralteten Plattformangaben
-     bleiben als separater Bereinigungsschritt offen.
+   - fehlende Modul-READMEs erstellen und die sieben vorhandenen Modul-READMEs
+     mit dem tatsächlichen Modulvertrag synchronisieren (abgeschlossen).
 5. Die automatische Library-Versionierung nach dem freigegebenen Vorbild von
    `OpenHomeAlarm` einfuehren:
    - den Uebergang von der historischen Vierkomponenten-Version `0.9.9.9` auf
