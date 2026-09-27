@@ -1,7 +1,7 @@
 # PROJECT_CONTEXT - JSLive
 
 Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
-`2afe620b3569291d4b49161dd8e5f2ad8ebff204`.
+`8a33ded186e5a41876050ee39006624cea83fc26`.
 
 ## 1. Zweck und Zielbild
 
@@ -146,6 +146,9 @@ Vorhandene lokale Pruefungen:
   AdvTextfield-Template mit zweistufiger Platzhalterverarbeitung,
   CSS-Farb-/Fontaufbereitung sowie cachefreiem, gecachtem und neu aufgebautem
   HTML-Ergebnis;
+- `tests/radar-chart-dates.php`: Datumsbereiche und Offset-Berechnung des
+  RadarChart fuer alle acht Perioden in relativem und absolutem Modus sowie
+  numerische Labels im Custom-Data-Pfad;
 - `tests/data-flow-integration.php`: statische Charakterisierung der
   DataFlowHelper-Anbindung;
 - `tests/helper_integrity.py`: Versionen, Hashes und Vollstaendigkeit der
@@ -160,9 +163,9 @@ Das offizielle `symcon/StylePHP`-Repository ist als `.style`-Submodul auf Commit
 `ec73bf742e18b049ad5c90de09033987d3ce671e` eingebunden. Der erste lokale
 php-cs-fixer-Prueflauf mit dieser Konfiguration weist 20 von 23 erfassten
 PHP-Dateien als noch zu formatieren aus. Als erste isolierte Gruppe wurden die
-Testquellen mechanisch formatiert: Alle acht PHP-Dateien unter `tests` bestehen
-nun den StylePHP-Prueflauf; Vertrags- und Verhaltenstests bleiben unveraendert
-gruen. Als erste Produktionsgruppe folgen die verwandten Einzelwertmodule
+Testquellen mechanisch formatiert: Die damals vorhandenen acht PHP-Dateien unter
+`tests` bestehen den StylePHP-Prueflauf; Vertrags- und Verhaltenstests bleiben
+unveraendert gruen. Als erste Produktionsgruppe folgen die verwandten Einzelwertmodule
 `SymconJSLiveGauge` und `SymconJSLiveProgressbar`. Beide bestehen nun ebenfalls
 den StylePHP-Prueflauf; die oeffentlichen Vertraege bleiben unveraendert. Als
 zweite Produktionsgruppe wurden `SymconJSLiveColorPicker` und
@@ -179,8 +182,11 @@ Webhook-Routing, DataFlow und Vertragspruefung abgesichert. Danach wurde
 die Gesamtsuite geprueft. Danach wurde `SymconJSLiveCalendar` isoliert formatiert
 und mit seinem realen Konfigurationsformular-Harness sowie dem Vertrags-Snapshot
 geprueft. Danach wurde `SymconJSLiveSyncModule` isoliert formatiert und gegen den
-Vertrags-Snapshot sowie die Gesamtsuite geprueft. Im Produktionsbestand sind noch
-4 Dateien zu bearbeiten. Der
+Vertrags-Snapshot sowie die Gesamtsuite geprueft. Danach wurde
+`SymconJSLiveRadarChart` isoliert formatiert. Die durch `strict_types` notwendigen
+Integer-Konvertierungen der `DateTime`-Bestandteile sind durch einen neuen Test
+fuer alle Perioden und beide Zeitmodi abgesichert. Im Produktionsbestand sind
+noch 3 Dateien zu bearbeiten. Der
 verpflichtende Style-Workflow wird daher erst nach der vollstaendigen,
 schrittweise geprueften Formatierung aktiviert.
 
@@ -197,6 +203,11 @@ StylePHP und ein php-cs-fixer-Check sind noch nicht Teil der JSLive-Workflowdate
 - Die Aktivierung von `strict_types` in `JSLiveModule.php` deckte eine implizite
   Float-zu-Integer-Konvertierung beim Aufruf von `srand()` auf. Der Seed wird nun
   explizit nach `int` konvertiert; der Formular-Harness sichert diesen Pfad ab.
+- Die Aktivierung von `strict_types` in `SymconJSLiveRadarChart` erforderte
+  explizite Integer-Konvertierungen fuer Datumsbestandteile aus
+  `DateTime::format()` sowie explizite String-Konvertierungen fuer numerische
+  Diagrammwerte. Der RadarChart-Test prueft alle Perioden in beiden Zeitmodi und
+  den isolierten Custom-Data-Pfad auf erneute PHP-8.5-`TypeError`.
 - Alle Module verwenden noch `IPSModule`; der Webhook basiert auf einer lokalen
   `WebHookModule`-Basisklasse. Symcon 9 empfiehlt fuer neue Module
   `IPSModuleStrict` und dessen native Hook-API. Eine Umstellung ist wegen der
@@ -275,6 +286,11 @@ Prioritaet mittel:
 - `SymconJSLiveDoughnutPie::GetData()` prueft neue Variablen gegen die falsche
   Liste und verwendet `array_column()` auf einer Liste skalarer Variablen-IDs;
   der Pfad benoetigt vor einer Korrektur einen gezielten Datensatztest;
+- `SymconJSLiveRadarChart::GetCorrectStartDate()` verwendet in mehreren
+  absoluten Perioden das Jahr eines neu erzeugten `DateTime`-Objekts statt
+  durchgaengig das Jahr des uebergebenen Zeitstempels. Dieses bestehende
+  Zeitverhalten benoetigt vor einer fachlichen Korrektur eine eigene Entscheidung
+  und Regressionstests;
 - Abhaengigkeit des ConfigStore von `jslive.babenschneider.net` und einem dort
   betriebenen Protokoll ohne lokale Schnittstellendokumentation.
 
@@ -341,6 +357,9 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    - `SyncModule` isoliert formatieren und gegen Vertrags-Snapshot und
      Gesamtsuite pruefen (abgeschlossen; Netzwerk-, TLS- und
      Symcon-Laufzeitpruefung ausstehend);
+   - `RadarChart` isoliert formatieren und seine Datums- und Offset-Berechnung
+     fuer PHP 8.5 absichern (abgeschlossen; Archivdaten-, Rendering-, Browser-
+     und Symcon-Laufzeitpruefung ausstehend);
    - bestehenden PHP-Code in einer getrennten mechanischen Aenderung mit
       Vertrags- und Verhaltenstests formatieren;
    - `Symcon_ModuleCI/style@v1.0.0` als verpflichtenden, getrennt erkennbaren
