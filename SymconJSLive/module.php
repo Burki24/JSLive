@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 include_once __DIR__ . '/libs/WebHookModule.php';
+require_once dirname(__DIR__) . '/libs/helper/HttpResponseHelper.php';
 
 class SymconJSLive extends WebHookModule
 {
+    use \Burki24\SymconModuleHelper\HttpResponseHelper;
+
     public function __construct($InstanceID)
     {
         parent::__construct($InstanceID, 'JSLive');
@@ -201,7 +204,7 @@ class SymconJSLive extends WebHookModule
                 $this->SendDebug('WebHook', 'JS PATH =>' . $path, 0);
 
             if (!file_exists($path)) {
-                header('HTTP/1.1 404 Not Found');
+                $this->SendPlainTextResponse(404, '');
                 return;
             }
 
@@ -295,7 +298,7 @@ class SymconJSLive extends WebHookModule
 
                 if ($passwordIsSet != $password && strtolower($Type) != 'getcss') {
                     $this->SendDebug('WebHook', 'WRONG PASSWORD!', 0);
-                    echo '';
+                    $this->SendPlainTextResponse(200, '');
                     $this->SendDebug('WebHook', 'Password send => ' . $password . ' (' . $passwordIsSet . ')', 0);
                     return;
                 }

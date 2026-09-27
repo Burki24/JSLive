@@ -141,6 +141,10 @@ function decodeWebhookMessage(string $json): array
 
 $harness = new WebhookRoutingHarness();
 
+$deniedResponse = $harness->route('/hook/JSLive/getData', 'instance=42&pw=wrong-secret');
+assertWebhookRouting($deniedResponse['output'] === '', 'A rejected password must not produce response data.');
+assertWebhookRouting($harness->childMessages === [], 'A rejected password must not reach child modules.');
+
 $harness->setChildResponses(['{"value":42}']);
 $dataResponse = $harness->route(
     '/hook/JSLive/getData',
@@ -159,11 +163,6 @@ assertWebhookRouting(
     ($dataMessage['inner']['queryData']['var'] ?? null) === '17',
     'getData no longer forwards module-specific query values.'
 );
-
-$harness->resetCapturedData();
-$deniedResponse = $harness->route('/hook/JSLive/getData', 'instance=42&pw=wrong-secret');
-assertWebhookRouting($deniedResponse['output'] === '', 'A rejected password must not produce response data.');
-assertWebhookRouting($harness->childMessages === [], 'A rejected password must not reach child modules.');
 
 $harness->resetCapturedData();
 $missingInstanceResponse = $harness->route('/hook/JSLive/getData', 'pw=synthetic-secret');
