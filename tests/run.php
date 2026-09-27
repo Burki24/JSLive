@@ -7,6 +7,7 @@ $tests = [
     __DIR__ . '/public-contracts.php',
     __DIR__ . '/webhook-routing.php',
     __DIR__ . '/configuration-transfer.php',
+    __DIR__ . '/configuration-form.php',
     __DIR__ . '/data-flow-integration.php'
 ];
 

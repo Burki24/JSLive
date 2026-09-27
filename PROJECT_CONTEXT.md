@@ -1,7 +1,7 @@
 # PROJECT_CONTEXT - JSLive
 
 Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
-`0057fed78a5d86613d9ad2dea1fd8b82827c3d74`.
+`a85bca377cac9514f198086d953f8ef698de9908`.
 
 ## 1. Zweck und Zielbild
 
@@ -139,6 +139,9 @@ Vorhandene lokale Pruefungen:
   Export, erfolgreicher Import bekannter Properties mit Erhalt ausgelassener
   Werte sowie nebenwirkungsfreie Ablehnung leerer, fehlerhafter,
   unvollstaendiger und modulfremder Importe;
+- `tests/configuration-form.php`: reales Calendar-Formular mit initialer und
+  dynamischer Auswertung von `viewlevel`, `viewdisable`,
+  `viewlevelexactly` und `requireItem` in verschachtelten Strukturen;
 - `tests/data-flow-integration.php`: statische Charakterisierung der
   DataFlowHelper-Anbindung;
 - `tests/helper_integrity.py`: Versionen, Hashes und Vollstaendigkeit der
@@ -150,14 +153,14 @@ GitHub Actions fuehrt die Tests ueber
 JavaScript/TypeScript. Der aktuelle Commit war in beiden Workflows erfolgreich.
 
 Noch nicht abgedeckt sind Symcon-Laufzeitverhalten, Webhook-Authentisierung und
-Pfadbehandlung, Formulare, Properties, Migrationen, Renderausgaben,
-Browserbibliotheken, einzelne Modulaktionen sowie Store-/Sync-Netzwerkpfade.
+Pfadbehandlung, modulspezifische Formulardynamik ausserhalb des gemeinsamen
+Metadatenvertrags, Migrationen, Renderausgaben, Browserbibliotheken, einzelne
+Modulaktionen sowie Store-/Sync-Netzwerkpfade.
 StylePHP und ein php-cs-fixer-Check sind noch nicht Teil der JSLive-Workflowdatei.
 
 ## 8. Symcon-9-/PHP-8.5-Stand
 
-- Die vorhandenen Tests laufen lokal unter PHP 8.2; die CI laeuft fuer den
-  aktuellen Commit erfolgreich unter PHP 8.5.
+- Die vorhandenen Tests laufen lokal und in der CI unter PHP 8.5.
 - Der zuvor problematische Datenfluss verwendet kein `utf8_encode` mehr.
 - Alle Module verwenden noch `IPSModule`; der Webhook basiert auf einer lokalen
   `WebHookModule`-Basisklasse. Symcon 9 empfiehlt fuer neue Module
@@ -259,6 +262,9 @@ ausdruecklich nicht als erhaltenswerte Vertraege festgeschrieben.
 Export, sichere Import-Ablehnung und erfolgreicher Import bekannter Properties
 sind ebenfalls charakterisiert. Die zuvor fehlerhafte Schluesselpruefung des
 Imports ist korrigiert und durch einen gezielten Regressionstest abgesichert.
+Der gemeinsame dynamische Formularvertrag ist anhand des realen
+Calendar-Formulars fuer initiale Darstellung und Live-Aktualisierung
+charakterisiert.
 
 1. Modul-/Property-/Variablen-/Methoden- und Hook-Vertraege maschinenlesbar
    erfassen.

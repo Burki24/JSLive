@@ -45,3 +45,12 @@ incomplete and foreign-module imports are rejected without applying an instance
 configuration. A valid import updates known properties, preserves omitted
 properties, ignores unknown fields, records the uploaded payload and applies the
 target instance exactly once.
+
+## Configuration form harness
+
+`configuration-form.php` loads the real Calendar form through its public
+configuration-form entry point. It verifies initial and live updates for the
+shared `viewlevel`, `viewdisable`, `viewlevelexactly` and `requireItem`
+metadata, including nested fields, generated non-exported technical names and
+controller `onChange` wiring. Random technical names are checked by behavior
+and are deliberately not stored as fixtures.
