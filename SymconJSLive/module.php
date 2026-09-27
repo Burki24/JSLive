@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 include_once __DIR__ . '/libs/WebHookModule.php';
+require_once dirname(__DIR__) . '/libs/helper/DebugHelper.php';
 require_once dirname(__DIR__) . '/libs/helper/HttpResponseHelper.php';
 
 class SymconJSLive extends WebHookModule
 {
+    use \Burki24\SymconModuleHelper\DebugHelper;
     use \Burki24\SymconModuleHelper\HttpResponseHelper;
 
     public function __construct($InstanceID)
@@ -59,7 +61,10 @@ class SymconJSLive extends WebHookModule
         $rData = json_decode($JSONString, true);
         $jsonData = json_decode($rData['Buffer'], true);
 
-        $this->SendDebug('ForwardData', $JSONString, 0);
+        $this->SendSafeDebug('ForwardData', [
+            'request' => $rData,
+            'data'    => $jsonData
+        ], 16_384, ['pw']);
 
         switch ($jsonData['Type']) {
             case 'UpdateHtml':
@@ -153,7 +158,7 @@ class SymconJSLive extends WebHookModule
 
             IPS_SetScriptContent($ScriptID, file_get_contents($template_path));
 
-            $this->SendDebug('UpdateTemplates', 'FileName: ' . $path_parts['filename'], 0);
+            $this->SendSafeDebug('UpdateTemplates', 'FileName: ' . $path_parts['filename']);
         }
 
     }
@@ -190,18 +195,26 @@ class SymconJSLive extends WebHookModule
     protected function ProcessHookData()
     {
 
-        if ($this->ReadPropertyBoolean('Debug'))
-            $this->SendDebug('WebHook', '$_SERVER: ' . print_r($_SERVER, true), 0);
+        if ($this->ReadPropertyBoolean('Debug')) {
+            $this->SendSafeDebug('WebHook', [
+                'server' => [
+                    'scriptName'          => $_SERVER['SCRIPT_NAME'] ?? null,
+                    'requestMethod'       => $_SERVER['REQUEST_METHOD'] ?? null,
+                    'queryStringPresent'  => array_key_exists('QUERY_STRING', $_SERVER),
+                    'acceptEncoding'      => $_SERVER['HTTP_ACCEPT_ENCODING'] ?? null
+                ]
+            ], 16_384, ['pw']);
+        }
 
         if (strpos($_SERVER['SCRIPT_NAME'], '/hook/JSLive/WS') !== false) {
-            $this->SendDebug('WebHook', 'Array POST: ' . print_r($_POST, true), 0);
+            $this->SendSafeDebug('WebHook', ['post' => $_POST], 16_384, ['pw']);
         } elseif (strpos($_SERVER['SCRIPT_NAME'], '/hook/JSLive/js') !== false) {
             //get javascript files load from webhook
             $subpath = substr($_SERVER['SCRIPT_NAME'], strlen('/hook/JSLive/'));
             $path = __DIR__ . '/' . $subpath;
 
             if ($this->ReadPropertyBoolean('Debug'))
-                $this->SendDebug('WebHook', 'JS PATH =>' . $path, 0);
+                $this->SendSafeDebug('WebHook', 'JS PATH =>' . $path);
 
             if (!file_exists($path)) {
                 $this->SendPlainTextResponse(404, '');
@@ -228,7 +241,7 @@ class SymconJSLive extends WebHookModule
                     }
                 }
 
-                $this->SendDebug('WebHook', json_encode($queryData), 0);
+                $this->SendSafeDebug('WebHook', ['queryData' => $queryData], 16_384, ['pw']);
 
                 $contend = file_get_contents($path);
                 $contend = str_replace('{INSTANCEID}', $queryData['intid'], $contend);
@@ -297,9 +310,12 @@ class SymconJSLive extends WebHookModule
                 //Keinpassword bei CSS Abfrage!
 
                 if ($passwordIsSet != $password && strtolower($Type) != 'getcss') {
-                    $this->SendDebug('WebHook', 'WRONG PASSWORD!', 0);
+                    $this->SendSafeDebug('WebHook', 'WRONG PASSWORD!');
                     $this->SendPlainTextResponse(200, '');
-                    $this->SendDebug('WebHook', 'Password send => ' . $password . ' (' . $passwordIsSet . ')', 0);
+                    $this->SendSafeDebug('WebHook', [
+                        'password'           => $password,
+                        'configuredPassword' => $passwordIsSet
+                    ]);
                     return;
                 }
             }
@@ -311,13 +327,9 @@ class SymconJSLive extends WebHookModule
             }
 
             if (!array_key_exists('instance', $queryData)) {
-                $this->SendDebug('WebHook', 'INSTANCE NOT SET!', 0);
+                $this->SendSafeDebug('WebHook', 'INSTANCE NOT SET!');
                 return ''; //wenn instance Parameter nicht gefunden
             }
-
-            //$this->SendDebug('WebHook', 'INSTANCE:'. $queryData["instance"], 0);
-            //$this->SendDebug('WebHook', 'Array QUERY_STRING: ' . print_r($queryData, true), 0);
-            //$this->SendDebug('WebHook', 'Array Server: ' . print_r($_SERVER, true), 0);
 
             header('HTTP/1.1 200 X');
             header('Access-Control-Allow-Origin: *');
@@ -329,8 +341,11 @@ class SymconJSLive extends WebHookModule
             ));
 
             if (!is_array($contend) || count($contend) == 0) {
-                $this->SendDebug('WebHook-' . $Type, 'NO INSTANCE FOUND!', 0);
-                $this->SendDebug('WebHook-' . $Type, 'Contend => ' . print_r($contend, true), 0);
+                $this->SendSafeDebug('WebHook-' . $Type, 'NO INSTANCE FOUND!');
+                $this->SendSafeDebug('WebHook-' . $Type, [
+                    'contentType'  => get_debug_type($contend),
+                    'contentCount' => is_countable($contend) ? count($contend) : null
+                ]);
                 header('Content-Type: text/html');
                 return 'NO INSTANCE FOUND!'; //wenn instance nicht gefunden
             }
@@ -355,7 +370,7 @@ class SymconJSLive extends WebHookModule
             $lastmodified = gmdate('D, d M Y H:i:s', time()) . ' GMT';
             $useCache = false;
 
-            $this->SendDebug('WebHook-' . $Type, 'adaa', 0);
+            $this->SendSafeDebug('WebHook-' . $Type, 'adaa');
 
             if (strtolower($Type) == 'getcontend') {
                 $arr_data = [];
@@ -369,7 +384,7 @@ class SymconJSLive extends WebHookModule
                 }
 
                 if (count($arr_data) == 0) {
-                    $this->SendDebug('WebHook-' . $Type, 'Instance Not in List!', 0);
+                    $this->SendSafeDebug('WebHook-' . $Type, 'Instance Not in List!');
                     echo 'Instance Not in List!';
                     return;
                 }
@@ -410,12 +425,12 @@ class SymconJSLive extends WebHookModule
                 }
 
                 if (count($arr_data) == 0) {
-                    $this->SendDebug('WebHook-' . $Type, 'Instance Not in List! (getCSS)', 0);
+                    $this->SendSafeDebug('WebHook-' . $Type, 'Instance Not in List! (getCSS)');
                     echo 'Instance Not in List!';
                     return;
                 }
 
-                $this->SendDebug('TEST', $arr_data['lastModify'], 0);
+                $this->SendSafeDebug('TEST', ['lastModify' => $arr_data['lastModify']]);
 
                 $contend = $arr_data['Contend'];
                 $lastmodified = $arr_data['lastModify'];
@@ -446,7 +461,12 @@ class SymconJSLive extends WebHookModule
                 header('Pragma: no-cache');
             }
 
-            if ($this->ReadPropertyBoolean('Debug')) $this->SendDebug('WebHook-' . $Type, $contend, 0);
+            if ($this->ReadPropertyBoolean('Debug')) {
+                $this->SendSafeDebug('WebHook-' . $Type, [
+                    'contentType'   => get_debug_type($contend),
+                    'contentLength' => is_string($contend) ? strlen($contend) : null
+                ]);
+            }
 
             if ($this->ReadPropertyBoolean('enableCompression') && strstr($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) {
                 $compressed = gzencode($contend);

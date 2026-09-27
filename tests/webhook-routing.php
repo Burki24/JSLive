@@ -144,6 +144,10 @@ $harness = new WebhookRoutingHarness();
 $deniedResponse = $harness->route('/hook/JSLive/getData', 'instance=42&pw=wrong-secret');
 assertWebhookRouting($deniedResponse['output'] === '', 'A rejected password must not produce response data.');
 assertWebhookRouting($harness->childMessages === [], 'A rejected password must not reach child modules.');
+$deniedDebug = json_encode($harness->debugMessages, JSON_THROW_ON_ERROR);
+assertWebhookRouting(!str_contains($deniedDebug, 'wrong-secret'), 'Rejected passwords must not be logged.');
+assertWebhookRouting(!str_contains($deniedDebug, 'synthetic-secret'), 'Configured passwords must not be logged.');
+assertWebhookRouting(str_contains($deniedDebug, '***'), 'Rejected password diagnostics must be masked.');
 
 $harness->setChildResponses(['{"value":42}']);
 $dataResponse = $harness->route(
