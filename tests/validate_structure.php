@@ -132,6 +132,10 @@ if ($actualNames !== $expectedNames) {
 $moduleIds = [];
 $prefixes = [];
 foreach ($discoveredModules as $directory => $modulePath) {
+    if (!is_file(dirname($modulePath) . '/README.md')) {
+        $errors[] = $directory . ' is missing README.md';
+    }
+
     foreach (['module.php', 'form.json', 'locale.json'] as $requiredFile) {
         if (!is_file(dirname($modulePath) . '/' . $requiredFile)) {
             $errors[] = $directory . ' is missing ' . $requiredFile;

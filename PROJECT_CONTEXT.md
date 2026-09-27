@@ -131,9 +131,9 @@ Die Ueberschneidung liegt bei Standards, CI und Helper-Infrastruktur.
 
 Vorhandene lokale Pruefungen:
 
-- `tests/validate_structure.php`: Bibliothek, 13 Module, Metadaten,
-  Helper-Konfiguration, CodeQL-Sprache sowie die feste Einbindung der
-  gemeinsamen Style- und Metadatenworkflows;
+- `tests/validate_structure.php`: Bibliothek, 13 Module, Modul-READMEs,
+  Metadaten, Helper-Konfiguration, CodeQL-Sprache sowie die feste Einbindung
+  der gemeinsamen Style- und Metadatenworkflows;
 - `tests/test_update_library_metadata.py`: Erhoehung der gemeinsamen
   Library-Version ab `0.10`, Build-Ableitung aus dem Quell-SHA, Commit-Zeit und
   Schutz vor einer Rueckstufung;
@@ -343,8 +343,10 @@ Dokumentationsluecken:
 
 - Die Root-README beschreibt nun alle 13 Module, den Modernisierungsstatus,
   Installation, CI und bekannte Sicherheits-/Betriebseinschraenkungen;
-- sechs Module besitzen keine README; vorhandene README-Dateien enthalten
-  teilweise kopierte Namen und GUIDs;
+- Alle 13 Module besitzen jetzt eine README. Die sechs zuvor fehlenden Dateien
+  wurden aus dem tatsächlichen Modulvertrag erstellt; sieben vorhandene
+  README-Dateien enthalten weiterhin teilweise kopierte Namen und GUIDs und
+  müssen in einem separaten Dokumentationsschritt bereinigt werden;
 - Datenfluss, Hook-Protokoll, oeffentliche Methoden, Migrationsregeln,
   Frontend-Lizenzen und Store-/Sync-Protokolle sind nicht vollstaendig
   dokumentiert.
@@ -425,8 +427,9 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
 4. Root- und Modul-Dokumentation auf den Ist-Stand bringen:
    - Root-README mit allen 13 Modulen, Zielplattform, Installation, CI und
      bekannten Einschraenkungen aktualisieren (abgeschlossen);
-   - fehlende und fehlerhafte Modul-READMEs schrittweise ueberarbeiten
-     (ausstehend).
+   - fehlende Modul-READMEs erstellen (abgeschlossen); die sieben vorhandenen
+     Modul-READMEs mit kopierten Namen, GUIDs und veralteten Plattformangaben
+     bleiben als separater Bereinigungsschritt offen.
 5. Die automatische Library-Versionierung nach dem freigegebenen Vorbild von
    `OpenHomeAlarm` einfuehren:
    - den Uebergang von der historischen Vierkomponenten-Version `0.9.9.9` auf
