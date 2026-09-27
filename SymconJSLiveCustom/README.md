@@ -48,7 +48,9 @@ Custom-Instanz desselben Typs.
 Vorlagen, Bibliotheken und Skripte können JavaScript ausführen. `setData` kann
 Symcon-Werte ändern, Medien schreiben oder direkt konfigurierte Skripte
 ausführen. Deshalb nur eigene, geprüfte Inhalte und ausdrücklich freigegebene
-Objekte verwenden. Debug-Ausgaben können Objekt- und Nutzdaten enthalten.
+Objekte verwenden. Die modulspezifische Diagnose protokolliert weder
+Bibliotheksinhalte noch gelesene oder geschriebene Objektwerte. Andere
+Diagnosepfade können weiterhin Konfigurationsdaten enthalten.
 
 ## Technische Daten
 

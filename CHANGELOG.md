@@ -29,6 +29,8 @@ Patchstelle, beispielsweise `v0.10.0`.
   Textinhalte, Quellnamen und iCalendar-URLs werden nicht mehr geloggt.
 - DoughnutPie verwendet `DebugHelper` fuer seine eigenen Diagnosen;
   Browser-Abfragen und unbekannte Befehlsnamen werden nicht mehr geloggt.
+- Custom verwendet `DebugHelper` fuer seine eigenen Diagnosen; eingebettete
+  Bibliotheken, Objekt- und Schreibwerte werden nicht mehr geloggt.
 
 ### Added
 

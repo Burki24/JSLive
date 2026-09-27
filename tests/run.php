@@ -21,7 +21,8 @@ $tests = [
     __DIR__ . '/gauge-progressbar-debug.php',
     __DIR__ . '/color-datetime-debug.php',
     __DIR__ . '/adv-calendar-debug.php',
-    __DIR__ . '/doughnut-debug.php'
+    __DIR__ . '/doughnut-debug.php',
+    __DIR__ . '/custom-debug.php'
 ];
 
 $commands = [

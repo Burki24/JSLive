@@ -66,7 +66,6 @@ class SymconJSLiveCustom extends JSLiveModule
         $buffer = json_decode($jsonData['Buffer'], true);
 
         //if($buffer["instance"] != $this->InstanceID) return;
-        //$this->SendDebug("ReceiveData", $jsonData['Buffer']. " =>" . $this->InstanceID, 0);
 
         switch ($buffer['cmd']) {
             case 'exportConfiguration':
@@ -81,7 +80,7 @@ class SymconJSLiveCustom extends JSLiveModule
                 return json_encode($this->LoadFile($buffer['queryData']));
             default:
                 if ($buffer['cmd'] != 'UpdateCache')
-                    $this->SendDebug('ReceiveData', 'ACTION ' . $buffer['cmd'] . ' FOR THIS MODULE NOT DEFINED!', 0);
+                    $this->SendSafeDebug('ReceiveData', 'ACTION FOR THIS MODULE NOT DEFINED!');
                 break;
         }
     }
@@ -125,23 +124,22 @@ class SymconJSLiveCustom extends JSLiveModule
         $scriptID = $this->ReadPropertyInteger('TemplateScriptID');
         if (empty($scriptID)) {
             if ($this->ReadPropertyBoolean('Debug'))
-                $this->SendDebug('GetWebpage', 'NO TEMPLATE DEFINE!', 0);
+                $this->SendSafeDebug('GetWebpage', 'NO TEMPLATE DEFINE!');
 
             $scriptData = file_get_contents(__DIR__ . '/../SymconJSLive/templates/Default.html');
             //return 'NO TEMPLATE DEFINE!';
         }else {
             if (!IPS_ScriptExists($scriptID)) {
-                $this->SendDebug('GetWebpage', 'Template NOT FOUND!', 0);
+                $this->SendSafeDebug('GetWebpage', 'Template NOT FOUND!');
                 return '';
             }
 
             $scriptData = IPS_GetScriptContent($scriptID);
             if ($scriptData == '') {
-                $this->SendDebug('GetWebpage', 'Template IS EMPTY!', 0);
+                $this->SendSafeDebug('GetWebpage', 'Template IS EMPTY!');
             }
         }
 
-        //$this->SendDebug('GetWebpage', $scriptData, 0);
         $scriptData = $this->ReplacePlaceholder($scriptData);
 
         return $scriptData;
@@ -195,7 +193,7 @@ class SymconJSLiveCustom extends JSLiveModule
     private function LoadFile($querydata)
     {
         if (!array_key_exists('ident', $querydata)) {
-            $this->SendDebug('LoadFile', 'NO IDENT SET!', 0);
+            $this->SendSafeDebug('LoadFile', 'NO IDENT SET!');
             return ['Contend' => '', 'Type' => ''];
         }
 
@@ -203,21 +201,21 @@ class SymconJSLiveCustom extends JSLiveModule
         $key = array_search($querydata['ident'], array_column($Libraries, 'Ident'));
 
         if ($key === false) {
-            $this->SendDebug('LoadFile', 'NO IDENT ' . $querydata['ident'] . ' SET!', 0);
+            $this->SendSafeDebug('LoadFile', 'NO IDENT SET!');
             return ['Contend' => '', 'Type' => ''];
         }
 
         $item = $Libraries[$key];
 
         if (empty($item['Script']) && empty($item['File'])) {
-            $this->SendDebug('LoadFile', 'NO SCRIPT OR FILE FOR ' . $querydata['ident'] . ' SET!', 0);
+            $this->SendSafeDebug('LoadFile', 'NO SCRIPT OR FILE SET!');
             return ['Contend' => '', 'Type' => ''];
         }
 
         if ($item['Script'] > 0 && IPS_ScriptExists($item['Script'])) {
             return ['Contend' => IPS_GetScriptContent($item['Script']), 'Type' => $item['Type']];
         }else {
-            $this->SendDebug('TEST', $item['File'], 0);
+            $this->SendSafeDebug('LoadFile', 'Embedded file loaded');
             return ['Contend' => base64_decode($item['File']), 'Type' => $item['Type']];
         }
     }
@@ -392,18 +390,18 @@ class SymconJSLiveCustom extends JSLiveModule
                 break;
         }
 
-        $this->SendDebug('LoadDataFromObject', $obj_id . ' => ' . json_encode($output), 0);
+        $this->SendSafeDebug('LoadDataFromObject', 'Object data loaded');
         return $output;
     }
 
     private function SetData(array $querydata)
     {
         if (!array_key_exists('obj', $querydata)) {
-            $this->SendDebug('SetData', 'NO OBJECT SET!', 0);
+            $this->SendSafeDebug('SetData', 'NO OBJECT SET!');
             return 'NO OBJECT SET!';
         }
         if (!array_key_exists('val', $querydata)) {
-            $this->SendDebug('SetData', 'NO VALUE SET!', 0);
+            $this->SendSafeDebug('SetData', 'NO VALUE SET!');
             return 'NO VALUE SET!';
         }
 
@@ -411,7 +409,7 @@ class SymconJSLiveCustom extends JSLiveModule
         $val = $querydata['val'];
 
         if ($obj == 0 || !IPS_ObjectExists($obj)) {
-            $this->SendDebug('SetData', 'OBJECT NOT EXIST! (' . $obj . ')', 0);
+            $this->SendSafeDebug('SetData', 'OBJECT NOT EXIST!');
             return 'OBJECT NOT EXIST!';
         }
 
@@ -424,7 +422,7 @@ class SymconJSLiveCustom extends JSLiveModule
             //Main object
             if ($data['Object'] == $obj) {
                 if ($data['ReadOnly']) {
-                    $this->SendDebug('SetData', 'Variable ' . $data['Object'] . 'IS READONLY!', 0);
+                    $this->SendSafeDebug('SetData', 'Variable IS READONLY!');
                     return 'ACCESS DENIED';
                 }else {
                     return $this->SetSingleData($obj, $val);
@@ -436,7 +434,7 @@ class SymconJSLiveCustom extends JSLiveModule
                 foreach ($obj_data['ChildrenIDs'] as $item) {
                     if ($item == $obj) {
                         if ($data['ReadOnly']) {
-                            $this->SendDebug('SetData', 'Variable ' . $data['Object'] . 'IS READONLY!', 0);
+                            $this->SendSafeDebug('SetData', 'Variable IS READONLY!');
                             return 'ACCESS DENIED';
                         }else {
                             //wenn variable in Childids dann ausgabe
@@ -446,7 +444,7 @@ class SymconJSLiveCustom extends JSLiveModule
                 }
             }
         }
-        $this->SendDebug('SetData', $obj . ' NOT IN INSTANCE!', 0);
+        $this->SendSafeDebug('SetData', 'OBJECT NOT IN INSTANCE!');
         return 'ERROR';
     }
     private function SetSingleData(int $item, $val, bool $isSubItem = false)
@@ -457,7 +455,7 @@ class SymconJSLiveCustom extends JSLiveModule
                 //Variable
                 //nur ausgeben wenn nicht hidden/disabled!
                 if ((!$obj_data2['ObjectIsHidden'] && !$obj_data2['ObjectIsDisabled'])) {
-                    $this->SendDebug('SetSingleData', 'Update Variable ' . $item . ' => ' . $val, 0);
+                    $this->SendSafeDebug('SetSingleData', 'Update Variable');
                     SetValue($item, $val);
                     return 'OK';
                 }
@@ -465,14 +463,14 @@ class SymconJSLiveCustom extends JSLiveModule
             case 3:
                 //Skript
                 if (!$isSubItem && !$obj_data2['ObjectIsHidden'] && !$obj_data2['ObjectIsDisabled']) {
-                    $this->SendDebug('SetSingleData', 'Run Script ' . $item . ' with => ' . $val, 0);
+                    $this->SendSafeDebug('SetSingleData', 'Run Script');
                     return IPS_RunScriptWaitEx($item, json_decode($val, true));
                 }
                 break;
             case 5:
                 //Media
                 if ((!$obj_data2['ObjectIsHidden'] && !$obj_data2['ObjectIsDisabled'])) {
-                    $this->SendDebug('SetSingleData', 'Update Media ' . $item . ' => ' . $val, 0);
+                    $this->SendSafeDebug('SetSingleData', 'Update Media');
                     IPS_SetMediaContent($item, $val);
                     return 'OK';
                 }
@@ -482,7 +480,7 @@ class SymconJSLiveCustom extends JSLiveModule
                 //nur ausgeben wenn nicht hidden/disabled!
                 if ((!$obj_data2['ObjectIsHidden'] && !$obj_data2['ObjectIsDisabled'])) {
                     $l_data = IPS_GetLink($item);
-                    $this->SendDebug('SetSingleData', 'link Found (' . $item . ')', 0);
+                    $this->SendSafeDebug('SetSingleData', 'Link resolved');
                     return $this->SetSingleData($l_data['TargetID'], $val, $isSubItem);
                 }
                 break;
