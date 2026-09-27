@@ -33,6 +33,22 @@ if ($readme === false) {
     }
 }
 
+foreach (['CHANGELOG.md', 'docs/RELEASE_PROCESS.md'] as $requiredDocumentation) {
+    if (!is_file($root . '/' . $requiredDocumentation)) {
+        $errors[] = 'Missing required release documentation: ' . $requiredDocumentation;
+    }
+}
+
+$changelogPath = $root . '/CHANGELOG.md';
+if (is_file($changelogPath)) {
+    $changelog = file_get_contents($changelogPath);
+    if ($changelog === false) {
+        $errors[] = 'Cannot read CHANGELOG.md';
+    } elseif (!str_contains($changelog, '## Unreleased')) {
+        $errors[] = 'CHANGELOG.md must contain an Unreleased section.';
+    }
+}
+
 /**
  * Reads a JSON object and records a useful validation error on failure.
  *
@@ -87,8 +103,8 @@ if ($library !== null) {
     if (isset($library['id']) && !isSymconGuid($library['id'])) {
         $errors[] = 'library.json contains an invalid id.';
     }
-    if (isset($library['version']) && (!is_string($library['version']) || preg_match('/^\d+\.\d+\.\d+(?:\.\d+)?$/', $library['version']) !== 1)) {
-        $errors[] = 'library.json contains an invalid version.';
+    if (isset($library['version']) && (!is_string($library['version']) || preg_match('/^\d+\.\d+$/', $library['version']) !== 1)) {
+        $errors[] = 'library.json version must use the Hauptversion.Nebenstand format.';
     }
     if (isset($library['build']) && (!is_int($library['build']) || $library['build'] < 0)) {
         $errors[] = 'library.json contains an invalid build number.';

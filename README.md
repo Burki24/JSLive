@@ -16,7 +16,8 @@ der Modernisierung kompatibel bleiben.
 ## Projektstatus
 
 - Entwicklungszweig: `dev`
-- Bibliotheksversion: `0.9.9.9`, Build 35
+- Bibliotheksversion: `0.10` (Migrationsstand für die automatische
+  Versionierung; noch keine Produktfreigabe), Build 35
 - Zielplattform: IP-Symcon 9.0/9.1 und PHP 8.5
 - Lokale Vertrags-, Struktur- und Verhaltenstests sowie StylePHP laufen in der
   GitHub-CI.
@@ -95,6 +96,10 @@ php .style/json-check.php
 GitHub Actions führt zusätzlich die gemeinsamen Prüfungen aus
 `Burki24/Symcon_ModuleCI` mit PHP 8.5 sowie CodeQL für die
 JavaScript-/TypeScript-Quellen aus.
+
+Wesentliche Änderungen werden im [Changelog](CHANGELOG.md) festgehalten. Die
+Freigabe von `dev` nach `main`, Tagging und Rücksynchronisierung sind im
+[Release-Prozess](docs/RELEASE_PROCESS.md) beschrieben.
 
 ## Lizenz
 

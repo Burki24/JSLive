@@ -1,7 +1,7 @@
 # PROJECT_CONTEXT - JSLive
 
 Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
-`eb230b73aeffffed778928ddbf93de7997b16d93`.
+`83dbab0df5bf5dec553633477bd936bcdb0e0ea4`.
 
 ## 1. Zweck und Zielbild
 
@@ -26,8 +26,10 @@ Architektur oder ein gleichzeitiger Austausch aller Frontend-Bibliotheken.
   keine Commits, die `dev` fehlen.
 - `upstream/Beta` ist ein historischer Vorfahr und liegt 121 Commits hinter
   `dev`, ohne eigene Abweichung.
-- Bibliotheksversion: `0.9.9.9`, Build 35; Version, Build und Datum werden noch
-  manuell gepflegt und stammen weiterhin aus dem historischen Stand von 2024.
+- Bibliotheksversion: `0.10`, Build 35. Die Version wurde als isolierter
+  Bootstrap vom historischen Stand `0.9.9.9` auf das kuenftige Schema
+  `Hauptversion.Nebenstand` umgestellt. Build und Datum bleiben bis zur
+  Aktivierung des Metadatenworkflows unveraendert.
 - Gegenueber `main` enthaelt `dev` im Wesentlichen CI, Struktur-/Integritaetstests,
   den zentral bezogenen Helper-Bestand und die bereits erfolgte Anbindung des
   `DataFlowHelper`.
@@ -424,9 +426,9 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
 5. Die automatische Library-Versionierung nach dem freigegebenen Vorbild von
    `OpenHomeAlarm` einfuehren:
    - den Uebergang von der historischen Vierkomponenten-Version `0.9.9.9` auf
-     das gemeinsame Schema `Hauptversion.Nebenstand` festlegen; empfohlen ist
-     `0.10`, da diese Version nach PHP-/Symcon-Versionsvergleich neuer als
-     `0.9.9.9` ist;
+     das gemeinsame Schema `Hauptversion.Nebenstand` mit `0.10` als isolierten
+     Bootstrap vollziehen (umgesetzt; `0.10` ist nach PHP-/Symcon-
+     Versionsvergleich neuer als `0.9.9.9`);
    - Workflow, Python-Updater und Regressionstest aus dem Referenzverfahren
      projektspezifisch uebernehmen;
    - bei nicht vom Bot erzeugten Pushes nach `dev` den Nebenstand pro
@@ -436,8 +438,9 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
      `CHORE: Update library metadata`-Commits gegen Schleifen absichern und vor
      jeder Metadatenaktualisierung die gemeinsame Testsuite ausfuehren;
    - fuer den schreibenden Bot die vorhandene GitHub-App-Konvention mit
-     `HELPER_SYNC_APP_CLIENT_ID` und `HELPER_SYNC_APP_PRIVATE_KEY` verwenden und
-     ihre Verfuegbarkeit im JSLive-Repository pruefen;
+     `HELPER_SYNC_APP_CLIENT_ID` und `HELPER_SYNC_APP_PRIVATE_KEY` verwenden;
+     die Pruefung am 27.09.2026 ergab, dass beide Eintraege im
+     JSLive-Repository noch fehlen und vor Aktivierung einzurichten sind;
    - die generierten Felder in `library.json` nicht mehr manuell pflegen und
      diese Regel in `AGENTS.md`, Strukturtests und Projektdokumentation sichern;
    - ein `CHANGELOG.md` mit einem dauerhaft gepflegten Abschnitt `Unreleased`
@@ -535,12 +538,13 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
 Neue Funktionen, UI-Erweiterungen und weitergehende Architekturarbeiten folgen
 erst nach den Sicherheits-, Kompatibilitaets- und Migrationsgrundlagen.
 
-## 13. Offene Entscheidungen
+## 13. Entschiedene Punkte und offene Entscheidungen
 
-- Soll der einmalige Versionsuebergang von `0.9.9.9` wie empfohlen auf `0.10`
-  erfolgen, bevor der OpenHomeAlarm-Metadatenworkflow aktiviert wird?
-- Sind die GitHub-App-Variable `HELPER_SYNC_APP_CLIENT_ID` und das Secret
-  `HELPER_SYNC_APP_PRIVATE_KEY` im JSLive-Repository bereits verfuegbar?
+- Der einmalige Versionsuebergang von `0.9.9.9` auf `0.10` ist entschieden und
+  als getrennter Bootstrap vorbereitet.
+- Die GitHub-App-Variable `HELPER_SYNC_APP_CLIENT_ID` und das Secret
+  `HELPER_SYNC_APP_PRIVATE_KEY` fehlen im JSLive-Repository. Ihre Einrichtung
+  ist ein externes Gate vor der Aktivierung des schreibenden Workflows.
 - Welche der 13 Module werden produktiv noch benoetigt, und welche werden nur
   kompatibel erhalten oder stillgelegt?
 - Soll `ConfigStore` weiter betrieben werden, und wer betreibt/dokumentiert den

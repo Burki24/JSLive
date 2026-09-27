@@ -26,3 +26,20 @@ JSLive. Projektspezifische Fakten und offene Entscheidungen stehen in
   auszufuehren. Fuer PHP 8.5 gilt der CI-Lauf als verbindliche Zusatzpruefung.
 - Commits, Pushes und Merges werden vom Repository-Eigentuemer ausgefuehrt.
 
+## Branch-, Versions- und Release-Modell
+
+- `dev` ist der dauerhafte Entwicklungs- und Integrationsbranch. `main`
+  enthaelt ausschliesslich kontrolliert freigegebene Produktstaende.
+- Die Library verwendet eine gemeinsame Version im Format
+  `Hauptversion.Nebenstand` fuer alle 13 Module. Git-Tags ergaenzen die
+  Patchstelle als `v<Library-Version>.0`.
+- `library.json` steht seit dem einmaligen Bootstrap auf `0.10`. Sobald der
+  Metadatenworkflow aktiviert ist, werden `version`, `build` und `date` nur
+  noch durch diesen Workflow gepflegt; manuelle Aenderungen sind dann allein
+  Teil einer ausdruecklichen Metadaten- oder Migrationsaufgabe.
+- Wesentliche Aenderungen werden im Abschnitt `Unreleased` von `CHANGELOG.md`
+  gepflegt. Der verbindliche Ablauf fuer `dev` nach `main`, Tag, GitHub Release
+  und Ruecksynchronisierung steht in `docs/RELEASE_PROCESS.md`.
+- Tags und Releases werden nie verschoben oder ueberschrieben. Die
+  Metadatenautomatik veroeffentlicht selbst keinen Release.
+
