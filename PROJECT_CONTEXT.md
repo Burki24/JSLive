@@ -1,7 +1,7 @@
 # PROJECT_CONTEXT - JSLive
 
 Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
-`a85bca377cac9514f198086d953f8ef698de9908`.
+`acb67d13fdcff571fa84176ca8b75ac9a591a31b`.
 
 ## 1. Zweck und Zielbild
 
@@ -142,6 +142,10 @@ Vorhandene lokale Pruefungen:
 - `tests/configuration-form.php`: reales Calendar-Formular mit initialer und
   dynamischer Auswertung von `viewlevel`, `viewdisable`,
   `viewlevelexactly` und `requireItem` in verschachtelten Strukturen;
+- `tests/adv-textfield-rendering.php`: gebuendeltes und skriptbasiertes
+  AdvTextfield-Template mit zweistufiger Platzhalterverarbeitung,
+  CSS-Farb-/Fontaufbereitung sowie cachefreiem, gecachtem und neu aufgebautem
+  HTML-Ergebnis;
 - `tests/data-flow-integration.php`: statische Charakterisierung der
   DataFlowHelper-Anbindung;
 - `tests/helper_integrity.py`: Versionen, Hashes und Vollstaendigkeit der
@@ -154,8 +158,8 @@ JavaScript/TypeScript. Der aktuelle Commit war in beiden Workflows erfolgreich.
 
 Noch nicht abgedeckt sind Symcon-Laufzeitverhalten, Webhook-Authentisierung und
 Pfadbehandlung, modulspezifische Formulardynamik ausserhalb des gemeinsamen
-Metadatenvertrags, Migrationen, Renderausgaben, Browserbibliotheken, einzelne
-Modulaktionen sowie Store-/Sync-Netzwerkpfade.
+Metadatenvertrags, Migrationen, Renderausgaben der weiteren Module,
+Browserbibliotheken, einzelne Modulaktionen sowie Store-/Sync-Netzwerkpfade.
 StylePHP und ein php-cs-fixer-Check sind noch nicht Teil der JSLive-Workflowdatei.
 
 ## 8. Symcon-9-/PHP-8.5-Stand
@@ -265,6 +269,8 @@ Imports ist korrigiert und durch einen gezielten Regressionstest abgesichert.
 Der gemeinsame dynamische Formularvertrag ist anhand des realen
 Calendar-Formulars fuer initiale Darstellung und Live-Aktualisierung
 charakterisiert.
+Die zweistufige HTML-Erzeugung ist fuer AdvTextfield als erstes Pilotmodul mit
+Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
 
 1. Modul-/Property-/Variablen-/Methoden- und Hook-Vertraege maschinenlesbar
    erfassen.

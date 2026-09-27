@@ -54,3 +54,12 @@ shared `viewlevel`, `viewdisable`, `viewlevelexactly` and `requireItem`
 metadata, including nested fields, generated non-exported technical names and
 controller `onChange` wiring. Random technical names are checked by behavior
 and are deliberately not stored as fixtures.
+
+## AdvTextfield rendering harness
+
+`adv-textfield-rendering.php` exercises the bundled and script-provided
+AdvTextfield templates and the public `getContend` data path. It verifies module
+and parent placeholder stages, CSS color conversion, unique font inclusion,
+current-value escaping and the cache-disabled, cache-hit and cache-rebuild
+responses. The test asserts stable rendering contracts instead of storing the
+complete generated HTML as a snapshot.
