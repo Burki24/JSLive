@@ -1,7 +1,7 @@
 # PROJECT_CONTEXT - JSLive
 
 Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
-`44fd7829f616f63aaad771482fe2b1875f3a4f14`.
+`ff26208b285ad6b2e5c7a1680ff71323c67e0b6b`.
 
 ## 1. Zweck und Zielbild
 
@@ -162,9 +162,12 @@ php-cs-fixer-Prueflauf mit dieser Konfiguration weist 20 von 23 erfassten
 PHP-Dateien als noch zu formatieren aus. Als erste isolierte Gruppe wurden die
 Testquellen mechanisch formatiert: Alle acht PHP-Dateien unter `tests` bestehen
 nun den StylePHP-Prueflauf; Vertrags- und Verhaltenstests bleiben unveraendert
-gruen. Im Produktionsbestand sind noch 15 Dateien zu bearbeiten. Der
-verpflichtende Style-Workflow wird daher erst nach der vollstaendigen,
-schrittweise geprueften Formatierung aktiviert.
+gruen. Als erste Produktionsgruppe folgen die verwandten Einzelwertmodule
+`SymconJSLiveGauge` und `SymconJSLiveProgressbar`. Beide bestehen nun ebenfalls
+den StylePHP-Prueflauf; die oeffentlichen Vertraege bleiben unveraendert. Im
+Produktionsbestand sind noch 13 Dateien zu bearbeiten. Der verpflichtende
+Style-Workflow wird daher erst nach der vollstaendigen, schrittweise geprueften
+Formatierung aktiviert.
 
 Noch nicht abgedeckt sind Symcon-Laufzeitverhalten, Webhook-Authentisierung und
 Pfadbehandlung, modulspezifische Formulardynamik ausserhalb des gemeinsamen
@@ -290,6 +293,8 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    - offizielles `.style`-Submodul anbinden und Altbestand messen;
    - Testquellen als erste mechanische Gruppe formatieren und pruefen
      (abgeschlossen);
+   - `Gauge` und `Progressbar` als erste Produktionsgruppe formatieren und
+     pruefen (abgeschlossen; Symcon-Laufzeitpruefung weiterhin ausstehend);
    - bestehenden PHP-Code in einer getrennten mechanischen Aenderung mit
       Vertrags- und Verhaltenstests formatieren;
    - `Symcon_ModuleCI/style@v1.0.0` als verpflichtenden, getrennt erkennbaren
