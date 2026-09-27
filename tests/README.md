@@ -6,6 +6,17 @@ Run the project checks from the repository root:
 php tests/run.php
 ```
 
+The official Symcon style configuration is available through the `.style`
+submodule. Its local read-only check is:
+
+```text
+php-cs-fixer fix --dry-run --diff --using-cache=no --allow-risky=yes --config=.style/.php-cs-fixer.php
+```
+
+The legacy style migration is tracked separately from behavioral changes. The
+style check becomes a required workflow only after that mechanical migration is
+reviewed and the command succeeds for the complete configured file set.
+
 ## Public contract snapshot
 
 `fixtures/public-contracts.json` is the reviewed baseline for externally

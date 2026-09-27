@@ -1,7 +1,7 @@
 # PROJECT_CONTEXT - JSLive
 
 Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
-`acb67d13fdcff571fa84176ca8b75ac9a591a31b`.
+`8a555105a9d94fd15afbb931e828dbea85465f93`.
 
 ## 1. Zweck und Zielbild
 
@@ -156,6 +156,13 @@ GitHub Actions fuehrt die Tests ueber
 `Burki24/Symcon_ModuleCI/php-tests@v1.0.0` mit PHP 8.5 aus. CodeQL prueft
 JavaScript/TypeScript. Der aktuelle Commit war in beiden Workflows erfolgreich.
 
+Das offizielle `symcon/StylePHP`-Repository ist als `.style`-Submodul auf Commit
+`ec73bf742e18b049ad5c90de09033987d3ce671e` eingebunden. Der erste lokale
+php-cs-fixer-Prueflauf mit dieser Konfiguration weist 20 von 23 erfassten
+PHP-Dateien als noch zu formatieren aus. Der verpflichtende Style-Workflow wird
+daher erst nach einem getrennten, rein mechanischen und vollstaendig geprueften
+Formatierungsschritt aktiviert.
+
 Noch nicht abgedeckt sind Symcon-Laufzeitverhalten, Webhook-Authentisierung und
 Pfadbehandlung, modulspezifische Formulardynamik ausserhalb des gemeinsamen
 Metadatenvertrags, Migrationen, Renderausgaben der weiteren Module,
@@ -276,8 +283,12 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    erfassen.
 2. Charakterisierungstests fuer DataFlow, Hook-Routing, Formularaufbereitung,
    HTML-Erzeugung und Import/Export ergaenzen.
-3. CI an den zentralen Standard angleichen: Struktur, PHP 8.5, StylePHP,
-   php-cs-fixer-Check und Tests als getrennt erkennbare Schritte.
+3. CI an den zentralen Standard angleichen:
+   - offizielles `.style`-Submodul anbinden und Altbestand messen;
+   - bestehenden PHP-Code in einer getrennten mechanischen Aenderung mit
+      Vertrags- und Verhaltenstests formatieren;
+   - `Symcon_ModuleCI/style@v1.0.0` als verpflichtenden, getrennt erkennbaren
+      Workflow aktivieren.
 4. Root- und Modul-Dokumentation auf den Ist-Stand bringen.
 
 ### Phase 1 - Sicherheitsgrenzen
