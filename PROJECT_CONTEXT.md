@@ -1,7 +1,7 @@
 # PROJECT_CONTEXT - JSLive
 
 Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
-`81490d1d28b91ba47d423840ba31da85d4e6f21f`.
+`5546f7dda4c169a2b9ff607f79629d8695eb2166`.
 
 ## 1. Zweck und Zielbild
 
@@ -248,7 +248,8 @@ Browserbibliotheken, einzelne Modulaktionen sowie Store-/Sync-Netzwerkpfade.
 - Alle Module verwenden noch `IPSModule`; der Webhook basiert auf einer lokalen
   `WebHookModule`-Basisklasse. Symcon 9 empfiehlt fuer neue Module
   `IPSModuleStrict` und dessen native Hook-API. Eine Umstellung ist wegen der
-  zahlreichen untypisierten oeffentlichen Methoden ein eigenes Projekt.
+  zahlreichen untypisierten oeffentlichen Methoden ein eigenes, in Phase 2
+  ausdruecklich eingeplantes Migrationsprojekt.
 - `library.json` deklariert derzeit keine Symcon-Kompatibilitaet.
 - `Output` und `IPSView` werden als Stringvariablen mit dem Legacy-Profil
   `~HTMLBox` angelegt. Symcon 9 unterstuetzt dies weiter, fuer modernisierte
@@ -432,10 +433,26 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
 ### Phase 2 - Symcon 9.0 / PHP 8.5 stabilisieren
 
 1. Laufzeittests auf einer Symcon-9-Testinstanz fuer alle 13 Module definieren.
-2. Type Hints, Arrayzugriffe, JSON-Fehler, Buffer und Netzwerkfehler schrittweise
+2. Die Migration von `IPSModule` auf `IPSModuleStrict` als eigenes Vorhaben
+   vorbereiten. Vor jeder Codeaenderung sind die notwendigen Type Hints aller
+   oeffentlichen Methoden sowie die geaenderten Vertraege fuer
+   Variablenregistrierung/-schreibzugriff, Parent-Automatik, Datenfluss und
+   Hooks zu erfassen und durch Tests zu sichern.
+3. Die beiden direkt von `IPSModule` erbenden Sondermodule `ConfigStore` und
+   `SyncModule` einzeln migrieren und jeweils in einer Symcon-9-Testinstanz
+   pruefen.
+4. Die gemeinsame Basisklasse `JSLiveModule` und ihre zehn Kindmodule in einem
+   koordinierten, eigenen Schritt migrieren. Data-IDs, Parent-Verbindung,
+   Datenkodierung, Variablen-Idents, Actions und oeffentliche PHP-Aufrufe muessen
+   dabei kompatibel bleiben.
+5. Den Splitter erst nach den Webhook-Sicherheits- und Pfadtests von der lokalen
+   `WebHookModule`-Basisklasse auf die native Hook-API von `IPSModuleStrict`
+   umstellen. Hook-Pfad, Authentisierung und bestehende Browseraufrufe sind als
+   Migrationsvertraege zu erhalten.
+6. Type Hints, Arrayzugriffe, JSON-Fehler, Buffer und Netzwerkfehler schrittweise
    haerten, ohne oeffentliche Signaturen unkontrolliert zu aendern.
-3. Kompatibilitaetsangaben erst nach erfolgreicher Laufzeitmatrix setzen.
-4. Migrationen fuer jede unvermeidbare Vertragsaenderung vor der Aenderung
+7. Kompatibilitaetsangaben erst nach erfolgreicher Laufzeitmatrix setzen.
+8. Migrationen fuer jede unvermeidbare Vertragsaenderung vor der Aenderung
    spezifizieren und testen.
 
 ### Phase 3 - Helper-Integration
