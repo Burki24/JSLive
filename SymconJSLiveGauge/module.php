@@ -136,8 +136,6 @@ class SymconJSLiveGauge extends JSLiveModule
         $buffer = json_decode($jsonData['Buffer'], true);
 
         //if($buffer["instance"] != $this->InstanceID) return;
-        //$this->SendDebug("ReceiveData", $jsonData['Buffer']. " =>" . $this->InstanceID, 0);
-
         switch ($buffer['cmd']) {
             case 'exportConfiguration':
                 return $this->ExportConfiguration();
@@ -147,7 +145,7 @@ class SymconJSLiveGauge extends JSLiveModule
                 return $this->GetData($buffer['queryData']);
             default:
                 if ($buffer['cmd'] != 'UpdateCache')
-                    $this->SendDebug('ReceiveData', 'ACTION ' . $buffer['cmd'] . ' FOR THIS MODULE NOT DEFINED!', 0);
+                    $this->SendSafeDebug('ReceiveData', 'ACTION FOR THIS MODULE NOT DEFINED!');
                 break;
         }
 
@@ -158,7 +156,7 @@ class SymconJSLiveGauge extends JSLiveModule
 
         $output['Variable'] = $this->ReadPropertyInteger('Variable');
         if (!IPS_VariableExists($output['Variable'])) {
-            $this->SendDebug('GetData', 'VARIABLE NOT EXIST!', 0);
+            $this->SendSafeDebug('GetData', 'VARIABLE NOT EXIST!');
             return 'VARIABLE NOT EXIST!';
         }
 
@@ -191,21 +189,20 @@ class SymconJSLiveGauge extends JSLiveModule
         $scriptID = $this->ReadPropertyInteger('TemplateScriptID');
         if (empty($scriptID)) {
             if ($this->ReadPropertyBoolean('Debug'))
-                $this->SendDebug('GetWebpage', 'load default template!', 0);
+                $this->SendSafeDebug('GetWebpage', 'load default template!');
             $scriptData = file_get_contents(__DIR__ . '/../SymconJSLive/templates/' . $this->ReadPropertyString('template') . '.html');
         }else {
             if (!IPS_ScriptExists($scriptID)) {
-                $this->SendDebug('GetWebpage', 'Template NOT FOUND!', 0);
+                $this->SendSafeDebug('GetWebpage', 'Template NOT FOUND!');
                 return '';
             }
 
             $scriptData = IPS_GetScriptContent($scriptID);
             if ($scriptData == '') {
-                $this->SendDebug('GetWebpage', 'Template IS EMPTY!', 0);
+                $this->SendSafeDebug('GetWebpage', 'Template IS EMPTY!');
             }
         }
 
-        //$this->SendDebug('GetWebpage', $scriptData, 0);
         $scriptData = $this->ReplacePlaceholder($scriptData);
 
         return $scriptData;
@@ -229,7 +226,10 @@ class SymconJSLiveGauge extends JSLiveModule
         if (IPS_VariableExists($this->ReadPropertyInteger('Variable'))) {
             $val = GetValue($this->ReadPropertyInteger('Variable'));
         }else {
-            $this->SendDebug('ReplacePlaceholder', 'Variable (' . $this->ReadPropertyInteger('Variable') . ') NOT EXIST!', 0);
+            $this->SendSafeDebug('ReplacePlaceholder', [
+                'variableID' => $this->ReadPropertyInteger('Variable'),
+                'error'      => 'Variable NOT EXIST!'
+            ]);
         }
         $htmlData = str_replace('{VALUE}', number_format($val, $this->ReadPropertyInteger('precision'), '.', ''), $htmlData);
 
@@ -253,7 +253,6 @@ class SymconJSLiveGauge extends JSLiveModule
         }
         $majorticks[] = number_format($max, $this->ReadPropertyInteger('precision'), '.', '');
 
-        //$this->SendDebug("TEST", print_r($majorticks, true), 0);
         return $majorticks;
     }
 

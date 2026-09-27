@@ -21,6 +21,8 @@ Patchstelle, beispielsweise `v0.10.0`.
 - Splitter, SyncModule und Kindmodul-Basisklasse verwenden den zentralen
   `DebugHelper`; sensible Konfigurations-, Webhook- und Nachrichtendaten werden
   strukturiert maskiert und nicht mehr ungefiltert protokolliert.
+- Gauge und Progressbar verwenden ebenfalls `DebugHelper` fuer ihre eigenen
+  Diagnosen; unbekannte Befehlsnamen gelangen nicht mehr in die Debug-Ausgabe.
 
 ### Added
 

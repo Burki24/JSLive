@@ -87,8 +87,6 @@ class SymconJSLiveProgressbar extends JSLiveModule
         $buffer = json_decode($jsonData['Buffer'], true);
 
         //if($buffer["instance"] != $this->InstanceID) return;
-        //$this->SendDebug("ReceiveData", $jsonData['Buffer']. " =>" . $this->InstanceID, 0);
-
         switch ($buffer['cmd']) {
             case 'exportConfiguration':
                 return $this->ExportConfiguration();
@@ -102,7 +100,7 @@ class SymconJSLiveProgressbar extends JSLiveModule
                 return $this->GetFillImg();
             default:
                 if ($buffer['cmd'] != 'UpdateCache')
-                    $this->SendDebug('ReceiveData', 'ACTION ' . $buffer['cmd'] . ' FOR THIS MODULE NOT DEFINED!', 0);
+                    $this->SendSafeDebug('ReceiveData', 'ACTION FOR THIS MODULE NOT DEFINED!');
                 break;
         }
     }
@@ -150,21 +148,20 @@ class SymconJSLiveProgressbar extends JSLiveModule
         $scriptID = $this->ReadPropertyInteger('TemplateScriptID');
         if (empty($scriptID)) {
             if ($this->ReadPropertyBoolean('Debug'))
-                $this->SendDebug('GetWebpage', 'load default template!', 0);
+                $this->SendSafeDebug('GetWebpage', 'load default template!');
             $scriptData = file_get_contents(__DIR__ . '/../SymconJSLive/templates/Progressbar.html');
         }else {
             if (!IPS_ScriptExists($scriptID)) {
-                $this->SendDebug('GetWebpage', 'Template NOT FOUND!', 0);
+                $this->SendSafeDebug('GetWebpage', 'Template NOT FOUND!');
                 return '';
             }
 
             $scriptData = IPS_GetScriptContent($scriptID);
             if ($scriptData == '') {
-                $this->SendDebug('GetWebpage', 'Template IS EMPTY!', 0);
+                $this->SendSafeDebug('GetWebpage', 'Template IS EMPTY!');
             }
         }
 
-        //$this->SendDebug('GetWebpage', $scriptData, 0);
         $scriptData = $this->ReplacePlaceholder($scriptData);
 
         return $scriptData;
@@ -182,7 +179,7 @@ class SymconJSLiveProgressbar extends JSLiveModule
         if (IPS_VariableExists($output['Variable'])) {
             $output['Value'] = GetValue($this->ReadPropertyInteger('Variable'));
         }else {
-            $this->SendDebug('SetData', 'VARIABLE NOT EXIST!', 0);
+            $this->SendSafeDebug('SetData', 'VARIABLE NOT EXIST!');
             $output['Value'] = 0;
         }
 
