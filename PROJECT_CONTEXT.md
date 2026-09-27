@@ -1,7 +1,7 @@
 # PROJECT_CONTEXT - JSLive
 
 Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
-`b0d839139994d45204bb5480657c673e32077d8a`.
+`322a4454cdcef74f1118be0fda1dfa7c12752f8b`.
 
 ## 1. Zweck und Zielbild
 
@@ -155,6 +155,9 @@ Vorhandene lokale Pruefungen:
 - `tests/custom-data.php`: RGBA-Aufbereitung numerischer Stringwerte und sichere
   Ablehnung eines unbekannten numerischen Webhook-Objektparameters im
   Custom-Modul, ohne schreibende Aktionen auszufuehren;
+- `tests/config-store-contracts.php`: rein lokale Vertraege fuer konfigurierte
+  Benutzer-ID, Forum-Link, UUID-Erzeugung und serialisierte Pufferwerte des
+  ConfigStore, ohne externe Webzugriffe oder Konfigurationsimporte;
 - `tests/data-flow-integration.php`: statische Charakterisierung der
   DataFlowHelper-Anbindung;
 - `tests/helper_integrity.py`: Versionen, Hashes und Vollstaendigkeit der
@@ -195,10 +198,16 @@ fuer alle Perioden und beide Zeitmodi abgesichert. Danach wurde
 `SymconJSLiveChart` entsprechend isoliert formatiert. Sein neuer Test deckt
 zusaetzlich den konfigurierten Startzeitpunkt und numerische Webhook-Querywerte
 ab. Danach wurde `SymconJSLiveCustom` isoliert formatiert und seine numerischen
-Konfigurations- und Webhook-Grenzen ohne schreibende Aktionen geprueft. Im
-Produktionsbestand ist noch 1 Datei zu bearbeiten. Der
-verpflichtende Style-Workflow wird daher erst nach der vollstaendigen,
-schrittweise geprueften Formatierung aktiviert.
+Konfigurations- und Webhook-Grenzen ohne schreibende Aktionen geprueft. Zuletzt
+wurde `SymconJSLiveConfigStore` isoliert formatiert. Ein lokaler Vertragstest
+sichert Benutzer-ID, Forum-Link, UUID und Puffer-Serialisierung; numerische
+API-Werte, Instanz-IDs und fehlgeschlagene cURL-Rueckgaben werden an den durch
+`strict_types` betroffenen Grenzen explizit normalisiert. Externe Webzugriffe,
+Importe und die bestehende TLS-Konfiguration blieben unveraendert. Damit ist der
+Produktionsbestand vollstaendig formatiert. Der repositoryweite Prueflauf findet
+0 von 27 erfassten PHP-Dateien mit verbleibender StylePHP-Abweichung. Der
+verpflichtende Style-Workflow kann als naechste isolierte Aenderung aktiviert
+werden.
 
 Noch nicht abgedeckt sind Symcon-Laufzeitverhalten, Webhook-Authentisierung und
 Pfadbehandlung, modulspezifische Formulardynamik ausserhalb des gemeinsamen
@@ -225,6 +234,11 @@ StylePHP und ein php-cs-fixer-Check sind noch nicht Teil der JSLive-Workflowdate
 - `SymconJSLiveCustom` normalisiert numerische Stringwerte fuer Alpha-Kanaele
   und Webhook-Objekt-IDs explizit. Der Test fuehrt dabei keine Variablen-,
   Skript- oder Medienschreiboperation aus.
+- `SymconJSLiveConfigStore` normalisiert numerische API-Werte und Instanz-IDs
+  fuer strikt typisierte Standardfunktionen. Ein cURL-Fehler wird als leerer
+  Antworttext weitergegeben, damit der bisherige Fehlerpfad nicht bereits in
+  `json_decode()` mit einem `TypeError` abbricht. Reale Netzwerk-, TLS-, Import-
+  und Symcon-Laufzeitpfade sind weiterhin nicht getestet.
 - Alle Module verwenden noch `IPSModule`; der Webhook basiert auf einer lokalen
   `WebHookModule`-Basisklasse. Symcon 9 empfiehlt fuer neue Module
   `IPSModuleStrict` und dessen native Hook-API. Eine Umstellung ist wegen der
@@ -383,8 +397,11 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    - `Custom` isoliert formatieren und numerische Konfigurations- und
      Webhook-Grenzen fuer PHP 8.5 absichern (abgeschlossen; schreibende Objekt-,
      Skript-, Medien-, Browser- und Symcon-Laufzeitpruefung ausstehend);
-   - bestehenden PHP-Code in einer getrennten mechanischen Aenderung mit
-      Vertrags- und Verhaltenstests formatieren;
+   - `ConfigStore` isoliert formatieren und seine lokalen Benutzer-ID-, UUID-
+     und Puffervertraege fuer PHP 8.5 absichern (abgeschlossen; Netzwerk-, TLS-,
+     Import- und Symcon-Laufzeitpruefung ausstehend);
+   - bestehenden PHP-Code schrittweise mit Vertrags- und Verhaltenstests
+     formatieren (abgeschlossen; repositoryweit 0 von 27 Style-Abweichungen);
    - `Symcon_ModuleCI/style@v1.0.0` als verpflichtenden, getrennt erkennbaren
       Workflow aktivieren.
 4. Root- und Modul-Dokumentation auf den Ist-Stand bringen.
