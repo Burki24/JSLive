@@ -248,7 +248,7 @@ class JSLiveModule extends IPSModule
         $output["LastUploadedConfig"] = $filename;
 
         foreach ($confdata["Config"] as $key => $item){
-            if(in_array($key, $output)){
+            if(array_key_exists($key, $output)){
                 $i_data = $item;
                 if(is_string($item)){
                     $jsonData = json_decode($item, true);

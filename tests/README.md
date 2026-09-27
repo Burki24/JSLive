@@ -42,9 +42,6 @@ requirements and may be tightened without updating a characterization fixture.
 `configuration-transfer.php` verifies complete and form-filtered exports,
 including nested list-column metadata. It also proves that empty, malformed,
 incomplete and foreign-module imports are rejected without applying an instance
-configuration.
-
-The successful import path is deliberately not characterized yet: the current
-implementation checks property names against configuration values and therefore
-skips regular fields. That defect requires a focused regression test and fix,
-not a snapshot of the broken behavior.
+configuration. A valid import updates known properties, preserves omitted
+properties, ignores unknown fields, records the uploaded payload and applies the
+target instance exactly once.

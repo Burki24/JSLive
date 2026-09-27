@@ -129,9 +129,10 @@ $state['instances'][42] = [
     ]
 ];
 $state['configuration'][42] = [
-    'Visible'          => 'fixture-value',
-    'Ignored'          => 'synthetic-private-placeholder',
-    'TemplateScriptID' => 0
+    'Visible'            => 'fixture-value',
+    'Ignored'            => 'synthetic-private-placeholder',
+    'TemplateScriptID'   => 0,
+    'LastUploadedConfig' => ''
 ];
 $state['configurationForm'][42] = [
     'elements' => [
@@ -233,6 +234,56 @@ assertConfigurationTransfer(
 assertConfigurationTransfer(
     $state['setConfiguration'] === [] && $state['applyChanges'] === [],
     'An import for a different module must not change the instance.'
+);
+
+resetConfigurationTransferMutations();
+$validImport = base64_encode(json_encode(
+    [
+        'ModuleID'   => '{11111111-2222-3333-4444-555555555555}',
+        'ModuleName' => 'Synthetic JSLive Module',
+        'Config'     => [
+            'Visible'         => 'imported-value',
+            'UnknownProperty' => 'must-not-be-added'
+        ]
+    ],
+    JSON_THROW_ON_ERROR
+));
+$harness->LoadConfigurationFile($validImport);
+
+assertConfigurationTransfer(
+    count($state['setConfiguration']) === 1,
+    'A valid import must set the instance configuration exactly once.'
+);
+assertConfigurationTransfer(
+    ($state['setConfiguration'][0]['instanceID'] ?? null) === 42,
+    'A valid import must target its own instance.'
+);
+$importedConfiguration = json_decode(
+    $state['setConfiguration'][0]['configuration'],
+    true,
+    512,
+    JSON_THROW_ON_ERROR
+);
+assertConfigurationTransfer(
+    ($importedConfiguration['Visible'] ?? null) === 'imported-value',
+    'A valid import must update existing properties.'
+);
+assertConfigurationTransfer(
+    ($importedConfiguration['Ignored'] ?? null) === 'synthetic-private-placeholder'
+        && ($importedConfiguration['TemplateScriptID'] ?? null) === 0,
+    'A valid import must preserve properties that are not part of the payload.'
+);
+assertConfigurationTransfer(
+    !array_key_exists('UnknownProperty', $importedConfiguration),
+    'A valid import must not add unknown properties.'
+);
+assertConfigurationTransfer(
+    ($importedConfiguration['LastUploadedConfig'] ?? null) === $validImport,
+    'A valid import must retain the uploaded configuration payload.'
+);
+assertConfigurationTransfer(
+    $state['applyChanges'] === [42],
+    'A valid import must apply its own instance exactly once.'
 );
 
 echo "JSLive configuration transfer contracts verified.\n";

@@ -1,7 +1,7 @@
 # PROJECT_CONTEXT - JSLive
 
-Stand dieser Bestandsaufnahme: 26.09.2026, Branch `dev`, Commit
-`b0ab43bb727f534e788793b0a0ae7abc2b1231d7`.
+Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
+`0057fed78a5d86613d9ad2dea1fd8b82827c3d74`.
 
 ## 1. Zweck und Zielbild
 
@@ -136,7 +136,8 @@ Vorhandene lokale Pruefungen:
   Instanz-Gates, Data-ID/JSON-Umschlag, direkte globale Konfiguration und den
   historischen Standardbefehl `getContend`;
 - `tests/configuration-transfer.php`: vollstaendiger und formulargefilterter
-  Export sowie nebenwirkungsfreie Ablehnung leerer, fehlerhafter,
+  Export, erfolgreicher Import bekannter Properties mit Erhalt ausgelassener
+  Werte sowie nebenwirkungsfreie Ablehnung leerer, fehlerhafter,
   unvollstaendiger und modulfremder Importe;
 - `tests/data-flow-integration.php`: statische Charakterisierung der
   DataFlowHelper-Anbindung;
@@ -226,9 +227,6 @@ Prioritaet mittel:
   ungepruefte Server-Arrayzugriffe und `rand()` fuer Kennwoerter;
 - serialisierte PHP-Daten in Buffern und `unserialize` ohne erlaubte Klassen;
 - grosse Basisklasse, duplizierte Hilfsfunktionen und sehr grosse Moduldateien;
-- der Konfigurationsimport prueft Property-Namen mit `in_array` gegen die Werte
-  der aktuellen Konfiguration statt mit `array_key_exists` gegen deren
-  Schluessel; regulaere Importfelder werden dadurch voraussichtlich uebersprungen;
 - `LoadConnectAddress` enthaelt einen bedingungslosen fruehen Rueckgabepfad und
   kann die ermittelte Connect-URL derzeit nicht zurueckgeben;
 - die MessageSink-Verwaltung registriert bereits bekannte Variablen erneut,
@@ -258,9 +256,9 @@ bekannte fehlerhafte Fachlogik als Sollverhalten festzuschreiben.
 Das grundlegende Webhook-Routing wird zusaetzlich durch einen synthetischen
 Symcon-Harness geprueft; sensible Debug-Ausgaben und unsichere Asset-Pfade sind
 ausdruecklich nicht als erhaltenswerte Vertraege festgeschrieben.
-Export und sichere Import-Ablehnung sind ebenfalls charakterisiert. Der
-erfolgreiche Import gueltiger Werte bleibt bis zur separaten Korrektur seiner
-nachgewiesenen Schluesselpruefung bewusst ausserhalb des Bestandssnapshots.
+Export, sichere Import-Ablehnung und erfolgreicher Import bekannter Properties
+sind ebenfalls charakterisiert. Die zuvor fehlerhafte Schluesselpruefung des
+Imports ist korrigiert und durch einen gezielten Regressionstest abgesichert.
 
 1. Modul-/Property-/Variablen-/Methoden- und Hook-Vertraege maschinenlesbar
    erfassen.
