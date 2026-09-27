@@ -1,7 +1,7 @@
 # PROJECT_CONTEXT - JSLive
 
 Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
-`8720389bbbeb985043f5c9d188cd1875f9e938f3`.
+`914f571d1fd93518fbc735daeeda56d4dd141282`.
 
 ## 1. Zweck und Zielbild
 
@@ -168,7 +168,9 @@ den StylePHP-Prueflauf; die oeffentlichen Vertraege bleiben unveraendert. Als
 zweite Produktionsgruppe wurden `SymconJSLiveColorPicker` und
 `SymconJSLiveDateTimePicker` entsprechend bearbeitet. Danach wurde
 `SymconJSLiveAdvTextfield` einzeln formatiert und mit seinem gezielten
-Rendering-Harness geprueft. Im Produktionsbestand sind noch 10 Dateien zu
+Rendering-Harness geprueft. Anschliessend wurde die sicherheitsnahe Basisklasse
+`SymconJSLive/libs/WebHookModule.php` isoliert formatiert und mit dem
+Webhook-Routing-Harness geprueft. Im Produktionsbestand sind noch 9 Dateien zu
 bearbeiten. Der verpflichtende Style-Workflow wird daher erst nach der
 vollstaendigen, schrittweise geprueften Formatierung aktiviert.
 
@@ -305,6 +307,8 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
      und pruefen (abgeschlossen; Symcon-Laufzeitpruefung weiterhin ausstehend);
    - `AdvTextfield` einzeln formatieren und mit dem Rendering-Harness pruefen
      (abgeschlossen; Symcon-Laufzeitpruefung weiterhin ausstehend);
+   - `WebHookModule.php` isoliert formatieren und mit dem Routing-Harness pruefen
+     (abgeschlossen; Sicherheits- und Symcon-Laufzeitpruefung ausstehend);
    - bestehenden PHP-Code in einer getrennten mechanischen Aenderung mit
       Vertrags- und Verhaltenstests formatieren;
    - `Symcon_ModuleCI/style@v1.0.0` als verpflichtenden, getrennt erkennbaren
