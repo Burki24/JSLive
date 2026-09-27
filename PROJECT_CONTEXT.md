@@ -1,7 +1,7 @@
 # PROJECT_CONTEXT - JSLive
 
 Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
-`ebfa4dbef6116df0dfd221237a7fef5125e64677`.
+`b43ec42ffaba305cda563d5dadf644ce9463ae0c`.
 
 ## 1. Zweck und Zielbild
 
@@ -174,9 +174,11 @@ Webhook-Routing-Harness geprueft. Danach wurde die zentrale Kindmodul-Basisklass
 `SymconJSLive/libs/JSLiveModule.php` isoliert formatiert und mit den Harnesses
 fuer Konfigurationstransfer, Formulare, Rendering und DataFlow geprueft. Danach
 wurde der zentrale Splitter `SymconJSLive/module.php` isoliert formatiert und mit
-Webhook-Routing, DataFlow und Vertragspruefung abgesichert. Im Produktionsbestand
-sind noch 7 Dateien zu bearbeiten. Der verpflichtende Style-Workflow wird daher
-erst nach der vollstaendigen, schrittweise geprueften Formatierung aktiviert.
+Webhook-Routing, DataFlow und Vertragspruefung abgesichert. Danach wurde
+`SymconJSLiveDoughnutPie` einzeln formatiert und gegen den Vertrags-Snapshot und
+die Gesamtsuite geprueft. Im Produktionsbestand sind noch 6 Dateien zu
+bearbeiten. Der verpflichtende Style-Workflow wird daher erst nach der
+vollstaendigen, schrittweise geprueften Formatierung aktiviert.
 
 Noch nicht abgedeckt sind Symcon-Laufzeitverhalten, Webhook-Authentisierung und
 Pfadbehandlung, modulspezifische Formulardynamik ausserhalb des gemeinsamen
@@ -266,6 +268,9 @@ Prioritaet mittel:
 - `SymconJSLiveDateTimePicker::LoadOtherConfiguration()` liest die nicht
   registrierte Property `Variables`; eine Korrektur benoetigt einen getrennten
   Verhaltens- und Regressionstest;
+- `SymconJSLiveDoughnutPie::GetData()` prueft neue Variablen gegen die falsche
+  Liste und verwendet `array_column()` auf einer Liste skalarer Variablen-IDs;
+  der Pfad benoetigt vor einer Korrektur einen gezielten Datensatztest;
 - Abhaengigkeit des ConfigStore von `jslive.babenschneider.net` und einem dort
   betriebenen Protokoll ohne lokale Schnittstellendokumentation.
 
@@ -322,6 +327,9 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
      weiterhin aus);
    - den zentralen Splitter isoliert formatieren und mit Webhook-, DataFlow- und
      Vertragspruefungen absichern (abgeschlossen; Sicherheits- und
+     Symcon-Laufzeitpruefung ausstehend);
+   - `DoughnutPie` einzeln formatieren und gegen Vertrags-Snapshot und
+     Gesamtsuite pruefen (abgeschlossen; Rendering-, Browser- und
      Symcon-Laufzeitpruefung ausstehend);
    - bestehenden PHP-Code in einer getrennten mechanischen Aenderung mit
       Vertrags- und Verhaltenstests formatieren;
