@@ -16,7 +16,8 @@ $tests = [
     __DIR__ . '/data-flow-integration.php',
     __DIR__ . '/sync-debug-helper.php',
     __DIR__ . '/http-response-integration.php',
-    __DIR__ . '/splitter-debug-helper.php'
+    __DIR__ . '/splitter-debug-helper.php',
+    __DIR__ . '/jslive-module-debug-helper.php'
 ];
 
 $commands = [

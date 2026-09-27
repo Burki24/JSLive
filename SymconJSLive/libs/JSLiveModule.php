@@ -3,10 +3,12 @@
 declare(strict_types=1);
 
 require_once dirname(__DIR__, 2) . '/libs/helper/DataFlowHelper.php';
+require_once dirname(__DIR__, 2) . '/libs/helper/DebugHelper.php';
 
 class JSLiveModule extends IPSModule
 {
     use \Burki24\SymconModuleHelper\DataFlowHelper;
+    use \Burki24\SymconModuleHelper\DebugHelper;
 
     //confuguration and link
     public function LoadOtherConfiguration(int $id)
@@ -52,14 +54,10 @@ class JSLiveModule extends IPSModule
         if (array_key_exists('scripts', $queryData) && $queryData['scripts'] >= 1) $withScript = true;
         $withScript = true;
 
-        //$output["queryData"] = json_encode($queryData);
         $output['ModuleID'] = IPS_GetInstance($this->InstanceID)['ModuleInfo']['ModuleID'];
         $output['ModuleName'] = IPS_GetInstance($this->InstanceID)['ModuleInfo']['ModuleName'];
 
         $output['Config'] = json_decode(IPS_GetConfiguration($this->InstanceID), true);
-        //$jsonPath = realpath(__DIR__ . "/../../" . get_called_class() . "/form.json");
-        //$output["Config"] = json_decode(file_get_contents($jsonPath), true);
-
         $scriptID = $this->ReadPropertyInteger('TemplateScriptID');
         if (IPS_ScriptExists($scriptID) && $withScript) {
             $output['Script'] = IPS_GetScriptContent($scriptID);
@@ -101,7 +99,9 @@ class JSLiveModule extends IPSModule
             $libs = [];
             $lib_data = json_decode($output['Config']['Libraries'], true);
 
-            $this->SendDebug('test', json_encode($output['Config']), 0);
+            $this->SendSafeDebug('ExportConfiguration', [
+                'configKeys' => array_keys($output['Config'])
+            ]);
 
             foreach ($lib_data as $item) {
                 if (IPS_ScriptExists($item['Script'])) {
@@ -164,8 +164,6 @@ class JSLiveModule extends IPSModule
         if (!array_key_exists('Config', $confdata) || !array_key_exists('ModuleID', $confdata) || !array_key_exists('ModuleName', $confdata)) return 'Not valid json File!(2)';
         if ($confdata['ModuleID'] != IPS_GetInstance($this->InstanceID)['ModuleInfo']['ModuleID']) return 'Configuration only allowed for ' . $confdata['ModuleName'];
 
-        //echo json_encode($confdata["Config"]);
-        //$allowedItems = $this->GetAllowConfigurationExportList($formData);
         $output = json_decode(IPS_GetConfiguration($this->InstanceID), true);
         $output['LastUploadedConfig'] = $filename;
 
@@ -190,17 +188,21 @@ class JSLiveModule extends IPSModule
                             $i_data = json_encode($i_data);
                         }else {
                             $i_data = json_encode($item);
-                            $this->SendDebug('LoadConfigurationFile', 'JSON OPTION ERROR (' . json_last_error() . ') ' . $key . ' => ' . $item, 0);
+                            $this->SendSafeDebug('LoadConfigurationFile', [
+                                'operation' => 'JSON OPTION ERROR',
+                                'error'     => json_last_error(),
+                                'property'  => $key
+                            ]);
                         }
-                    }else {
-                        //$this->SendDebug("LoadConfigurationFile", "JSON ERROR (" .json_last_error() . ") ".$key." => " . $item  , 0);
                     }
                 }
 
                 $output[$key] = $i_data;
-                //$this->SendDebug("LoadConfigurationFile", "PARAMETER UPDATE ".$key." => " . $item , 0);
             }else {
-                $this->SendDebug('LoadConfigurationFile', 'PARAMETER => ' . $key . ' SKIP', 0);
+                $this->SendSafeDebug('LoadConfigurationFile', [
+                    'operation' => 'PARAMETER SKIP',
+                    'property'  => $key
+                ]);
             }
         }
 
@@ -224,7 +226,10 @@ class JSLiveModule extends IPSModule
                 $key = array_search($lib['Ident'], array_column($Libraries, 'Ident'));
 
                 if ($key === false) {
-                    $this->SendDebug('LoadConfigurationFile', 'SCRIPT => ' . $lib['Ident'] . ' SKIP', 0);
+                    $this->SendSafeDebug('LoadConfigurationFile', [
+                        'operation' => 'SCRIPT SKIP',
+                        'ident'     => $lib['Ident']
+                    ]);
                     continue;
                 }else {
                     if ($Libraries[$key]['Script'] == 0 || !$overrideScript || !IPS_ScriptExists($Libraries[$key]['Script'])) {
@@ -283,11 +288,10 @@ class JSLiveModule extends IPSModule
         $formData = [];
         $jsonPath = realpath(__DIR__ . '/../../' . get_called_class() . '/form.json');
 
-        if ($this->ReadPropertyBoolean('Debug')) $this->SendDebug('GetConfigurationForm', $jsonPath, 0);
+        if ($this->ReadPropertyBoolean('Debug')) $this->SendSafeDebug('GetConfigurationForm', $jsonPath);
         $formData = json_decode(file_get_contents($jsonPath), true);
 
         //Remove Confoniguration for Basic => 0; Advance => 1; Expert => 2
-        //$this->SendDebug("BEFOR", json_encode($formData), 0 );
 
         $addFunctions = [];
         $r_val = $this->RecursiveUpdateForm($formData['elements'], $addFunctions);
@@ -303,8 +307,6 @@ class JSLiveModule extends IPSModule
 
         $listVisibility = ['elements' => $formData['elements'], 'actions' => $formData['actions']];
         $this->SetBuffer('ConfigurationBuffer', json_encode($listVisibility));
-
-        //this->SendDebug("AFTER", json_encode($formData), 0 );
 
         return $formData;
     }
@@ -322,14 +324,19 @@ class JSLiveModule extends IPSModule
 
         $gw_id = IPS_GetInstance($this->InstanceID)['ConnectionID'];
         if ($SenderID == $gw_id && $Message == 10503) {
-            //$this->SendDebug("MessageSink", "Update Output!",0);
             $this->UpdateOutput();
             $this->UpdateIframe();
             return;
         }
 
-        if ($this->ReadPropertyBoolean('Debug'))
-            $this->SendDebug('MessageSink', $TimeStamp . ' | ' . $SenderID . ' => ' . $Message . '(' . json_encode($Data) . ')', 0);
+        if ($this->ReadPropertyBoolean('Debug')) {
+            $this->SendSafeDebug('MessageSink', [
+                'timestamp' => $TimeStamp,
+                'senderID'  => $SenderID,
+                'message'   => $Message,
+                'data'      => $Data
+            ]);
+        }
 
         switch ($Message) {
             case 10602:
@@ -338,7 +345,10 @@ class JSLiveModule extends IPSModule
                 $this->UnregisterMessage($SenderID, 10602);
                 $this->UnregisterMessage($SenderID, 10603);
 
-                $this->SendDebug('UpdateMessageSink', 'UnregisterMessage => ' . $SenderID . '(REMOVE)', 0);
+                $this->SendSafeDebug('UpdateMessageSink', [
+                    'operation' => 'UnregisterMessage (REMOVE)',
+                    'senderID'  => $SenderID
+                ]);
 
                 $RegistredVariables = json_decode($this->GetBuffer('MessageSink'), true);
 
@@ -351,14 +361,23 @@ class JSLiveModule extends IPSModule
                 if (in_array('IdentIDList', $this->GetBufferList())) {
                     $identList = json_decode($this->GetBuffer('IdentIDList'), true);
                     if (in_array($SenderID, $identList)) {
-                        $this->SendDebug('UpdateMessageSink', 'Send Data => ' . $SenderID . ' | DATA => ' . json_encode($Data), 0);
+                        $this->SendSafeDebug('UpdateMessageSink', [
+                            'operation' => 'Send Data',
+                            'senderID'  => $SenderID,
+                            'data'      => $Data
+                        ]);
                     }
                 }
 
                 $this->SendDataToSocketClient($SenderID, $Message, $Data);
                 break;
             default:
-                $this->SendDebug('MessageSink', $TimeStamp . ' | ' . $SenderID . ' => ' . $Message . '(' . json_encode($Data) . ')', 0);
+                $this->SendSafeDebug('MessageSink', [
+                    'timestamp' => $TimeStamp,
+                    'senderID'  => $SenderID,
+                    'message'   => $Message,
+                    'data'      => $Data
+                ]);
                 break;
         }
     }
@@ -425,7 +444,7 @@ class JSLiveModule extends IPSModule
             if (!in_array($conf_item, $font_list) && !empty($conf_item)) {
                 $font_list[] = $conf_item;
                 if ($this->ReadPropertyBoolean('Debug'))
-                    $this->SendDebug('LoadFonts', 'New font found => ' . $conf_item, 0);
+                    $this->SendSafeDebug('LoadFonts', ['font' => $conf_item]);
             }
         }
         return $font_list;
@@ -547,8 +566,7 @@ class JSLiveModule extends IPSModule
             }
         }
 
-        //if($this->ReadPropertyBoolean("Debug"))
-        $this->SendDebug('GetVariableList', json_encode($varList), 0);
+        $this->SendSafeDebug('GetVariableList', ['variables' => $varList]);
         return $varList;
     }
     protected function UpdateMessageSink(array $newVariables)
@@ -561,7 +579,11 @@ class JSLiveModule extends IPSModule
 
         //gateway connection registrieren!
         $gw_id = IPS_GetInstance($this->InstanceID)['ConnectionID'];
-        $this->SendDebug('UpdateMessageSink', 'Register Gateway for ReadyMessage (ID:' . $gw_id . ' => 10503)', 0);
+        $this->SendSafeDebug('UpdateMessageSink', [
+            'operation' => 'Register Gateway for ReadyMessage',
+            'gatewayID' => $gw_id,
+            'message'   => 10503
+        ]);
         $this->RegisterMessage($gw_id, 10503); //wenn verfügbar!
 
         foreach ($newVariables as $var) {
@@ -569,7 +591,7 @@ class JSLiveModule extends IPSModule
 
             if (in_array($var, $oldVariables)) {
                 if ($this->ReadPropertyBoolean('Debug'))
-                    $this->SendDebug('UpdateMessageSink', 'Skip => ' . $var, 0);
+                    $this->SendSafeDebug('UpdateMessageSink', ['skip' => $var]);
                 continue;
             }
 
@@ -577,7 +599,7 @@ class JSLiveModule extends IPSModule
             $this->RegisterMessage($var, 10603);
 
             if ($this->ReadPropertyBoolean('Debug'))
-                $this->SendDebug('UpdateMessageSink', 'RegisterMessage => ' . $var, 0);
+                $this->SendSafeDebug('UpdateMessageSink', ['registerMessage' => $var]);
         }
 
         //alte entfernen
@@ -586,7 +608,7 @@ class JSLiveModule extends IPSModule
             $this->UnregisterMessage($var, 10603);
 
             if ($this->ReadPropertyBoolean('Debug'))
-                $this->SendDebug('UpdateMessageSink', 'UnregisterMessage => ' . $var, 0);
+                $this->SendSafeDebug('UpdateMessageSink', ['unregisterMessage' => $var]);
         }
 
         $this->SetBuffer('MessageSink', json_encode($newVariables));
@@ -600,8 +622,12 @@ class JSLiveModule extends IPSModule
         $senddata['Message'] = $Message;
         $senddata['Data'] = $Data;
 
-        if ($this->ReadPropertyBoolean('Debug'))
-            $this->SendDebug('MessageSink', 'Send Data to WS-Client => ' . json_encode($senddata), 0);
+        if ($this->ReadPropertyBoolean('Debug')) {
+            $this->SendSafeDebug('MessageSink', [
+                'operation' => 'Send Data to WS-Client',
+                'data'      => $senddata
+            ]);
+        }
 
         $hcID = IPS_GetInstanceListByModuleID('{015A6EB8-D6E5-4B93-B496-0D3F77AE9FE1}')[0];
         WC_PushMessage($hcID, '/hook/JSLive/WS/' . $this->InstanceID, json_encode($senddata));
@@ -700,7 +726,7 @@ class JSLiveModule extends IPSModule
             }
 
             if ($this->ReadPropertyBoolean('Debug'))
-                $this->SendDebug('GetOutput', 'Get Data form Cache!', 0);
+                $this->SendSafeDebug('GetOutput', 'Get Data form Cache!');
             return json_encode(['Contend' => $this->GetBuffer('Output'), 'lastModify' => $this->GetBuffer('LastModifed'), 'EnableCache' => $EnableCache, 'EnableViewport' => $EnableViewport, 'InstanceID' => $this->InstanceID]);
         }else {
             return json_encode(['Contend' => $this->GetWebpage(), 'lastModify' => $this->GetBuffer('LastModifed'), 'EnableCache' => $EnableCache, 'EnableViewport' => $EnableViewport, 'InstanceID' => $this->InstanceID]);
@@ -751,7 +777,6 @@ class JSLiveModule extends IPSModule
     private function RecursiveUpdateForm($arr, $addFunctions)
     {
         foreach ($arr as $key => $item) {
-            //$this->SendDebug("RecursiveUpdateForm", $key, 0 );
             if (!array_key_exists('visible', $item)) $arr[$key]['visible'] = true;
 
             //items Recusive for Items
@@ -791,7 +816,6 @@ class JSLiveModule extends IPSModule
                 if (!array_key_exists('name', $item)) {
                     $arr[$key]['name'] = $this->getUniqueID();
                     $arr[$key]['disableExport'] = true;
-                    //$this->SendDebug(__FUNCTION__, $item["type"],0);
                 }
 
                 $viewLevelExactly = false;
@@ -851,7 +875,6 @@ class JSLiveModule extends IPSModule
             //add function to viewlevel
             if (array_key_exists('name', $item) && $item['name'] == 'ViewLevel') {
                 //$arr[$key]["onChange"] = " ".IPS_GetInstance($this->InstanceID)["ModuleInfo"]["ModuleName"]."_ReloadConfigurationForm(\$id, 'ViewLevel', \$ViewLevel);";
-                //$this->SendDebug("TEST", IPS_GetInstance($this->InstanceID)["ModuleInfo"]["ModuleName"]."_ReloadConfigurationForm(\$id, 'ViewLevel', \$ViewLevel);", 0);
             }
 
         }
@@ -871,7 +894,6 @@ class JSLiveModule extends IPSModule
 
             if (array_key_exists('name', $item) && in_array($item['name'], $addFunctions)) {
                 $arr[$key]['onChange'] = IPS_GetInstance($this->InstanceID)['ModuleInfo']['ModuleName'] . "_ReloadConfigurationForm(\$id, '" . $item['name'] . "', \$" . $item['name'] . ');';
-                //$this->SendDebug("##TEST##", IPS_GetInstance($this->InstanceID)["ModuleInfo"]["ModuleName"]."_ReloadConfigurationForm(\$id, '".$item["name"]."', \$".$item["name"].");", 0);
             }
         }
         return array_values($arr);
@@ -890,7 +912,10 @@ class JSLiveModule extends IPSModule
             if (array_key_exists('requireItem', $item)) {
                 if (!array_key_exists('name', $item)) {
                     if (!isset($item['type'])) $item['type'] = '';
-                    $this->SendDebug(__FUNCTION__, 'NO Name Set for => ' . $item['type'], 0);
+                    $this->SendSafeDebug(__FUNCTION__, [
+                        'error' => 'NO Name Set',
+                        'type'  => $item['type']
+                    ]);
                 }else {
                     if ($item['requireItem'] == $name) {
                         $this->UpdateFormField($item['name'], 'visible', $value);
@@ -962,7 +987,6 @@ class JSLiveModule extends IPSModule
             while (strlen($str) < $length) $str .= substr($c, (rand() % (strlen($c))), 1);
         }
 
-        //$this->SendDebug(__FUNCTION__, $str, 0);
         return $str;
     }
 }

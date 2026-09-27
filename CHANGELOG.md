@@ -18,6 +18,9 @@ Patchstelle, beispielsweise `v0.10.0`.
   gebracht.
 - Splitter und Kindmodul-Basisklasse verwenden den zentral synchronisierten
   `DataFlowHelper` fuer ihre bestehenden Datenaustausch-Umschlaege.
+- Splitter, SyncModule und Kindmodul-Basisklasse verwenden den zentralen
+  `DebugHelper`; sensible Konfigurations-, Webhook- und Nachrichtendaten werden
+  strukturiert maskiert und nicht mehr ungefiltert protokolliert.
 
 ### Added
 
