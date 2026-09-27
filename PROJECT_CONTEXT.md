@@ -1,7 +1,7 @@
 # PROJECT_CONTEXT - JSLive
 
 Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
-`5546f7dda4c169a2b9ff607f79629d8695eb2166`.
+`eb230b73aeffffed778928ddbf93de7997b16d93`.
 
 ## 1. Zweck und Zielbild
 
@@ -26,7 +26,8 @@ Architektur oder ein gleichzeitiger Austausch aller Frontend-Bibliotheken.
   keine Commits, die `dev` fehlen.
 - `upstream/Beta` ist ein historischer Vorfahr und liegt 121 Commits hinter
   `dev`, ohne eigene Abweichung.
-- Bibliotheksversion: `0.9.9.9`, Build 35.
+- Bibliotheksversion: `0.9.9.9`, Build 35; Version, Build und Datum werden noch
+  manuell gepflegt und stammen weiterhin aus dem historischen Stand von 2024.
 - Gegenueber `main` enthaelt `dev` im Wesentlichen CI, Struktur-/Integritaetstests,
   den zentral bezogenen Helper-Bestand und die bereits erfolgte Anbindung des
   `DataFlowHelper`.
@@ -420,6 +421,55 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
      bekannten Einschraenkungen aktualisieren (abgeschlossen);
    - fehlende und fehlerhafte Modul-READMEs schrittweise ueberarbeiten
      (ausstehend).
+5. Die automatische Library-Versionierung nach dem freigegebenen Vorbild von
+   `OpenHomeAlarm` einfuehren:
+   - den Uebergang von der historischen Vierkomponenten-Version `0.9.9.9` auf
+     das gemeinsame Schema `Hauptversion.Nebenstand` festlegen; empfohlen ist
+     `0.10`, da diese Version nach PHP-/Symcon-Versionsvergleich neuer als
+     `0.9.9.9` ist;
+   - Workflow, Python-Updater und Regressionstest aus dem Referenzverfahren
+     projektspezifisch uebernehmen;
+   - bei nicht vom Bot erzeugten Pushes nach `dev` den Nebenstand pro
+     Quellcommit erhoehen, `build` aus den ersten sieben Zeichen des Quell-SHA
+     und `date` aus dessen Commit-Zeit bilden;
+   - den Workflow durch Concurrency und Erkennung des eigenen
+     `CHORE: Update library metadata`-Commits gegen Schleifen absichern und vor
+     jeder Metadatenaktualisierung die gemeinsame Testsuite ausfuehren;
+   - fuer den schreibenden Bot die vorhandene GitHub-App-Konvention mit
+     `HELPER_SYNC_APP_CLIENT_ID` und `HELPER_SYNC_APP_PRIVATE_KEY` verwenden und
+     ihre Verfuegbarkeit im JSLive-Repository pruefen;
+   - die generierten Felder in `library.json` nicht mehr manuell pflegen und
+     diese Regel in `AGENTS.md`, Strukturtests und Projektdokumentation sichern;
+   - ein `CHANGELOG.md` mit einem dauerhaft gepflegten Abschnitt `Unreleased`
+     einfuehren; jeder Release benennt dort Library-Version,
+     Veroeffentlichungsdatum und die wesentlichen Aenderungen;
+   - einen projektspezifischen Release-Prozess dokumentieren: Metadaten-Bot auf
+     `dev` abwarten, exakten Kandidaten pruefen, `Unreleased` auf die
+     Release-Version umstellen, `dev` per Pull Request nach `main` uebernehmen,
+     den unveraenderten `main`-Commit erneut pruefen und erst danach Tag und
+     GitHub Release erzeugen;
+   - Git-Tags nach dem OpenHomeAlarm-Schema als
+     `v<Library-Version>.0` bilden und weder Tags noch Releases nachtraeglich
+     verschieben oder ueberschreiben;
+   - das Merge-Ergebnis aus `main` einschliesslich des Merge-Commits nach jedem
+     Release wieder nach `dev` synchronisieren. Der dadurch folgende
+     Metadaten-Bot-Commit eroeffnet den naechsten Entwicklungsstand auf `dev`;
+   - `main`, Tags und GitHub Releases weiterhin nur ueber den ausdruecklichen
+     Release-Prozess aktualisieren; die Metadatenautomatik veroeffentlicht
+     selbst keinen Release.
+6. Das Verfahren nach erfolgreicher JSLive-Einfuehrung auf alle Burki24-
+   Modulbibliotheken ausrollen:
+   - die gemeinsame Versionierungs-, Changelog-, Release- und
+     Ruecksynchronisierungsregel in `SymconDevelopment` verbindlich
+     dokumentieren;
+   - je Repository Ausgangsversion, Branch-Modell, vorhandene Tags,
+     GitHub-App-Zugriff und projektspezifische Release-Gates inventarisieren;
+   - jedes Repository einzeln mit Updater-Test, Strukturpruefung und erstem
+     beobachtetem Bot-Lauf migrieren, statt alle Repositories gleichzeitig
+     umzuschalten;
+   - innerhalb von JSLive gilt eine zentrale Library-Version gemeinsam fuer
+     alle 13 enthaltenen Module; es werden keine voneinander abweichenden
+     Modulversionen eingefuehrt.
 
 ### Phase 1 - Sicherheitsgrenzen
 
@@ -487,6 +537,10 @@ erst nach den Sicherheits-, Kompatibilitaets- und Migrationsgrundlagen.
 
 ## 13. Offene Entscheidungen
 
+- Soll der einmalige Versionsuebergang von `0.9.9.9` wie empfohlen auf `0.10`
+  erfolgen, bevor der OpenHomeAlarm-Metadatenworkflow aktiviert wird?
+- Sind die GitHub-App-Variable `HELPER_SYNC_APP_CLIENT_ID` und das Secret
+  `HELPER_SYNC_APP_PRIVATE_KEY` im JSLive-Repository bereits verfuegbar?
 - Welche der 13 Module werden produktiv noch benoetigt, und welche werden nur
   kompatibel erhalten oder stillgelegt?
 - Soll `ConfigStore` weiter betrieben werden, und wer betreibt/dokumentiert den
