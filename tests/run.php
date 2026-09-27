@@ -23,7 +23,8 @@ $tests = [
     __DIR__ . '/adv-calendar-debug.php',
     __DIR__ . '/doughnut-debug.php',
     __DIR__ . '/custom-debug.php',
-    __DIR__ . '/config-store-debug.php'
+    __DIR__ . '/config-store-debug.php',
+    __DIR__ . '/radar-debug.php'
 ];
 
 $commands = [

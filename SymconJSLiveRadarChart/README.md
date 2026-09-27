@@ -37,6 +37,10 @@ Konfiguration einer anderen RadarChart-Instanz.
 Die Standardvorlage ist `RadarChart.html`. Chart.js, Moment und das
 Datalabels-Plugin werden aus dem JSLive-Bestand ausgeliefert. Eigene Vorlagen
 werden als HTML/JavaScript ausgeführt und müssen vertrauenswürdig sein.
+Die modulspezifische Diagnose verwendet `DebugHelper`. Bei aktivem `Debug`
+werden höchstens die ersten zehn numerischen Archivwerte je Abfrage ausgegeben;
+vollständige Archiv- und Ergebnisreihen sowie frei eingegebene Schlüssel werden
+nicht protokolliert.
 
 ## Technische Daten
 

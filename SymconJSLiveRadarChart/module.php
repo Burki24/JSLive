@@ -144,7 +144,6 @@ class SymconJSLiveRadarChart extends JSLiveModule
         $buffer = json_decode($jsonData['Buffer'], true);
 
         //if($buffer["instance"] != $this->InstanceID) return;
-        //$this->SendDebug("ReceiveData", $jsonData['Buffer']. " =>" . $this->InstanceID, 0);
 
         switch ($buffer['cmd']) {
             case 'exportConfiguration':
@@ -157,7 +156,7 @@ class SymconJSLiveRadarChart extends JSLiveModule
                 return $this->GetData($buffer['queryData']);
             default:
                 if ($buffer['cmd'] != 'UpdateCache')
-                    $this->SendDebug('ReceiveData', 'ACTION ' . $buffer['cmd'] . ' FOR THIS MODULE NOT DEFINED!', 0);
+                    $this->SendSafeDebug('ReceiveData', 'ACTION FOR THIS MODULE NOT DEFINED!');
                 break;
         }
 
@@ -226,21 +225,20 @@ class SymconJSLiveRadarChart extends JSLiveModule
         $scriptID = $this->ReadPropertyInteger('TemplateScriptID');
         if (empty($scriptID)) {
             if ($this->ReadPropertyBoolean('Debug'))
-                $this->SendDebug('GetWebpage', 'load default template!', 0);
+                $this->SendSafeDebug('GetWebpage', 'load default template!');
             $scriptData = file_get_contents(__DIR__ . '/../SymconJSLive/templates/RadarChart.html');
         }else {
             if (!IPS_ScriptExists($scriptID)) {
-                $this->SendDebug('GetWebpage', 'Template NOT FOUND!', 0);
+                $this->SendSafeDebug('GetWebpage', 'Template NOT FOUND!');
                 return '';
             }
 
             $scriptData = IPS_GetScriptContent($scriptID);
             if ($scriptData == '') {
-                $this->SendDebug('GetWebpage', 'Template IS EMPTY!', 0);
+                $this->SendSafeDebug('GetWebpage', 'Template IS EMPTY!');
             }
         }
 
-        //$this->SendDebug('GetWebpage', $scriptData, 0);
         $scriptData = $this->ReplacePlaceholder($scriptData);
 
         return $scriptData;
@@ -256,7 +254,7 @@ class SymconJSLiveRadarChart extends JSLiveModule
         foreach ($datasets as $item) {
             $s_output = [];
             if (!IPS_VariableExists($item['Variable'])) {
-                $this->SendDebug('GetUpdate', 'VARIABLE ' . $item['Variable'] . ' NOT EXIST!', 0);
+                $this->SendSafeDebug('GetUpdate', 'VARIABLE NOT EXIST!');
                 continue;
             }
 
@@ -435,7 +433,7 @@ class SymconJSLiveRadarChart extends JSLiveModule
                 }
             }
 
-            $this->SendDebug('GenerateLabels', json_encode($output['labels']), 0);
+            $this->SendSafeDebug('GenerateLabels', ['labelCount' => count($output['labels'])]);
         }
 
         return $output;
@@ -448,14 +446,13 @@ class SymconJSLiveRadarChart extends JSLiveModule
         //datasets erstellen
         $datasets = json_decode($this->ReadPropertyString('Datasets'), true);
         if (!is_array($datasets)) {
-            $this->SendDebug('GenerateDataSet', 'No Variables set!', 0);
+            $this->SendSafeDebug('GenerateDataSet', 'No Variables set!');
             return '{}';
         }
 
         if ($var > 0) {
             foreach ($datasets as $key => $id) {
                 if ($var != $id['Variable']) {
-                    //$this->SendDebug("GenerateDataSet", "ITEM(".$key.") " . $id["Variable"], 0);
                     unset($datasets[$key]);
                 }
             }
@@ -474,7 +471,7 @@ class SymconJSLiveRadarChart extends JSLiveModule
 
         foreach ($datasets as $item) {
             if (!IPS_VariableExists($item['Variable'])) {
-                $this->SendDebug('GenerateDataSet', 'VARIABLE ' . $item['Variable'] . ' NOT EXIST!', 0);
+                $this->SendSafeDebug('GenerateDataSet', 'VARIABLE NOT EXIST!');
                 continue;
             }
 
@@ -624,7 +621,7 @@ class SymconJSLiveRadarChart extends JSLiveModule
             $useRef = false;
         }
 
-        if ($this->ReadPropertyBoolean('Debug')) $this->SendDebug('GetArchivData', 'Get ArchivData for => ' . $varId, 0);
+        if ($this->ReadPropertyBoolean('Debug')) $this->SendSafeDebug('GetArchivData', 'Archive data requested');
         $VariableType = IPS_GetVariable($ref_varId)['VariableType']; // 0: Boolean, 1: Integer, 2: Float, 3: String)
 
         if ($VariableType == 2) {
@@ -643,7 +640,7 @@ class SymconJSLiveRadarChart extends JSLiveModule
             return;
         }
 
-        if ($this->ReadPropertyBoolean('Debug')) $this->SendDebug('GetArchivData', 'Start_Date: ' . $date_start . ' | End_Date: ' . $date_end, 0);
+        if ($this->ReadPropertyBoolean('Debug')) $this->SendSafeDebug('GetArchivData', 'Archive range computed');
 
         $output = [];
         $archivData = [];
@@ -660,7 +657,7 @@ class SymconJSLiveRadarChart extends JSLiveModule
 
         $mode = '';
         if ($this->ReadPropertyBoolean('Debug')) {
-            $this->SendDebug('GetArchivData', 'Periode: ' . $period . ' | Start:' . gmdate('d-m-Y H:i:s', $date_start) . ' | End:' . gmdate('d-m-Y H:i:s', $date_end), 0);
+            $this->SendSafeDebug('GetArchivData', 'Archive period selected');
         }
 
         if (6 <= $period) {
@@ -672,11 +669,8 @@ class SymconJSLiveRadarChart extends JSLiveModule
             $mode = 'Avg';
         }
 
-        //$this->SendDebug("GetArchivData", json_encode($archivData),0);
-
         $oldVal = 0;
         $output = array_fill(0, count($labels), 0);
-        $output_count = array_fill(0, count($labels), 0); //for Debug only
         $count = 0;
         $sum = 0;
         $count_archivData = count($archivData);
@@ -699,14 +693,12 @@ class SymconJSLiveRadarChart extends JSLiveModule
                     //hohe auflösung für tag
                     $sub_archivData = AC_GetLoggedValues($archiveControlID, $varId, $t_start, $t_end, 0);
                 }else {
-                    $t_time = microtime();
                     $sub_archivData = AC_GetAggregatedValues($archiveControlID, $varId, $Aggregationsstufe, $t_start, $t_end, 0);
-                    //$this->SendDebug("Test", round((microtime()-$t_time)*1000)."ms", 0);
                 }
                 $sub_count = count($sub_archivData);
 
                 if ($this->ReadPropertyBoolean('Debug')) {
-                    $this->SendDebug('GetArchivData', 'Ref:' . $ref . ' | Start:' . gmdate('d-m-Y H:i:s', $t_start) . ' | End:' . gmdate('d-m-Y H:i:s', $t_end) . ' | Count:' . $sub_count, 0);
+                    $this->SendSafeDebug('GetArchivData', ['operation' => 'Reference archive segment loaded', 'count' => $sub_count]);
                 }
 
                 if ($datamode == 'counter') {
@@ -721,9 +713,6 @@ class SymconJSLiveRadarChart extends JSLiveModule
                         $val = round(($sub_sum / $sub_count), $precision);
                     }
                 }
-                if ($this->ReadPropertyBoolean('Debug')) {
-                    $this->SendDebug('GetArchivData', 'Ref:' . $ref . ' | Val:' . $val, 0);
-                }
             }else {
                 $val = $item[$mode];
                 $ref = $item[$mode];
@@ -731,12 +720,15 @@ class SymconJSLiveRadarChart extends JSLiveModule
 
             if ($VariableType == 2) {
                 $ref = round($ref, $precision);
-                //$this->SendDebug("GetArchivData", "Value (".$val.")", 0);
+            }
+            if ($this->ReadPropertyBoolean('Debug') && $a_key < 10) {
+                $this->SendSafeDebug('GetArchivData', ['sample' => $a_key, 'value' => $val, 'reference' => $ref]);
             }
             if ($VariableType == 1 || $VariableType == 2) {
                 if ($ref > $max || $ref < $min) {
                     //verwerfen auserhalb des bereiches
-                    $this->SendDebug('GetArchivData', 'Datasets Skip Value  ' . $min . ' < ' . $ref . ' > ' . $max, 0);
+                    if ($this->ReadPropertyBoolean('Debug') && $a_key < 10)
+                        $this->SendSafeDebug('GetArchivData', 'Archive value outside configured range');
                     continue;
                 }
             }
@@ -769,17 +761,16 @@ class SymconJSLiveRadarChart extends JSLiveModule
                     $count = +1;
                     $sum = $val;
 
-                    $output_count[$index]++;
                     $output[$index] = round($sum / $count, $precision);
                 }
             }else {
-                $this->SendDebug('GetArchivData', 'Index wrong! (' . $val . ') => ' . $index, 0);
+                if ($this->ReadPropertyBoolean('Debug') && $a_key < 10)
+                    $this->SendSafeDebug('GetArchivData', 'Archive label index not found');
             }
         }
 
         if ($this->ReadPropertyBoolean('Debug')) {
-            $this->SendDebug('GetArchivData', 'OUPUT => ' . json_encode($output), 0);
-            $this->SendDebug('GetArchivData', 'OUPUT_COUNT => ' . json_encode($output_count), 0);
+            $this->SendSafeDebug('GetArchivData', ['operation' => 'Archive dataset generated', 'bucketCount' => count($output)]);
         }
 
         return $output;
@@ -797,11 +788,11 @@ class SymconJSLiveRadarChart extends JSLiveModule
         $output = array_fill(0, count($labels), 0);
         foreach ($arr as $key => $item) {
             if (!in_array($key, $labels)) {
-                $this->SendDebug('GetCustomData', 'IGNORE KEY => ' . $key . ' NOT IN LIST!', 0);
+                $this->SendSafeDebug('GetCustomData', 'KEY NOT IN LIST!');
             }
 
             $index = array_search(strtolower((string) $key), $labels);
-            $this->SendDebug('GetCustomData', (string) $index, 0);
+            $this->SendSafeDebug('GetCustomData', 'Label processed');
             $output[$index] = $item;
         }
 
@@ -842,7 +833,7 @@ class SymconJSLiveRadarChart extends JSLiveModule
         $output['Var_List'] = [];
         foreach ($datasets as $item) {
             if (!IPS_VariableExists($item['Variable'])) {
-                $this->SendDebug('GetUpdate', 'VARIABLE ' . $item['Variable'] . ' NOT EXIST!', 0);
+                $this->SendSafeDebug('GetUpdate', 'VARIABLE NOT EXIST!');
                 continue;
             }
 
@@ -1091,7 +1082,7 @@ class SymconJSLiveRadarChart extends JSLiveModule
         }
 
         if ($this->ReadPropertyBoolean('Debug'))
-            $this->SendDebug('GetCorrectStartDate', 'Realtiv: ' . $relativ . ' | Period: ' . $period . ' | Start_Date: ' . $date_start->format('d.m.Y H:i:s') . ' | End_Date: ' . $date_end->format('d.m.Y H:i:s'), 0);
+            $this->SendSafeDebug('GetCorrectStartDate', 'Date range computed');
 
         return ['start' => $date_start->getTimestamp(), 'end' => $date_end->getTimestamp(), 'stufe' => $Aggregationsstufe, 'datasets' => $curVales];
     }
@@ -1205,7 +1196,7 @@ class SymconJSLiveRadarChart extends JSLiveModule
         }
 
         if ($this->ReadPropertyBoolean('Debug'))
-            $this->SendDebug('GetOffsetDate', 'Start_Date: ' . $date_start->format('d.m.Y H:i:s') . '(' . $date_start->getTimestamp() . ') | End_Date: ' . $date_end->format('d.m.Y H:i:s') . '(' . $date_end->getTimestamp() . ') | Interval: ' . $seconds, 0);
+            $this->SendSafeDebug('GetOffsetDate', 'Offset range computed');
 
         return ['start' => $date_start->getTimestamp(), 'end' => $date_end->getTimestamp(), 'interval' => $seconds];
     }

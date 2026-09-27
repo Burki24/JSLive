@@ -33,6 +33,9 @@ Patchstelle, beispielsweise `v0.10.0`.
   Bibliotheken, Objekt- und Schreibwerte werden nicht mehr geloggt.
 - ConfigStore verwendet `DebugHelper` fuer seine Diagnose einer ungueltigen
   Modulauswahl; der uebergebene Index wird nicht mehr geloggt.
+- RadarChart verwendet `DebugHelper` fuer eigene Diagnosen. Ganze Archiv- und
+  Ergebnisreihen, freie Schluessel und Befehlsnamen werden nicht mehr geloggt;
+  bei aktivem Debug bleiben bis zu zehn einzelne numerische Archivwerte sichtbar.
 
 ### Added
 
