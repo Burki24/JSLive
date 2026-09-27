@@ -2,8 +2,12 @@
 
 declare(strict_types=1);
 
+require_once dirname(__DIR__) . '/libs/helper/DebugHelper.php';
+
 class SymconJSLiveModuleSync extends IPSModule
 {
+    use \Burki24\SymconModuleHelper\DebugHelper;
+
     private const APILINK = 'https://jslive.babenschneider.net/';
 
     public function Create()
@@ -79,14 +83,13 @@ class SymconJSLiveModuleSync extends IPSModule
             $moduleID = $this->ReadPropertyString('SelectType');
 
             if (IPS_GetInstance($SenderID)['ModuleInfo']['ModuleID'] != $moduleID) {
-                $this->SendDebug(__FUNCTION__, 'CHANGE MODULE ID (' . $SenderID . ') WRONG!', 0);
+                $this->SendSafeDebug(__FUNCTION__, 'CHANGE MODULE ID (' . $SenderID . ') WRONG!');
                 return;
             }
 
             if (in_array($SenderID, $syncList) && $allowSync) {
                 $allowSync = $this->SetBuffer('allowSync', false);
-                $this->SendDebug(__FUNCTION__, 'Start UPDATE FROM ' . $SenderID, 0);
-                //$this->SendDebug(__FUNCTION__, "Start UPDATE FROM ".$SenderID." with Message ".$Message."\r\n Data: ".print_r($Data, true),0);
+                $this->SendSafeDebug(__FUNCTION__, 'Start UPDATE FROM ' . $SenderID);
 
                 //get default settings from master
                 $syncItems = json_decode($this->ReadPropertyString('Parameterlist'), true);
@@ -114,16 +117,13 @@ class SymconJSLiveModuleSync extends IPSModule
                                 if (!$syncItems[$index]['sync']) continue;
 
                                 $updateSubItems[$l_key] = $l_value;
-                                //$this->SendDebug(__FUNCTION__, "Config-Master(Item) ". $subItemName . " => " . $l_value,0);
                             }
                             $updateItems[] = $updateSubItems;
                         }
 
                         $syncItems[$key]['value'] = $updateItems;
-                        //$this->SendDebug(__FUNCTION__, "Config-Master " .$name . "(" . $key . ") Value => " . json_encode($updateItems),0);
                     }else {
                         $syncItems[$key]['value'] = $value;
-                        //$this->SendDebug(__FUNCTION__, "Config-Master " .$name . " Value => " . $value,0);
                     }
                 }
 
@@ -135,7 +135,10 @@ class SymconJSLiveModuleSync extends IPSModule
                     if (IPS_InstanceExists($instanceID) === false) continue;
                     if (IPS_GetInstance($instanceID)['ModuleInfo']['ModuleID'] != $moduleID) continue;
 
-                    $this->SendDebug(__FUNCTION__, '###Start Update ' . IPS_GetObject($instanceID)['ObjectName'] . ' (' . $instanceID . ') ###', 0);
+                    $this->SendSafeDebug(
+                        __FUNCTION__,
+                        '###Start Update ' . IPS_GetObject($instanceID)['ObjectName'] . ' (' . $instanceID . ') ###'
+                    );
                     $config = json_decode(IPS_GetConfiguration($instanceID), true);
                     $old_config = json_decode(IPS_GetConfiguration($instanceID), true);
 
@@ -152,7 +155,12 @@ class SymconJSLiveModuleSync extends IPSModule
                                 //werte vom Orginal übertragen
                                 if ($config[$key] != $syncItems[$index]['org']) {
                                     $config[$key] = $syncItems[$index]['org'];
-                                    $this->SendDebug(__FUNCTION__, 'Write-Single-Config(Set Default) => ' . $syncItems[$index]['org'], 0);
+                                    $this->SendSafeDebug(__FUNCTION__, [
+                                        $key => [
+                                            'operation' => 'Write-Single-Config(Set Default)',
+                                            'value'     => $syncItems[$index]['org']
+                                        ]
+                                    ]);
                                 }
                             }else {
                                 //Json Update sync items
@@ -169,31 +177,56 @@ class SymconJSLiveModuleSync extends IPSModule
 
                                         if ($json_value[$sub_key][$l_key] != $newValue[$sub_key][$l_key]) {
                                             $json_value[$sub_key][$l_key] = $newValue[$sub_key][$l_key];
-                                            $this->SendDebug(__FUNCTION__, 'Write-Single-Config(Item) ' . $subItemName . ' => ' . $l_value . ' to ' . $newValue[$sub_key][$l_key], 0);
+                                            $this->SendSafeDebug(__FUNCTION__, [
+                                                $subItemName => [
+                                                    'operation' => 'Write-Single-Config(Item)',
+                                                    'old'       => $l_value,
+                                                    'new'       => $newValue[$sub_key][$l_key]
+                                                ]
+                                            ]);
                                         }
                                     }
                                 }
 
                                 if ($config[$key] != json_encode($json_value)) {
                                     $config[$key] = json_encode($json_value);
-                                    $this->SendDebug(__FUNCTION__, 'Write-Single-Config ' . $name . '(' . $key . ') Value => ' . json_encode($config[$key]), 0);
+                                    $this->SendSafeDebug(__FUNCTION__, [
+                                        $name => [
+                                            'operation' => 'Write-Single-Config',
+                                            'key'       => $key,
+                                            'value'     => $config[$key]
+                                        ]
+                                    ]);
                                 }
                             }
                         }else {
                             if ($config[$key] != $newValue) {
                                 $config[$key] = $newValue;
-                                $this->SendDebug(__FUNCTION__, 'Write-Single-Config ' . $key . ' => ' . $value . ' to ' . $newValue, 0);
+                                $this->SendSafeDebug(__FUNCTION__, [
+                                    $key => [
+                                        'operation' => 'Write-Single-Config',
+                                        'old'       => $value,
+                                        'new'       => $newValue
+                                    ]
+                                ]);
                             }
                         }
                     }
 
                     if ($old_config != $config) {
-                        $this->SendDebug(__FUNCTION__, 'Write-Config ' . IPS_GetObject($instanceID)['ObjectName'] . ' (' . $instanceID . ') =>' . json_encode($config), 0);
+                        $this->SendSafeDebug(__FUNCTION__, [
+                            'operation' => 'Write-Config',
+                            'instance'  => IPS_GetObject($instanceID)['ObjectName'] . ' (' . $instanceID . ')',
+                            'config'    => $config
+                        ]);
                         IPS_SetConfiguration($instanceID, json_encode($config));
                         IPS_ApplyChanges($instanceID); // Apply new configuration
                     }
 
-                    $this->SendDebug(__FUNCTION__, '###End Update ' . IPS_GetObject($instanceID)['ObjectName'] . ' (' . $instanceID . ') ###', 0);
+                    $this->SendSafeDebug(
+                        __FUNCTION__,
+                        '###End Update ' . IPS_GetObject($instanceID)['ObjectName'] . ' (' . $instanceID . ') ###'
+                    );
                 }
 
                 $allowSync = $this->SetBuffer('allowSync', true);
@@ -258,13 +291,13 @@ class SymconJSLiveModuleSync extends IPSModule
 
                 if ($key !== false) unset($old_sync[$key]);
                 $this->RegisterMessage($instancID, 10506 /* IM_CHANGESETTINGS */);
-                $this->SendDebug(__FUNCTION__, 'RegisterMessage => ' . $instancID, 0);
+                $this->SendSafeDebug(__FUNCTION__, 'RegisterMessage => ' . $instancID);
             }
         }
 
         foreach ($old_sync as $instancID) {
             $this->UnregisterMessage($instancID, 10506 /* IM_CHANGESETTINGS */);
-            $this->SendDebug(__FUNCTION__, '(Un)registerMessage => ' . $instancID, 0);
+            $this->SendSafeDebug(__FUNCTION__, '(Un)registerMessage => ' . $instancID);
         }
         $this->SetBuffer('onChange_InstanceList', $new_sync);
     }
@@ -385,9 +418,6 @@ class SymconJSLiveModuleSync extends IPSModule
 
             //items Recusive for Items
             if (array_key_exists('items', $item)) {
-                //if(array_key_exists("caption", $item)) $this->SendDebug(__function__, $item["caption"], 0);
-                //$this->SendDebug(__function__, $item["type"], 0);
-
                 $d = $this->LoadRecusiveFormData($item['items'], $r_arr, $column_name, $id++);
                 $r_arr = $d['data'];
                 $id = $d['id'];

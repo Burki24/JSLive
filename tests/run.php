@@ -13,7 +13,8 @@ $tests = [
     __DIR__ . '/chart-dates.php',
     __DIR__ . '/custom-data.php',
     __DIR__ . '/config-store-contracts.php',
-    __DIR__ . '/data-flow-integration.php'
+    __DIR__ . '/data-flow-integration.php',
+    __DIR__ . '/sync-debug-helper.php'
 ];
 
 $commands = [
