@@ -71,6 +71,10 @@ httpResponseIntegrationAssert(
     str_contains($source, '$this->NormalizeImageMimeType($arr_data[\'Type\'] ?? null)'),
     'JSLive must normalize child-provided image MIME types before emitting a header.'
 );
+httpResponseIntegrationAssert(
+    str_contains($source, "header('Content-Disposition: ' . \$this->BuildDownloadContentDisposition(\$filename));"),
+    'JSLive must build the export Content-Disposition header from a sanitized filename.'
+);
 
 $helper = new HttpResponseIntegrationHarness();
 foreach ([200 => '', 400 => 'bad request', 404 => 'not found'] as $statusCode => $body) {

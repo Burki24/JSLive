@@ -351,7 +351,11 @@ class SymconJSLive extends WebHookModule
                 //header("Content-Type: text/html");
             }elseif (strtolower($Type) == 'exportconfiguration') {
                 $date = new DateTime();
-                header('Content-disposition: attachment; filename=' . IPS_GetInstance($queryData['instance'])['ModuleInfo']['ModuleName'] . '_' . IPS_GetObject($queryData['instance'])['ObjectName'] . '_ID' . $queryData['instance'] . '_' . $date->format('Y-m-d_H-i-s') . '.json');
+                $filename = IPS_GetInstance($queryData['instance'])['ModuleInfo']['ModuleName']
+                    . '_' . IPS_GetObject($queryData['instance'])['ObjectName']
+                    . '_ID' . $queryData['instance']
+                    . '_' . $date->format('Y-m-d_H-i-s') . '.json';
+                header('Content-Disposition: ' . $this->BuildDownloadContentDisposition($filename));
                 header('Content-Type: application/json');
             }elseif (strtolower($Type) == 'loadfile') {
                 //Here Do Nothing
@@ -503,6 +507,21 @@ class SymconJSLive extends WebHookModule
             'image/svg+xml' => $mimeType,
             default         => 'application/octet-stream'
         };
+    }
+
+    protected function BuildDownloadContentDisposition(string $filename): string
+    {
+        $filename = preg_replace('/[\x00-\x1F\x7F"\\\\\/:*?<>|]+/', '_', $filename) ?? '';
+        $filename = trim($filename, ' .');
+        if ($filename === '') {
+            $filename = 'JSLive-export.json';
+        }
+
+        $encodedFilename = json_encode($filename, JSON_INVALID_UTF8_SUBSTITUTE | JSON_THROW_ON_ERROR);
+        $filename = (string) json_decode($encodedFilename, true, 512, JSON_THROW_ON_ERROR);
+        $asciiFilename = preg_replace('/[^\x20-\x7E]+/', '_', $filename) ?? 'JSLive-export.json';
+
+        return 'attachment; filename="' . $asciiFilename . '"; filename*=UTF-8\'\'' . rawurlencode($filename);
     }
 
     private function IsNotModified(int $lastModified, string $etag): bool

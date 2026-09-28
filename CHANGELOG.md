@@ -65,6 +65,10 @@ Patchstelle, beispielsweise `v0.10.0`.
   Progressbar-Kindmodul gelieferte Bildtypen werden auf die vier tatsaechlich
   konfigurierbaren Formate begrenzt; unbekannte oder manipulierte Angaben
   verwenden `application/octet-stream`, ohne den Bildinhalt zu veraendern.
+- Der Downloadname des Konfigurationsexports kann keine zusaetzlichen
+  HTTP-Header oder ungueltigen Dateipfade mehr einschleusen. Lesbare
+  ASCII-Namen bleiben erhalten; Namen mit Umlauten werden zusaetzlich als
+  UTF-8-`filename*` uebertragen.
 
 ### Removed
 

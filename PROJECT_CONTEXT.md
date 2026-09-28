@@ -149,7 +149,9 @@ Vorhandene lokale Pruefungen:
   Statuscodes der Plain-Text-Abbruchpfade und Conditional Requests fuer
   statische Assets sowie gecachte Modulantworten ab. Der Test charakterisiert
   ausserdem die explizite JSON-Kennzeichnung der direkten globalen
-  Konfiguration und aller etablierten JSON-Kindbefehle;
+  Konfiguration und aller etablierten JSON-Kindbefehle, die feste
+  Kennzeichnung der uebrigen Antworttypen sowie den abgesicherten
+  Downloadnamen des Konfigurationsexports;
 - `tests/configuration-transfer.php`: vollstaendiger und formulargefilterter
   Export, erfolgreicher Import bekannter Properties mit Erhalt ausgelassener
   Werte sowie nebenwirkungsfreie Ablehnung leerer, fehlerhafter,
@@ -331,6 +333,10 @@ Bereits abgesicherte Sicherheitsgrenzen:
   angebotenen MIME-Typen und faellt bei unbekannten oder manipulierten Angaben
   auf `application/octet-stream` zurueck. Der bestehende Binaerinhalt bleibt
   dabei unveraendert.
+- Der `Content-Disposition`-Header des Konfigurationsexports entfernt
+  Steuerzeichen und ungueltige Dateipfadzeichen aus Modul- und Objektnamen.
+  Ein kompatibler ASCII-Name und ein UTF-8-`filename*` erhalten weiterhin
+  lesbare Downloadnamen einschliesslich Umlauten.
 
 Prioritaet hoch:
 
@@ -551,7 +557,9 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    feste Texttypen sowie eine Allowlist mit sicherem Fallback fuer dynamische
    Bildtypen sind getestet).
 9. Den dynamisch erzeugten Dateinamen der Exportantwort charakterisieren und
-   den `Content-Disposition`-Header gegen ungueltige Zeichen absichern.
+   den `Content-Disposition`-Header gegen ungueltige Zeichen absichern
+   (abgeschlossen; regulaere, internationale und manipulierte Namen sind
+   getestet).
 10. CORS-, Authentisierungs- und Schreibberechtigungsmodell dokumentieren und
    testen.
 

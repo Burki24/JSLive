@@ -89,6 +89,11 @@ final class WebhookRoutingHarness extends SymconJSLive
         return $this->NormalizeImageMimeType($mimeType);
     }
 
+    public function buildDownloadContentDispositionForTest(string $filename): string
+    {
+        return $this->BuildDownloadContentDisposition($filename);
+    }
+
     public function ReadPropertyBoolean(string $name): bool
     {
         return (bool) ($this->properties[$name] ?? false);
@@ -196,6 +201,26 @@ foreach (['text/html', "image/png\r\nX-Test: injected", '', ['image/png']] as $i
         'Unknown or malformed image MIME types must use the binary fallback.'
     );
 }
+
+$regularDownloadName = 'JSLive Chart_Wohnzimmer_ID42_2026-09-28_12-34-56.json';
+assertWebhookRouting(
+    $harness->buildDownloadContentDispositionForTest($regularDownloadName)
+        === 'attachment; filename="JSLive Chart_Wohnzimmer_ID42_2026-09-28_12-34-56.json"; '
+            . "filename*=UTF-8''JSLive%20Chart_Wohnzimmer_ID42_2026-09-28_12-34-56.json",
+    'Regular export filenames must preserve the established readable name.'
+);
+
+$unsafeDownloadHeader = $harness->buildDownloadContentDispositionForTest(
+    "Chart\"\r\nX-Test: injected_Übersicht/Bad\\Name_ID42_2026-09-28_12-34-56.json"
+);
+assertWebhookRouting(
+    !str_contains($unsafeDownloadHeader, "\r")
+        && !str_contains($unsafeDownloadHeader, "\n")
+        && !str_contains($unsafeDownloadHeader, 'X-Test:')
+        && str_contains($unsafeDownloadHeader, 'filename="Chart_X-Test_ injected__bersicht_Bad_Name_')
+        && str_contains($unsafeDownloadHeader, "filename*=UTF-8''Chart_X-Test_%20injected_%C3%9Cbersicht_Bad_Name_"),
+    'Export filenames must not inject headers or unsafe filesystem characters and must preserve UTF-8 names.'
+);
 
 $imageBytes = 'synthetic-image-bytes';
 $harness->setChildResponses([
