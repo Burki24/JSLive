@@ -34,15 +34,18 @@ Die öffentlichen Aktionen umfassen unter anderem `UploadConfig`,
 ## Sicherheits- und Betriebsgrenzen
 
 Der Dienst wird über `https://jslive.babenschneider.net/` angesprochen. Die
-Bestandsimplementierung deaktiviert bei diesen cURL-Aufrufen die TLS-
-Zertifikatsprüfung; der Pfad ist daher vor einer produktiven Freigabe zu
-überarbeiten. Die Konfigurationsdaten können sensible Eigenschaften enthalten
-und werden an den externen Dienst übertragen.
+HTTPS-Aufrufe prüfen Zertifikat und Hostnamen, erlauben auch bei Weiterleitungen
+nur HTTPS und verwenden begrenzte Verbindungs- und Gesamtlaufzeiten. Transport-,
+HTTP- und ungültige JSON-Antworten werden als kontrollierter Fehler behandelt.
+Die Konfigurationsdaten können sensible Eigenschaften enthalten und werden an
+den externen Dienst übertragen.
 
 Das Laden kann bestehende Modulkonfigurationen überschreiben, `ApplyChanges()`
 auslösen oder eine neue Instanz erzeugen. Nur vertrauenswürdige und zum
 Modultyp passende Konfigurationen verwenden. Der externe Dienst, sein Protokoll
 und seine Verfügbarkeit sind nicht Bestandteil der lokalen JSLive-Testumgebung.
+Der negative Fehlerpfad wird lokal geprüft; ein realer Integrationstest des
+externen Dienstes steht weiterhin aus.
 Die neue Option `Debug` ist standardmäßig ausgeschaltet. Bei Aktivierung
 protokolliert der gemeinsame `DebugHelper` vollständige Formular- und
 Store-Austauschdaten einschließlich exportierter Konfigurationen und Medien.

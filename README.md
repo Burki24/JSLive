@@ -75,9 +75,10 @@ erkannt werden. Debug daher nur in einer geschützten Testumgebung verwenden.
 ## Bekannte Einschränkungen
 
 - Die Symcon-9-Laufzeitprüfung aller Module ist noch nicht abgeschlossen.
-- ConfigStore und SyncModule deaktivieren derzeit bei ihren externen
-  HTTPS-Aufrufen die Zertifikatsprüfung. Diese Netzwerkpfade sind noch nicht für
-  einen produktiven Einsatz freigegeben.
+- ConfigStore und SyncModule prüfen bei externen HTTPS-Aufrufen Zertifikat und
+  Hostnamen, folgen ausschließlich HTTPS-Weiterleitungen und behandeln
+  Transport-, HTTP- und ungültige JSON-Antworten kontrolliert. Ein realer
+  Integrationstest des externen Dienstes steht weiterhin aus.
 - Die Webhook-Authentisierung und sensible Debugausgaben werden in einer
   eigenen Sicherheitsphase überarbeitet. Der Webhook sollte nicht ungeschützt
   öffentlich erreichbar sein.

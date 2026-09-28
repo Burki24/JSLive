@@ -212,8 +212,10 @@ wurde `SymconJSLiveConfigStore` isoliert formatiert. Ein lokaler Vertragstest
 sichert Benutzer-ID, Forum-Link, UUID und Puffer-Serialisierung; numerische
 API-Werte, Instanz-IDs und fehlgeschlagene cURL-Rueckgaben werden an den durch
 `strict_types` betroffenen Grenzen explizit normalisiert. Externe Webzugriffe,
-Importe und die bestehende TLS-Konfiguration blieben unveraendert. Damit ist der
-Produktionsbestand vollstaendig formatiert. Der repositoryweite Prueflauf findet
+Importe und die damalige TLS-Konfiguration blieben in diesem reinen Style-Schritt
+unveraendert. Die TLS-Pfade wurden spaeter separat gehaertet und mit einem
+negativen Transporttest abgesichert. Damit ist der Produktionsbestand
+vollstaendig formatiert. Der repositoryweite Prueflauf findet
 0 von 27 erfassten PHP-Dateien mit verbleibender StylePHP-Abweichung. Der
 verpflichtende Workflow `.github/workflows/style.yml` fuehrt nun bei Pushes,
 Pull Requests und manueller Ausloesung den gemeinsamen Check
@@ -248,10 +250,12 @@ Browserbibliotheken, einzelne Modulaktionen sowie Store-/Sync-Netzwerkpfade.
   und Webhook-Objekt-IDs explizit. Der Test fuehrt dabei keine Variablen-,
   Skript- oder Medienschreiboperation aus.
 - `SymconJSLiveConfigStore` normalisiert numerische API-Werte und Instanz-IDs
-  fuer strikt typisierte Standardfunktionen. Ein cURL-Fehler wird als leerer
-  Antworttext weitergegeben, damit der bisherige Fehlerpfad nicht bereits in
-  `json_decode()` mit einem `TypeError` abbricht. Reale Netzwerk-, TLS-, Import-
-  und Symcon-Laufzeitpfade sind weiterhin nicht getestet.
+  fuer strikt typisierte Standardfunktionen. ConfigStore und SyncModule
+  erzwingen fuer ihren externen Dienst verifiziertes HTTPS, begrenzen
+  Verbindungs- und Gesamtlaufzeit und geben bei Transport-, HTTP- oder
+  ungueltigen JSON-Antworten einen kontrollierten `success=false`-Fehler zurueck.
+  Der negative Fehlerpfad ist lokal getestet; reale Dienst-, Import- und
+  Symcon-Laufzeitpfade bleiben ungeprueft.
 - Alle Module verwenden noch `IPSModule`; der Webhook basiert auf einer lokalen
   `WebHookModule`-Basisklasse. Symcon 9 empfiehlt fuer neue Module
   `IPSModuleStrict` und dessen native Hook-API. Eine Umstellung ist wegen der
@@ -300,8 +304,6 @@ eine Lizenz-/Versionsliste und automatisierte Browserpruefungen.
 
 Prioritaet hoch:
 
-- `ConfigStore` und `SyncModule` deaktivieren die TLS-Zertifikatspruefung fuer
-  externe HTTPS-Aufrufe.
 - Der Webhook transportiert das Kennwort als Query-Parameter. Bekannte
   Zugangsdatenfelder werden im Debug maskiert; die bewusst vollstaendige
   Diagnose kann jedoch unbekannte Geheimnisse aus freien Texten, Skripten
@@ -402,7 +404,8 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
      absichern (abgeschlossen; ICS-, Event-, Browser- und
      Symcon-Laufzeitpruefung ausstehend);
    - `SyncModule` isoliert formatieren und gegen Vertrags-Snapshot und
-     Gesamtsuite pruefen (abgeschlossen; Netzwerk-, TLS- und
+     Gesamtsuite pruefen (abgeschlossen; TLS-Haertung und negativer
+     Transporttest ebenfalls abgeschlossen; reale Dienst- und
      Symcon-Laufzeitpruefung ausstehend);
    - `RadarChart` isoliert formatieren und seine Datums- und Offset-Berechnung
      fuer PHP 8.5 absichern (abgeschlossen; Archivdaten-, Rendering-, Browser-
@@ -414,7 +417,8 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
      Webhook-Grenzen fuer PHP 8.5 absichern (abgeschlossen; schreibende Objekt-,
      Skript-, Medien-, Browser- und Symcon-Laufzeitpruefung ausstehend);
    - `ConfigStore` isoliert formatieren und seine lokalen Benutzer-ID-, UUID-
-     und Puffervertraege fuer PHP 8.5 absichern (abgeschlossen; Netzwerk-, TLS-,
+     und Puffervertraege fuer PHP 8.5 absichern (abgeschlossen; TLS-Haertung
+     und negativer Transporttest ebenfalls abgeschlossen; reale Dienst-,
      Import- und Symcon-Laufzeitpruefung ausstehend);
    - bestehenden PHP-Code schrittweise mit Vertrags- und Verhaltenstests
      formatieren (abgeschlossen; repositoryweit 0 von 27 Style-Abweichungen);
@@ -483,7 +487,8 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
 
 ### Phase 1 - Sicherheitsgrenzen
 
-1. TLS-Pruefung in Store/Sync aktivieren und Fehlerbehandlung ergaenzen.
+1. TLS-Pruefung in Store/Sync aktivieren und Fehlerbehandlung ergaenzen
+   (abgeschlossen; realer Diensttest ausstehend).
 2. Debug-Ausgaben aller Module ueber `DebugHelper` fuehren. Die bewusst
    aktivierbare Diagnose enthaelt vollstaendige Browser-, Konfigurations- und
    Austausch-Payloads einschliesslich freier Texte, einzelner Messwerte,

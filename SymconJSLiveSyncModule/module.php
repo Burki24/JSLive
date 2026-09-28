@@ -464,23 +464,79 @@ class SymconJSLiveModuleSync extends IPSModule
             $this->SendSafeDebug('GetWebData', ['url' => $url, 'post' => $postdata], PHP_INT_MAX, ['pw']);
         }
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-
-        if (count($postdata) > 0) {
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $postdata);
+        if (!function_exists('curl_init')) {
+            return $this->WebRequestFailure('The PHP cURL extension is unavailable.');
         }
 
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); // On dev server only!
+        $ch = curl_init();
+        if ($ch === false) {
+            return $this->WebRequestFailure('The HTTPS request could not be initialized.');
+        }
+
+        $options = [
+            CURLOPT_URL             => $url,
+            CURLOPT_RETURNTRANSFER  => true,
+            CURLOPT_FOLLOWLOCATION  => true,
+            CURLOPT_MAXREDIRS       => 3,
+            CURLOPT_CONNECTTIMEOUT  => 10,
+            CURLOPT_TIMEOUT         => 30,
+            CURLOPT_SSL_VERIFYPEER  => true,
+            CURLOPT_SSL_VERIFYHOST  => 2,
+            CURLOPT_PROTOCOLS       => CURLPROTO_HTTPS,
+            CURLOPT_REDIR_PROTOCOLS => CURLPROTO_HTTPS
+        ];
+
+        if (count($postdata) > 0) {
+            $options[CURLOPT_POST] = true;
+            $options[CURLOPT_POSTFIELDS] = $postdata;
+        }
+
+        if (!curl_setopt_array($ch, $options)) {
+            curl_close($ch);
+            return $this->WebRequestFailure('The HTTPS request could not be configured.');
+        }
+
         $result = curl_exec($ch);
+        $errorCode = curl_errno($ch);
+        $errorMessage = curl_error($ch);
+        $statusCode = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+        curl_close($ch);
 
         if ($this->ReadPropertyBoolean('Debug')) {
             $this->SendSafeDebug('GetWebData', ['response' => $result === false ? '' : $result], PHP_INT_MAX, ['pw']);
         }
 
+        if ($result === false) {
+            return $this->WebRequestFailure('The HTTPS request failed.', [
+                'errorCode' => $errorCode,
+                'error'     => $errorMessage
+            ]);
+        }
+        if ($statusCode < 200 || $statusCode >= 300) {
+            return $this->WebRequestFailure('The JSLive service returned an unexpected HTTP status.', [
+                'statusCode' => $statusCode
+            ]);
+        }
+
+        json_decode($result, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return $this->WebRequestFailure('The JSLive service returned invalid JSON.', [
+                'jsonError' => json_last_error_msg()
+            ]);
+        }
+
         return $result;
+    }
+
+    private function WebRequestFailure(string $message, array $context = []): string
+    {
+        if ($this->ReadPropertyBoolean('Debug')) {
+            $this->SendSafeDebug('GetWebDataError', ['message' => $message, ...$context], PHP_INT_MAX, ['pw']);
+        }
+
+        return json_encode([
+            'success' => false,
+            'msg'     => 'The JSLive service request failed.'
+        ], JSON_THROW_ON_ERROR);
     }
 }

@@ -29,6 +29,9 @@ Patchstelle, beispielsweise `v0.10.0`.
 - ConfigStore und SyncModule erhalten jeweils eine eigene Debug-Option im
   Konfigurationsformular; ihre vollstaendigen Austauschdaten sind damit nur
   bei bewusst aktivierter Diagnose sichtbar.
+- ConfigStore und SyncModule pruefen fuer ihren externen Dienst TLS-Zertifikat
+  und Hostnamen, begrenzen Weiterleitungen auf HTTPS und behandeln Transport-,
+  HTTP- sowie ungueltige JSON-Antworten kontrolliert.
 
 ### Added
 

@@ -27,7 +27,8 @@ $tests = [
     __DIR__ . '/radar-debug.php',
     __DIR__ . '/chart-debug.php',
     __DIR__ . '/full-debug-payload.php',
-    __DIR__ . '/sync-full-debug.php'
+    __DIR__ . '/sync-full-debug.php',
+    __DIR__ . '/tls-http-client.php'
 ];
 
 $commands = [

@@ -36,9 +36,12 @@ Die Synchronisation kann Konfigurationen anderer Instanzen überschreiben und
 Parameter verwenden. Ungültige oder gelöschte Instanzen werden im Formular
 markiert und übersprungen.
 
-Der Bestandsstand ruft für die dynamische Modulliste den externen Dienst
-`https://jslive.babenschneider.net/` auf und deaktiviert dabei die TLS-
-Zertifikatsprüfung. Dieser Pfad ist vor einem produktiven Einsatz zu härten.
+Für die dynamische Modulliste wird der externe Dienst
+`https://jslive.babenschneider.net/` aufgerufen. Die HTTPS-Anfrage prüft
+Zertifikat und Hostnamen, erlaubt auch bei Weiterleitungen nur HTTPS und
+begrenzt Verbindungs- sowie Gesamtlaufzeit. Transport-, HTTP- und ungültige
+JSON-Antworten werden kontrolliert behandelt. Der negative Fehlerpfad wird
+lokal geprüft; ein realer Integrationstest des externen Dienstes steht aus.
 Die neue Option `Debug` ist standardmäßig ausgeschaltet. Bei Aktivierung
 protokolliert der gemeinsame `DebugHelper` vollständige Synchronisations-
 und Austauschdaten. Bekannte Zugangsdatenfelder werden maskiert; Debug nur in
