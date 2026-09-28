@@ -47,6 +47,12 @@ Patchstelle, beispielsweise `v0.10.0`.
   ausschliesslich positive Ganzzahlen.
   AdvTextfield uebernimmt die bereits decodierten Werte ohne eine zweite,
   inhaltsveraendernde Decodierung.
+- Plain-Text-Abbrueche des Webhooks verwenden durchgaengig den
+  `HttpResponseHelper`: unvollstaendige Anfragen liefern HTTP 400, fehlende
+  Kindinstanzen HTTP 404. Der absichtlich nicht unterscheidbare
+  Authentisierungsfehler bleibt eine leere HTTP-200-Antwort. Erfolgreiche
+  Routen verwenden keine benutzerdefinierte `200 X`-Statuszeile mehr und setzen
+  `X-Content-Type-Options: nosniff`.
 
 ### Removed
 

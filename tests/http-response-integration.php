@@ -34,18 +34,31 @@ httpResponseIntegrationAssert(
     'JSLive must use the HttpResponseHelper trait.'
 );
 httpResponseIntegrationAssert(
-    substr_count($source, '$this->SendPlainTextResponse(') === 2,
-    'JSLive must route its two safe early webhook responses through HttpResponseHelper.'
+    substr_count($source, '$this->SendPlainTextResponse(') === 6,
+    'JSLive must route all six plain-text webhook exits through HttpResponseHelper.'
+);
+httpResponseIntegrationAssert(
+    !str_contains($source, "header('HTTP/1.1 200 X')"),
+    'JSLive must not emit the obsolete custom HTTP 200 status line.'
+);
+httpResponseIntegrationAssert(
+    substr_count($source, "header('X-Content-Type-Options: nosniff');") === 2,
+    'JSLive must protect both successful webhook response groups against MIME sniffing.'
 );
 
 $helper = new HttpResponseIntegrationHarness();
-ob_start();
-$helper->sendPlainText(200, 'response body');
-$output = ob_get_clean();
+foreach ([200 => '', 400 => 'bad request', 404 => 'not found'] as $statusCode => $body) {
+    ob_start();
+    $helper->sendPlainText($statusCode, $body);
+    $output = ob_get_clean();
 
-httpResponseIntegrationAssert($output === 'response body', 'Plain-text helper output must remain unchanged.');
-httpResponseIntegrationAssert(http_response_code() === 200, 'Plain-text helper must set the requested status code.');
+    httpResponseIntegrationAssert($output === $body, 'Plain-text helper output must remain unchanged.');
+    httpResponseIntegrationAssert(
+        http_response_code() === $statusCode,
+        'Plain-text helper must set the requested status code.'
+    );
+    header_remove();
+}
 http_response_code(200);
-header_remove();
 
 fwrite(STDOUT, "JSLive HTTP response integration verified.\n");

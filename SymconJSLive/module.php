@@ -227,11 +227,11 @@ class SymconJSLive extends WebHookModule
                 return;
             }
 
-            header('HTTP/1.1 200 X');
+            http_response_code(200);
             header('Access-Control-Allow-Origin: *');
             header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
             header('Access-Control-Allow-Headers: Content-Type');
-            //http_response_code(200);
+            header('X-Content-Type-Options: nosniff');
             $path_parts = pathinfo($path);
             $mimeType = $this->GetMimeType($path_parts['extension']);
             header('Content-Type: ' . $mimeType);
@@ -320,11 +320,13 @@ class SymconJSLive extends WebHookModule
 
             if (!array_key_exists('instance', $queryData)) {
                 $this->SendSafeDebug('WebHook', 'INSTANCE NOT SET!');
-                return ''; //wenn instance Parameter nicht gefunden
+                $this->SendPlainTextResponse(400, '');
+                return;
             }
 
-            header('HTTP/1.1 200 X');
+            http_response_code(200);
             header('Access-Control-Allow-Origin: *');
+            header('X-Content-Type-Options: nosniff');
 
             $sendData = ['cmd' => $Type, 'instance' => $queryData['instance'], 'queryData' => $queryData];
             $contend = $this->SendDataToChildren($this->EncodeDataFlowMessage(
@@ -338,8 +340,8 @@ class SymconJSLive extends WebHookModule
                     'contentType'  => get_debug_type($contend),
                     'contentCount' => is_countable($contend) ? count($contend) : null
                 ]);
-                header('Content-Type: text/html');
-                return 'NO INSTANCE FOUND!'; //wenn instance nicht gefunden
+                $this->SendPlainTextResponse(404, 'NO INSTANCE FOUND!');
+                return;
             }
 
             if (strtolower($Type) == 'getsvg') {
@@ -377,7 +379,7 @@ class SymconJSLive extends WebHookModule
 
                 if (count($arr_data) == 0) {
                     $this->SendSafeDebug('WebHook-' . $Type, 'Instance Not in List!');
-                    echo 'Instance Not in List!';
+                    $this->SendPlainTextResponse(404, 'Instance Not in List!');
                     return;
                 }
 
@@ -418,7 +420,7 @@ class SymconJSLive extends WebHookModule
 
                 if (count($arr_data) == 0) {
                     $this->SendSafeDebug('WebHook-' . $Type, 'Instance Not in List! (getCSS)');
-                    echo 'Instance Not in List!';
+                    $this->SendPlainTextResponse(404, 'Instance Not in List!');
                     return;
                 }
 

@@ -145,7 +145,8 @@ Vorhandene lokale Pruefungen:
   Auslieferung erlaubter JavaScript-Assets und die Abweisung kanonischer
   Pfadausbrueche, URL-decodierte Querywerte mit eingebetteten
   Gleichheitszeichen, exakte Kennwortvergleiche und JavaScript-sichere
-  `init.js`-Parameter einschliesslich ungueltiger UTF-8-Eingaben ab;
+  `init.js`-Parameter einschliesslich ungueltiger UTF-8-Eingaben sowie die
+  Statuscodes der Plain-Text-Abbruchpfade ab;
 - `tests/configuration-transfer.php`: vollstaendiger und formulargefilterter
   Export, erfolgreicher Import bekannter Properties mit Erhalt ausgelassener
   Werte sowie nebenwirkungsfreie Ablehnung leerer, fehlerhafter,
@@ -309,6 +310,11 @@ Bereits abgesicherte Sicherheitsgrenzen:
   auf positive Ganzzahlen begrenzt. AdvTextfield verarbeitet den bereits
   decodierten Wert ohne eine zweite Decodierung, sodass woertliche
   Prozentsequenzen erhalten bleiben.
+- Alle sechs Plain-Text-Abbruchpfade verwenden den `HttpResponseHelper`.
+  Fehlende Queryparameter liefern HTTP 400, nicht erreichbare oder nicht
+  passende Kindinstanzen HTTP 404. Der Authentisierungsfehler behaelt bewusst
+  seine leere HTTP-200-Antwort. Erfolgreiche Routen setzen ihren Status
+  standardkonform und senden `X-Content-Type-Options: nosniff`.
 
 Prioritaet hoch:
 
@@ -516,9 +522,12 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    eingebettete Gleichheitszeichen, exakter Kennwortvergleich sowie sichere
    `init.js`-Parameter und der Erhalt woertlicher Prozentsequenzen sind
    getestet).
-5. Die verbliebenen HTTP-Antworten haerten und den `HttpResponseHelper` gezielt
-   weiter integrieren.
-6. CORS-, Authentisierungs- und Schreibberechtigungsmodell dokumentieren und
+5. Plain-Text-Abbruchantworten haerten und den `HttpResponseHelper` gezielt
+   integrieren (abgeschlossen; Statuscodes 200/400/404, Antworttexte und
+   `nosniff` sind getestet).
+6. Erfolgreiche JSON-, HTML-, SVG- und Binaerantworten sowie 304-Cachepfade
+   charakterisieren und ihre HTTP-Header schrittweise haerten.
+7. CORS-, Authentisierungs- und Schreibberechtigungsmodell dokumentieren und
    testen.
 
 ### Phase 2 - Symcon 9.0 / PHP 8.5 stabilisieren

@@ -217,6 +217,10 @@ assertWebhookRouting(
 $deniedResponse = $harness->route('/hook/JSLive/getData', 'instance=42&pw=wrong-secret');
 assertWebhookRouting($deniedResponse['output'] === '', 'A rejected password must not produce response data.');
 assertWebhookRouting($harness->childMessages === [], 'A rejected password must not reach child modules.');
+assertWebhookRouting(
+    $harness->responseStatusCodes === [200],
+    'A rejected password must preserve the non-disclosing HTTP 200 response.'
+);
 $deniedDebug = json_encode($harness->debugMessages, JSON_THROW_ON_ERROR);
 assertWebhookRouting(!str_contains($deniedDebug, 'wrong-secret'), 'Rejected passwords must not be logged.');
 assertWebhookRouting(!str_contains($deniedDebug, 'synthetic-secret'), 'Configured passwords must not be logged.');
@@ -272,6 +276,24 @@ $harness->resetCapturedData();
 $missingInstanceResponse = $harness->route('/hook/JSLive/getData', 'pw=synthetic-secret');
 assertWebhookRouting($missingInstanceResponse['output'] === '', 'A missing instance must not produce response data.');
 assertWebhookRouting($harness->childMessages === [], 'A missing instance must not reach child modules.');
+assertWebhookRouting(
+    $harness->responseStatusCodes === [400],
+    'A missing instance query parameter must return HTTP 400.'
+);
+
+$harness->resetCapturedData();
+$missingChildResponse = $harness->route(
+    '/hook/JSLive/getData',
+    'instance=42&pw=synthetic-secret'
+);
+assertWebhookRouting(
+    $missingChildResponse['output'] === 'NO INSTANCE FOUND!',
+    'A missing child instance must return the existing diagnostic body.'
+);
+assertWebhookRouting(
+    $harness->responseStatusCodes === [404],
+    'A missing child instance must return HTTP 404.'
+);
 
 $harness->resetCapturedData();
 $globalConfigResponse = $harness->route(
@@ -283,6 +305,45 @@ assertWebhookRouting(
     'getGlobalConfig changed its direct response contract.'
 );
 assertWebhookRouting($harness->childMessages === [], 'getGlobalConfig must not be sent to child modules.');
+
+$harness->resetCapturedData();
+$harness->setChildResponses([
+    json_encode(
+        [
+            'InstanceID'     => '99',
+            'Contend'        => '<div>other instance</div>',
+            'lastModify'     => 'Mon, 01 Jan 2024 00:00:00 GMT',
+            'EnableCache'    => true,
+            'EnableViewport' => true
+        ],
+        JSON_THROW_ON_ERROR
+    )
+]);
+$unmatchedContentResponse = $harness->route('/hook/JSLive/', 'instance=42&pw=synthetic-secret');
+assertWebhookRouting(
+    $unmatchedContentResponse['output'] === 'Instance Not in List!'
+        && $harness->responseStatusCodes === [404],
+    'An unmatched content instance must return its existing message with HTTP 404.'
+);
+
+$harness->resetCapturedData();
+$harness->setChildResponses([
+    json_encode(
+        [
+            'InstanceID'  => '99',
+            'Contend'     => '.other { color: red; }',
+            'lastModify'  => 'Mon, 01 Jan 2024 00:00:00 GMT',
+            'EnableCache' => false
+        ],
+        JSON_THROW_ON_ERROR
+    )
+]);
+$unmatchedCssResponse = $harness->route('/hook/JSLive/getCSS', 'instance=42');
+assertWebhookRouting(
+    $unmatchedCssResponse['output'] === 'Instance Not in List!'
+        && $harness->responseStatusCodes === [404],
+    'An unmatched CSS instance must return its existing message with HTTP 404.'
+);
 
 $harness->resetCapturedData();
 $harness->setChildResponses([
@@ -314,7 +375,10 @@ $debugResponse = $harness->route(
     'instance=42&pw=synthetic-secret&title=Free+text',
     ['content' => $longText, 'Password' => 'synthetic-post-password']
 );
-assertWebhookRouting($debugResponse['output'] === '', 'Debug changed the getData response without a child result.');
+assertWebhookRouting(
+    $debugResponse['output'] === 'NO INSTANCE FOUND!' && $harness->responseStatusCodes === [404],
+    'Debug changed the missing-child HTTP response.'
+);
 assertWebhookRouting($harness->debugMessages !== [], 'Enabled Debug must log the complete webhook request.');
 $loggedRequest = json_decode($harness->debugMessages[0]['data'], true, 512, JSON_THROW_ON_ERROR);
 assertWebhookRouting(
