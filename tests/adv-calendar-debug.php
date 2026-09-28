@@ -45,10 +45,10 @@ function debugRequest(array $buffer): string
 }
 
 $text = new SymconJSLiveAdvTextfield();
-$content = 'synthetic-private-content';
+$content = 'synthetic%20private content';
 $result = $text->ReceiveData(debugRequest([
     'cmd'       => 'setData',
-    'queryData' => ['val' => rawurlencode($content)]
+    'queryData' => ['val' => $content]
 ]));
 if ($result !== 'OK' || $text->values !== ['Content' => $content]) {
     throw new RuntimeException('AdvTextfield changed its successful write contract.');

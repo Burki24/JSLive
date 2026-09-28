@@ -143,7 +143,9 @@ Vorhandene lokale Pruefungen:
   Instanz-Gates, Data-ID/JSON-Umschlag, direkte globale Konfiguration und den
   historischen Standardbefehl `getContend`; zusaetzlich sichert er die
   Auslieferung erlaubter JavaScript-Assets und die Abweisung kanonischer
-  Pfadausbrueche ab;
+  Pfadausbrueche, URL-decodierte Querywerte mit eingebetteten
+  Gleichheitszeichen, exakte Kennwortvergleiche und JavaScript-sichere
+  `init.js`-Parameter einschliesslich ungueltiger UTF-8-Eingaben ab;
 - `tests/configuration-transfer.php`: vollstaendiger und formulargefilterter
   Export, erfolgreicher Import bekannter Properties mit Erhalt ausgelassener
   Werte sowie nebenwirkungsfreie Ablehnung leerer, fehlerhafter,
@@ -300,6 +302,13 @@ Bereits abgesicherte Sicherheitsgrenzen:
   relative Pfadausbrueche mit HTTP 404 ab. Ein Regressionstest belegt sowohl
   die regulaere Auslieferung als auch die Abweisung des frueher moeglichen
   Zugriffs auf `module.php` ueber `../`.
+- Webhook-Querywerte werden an einer gemeinsamen Grenze URL-decodiert und
+  behalten eingebettete Gleichheitszeichen. Kennwoerter werden ohne lockere
+  Typumwandlung mit `hash_equals` verglichen. Fuer `init.js` werden Strings als
+  JavaScript-Inhalte escaped, ungueltige UTF-8-Bytes ersetzt und die Instanz-ID
+  auf positive Ganzzahlen begrenzt. AdvTextfield verarbeitet den bereits
+  decodierten Wert ohne eine zweite Decodierung, sodass woertliche
+  Prozentsequenzen erhalten bleiben.
 
 Prioritaet hoch:
 
@@ -314,8 +323,8 @@ Prioritaet hoch:
 
 Prioritaet mittel:
 
-- manuelles Query-Parsing, rohe Header-/Echo-Antworten, breite CORS-Freigabe,
-  ungepruefte Server-Arrayzugriffe und `rand()` fuer Kennwoerter;
+- rohe Header-/Echo-Antworten, breite CORS-Freigabe, ungepruefte
+  Server-Arrayzugriffe und `rand()` fuer Kennwoerter;
 - serialisierte PHP-Daten in Buffern und `unserialize` ohne erlaubte Klassen;
 - grosse Basisklasse, duplizierte Hilfsfunktionen und sehr grosse Moduldateien;
 - `LoadConnectAddress` enthaelt einen bedingungslosen fruehen Rueckgabepfad und
@@ -503,9 +512,13 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    Der `VisualizationAssetHelper` ist fuer diesen historischen, dynamischen
    Webhook-Pfad nicht geeignet und bleibt der spaeteren Visualisierungs-
    umstellung vorbehalten.
-4. Query-Verarbeitung und die verbliebenen HTTP-Antworten haerten;
-   `HttpResponseHelper` gezielt weiter integrieren.
-5. CORS-, Authentisierungs- und Schreibberechtigungsmodell dokumentieren und
+4. Query-Verarbeitung zentralisieren und haerten (abgeschlossen; URL-Decodierung,
+   eingebettete Gleichheitszeichen, exakter Kennwortvergleich sowie sichere
+   `init.js`-Parameter und der Erhalt woertlicher Prozentsequenzen sind
+   getestet).
+5. Die verbliebenen HTTP-Antworten haerten und den `HttpResponseHelper` gezielt
+   weiter integrieren.
+6. CORS-, Authentisierungs- und Schreibberechtigungsmodell dokumentieren und
    testen.
 
 ### Phase 2 - Symcon 9.0 / PHP 8.5 stabilisieren

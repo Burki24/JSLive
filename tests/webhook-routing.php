@@ -74,6 +74,11 @@ final class WebhookRoutingHarness extends SymconJSLive
         $this->properties['Debug'] = $enabled;
     }
 
+    public function setPassword(string $password): void
+    {
+        $this->properties['Password'] = $password;
+    }
+
     public function ReadPropertyBoolean(string $name): bool
     {
         return (bool) ($this->properties[$name] ?? false);
@@ -179,6 +184,36 @@ assertWebhookRouting(
 );
 $harness->resetCapturedData();
 
+$initResponse = $harness->route(
+    '/hook/JSLive/js/init.js',
+    'INTID=42&BOXID=box%22id&PW=secret%22%3Balert%281%29%3B%2F%2F'
+        . '&LINK=https%3A%2F%2Fexample.test%2Fhook%3Fa%3D1%26b%3D2'
+);
+assertWebhookRouting(
+    !str_contains($initResponse['output'], 'secret";alert(1);//')
+        && str_contains($initResponse['output'], 'secret\\u0022;alert(1);\\/\\/')
+        && str_contains($initResponse['output'], 'https:\\/\\/example.test\\/hook?a=1\\u0026b=2'),
+    'init.js query values must be decoded and escaped as JavaScript strings.'
+);
+
+$invalidInstanceResponse = $harness->route(
+    '/hook/JSLive/js/init.js',
+    'intid=alert%281%29&boxid=box&pw=secret&link=https%3A%2F%2Fexample.test'
+);
+assertWebhookRouting(
+    !str_contains($invalidInstanceResponse['output'], 'load_Inctance(alert(1)'),
+    'init.js must not insert executable query data as its numeric instance ID.'
+);
+
+$invalidUtf8Response = $harness->route(
+    '/hook/JSLive/js/init.js',
+    'intid=42&boxid=%FF&pw=&link='
+);
+assertWebhookRouting(
+    $invalidUtf8Response['output'] !== '' && str_contains($invalidUtf8Response['output'], '\\ufffd'),
+    'init.js must replace invalid UTF-8 query bytes instead of aborting the response.'
+);
+
 $deniedResponse = $harness->route('/hook/JSLive/getData', 'instance=42&pw=wrong-secret');
 assertWebhookRouting($deniedResponse['output'] === '', 'A rejected password must not produce response data.');
 assertWebhookRouting($harness->childMessages === [], 'A rejected password must not reach child modules.');
@@ -205,6 +240,33 @@ assertWebhookRouting(
     ($dataMessage['inner']['queryData']['var'] ?? null) === '17',
     'getData no longer forwards module-specific query values.'
 );
+
+$harness->resetCapturedData();
+$harness->setPassword('synthetic secret+=&');
+$harness->setChildResponses(['{"value":43}']);
+$encodedResponse = $harness->route(
+    '/hook/JSLive/getData',
+    'INSTANCE=42&PW=synthetic%20secret%2B%3D%26&title=Chart%20A%2BB&token=a%3Db'
+);
+assertWebhookRouting(
+    $encodedResponse['output'] === '{"value":43}',
+    'Equivalent URL encoding must not reject a valid password.'
+);
+$encodedMessage = decodeWebhookMessage($harness->childMessages[0]);
+assertWebhookRouting(
+    ($encodedMessage['inner']['queryData']['title'] ?? null) === 'Chart A+B'
+        && ($encodedMessage['inner']['queryData']['token'] ?? null) === 'a=b',
+    'Webhook query values must be URL-decoded without losing embedded equals signs.'
+);
+
+$harness->resetCapturedData();
+$harness->setPassword('0e123456789');
+$numericPasswordResponse = $harness->route('/hook/JSLive/getData', 'instance=42&pw=0e987654321');
+assertWebhookRouting(
+    $numericPasswordResponse['output'] === '' && $harness->childMessages === [],
+    'Different numeric-looking password strings must not authenticate as equal.'
+);
+$harness->setPassword('synthetic-secret');
 
 $harness->resetCapturedData();
 $missingInstanceResponse = $harness->route('/hook/JSLive/getData', 'pw=synthetic-secret');

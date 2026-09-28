@@ -40,6 +40,13 @@ Patchstelle, beispielsweise `v0.10.0`.
   deren kanonischer Pfad innerhalb von `SymconJSLive/js` liegt. Relative
   Pfadausbrueche werden mit HTTP 404 abgewiesen; ein Regressionstest sichert
   erlaubte Assets und den bisherigen Quelltextzugriff ueber `../` ab.
+- Webhook-Querywerte werden zentral und URL-konform decodiert, ohne eingebettete
+  Gleichheitszeichen zu verlieren. Kennwoerter werden exakt mit `hash_equals`
+  verglichen; dynamische `init.js`-Strings werden JavaScript-sicher maskiert und
+  ungueltige UTF-8-Bytes ersetzt. Die unquoted Instanz-ID akzeptiert
+  ausschliesslich positive Ganzzahlen.
+  AdvTextfield uebernimmt die bereits decodierten Werte ohne eine zweite,
+  inhaltsveraendernde Decodierung.
 
 ### Removed
 

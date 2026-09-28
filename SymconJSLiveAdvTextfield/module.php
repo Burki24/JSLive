@@ -137,7 +137,7 @@ class SymconJSLiveAdvTextfield extends JSLiveModule
             return 'NO VALUE SET!';
         }
 
-        $val = urldecode($querydata['val']);
+        $val = $querydata['val'];
         $this->SendSafeDebug('SetData', 'Update Content');
         $this->SetValue('Content', $val);
         return 'OK';

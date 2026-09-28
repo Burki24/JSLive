@@ -201,13 +201,13 @@ class SymconJSLive extends WebHookModule
     protected function ProcessHookData()
     {
         $scriptName = (string) ($_SERVER['SCRIPT_NAME'] ?? '');
+        $queryData = $this->ParseQueryString((string) ($_SERVER['QUERY_STRING'] ?? ''));
 
         if ($this->ReadPropertyBoolean('Debug')) {
-            parse_str((string) ($_SERVER['QUERY_STRING'] ?? ''), $debugQuery);
             $this->SendSafeDebug('WebHook', [
                 'scriptName'    => $scriptName,
                 'requestMethod' => $_SERVER['REQUEST_METHOD'] ?? null,
-                'queryData'     => $debugQuery,
+                'queryData'     => $queryData,
                 'post'          => $_POST
             ], PHP_INT_MAX, ['pw']);
         }
@@ -237,21 +237,20 @@ class SymconJSLive extends WebHookModule
             header('Content-Type: ' . $mimeType);
 
             if ($subpath == 'js/init.js') {
-                $queryData = [];
-                foreach (explode('&', $_SERVER['QUERY_STRING']) as $item) {
-                    $pos2 = strpos($item, '=');
-                    if ($pos2 !== false) {
-                        $p_arr = explode('=', $item);
-                        if (count($p_arr) > 2) continue;
-                        $queryData[strtolower($p_arr[0])] = $p_arr[1];
-                    }
+                $instanceID = filter_var(
+                    $queryData['intid'] ?? null,
+                    FILTER_VALIDATE_INT,
+                    ['options' => ['min_range' => 1]]
+                );
+                if ($instanceID === false) {
+                    $instanceID = 0;
                 }
 
                 $contend = file_get_contents($path);
-                $contend = str_replace('{INSTANCEID}', $queryData['intid'], $contend);
-                $contend = str_replace('{BOXID}', $queryData['boxid'], $contend);
-                $contend = str_replace('{PW}', $queryData['pw'], $contend);
-                $contend = str_replace('{LINK}', $queryData['link'], $contend);
+                $contend = str_replace('{INSTANCEID}', (string) $instanceID, $contend);
+                $contend = str_replace('{BOXID}', $this->EncodeJavaScriptString($queryData['boxid'] ?? ''), $contend);
+                $contend = str_replace('{PW}', $this->EncodeJavaScriptString($queryData['pw'] ?? ''), $contend);
+                $contend = str_replace('{LINK}', $this->EncodeJavaScriptString($queryData['link'] ?? ''), $contend);
 
                 header('Content-Length: ' . strlen($contend));
                 echo $contend;
@@ -292,28 +291,13 @@ class SymconJSLive extends WebHookModule
             $Type = substr($scriptName, strlen('/hook/JSLive/'));
             if (empty($Type)) $Type = 'getContend';
 
-            $queryData = [];
-
-            foreach (explode('&', $_SERVER['QUERY_STRING']) as $item) {
-                $pos2 = strpos($item, '=');
-                if ($pos2 !== false) {
-                    $p_arr = explode('=', $item);
-                    if (count($p_arr) > 2) continue;
-                    $queryData[strtolower($p_arr[0])] = $p_arr[1];
-                }
-            }
-
             //password prüfen!
             $passwordIsSet = $this->ReadPropertyString('Password');
             if (!empty($passwordIsSet)) {
-                $passwordIsSet = urlencode($passwordIsSet);
-                $password = '';
-                if (array_key_exists('pw', $queryData)) {
-                    $password = $queryData['pw'];
-                }
+                $password = $queryData['pw'] ?? '';
                 //Keinpassword bei CSS Abfrage!
 
-                if ($passwordIsSet != $password && strtolower($Type) != 'getcss') {
+                if (!hash_equals($passwordIsSet, $password) && strtolower($Type) != 'getcss') {
                     $this->SendSafeDebug('WebHook', 'WRONG PASSWORD!');
                     $this->SendPlainTextResponse(200, '');
                     $this->SendSafeDebug('WebHook', [
@@ -486,6 +470,43 @@ class SymconJSLive extends WebHookModule
                 echo $contend;
             }
         }
+    }
+
+    private function EncodeJavaScriptString(string $value): string
+    {
+        $encoded = json_encode(
+            $value,
+            JSON_HEX_TAG
+                | JSON_HEX_AMP
+                | JSON_HEX_APOS
+                | JSON_HEX_QUOT
+                | JSON_INVALID_UTF8_SUBSTITUTE
+                | JSON_THROW_ON_ERROR
+        );
+
+        return substr($encoded, 1, -1);
+    }
+
+    /** @return array<string, string> */
+    private function ParseQueryString(string $queryString): array
+    {
+        $queryData = [];
+
+        foreach (explode('&', $queryString) as $item) {
+            $separatorPosition = strpos($item, '=');
+            if ($separatorPosition === false) {
+                continue;
+            }
+
+            $key = strtolower(urldecode(substr($item, 0, $separatorPosition)));
+            if ($key === '') {
+                continue;
+            }
+
+            $queryData[$key] = urldecode(substr($item, $separatorPosition + 1));
+        }
+
+        return $queryData;
     }
 
     private function ResolveStaticAssetPath(string $scriptName): ?string
