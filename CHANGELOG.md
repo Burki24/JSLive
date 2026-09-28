@@ -53,6 +53,10 @@ Patchstelle, beispielsweise `v0.10.0`.
   Authentisierungsfehler bleibt eine leere HTTP-200-Antwort. Erfolgreiche
   Routen verwenden keine benutzerdefinierte `200 X`-Statuszeile mehr und setzen
   `X-Content-Type-Options: nosniff`.
+- Conditional Requests fuer statische Assets und gecachte Modulantworten
+  pruefen ETags und `If-Modified-Since` sicher, akzeptieren quotierte ETags und
+  liefern bei unveraendertem Inhalt HTTP 304 ohne Response-Body. Fehlende
+  Conditional-Request-Header loesen unter PHP 8.5 keinen Fehler mehr aus.
 
 ### Removed
 

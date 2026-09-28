@@ -261,15 +261,13 @@ class SymconJSLive extends WebHookModule
                 //Add caching support
                 $lastmodified = filemtime($path);
                 header('Cache-Control: max-age=3600');
-                header('Last-Modified: ' . $lastmodified);
+                header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $lastmodified) . ' GMT');
                 $etag = md5_file($path);
                 header('ETag: ' . $etag);
 
-                //CHeck if etag header exist and get them
-                $Header_Etag = (isset($_SERVER['HTTP_IF_NONE_MATCH']) ? trim($_SERVER['HTTP_IF_NONE_MATCH']) : false);
-
-                if (@strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == $lastmodified || $Header_Etag == $etag) {
-                    header('HTTP/1.1 304 Not Modified');
+                if ($this->IsNotModified($lastmodified, $etag)) {
+                    http_response_code(304);
+                    return;
                 }
             }else {
                 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
@@ -441,11 +439,10 @@ class SymconJSLive extends WebHookModule
                 $etag = md5($contend);
                 header('ETag: ' . $etag);
 
-                //CHeck if etag header exist and get them
-                $Header_Etag = (isset($_SERVER['HTTP_IF_NONE_MATCH']) ? trim($_SERVER['HTTP_IF_NONE_MATCH']) : false);
-
-                if (@strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == $lastmodified || $Header_Etag == $etag) {
-                    header('HTTP/1.1 304 Not Modified');
+                $lastModifiedTimestamp = strtotime($lastmodified);
+                if ($lastModifiedTimestamp !== false && $this->IsNotModified($lastModifiedTimestamp, $etag)) {
+                    http_response_code(304);
+                    return;
                 }
             }
 
@@ -472,6 +469,26 @@ class SymconJSLive extends WebHookModule
                 echo $contend;
             }
         }
+    }
+
+    private function IsNotModified(int $lastModified, string $etag): bool
+    {
+        $ifNoneMatch = trim((string) ($_SERVER['HTTP_IF_NONE_MATCH'] ?? ''));
+        if ($ifNoneMatch !== '') {
+            foreach (explode(',', $ifNoneMatch) as $candidate) {
+                if (trim($candidate, " \t\"") === trim($etag, " \t\"")) {
+                    return true;
+                }
+            }
+        }
+
+        $ifModifiedSince = trim((string) ($_SERVER['HTTP_IF_MODIFIED_SINCE'] ?? ''));
+        if ($ifModifiedSince === '') {
+            return false;
+        }
+
+        $ifModifiedSinceTimestamp = strtotime($ifModifiedSince);
+        return $ifModifiedSinceTimestamp !== false && $ifModifiedSinceTimestamp >= $lastModified;
     }
 
     private function EncodeJavaScriptString(string $value): string

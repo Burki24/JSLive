@@ -79,6 +79,11 @@ final class WebhookRoutingHarness extends SymconJSLive
         $this->properties['Password'] = $password;
     }
 
+    public function setCacheEnabled(bool $enabled): void
+    {
+        $this->properties['enableCache'] = $enabled;
+    }
+
     public function ReadPropertyBoolean(string $name): bool
     {
         return (bool) ($this->properties[$name] ?? false);
@@ -102,24 +107,31 @@ final class WebhookRoutingHarness extends SymconJSLive
     }
 
     /**
-     * @return array{output: string, result: mixed}
+     * @param array<string, string> $serverOverrides
+     *
+     * @return array{output: string, result: mixed, statusCode: int|false}
      */
-    public function route(string $scriptName, string $queryString, array $post = []): array
-    {
+    public function route(
+        string $scriptName,
+        string $queryString,
+        array $post = [],
+        array $serverOverrides = []
+    ): array {
         $previousServer = $_SERVER;
         $previousPost = $_POST;
         header_remove();
-        $_SERVER = [
+        $_SERVER = array_merge([
             'SCRIPT_NAME'          => $scriptName,
             'QUERY_STRING'         => $queryString,
             'HTTP_ACCEPT_ENCODING' => ''
-        ];
+        ], $serverOverrides);
         $_POST = $post;
 
         ob_start();
         try {
             $result = $this->ProcessHookData();
             $output = ob_get_clean();
+            $statusCode = http_response_code();
         } catch (Throwable $throwable) {
             ob_end_clean();
             throw $throwable;
@@ -129,7 +141,7 @@ final class WebhookRoutingHarness extends SymconJSLive
             header_remove();
         }
 
-        return ['output' => (string) $output, 'result' => $result];
+        return ['output' => (string) $output, 'result' => $result, 'statusCode' => $statusCode];
     }
 
     protected function GetMimeType($extension)
@@ -213,6 +225,56 @@ assertWebhookRouting(
     $invalidUtf8Response['output'] !== '' && str_contains($invalidUtf8Response['output'], '\\ufffd'),
     'init.js must replace invalid UTF-8 query bytes instead of aborting the response.'
 );
+
+$harness->setCacheEnabled(true);
+$assetBody = file_get_contents(dirname(__DIR__) . '/SymconJSLive/js/util.js');
+$cachedAssetResponse = $harness->route(
+    '/hook/JSLive/js/util.js',
+    '',
+    [],
+    ['HTTP_IF_NONE_MATCH' => '"' . md5((string) $assetBody) . '"']
+);
+assertWebhookRouting(
+    $cachedAssetResponse['output'] === '' && $cachedAssetResponse['statusCode'] === 304,
+    'An unchanged JavaScript asset must return HTTP 304 without a response body.'
+);
+
+$harness->resetCapturedData();
+$harness->setChildResponses([
+    json_encode(
+        [
+            'InstanceID'     => '42',
+            'Contend'        => '<div>cached fixture</div>',
+            'lastModify'     => 'Mon, 01 Jan 2024 00:00:00 GMT',
+            'EnableCache'    => true,
+            'EnableViewport' => true
+        ],
+        JSON_THROW_ON_ERROR
+    )
+]);
+$cachedContentBody = '<div>cached fixture</div>';
+$cachedContentResponse = $harness->route(
+    '/hook/JSLive/',
+    'instance=42&pw=synthetic-secret',
+    [],
+    ['HTTP_IF_NONE_MATCH' => md5($cachedContentBody)]
+);
+assertWebhookRouting(
+    $cachedContentResponse['output'] === '' && $cachedContentResponse['statusCode'] === 304,
+    'An unchanged cached module response must return HTTP 304 without a response body.'
+);
+$cachedContentDateResponse = $harness->route(
+    '/hook/JSLive/',
+    'instance=42&pw=synthetic-secret',
+    [],
+    ['HTTP_IF_MODIFIED_SINCE' => 'Mon, 01 Jan 2024 00:00:00 GMT']
+);
+assertWebhookRouting(
+    $cachedContentDateResponse['output'] === '' && $cachedContentDateResponse['statusCode'] === 304,
+    'An unchanged cached module response must honor If-Modified-Since without a response body.'
+);
+$harness->setCacheEnabled(false);
+$harness->resetCapturedData();
 
 $deniedResponse = $harness->route('/hook/JSLive/getData', 'instance=42&pw=wrong-secret');
 assertWebhookRouting($deniedResponse['output'] === '', 'A rejected password must not produce response data.');

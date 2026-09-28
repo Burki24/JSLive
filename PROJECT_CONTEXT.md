@@ -146,7 +146,8 @@ Vorhandene lokale Pruefungen:
   Pfadausbrueche, URL-decodierte Querywerte mit eingebetteten
   Gleichheitszeichen, exakte Kennwortvergleiche und JavaScript-sichere
   `init.js`-Parameter einschliesslich ungueltiger UTF-8-Eingaben sowie die
-  Statuscodes der Plain-Text-Abbruchpfade ab;
+  Statuscodes der Plain-Text-Abbruchpfade und Conditional Requests fuer
+  statische Assets sowie gecachte Modulantworten ab;
 - `tests/configuration-transfer.php`: vollstaendiger und formulargefilterter
   Export, erfolgreicher Import bekannter Properties mit Erhalt ausgelassener
   Werte sowie nebenwirkungsfreie Ablehnung leerer, fehlerhafter,
@@ -315,6 +316,9 @@ Bereits abgesicherte Sicherheitsgrenzen:
   passende Kindinstanzen HTTP 404. Der Authentisierungsfehler behaelt bewusst
   seine leere HTTP-200-Antwort. Erfolgreiche Routen setzen ihren Status
   standardkonform und senden `X-Content-Type-Options: nosniff`.
+- Statische Assets und gecachte Modulantworten pruefen ETag und
+  `If-Modified-Since` ohne unsichere Server-Arrayzugriffe, akzeptieren quotierte
+  ETags und beenden unveraenderte Antworten mit HTTP 304 ohne Body.
 
 Prioritaet hoch:
 
@@ -525,9 +529,11 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
 5. Plain-Text-Abbruchantworten haerten und den `HttpResponseHelper` gezielt
    integrieren (abgeschlossen; Statuscodes 200/400/404, Antworttexte und
    `nosniff` sind getestet).
-6. Erfolgreiche JSON-, HTML-, SVG- und Binaerantworten sowie 304-Cachepfade
-   charakterisieren und ihre HTTP-Header schrittweise haerten.
-7. CORS-, Authentisierungs- und Schreibberechtigungsmodell dokumentieren und
+6. Conditional Requests fuer statische Assets und gecachte Modulantworten
+   haerten (abgeschlossen; ETag-, Datums- und Body-Verhalten sind getestet).
+7. Erfolgreiche JSON-, HTML-, SVG- und Binaerantworten charakterisieren und
+   ihre HTTP-Header schrittweise haerten.
+8. CORS-, Authentisierungs- und Schreibberechtigungsmodell dokumentieren und
    testen.
 
 ### Phase 2 - Symcon 9.0 / PHP 8.5 stabilisieren
