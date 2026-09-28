@@ -1,0 +1,120 @@
+{
+    "schema": 1,
+    "sources": {
+        "SymconJSLive/module.php": {
+            "__construct": "public function __construct(string $InstanceID)",
+            "Create": "public function Create(): void",
+            "ApplyChanges": "public function ApplyChanges(): void",
+            "ForwardData": "public function ForwardData(string $JSONString): string",
+            "UpdateTemplates": "public function UpdateTemplates(int $category): void",
+            "LoadConnectAddress": "public function LoadConnectAddress(bool $start = false): void",
+            "SetRandomPassword": "public function SetRandomPassword(bool $start = false, bool $override = false): void"
+        },
+        "SymconJSLive/libs/WebHookModule.php": {
+            "__construct": "public function __construct(string $InstanceID, string $hook)",
+            "Create": "public function Create(): void",
+            "MessageSink": "public function MessageSink(int $TimeStamp, int $SenderID, int $Message, array $Data): void",
+            "ApplyChanges": "public function ApplyChanges(): void"
+        },
+        "SymconJSLive/libs/JSLiveModule.php": {
+            "LoadOtherConfiguration": "public function LoadOtherConfiguration(int $id): mixed",
+            "GetLink": "public function GetLink(): string",
+            "GetLocalLink": "public function GetLocalLink(): string",
+            "ExportConfiguration": "public function ExportConfiguration(bool $export_all = false, array $queryData = []): string",
+            "GetAllowConfigurationExportList": "public function GetAllowConfigurationExportList(array $arr, array $r_arr = [], string $column_name = ''): array",
+            "LoadConfigurationFile": "public function LoadConfigurationFile(string $filename, bool $overrideScript = false): mixed",
+            "GetConfigurationLink": "public function GetConfigurationLink(bool $withScript): string",
+            "GetGlobalConfiguration": "public function GetGlobalConfiguration(): ?array",
+            "GetConfigurationForm": "public function GetConfigurationForm(): string",
+            "LoadConfigurationForm": "public function LoadConfigurationForm(): array",
+            "ReloadConfigurationForm": "public function ReloadConfigurationForm(string $name, mixed $value): void",
+            "MessageSink": "public function MessageSink(int $TimeStamp, int $SenderID, int $Message, array $Data): void",
+            "ReceiveData": "public function ReceiveData(string $JSONString): string",
+            "Create": "public function Create(): void",
+            "ApplyChanges": "public function ApplyChanges(): void",
+            "Debug_LoadLogFile": "public function Debug_LoadLogFile(int $intID): void"
+        },
+        "SymconJSLiveAdvTextfield/module.php": {
+            "Create": "public function Create(): void",
+            "ApplyChanges": "public function ApplyChanges(): void",
+            "ReceiveData": "public function ReceiveData(string $JSONString): string",
+            "LoadOtherConfiguration": "public function LoadOtherConfiguration(int $id): mixed"
+        },
+        "SymconJSLiveCalendar/module.php": {
+            "Create": "public function Create(): void",
+            "ApplyChanges": "public function ApplyChanges(): void",
+            "GetConfigurationForm": "public function GetConfigurationForm(): string",
+            "ReceiveData": "public function ReceiveData(string $JSONString): string",
+            "LoadOtherConfiguration": "public function LoadOtherConfiguration(int $id): mixed",
+            "GetCSSLink": "public function GetCSSLink(): string",
+            "GetDefaultCSSLink": "public function GetDefaultCSSLink(): string"
+        },
+        "SymconJSLiveChart/module.php": {
+            "Create": "public function Create(): void",
+            "ApplyChanges": "public function ApplyChanges(): void",
+            "RequestAction": "public function RequestAction(string $Ident, mixed $Value): void",
+            "GetConfigurationForm": "public function GetConfigurationForm(): string",
+            "ReloadFormAxes": "public function ReloadFormAxes(mixed $arr, int $type): void",
+            "ReloadFormDatasets": "public function ReloadFormDatasets(mixed $arr, int $type): void",
+            "ReceiveData": "public function ReceiveData(string $JSONString): string",
+            "GetUpdate": "public function GetUpdate(array $querydata): string",
+            "LoadOtherConfiguration": "public function LoadOtherConfiguration(int $id): mixed"
+        },
+        "SymconJSLiveColorPicker/module.php": {
+            "Create": "public function Create(): void",
+            "ApplyChanges": "public function ApplyChanges(): void",
+            "ReceiveData": "public function ReceiveData(string $JSONString): string",
+            "LoadOtherConfiguration": "public function LoadOtherConfiguration(int $id): mixed"
+        },
+        "SymconJSLiveCustom/module.php": {
+            "Create": "public function Create(): void",
+            "ApplyChanges": "public function ApplyChanges(): void",
+            "ReceiveData": "public function ReceiveData(string $JSONString): string",
+            "LoadOtherConfiguration": "public function LoadOtherConfiguration(int $id): mixed",
+            "GenerateDefaultScript": "public function GenerateDefaultScript(): mixed"
+        },
+        "SymconJSLiveDateTimePicker/module.php": {
+            "Create": "public function Create(): void",
+            "ApplyChanges": "public function ApplyChanges(): void",
+            "ReceiveData": "public function ReceiveData(string $JSONString): string",
+            "LoadOtherConfiguration": "public function LoadOtherConfiguration(int $id): mixed"
+        },
+        "SymconJSLiveDoughnutPie/module.php": {
+            "Create": "public function Create(): void",
+            "ApplyChanges": "public function ApplyChanges(): void",
+            "ReceiveData": "public function ReceiveData(string $JSONString): string",
+            "GetUpdate": "public function GetUpdate(): string",
+            "LoadOtherConfiguration": "public function LoadOtherConfiguration(int $id): mixed"
+        },
+        "SymconJSLiveGauge/module.php": {
+            "Create": "public function Create(): void",
+            "ApplyChanges": "public function ApplyChanges(): void",
+            "ReceiveData": "public function ReceiveData(string $JSONString): string",
+            "GetData": "public function GetData(array $querydata): string",
+            "LoadOtherConfiguration": "public function LoadOtherConfiguration(int $id): mixed"
+        },
+        "SymconJSLiveProgressbar/module.php": {
+            "Create": "public function Create(): void",
+            "ApplyChanges": "public function ApplyChanges(): void",
+            "ReceiveData": "public function ReceiveData(string $JSONString): string",
+            "LoadOtherConfiguration": "public function LoadOtherConfiguration(int $id): mixed",
+            "LoadSvg": "public function LoadSvg(string $base64): mixed"
+        },
+        "SymconJSLiveRadarChart/module.php": {
+            "Create": "public function Create(): void",
+            "ApplyChanges": "public function ApplyChanges(): void",
+            "RequestAction": "public function RequestAction(string $Ident, mixed $Value): void",
+            "ReceiveData": "public function ReceiveData(string $JSONString): string",
+            "GetUpdate": "public function GetUpdate(array $querydata): string",
+            "LoadOtherConfiguration": "public function LoadOtherConfiguration(int $id): mixed"
+        },
+        "SymconJSLiveSyncModule/module.php": {
+            "Create": "public function Create(): void",
+            "ApplyChanges": "public function ApplyChanges(): void",
+            "GetConfigurationForm": "public function GetConfigurationForm(): string",
+            "MessageSink": "public function MessageSink(int $TimeStamp, int $SenderID, int $Message, array $Data): void",
+            "changeModule": "public function changeModule(string $value): void",
+            "changeInstance": "public function changeInstance(array $data): void"
+        }
+    }
+}

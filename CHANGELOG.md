@@ -80,6 +80,11 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Added
 
+- Eine getestete `IPSModuleStrict`-Migrationsinventur erfasst alle 87
+  oeffentlichen Methodendeklarationen mit Zielsignaturen sowie die geaenderten
+  Grenzen fuer Variablenregistrierung, Schreibzugriff, Parent-Verbindung,
+  Datenfluss, Webhooks und die serialisierten Buffer des SyncModule. Die
+  produktiven Modulklassen bleiben in diesem Schritt unveraendert.
 - Eine verbindliche Laufzeitmatrix definiert Fresh- und Upgrade-Abnahmen aller
   verbliebenen Module unter IP-Symcon 9.0/9.1 und PHP 8.5. Ein Vertragstest
   sichert Szenarien, Module und erforderliche Nachweise, ohne noch nicht

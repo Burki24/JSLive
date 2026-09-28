@@ -97,7 +97,10 @@ erkannt werden. Debug daher nur in einer geschützten Testumgebung verwenden.
   Lizenzinventur.
 
 Weitere technische Details, Risiken und der priorisierte Modernisierungsplan
-stehen in [`PROJECT_CONTEXT.md`](PROJECT_CONTEXT.md).
+stehen in [`PROJECT_CONTEXT.md`](PROJECT_CONTEXT.md). Die vorbereitende
+[`IPSModuleStrict`-Migrationsinventur](docs/STRICT_MODULE_MIGRATION.md)
+dokumentiert die erforderlichen Signaturen und Kompatibilitätsgrenzen; der
+produktive Code verwendet derzeit weiterhin `IPSModule`.
 
 ## Entwicklung und Prüfungen
 

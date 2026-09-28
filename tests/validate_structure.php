@@ -35,6 +35,7 @@ if ($readme === false) {
 foreach ([
     'CHANGELOG.md',
     'docs/RELEASE_PROCESS.md',
+    'docs/STRICT_MODULE_MIGRATION.md',
     'docs/SYCON_RUNTIME_MATRIX.md',
     'docs/WEBHOOK_SECURITY_MODEL.md'
 ] as $requiredDocumentation) {

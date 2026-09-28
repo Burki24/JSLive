@@ -160,6 +160,9 @@ Vorhandene lokale Pruefungen:
 - `tests/runtime-matrix.php`: Vollstaendigkeitspruefung der definierten Fresh-
   und Upgrade-Laufzeitabnahmen fuer IP-Symcon 9.0/9.1, aller 12 Module und der
   erforderlichen Ergebnisnachweise;
+- `tests/strict-module-migration.php`: exakte Inventur der 87 oeffentlichen
+  Methodendeklarationen und ihrer vorgesehenen Type Hints sowie der Grenzen
+  fuer Variablen, Parent-Verbindung, Datenfluss und native Hooks;
 - `tests/configuration-transfer.php`: vollstaendiger und formulargefilterter
   Export, erfolgreicher Import bekannter Properties mit Erhalt ausgelassener
   Werte sowie nebenwirkungsfreie Ablehnung leerer, fehlerhafter,
@@ -586,10 +589,11 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    und Upgrade-Szenarien fuer 9.0/9.1, gemeinsame und modulspezifische
    Abnahmen sowie Nachweise; die Ausfuehrung steht noch aus).
 2. Die Migration von `IPSModule` auf `IPSModuleStrict` als eigenes Vorhaben
-   vorbereiten. Vor jeder Codeaenderung sind die notwendigen Type Hints aller
-   oeffentlichen Methoden sowie die geaenderten Vertraege fuer
-   Variablenregistrierung/-schreibzugriff, Parent-Automatik, Datenfluss und
-   Hooks zu erfassen und durch Tests zu sichern.
+   vorbereiten (abgeschlossen: `docs/STRICT_MODULE_MIGRATION.md` und
+   `tests/fixtures/strict-module-public-methods.json` erfassen alle 87
+   oeffentlichen Methodendeklarationen, Zielsignaturen, Variablenregistrierung/-
+   schreibzugriff, Parent-Automatik, Datenfluss, Hooks und Rueckfallgrenzen; die
+   produktive Migration ist noch nicht begonnen).
 3. Das direkt von `IPSModule` erbende Sondermodul `SyncModule` nur dann einzeln
    migrieren und in einer Symcon-9-Testinstanz pruefen, wenn sein Bedarf an
    dauerhafter Instanzsynchronisierung bestaetigt wurde.

@@ -8,6 +8,7 @@ $tests = [
     __DIR__ . '/webhook-routing.php',
     __DIR__ . '/webhook-security-model.php',
     __DIR__ . '/runtime-matrix.php',
+    __DIR__ . '/strict-module-migration.php',
     __DIR__ . '/configuration-transfer.php',
     __DIR__ . '/configuration-form.php',
     __DIR__ . '/adv-textfield-rendering.php',
