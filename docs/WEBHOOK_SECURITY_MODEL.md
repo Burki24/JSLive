@@ -90,9 +90,9 @@ jedes Symcon-Objekt. Die Kindmodule begrenzen ihre Ziele zusätzlich:
   die aufgerufene Methode fehlt. Das ist eine bekannte Bestandsabweichung und
   keine nutzbare Berechtigung.
 
-Der Konfigurationsimport und das SyncModule liegen außerhalb des Webhook-
-Kennwortmodells. Sie werden über öffentliche Modulfunktionen beziehungsweise
-die lokale Symcon-Datenverbindung ausgeführt und benötigen eigene Laufzeit- und
+Der Konfigurationsimport liegt außerhalb des Webhook-
+Kennwortmodells. Er wird über öffentliche Modulfunktionen beziehungsweise die
+lokale Symcon-Datenverbindung ausgeführt und benötigt eigene Laufzeit- und
 Berechtigungsprüfungen.
 
 ## Verbindliche Betriebsregeln

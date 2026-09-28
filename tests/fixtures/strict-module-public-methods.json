@@ -107,14 +107,6 @@
             "ReceiveData": "public function ReceiveData(string $JSONString): string",
             "GetUpdate": "public function GetUpdate(array $querydata): string",
             "LoadOtherConfiguration": "public function LoadOtherConfiguration(int $id): mixed"
-        },
-        "SymconJSLiveSyncModule/module.php": {
-            "Create": "public function Create(): void",
-            "ApplyChanges": "public function ApplyChanges(): void",
-            "GetConfigurationForm": "public function GetConfigurationForm(): string",
-            "MessageSink": "public function MessageSink(int $TimeStamp, int $SenderID, int $Message, array $Data): void",
-            "changeModule": "public function changeModule(string $value): void",
-            "changeInstance": "public function changeInstance(array $data): void"
         }
     }
 }

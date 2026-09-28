@@ -152,15 +152,6 @@
             "implemented": [
                 "{79D59629-E9C5-44F1-0F34-0FBC5C88F307}"
             ]
-        },
-        "SymconJSLiveSyncModule": {
-            "id": "{6C44628E-B623-7B92-D61D-0B3EAF4D6345}",
-            "name": "SymconJSLiveModuleSync",
-            "type": 3,
-            "prefix": "SymconJSLiveModuleSync",
-            "parentRequirements": [],
-            "childRequirements": [],
-            "implemented": []
         }
     },
     "sources": {
@@ -893,24 +884,6 @@
                 "LoadOtherConfiguration",
                 "ReceiveData",
                 "RequestAction"
-            ]
-        },
-        "SymconJSLiveSyncModule/module.php": {
-            "properties": [
-                "Debug:boolean",
-                "InstanceList:string",
-                "Parameterlist:string",
-                "SelectType:string"
-            ],
-            "variables": [],
-            "actions": [],
-            "publicMethods": [
-                "ApplyChanges",
-                "changeInstance",
-                "changeModule",
-                "Create",
-                "GetConfigurationForm",
-                "MessageSink"
             ]
         },
         "SymconJSLive/libs/JSLiveModule.php": {

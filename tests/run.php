@@ -16,7 +16,6 @@ $tests = [
     __DIR__ . '/chart-dates.php',
     __DIR__ . '/custom-data.php',
     __DIR__ . '/data-flow-integration.php',
-    __DIR__ . '/sync-debug-helper.php',
     __DIR__ . '/http-response-integration.php',
     __DIR__ . '/splitter-debug-helper.php',
     __DIR__ . '/jslive-module-debug-helper.php',
@@ -27,9 +26,7 @@ $tests = [
     __DIR__ . '/custom-debug.php',
     __DIR__ . '/radar-debug.php',
     __DIR__ . '/chart-debug.php',
-    __DIR__ . '/full-debug-payload.php',
-    __DIR__ . '/sync-full-debug.php',
-    __DIR__ . '/tls-http-client.php'
+    __DIR__ . '/full-debug-payload.php'
 ];
 
 $commands = [

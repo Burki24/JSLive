@@ -27,12 +27,6 @@ Patchstelle, beispielsweise `v0.10.0`.
 - Chart und RadarChart geben bei aktiviertem Debug einzelne numerische
   Archivwerte ohne kuenstliche Anzahlbegrenzung aus. Ihre modulspezifischen
   Diagnosen wurden auf `DebugHelper` umgestellt.
-- Das SyncModule erhaelt eine eigene Debug-Option im Konfigurationsformular;
-  seine vollstaendigen Austauschdaten sind damit nur bei bewusst aktivierter
-  Diagnose sichtbar.
-- Das SyncModule prueft fuer seinen externen Dienst TLS-Zertifikat und
-  Hostnamen, begrenzt Weiterleitungen auf HTTPS und behandelt Transport-, HTTP-
-  sowie ungueltige JSON-Antworten kontrolliert.
 
 ### Security
 
@@ -77,14 +71,21 @@ Patchstelle, beispielsweise `v0.10.0`.
   Library entfernt. Vorhandene ConfigStore-Instanzen muessen vor einem Update
   auf diesen Stand geloescht werden. Ein spaeterer lokaler Export und Import
   fertig konfigurierter Chart-Ansichten wird als getrennte Funktion entwickelt.
+- Das experimentelle `SymconJSLiveSyncModule` wurde entfernt. Seine
+  Modultyp-Liste hing am selben abgeschalteten Dienst, gespeicherte
+  Parameterauswahlen wurden verworfen und die direkte Konfigurationsverteilung
+  besass weder Vorschau noch Rueckfallmechanismus. Vorhandene SyncModule-
+  Instanzen muessen vor einem Update geloescht werden. Die Modul-ID
+  `{6C44628E-B623-7B92-D61D-0B3EAF4D6345}` wird nicht wiederverwendet; eine
+  spaetere lokale Einmalverteilung wird getrennt entworfen.
 
 ### Added
 
-- Eine getestete `IPSModuleStrict`-Migrationsinventur erfasst alle 87
+- Eine getestete `IPSModuleStrict`-Migrationsinventur erfasst alle 81
   oeffentlichen Methodendeklarationen mit Zielsignaturen sowie die geaenderten
   Grenzen fuer Variablenregistrierung, Schreibzugriff, Parent-Verbindung,
-  Datenfluss, Webhooks und die serialisierten Buffer des SyncModule. Die
-  produktiven Modulklassen bleiben in diesem Schritt unveraendert.
+  Datenfluss und Webhooks. Die produktiven Modulklassen bleiben in diesem
+  Schritt unveraendert.
 - Eine verbindliche Laufzeitmatrix definiert Fresh- und Upgrade-Abnahmen aller
   verbliebenen Module unter IP-Symcon 9.0/9.1 und PHP 8.5. Ein Vertragstest
   sichert Szenarien, Module und erforderliche Nachweise, ohne noch nicht

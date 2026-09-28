@@ -2,7 +2,8 @@
 
 Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
 `25fd163340dac13cafdb5b39d32dd14cada2cbb1`. Am 28.09.2026 wurde die
-Bestandsaufnahme um die beschlossene Entfernung des ConfigStore fortgeschrieben.
+Bestandsaufnahme um die beschlossene Entfernung von ConfigStore und SyncModule
+fortgeschrieben.
 
 ## 1. Zweck und Zielbild
 
@@ -51,11 +52,9 @@ Architektur oder ein gleichzeitiger Austausch aller Frontend-Bibliotheken.
 | `SymconJSLiveGauge` | 3 | Messinstrumente |
 | `SymconJSLiveProgressbar` | 3 | Fortschrittsanzeigen und SVG-Import |
 | `SymconJSLiveRadarChart` | 3 | Radardiagramme und Archivdaten |
-| `SymconJSLiveSyncModule` | 3 | Synchronisation ausgewaehlter Konfigurationsparameter zwischen Instanzen |
 
 Die zehn Visualisierungsmodule verwenden die gemeinsame Basisklasse
-`SymconJSLive/libs/JSLiveModule.php`. Das `SyncModule` ist ein eigenstaendiges
-Sondermodul und nicht Teil der Splitter-Datenverbindung.
+`SymconJSLive/libs/JSLiveModule.php` und den gemeinsamen Splitter.
 
 ## 4. Architektur und Datenfluss
 
@@ -83,7 +82,7 @@ ueber Templates, Platzhalter und grosse Property-Mengen erzeugt.
 
 Zu erhalten und vor Refactorings durch Charakterisierungstests abzusichern sind:
 
-- alle 12 verbliebenen Modul-IDs, Praefixe und die beiden Data-IDs;
+- alle 11 verbliebenen Modul-IDs, Praefixe und die beiden Data-IDs;
 - der Hook-Pfad `/hook/JSLive` und seine Unterpfade;
 - die JSON-Umschlaege `DataID`, `Buffer`, `Type`, `InstanceID` sowie die
   bestehenden Befehlsnamen, einschliesslich historischer Schreibweisen;
@@ -91,13 +90,12 @@ Zu erhalten und vor Refactorings durch Charakterisierungstests abzusichern sind:
 - die Variablen-Idents `Output`, `IPSView`, `Content`, `Period`, `Now`,
   `Relativ`, `Offset` und `StartDate`;
 - oeffentliche Modulmethoden fuer Links, Konfigurationsimport/-export,
-  Formaktualisierung, Datenabfragen, Aktionen und Synchronisation;
+  Formaktualisierung, Datenabfragen und Aktionen;
 - vorhandene Template- und Assetpfade.
 
 Der Konfigurationsimport kann Skripte anlegen und Instanzkonfigurationen
-ueberschreiben. Das `SyncModule` kann fremde Instanzkonfigurationen setzen und
-`ApplyChanges` ausloesen. Diese Pfade brauchen vor jeder Modernisierung eigene
-Sicherheits- und Regressionstests.
+ueberschreiben. Dieser Pfad braucht vor jeder Modernisierung eigene Sicherheits-
+und Regressionstests.
 
 ## 6. Helper-Abgleich mit SymconDevelopment
 
@@ -119,10 +117,9 @@ nur `DataFlowHelper`.
 | `VisualizationThemeConfigurationHelper` | Kandidat fuer gemeinsame Theme-Konfiguration |
 
 Lokale Doppelungen bestehen insbesondere bei `json_encode_advanced`,
-`HexToRGB` und `isAssoc` in beiden Basisklassen. Das `SyncModule` besitzt
-zusaetzlich einen eigenen HTTPS-Client sowie serialisierende
-`SetBuffer`-/`GetBuffer`-Wrapper. Eine Uebernahme in zentrale Helper ist erst
-sinnvoll, wenn der Vertrag generalisierbar und durch Tests belegt ist.
+`HexToRGB` und `isAssoc` in beiden Basisklassen. Eine Uebernahme in zentrale
+Helper ist erst sinnvoll, wenn der Vertrag generalisierbar und durch Tests
+belegt ist.
 
 `SymconDevelopment` enthaelt keine konkurrierenden fachlichen JSLive-Module.
 Die Ueberschneidung liegt bei Standards, CI und Helper-Infrastruktur.
@@ -131,13 +128,13 @@ Die Ueberschneidung liegt bei Standards, CI und Helper-Infrastruktur.
 
 Vorhandene lokale Pruefungen:
 
-- `tests/validate_structure.php`: Bibliothek, 12 Module, Modul-READMEs,
+- `tests/validate_structure.php`: Bibliothek, 11 Module, Modul-READMEs,
   Metadaten, Helper-Konfiguration, CodeQL-Sprache sowie die feste Einbindung
   der gemeinsamen Style- und Metadatenworkflows;
 - `tests/test_update_library_metadata.py`: Erhoehung der gemeinsamen
   Library-Version ab `0.10`, Build-Ableitung aus dem Quell-SHA, Commit-Zeit und
   Schutz vor einer Rueckstufung;
-- `tests/public-contracts.php`: maschinenlesbare Charakterisierung der 12
+- `tests/public-contracts.php`: maschinenlesbare Charakterisierung der 11
   verbliebenen Modulvertraege, ihrer PHP-Quellen und der bestehenden Hook-Pfade;
 - `tests/webhook-routing.php`: Verhaltens-Harness fuer Authentisierungs- und
   Instanz-Gates, Data-ID/JSON-Umschlag, direkte globale Konfiguration und den
@@ -158,9 +155,9 @@ Vorhandene lokale Pruefungen:
   Browser erreichbaren Kindmodulbefehle, der Module mit `setData` sowie der
   derzeit fehlenden Calendar-Schreibimplementierung;
 - `tests/runtime-matrix.php`: Vollstaendigkeitspruefung der definierten Fresh-
-  und Upgrade-Laufzeitabnahmen fuer IP-Symcon 9.0/9.1, aller 12 Module und der
+  und Upgrade-Laufzeitabnahmen fuer IP-Symcon 9.0/9.1, aller 11 Module und der
   erforderlichen Ergebnisnachweise;
-- `tests/strict-module-migration.php`: exakte Inventur der 87 oeffentlichen
+- `tests/strict-module-migration.php`: exakte Inventur der 81 oeffentlichen
   Methodendeklarationen und ihrer vorgesehenen Type Hints sowie der Grenzen
   fuer Variablen, Parent-Verbindung, Datenfluss und native Hooks;
 - `tests/configuration-transfer.php`: vollstaendiger und formulargefilterter
@@ -216,8 +213,10 @@ Webhook-Routing, DataFlow und Vertragspruefung abgesichert. Danach wurde
 `SymconJSLiveDoughnutPie` einzeln formatiert und gegen den Vertrags-Snapshot und
 die Gesamtsuite geprueft. Danach wurde `SymconJSLiveCalendar` isoliert formatiert
 und mit seinem realen Konfigurationsformular-Harness sowie dem Vertrags-Snapshot
-geprueft. Danach wurde `SymconJSLiveSyncModule` isoliert formatiert und gegen den
-Vertrags-Snapshot sowie die Gesamtsuite geprueft. Danach wurde
+geprueft. Danach wurde das damals noch enthaltene `SymconJSLiveSyncModule`
+isoliert formatiert und gegen den Vertrags-Snapshot sowie die Gesamtsuite
+geprueft; es wurde am 28.09.2026 nach separater Bewertung vollstaendig entfernt.
+Danach wurde
 `SymconJSLiveRadarChart` isoliert formatiert. Die durch `strict_types` notwendigen
 Integer-Konvertierungen der `DateTime`-Bestandteile sind durch einen neuen Test
 fuer alle Perioden und beide Zeitmodi abgesichert. Danach wurde
@@ -240,7 +239,7 @@ gegen den Ausgangscommit bestaetigt unveraenderte JSON-Daten.
 Noch nicht abgedeckt sind Symcon-Laufzeitverhalten, Webhook-Authentisierung und
 Pfadbehandlung, modulspezifische Formulardynamik ausserhalb des gemeinsamen
 Metadatenvertrags, Migrationen, Renderausgaben der weiteren Module,
-Browserbibliotheken, einzelne Modulaktionen sowie der Sync-Netzwerkpfad.
+Browserbibliotheken sowie einzelne Modulaktionen.
 
 ## 8. Symcon-9-/PHP-8.5-Stand
 
@@ -261,11 +260,6 @@ Browserbibliotheken, einzelne Modulaktionen sowie der Sync-Netzwerkpfad.
 - `SymconJSLiveCustom` normalisiert numerische Stringwerte fuer Alpha-Kanaele
   und Webhook-Objekt-IDs explizit. Der Test fuehrt dabei keine Variablen-,
   Skript- oder Medienschreiboperation aus.
-- Das SyncModule erzwingt fuer seinen externen Dienst verifiziertes HTTPS,
-  begrenzt Verbindungs- und Gesamtlaufzeit und gibt bei Transport-, HTTP- oder
-  ungueltigen JSON-Antworten einen kontrollierten `success=false`-Fehler zurueck.
-  Der negative Fehlerpfad ist lokal getestet; reale Dienst-, Schreib- und
-  Symcon-Laufzeitpfade bleiben ungeprueft.
 - Alle Module verwenden noch `IPSModule`; der Webhook basiert auf einer lokalen
   `WebHookModule`-Basisklasse. Symcon 9 empfiehlt fuer neue Module
   `IPSModuleStrict` und dessen native Hook-API. Eine Umstellung ist wegen der
@@ -386,20 +380,15 @@ Prioritaet mittel:
   Perioden das Jahr eines neu erzeugten `DateTime`-Objekts statt durchgaengig das
   Jahr des uebergebenen Zeitstempels. Dieses bestehende Zeitverhalten benoetigt
   vor einer fachlichen Korrektur eine eigene Entscheidung und Regressionstests;
-- Das SyncModule bezieht seine Modultyp-Liste weiterhin von
-  `jslive.babenschneider.net`, obwohl der Dienst nicht mehr verfuegbar ist. Die
-  eigentliche Synchronisierung arbeitet lokal; ueber Behalten oder Entfernen ist
-  nach Klaerung des Bedarfs an dauerhafter Instanzsynchronisierung zu entscheiden.
-- Fuer den geplanten einmaligen Export und Import fertig konfigurierter
-  Chart-Ansichten ist das SyncModule nicht erforderlich. Sein eigener Nutzen
-  besteht ausschliesslich in der fortlaufenden Master-/Slave-Synchronisierung.
-  Dieser Schreibpfad besitzt noch keinen Verhaltenstest unter Symcon 9; zudem
-  sind Mehrfach-Master, Fehlerwiederanlauf und der Erhalt gespeicherter
-  Parameterauswahlen unzureichend abgesichert.
+- Das experimentelle SyncModule wurde entfernt. Seine externe Modultyp-Liste
+  war nicht mehr erreichbar; ausserdem verwarf es gespeicherte
+  Parameterauswahlen und besass fuer direkte Zielaenderungen keine Vorschau oder
+  Rueckfallmoeglichkeit. Die Entscheidung steht in
+  `docs/adr/0002-remove-sync-module.md`.
 
 Dokumentationsluecken:
 
-- Die Root-README beschreibt nun alle 12 verbliebenen Module, den
+- Die Root-README beschreibt nun alle 11 verbliebenen Module, den
   Modernisierungsstatus, Installation, CI und bekannte
   Sicherheits-/Betriebseinschraenkungen;
 - Alle verbliebenen Module besitzen eine README. Die zuvor fehlenden Dateien
@@ -407,8 +396,8 @@ Dokumentationsluecken:
   README-Dateien wurden anschliessend auf korrekte Titel, GUIDs, Zielplattform,
   Datenvertraege und bekannte Frontend-Einschraenkungen synchronisiert.
 - Datenfluss, Hook-Protokoll, oeffentliche Methoden, Migrationsregeln,
-  Frontend-Lizenzen und das Sync-Protokoll sind nicht vollstaendig
-  dokumentiert.
+  Frontend-Lizenzen und die spaeter geplante lokale Konfigurationsverteilung
+  sind nicht vollstaendig dokumentiert.
 
 ## 12. Priorisierter Arbeitsplan
 
@@ -460,10 +449,9 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    - `Calendar` isoliert formatieren und mit Formular- und Vertragspruefung
      absichern (abgeschlossen; ICS-, Event-, Browser- und
      Symcon-Laufzeitpruefung ausstehend);
-   - `SyncModule` isoliert formatieren und gegen Vertrags-Snapshot und
-     Gesamtsuite pruefen (abgeschlossen; TLS-Haertung und negativer
-     Transporttest ebenfalls abgeschlossen; reale Dienst- und
-     Symcon-Laufzeitpruefung ausstehend);
+   - das damals noch enthaltene `SyncModule` isoliert formatieren und gegen
+     Vertrags-Snapshot und Gesamtsuite pruefen (historisch abgeschlossen; das
+     Modul wurde anschliessend gemaess ADR 0002 entfernt);
    - `RadarChart` isoliert formatieren und seine Datums- und Offset-Berechnung
      fuer PHP 8.5 absichern (abgeschlossen; Archivdaten-, Rendering-, Browser-
      und Symcon-Laufzeitpruefung ausstehend);
@@ -540,9 +528,8 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
 
 ### Phase 1 - Sicherheitsgrenzen
 
-1. TLS-Pruefung im SyncModule aktivieren und Fehlerbehandlung ergaenzen
-   (abgeschlossen; der nicht mehr verfuegbare Dienst wird nicht weiter
-   integriert und die Zukunft des SyncModule separat entschieden).
+1. Das experimentelle SyncModule und seinen externen Dienst bewerten
+   (abgeschlossen: Das Modul wurde gemaess ADR 0002 vollstaendig entfernt).
 2. Debug-Ausgaben aller Module ueber `DebugHelper` fuehren. Die bewusst
    aktivierbare Diagnose enthaelt vollstaendige Browser-, Konfigurations- und
    Austausch-Payloads einschliesslich freier Texte, einzelner Messwerte,
@@ -590,13 +577,12 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    Abnahmen sowie Nachweise; die Ausfuehrung steht noch aus).
 2. Die Migration von `IPSModule` auf `IPSModuleStrict` als eigenes Vorhaben
    vorbereiten (abgeschlossen: `docs/STRICT_MODULE_MIGRATION.md` und
-   `tests/fixtures/strict-module-public-methods.json` erfassen alle 87
+   `tests/fixtures/strict-module-public-methods.json` erfassen alle 81
    oeffentlichen Methodendeklarationen, Zielsignaturen, Variablenregistrierung/-
    schreibzugriff, Parent-Automatik, Datenfluss, Hooks und Rueckfallgrenzen; die
    produktive Migration ist noch nicht begonnen).
-3. Das direkt von `IPSModule` erbende Sondermodul `SyncModule` nur dann einzeln
-   migrieren und in einer Symcon-9-Testinstanz pruefen, wenn sein Bedarf an
-   dauerhafter Instanzsynchronisierung bestaetigt wurde.
+3. Das experimentelle `SyncModule` wurde vor der Strict-Migration entfernt;
+   Modul-ID und Praefix werden nicht wiederverwendet.
 4. Die gemeinsame Basisklasse `JSLiveModule` und ihre zehn Kindmodule in einem
    koordinierten, eigenen Schritt migrieren. Data-IDs, Parent-Verbindung,
    Datenkodierung, Variablen-Idents, Actions und oeffentliche PHP-Aufrufe muessen
@@ -658,8 +644,9 @@ erst nach den Sicherheits-, Kompatibilitaets- und Migrationsgrundlagen.
    verwenden. Ein externer Dienst ist dafuer nicht vorgesehen.
 5. Zunaechst keine automatische Dauersynchronisierung einfuehren. Erst nach der
    Abnahme des Chart-Piloten entscheiden, ob die lokale Verteilung auf weitere
-   Module ausgerollt wird und ob das bisherige `SyncModule` noch einen eigenen
-   produktiven Anwendungsfall besitzt oder entfernt werden kann.
+   Module ausgerollt wird. Eine spaetere Dauersynchronisierung benoetigt eine
+   neue Architekturentscheidung und darf die alte SyncModule-ID nicht
+   wiederverwenden.
 
 ## 13. Entschiedene Punkte und offene Entscheidungen
 
@@ -669,7 +656,7 @@ erst nach den Sicherheits-, Kompatibilitaets- und Migrationsgrundlagen.
   `HELPER_SYNC_APP_PRIVATE_KEY` fehlen im JSLive-Repository. Die App
   `Burki24 Helper Sync` ist bereits installiert; die beiden Eintraege bleiben
   das externe Gate vor dem ersten Push des schreibenden Workflows.
-- Welche der 12 verbliebenen Module werden produktiv noch benoetigt, und welche
+- Welche der 11 verbliebenen Module werden produktiv noch benoetigt, und welche
   werden nur kompatibel erhalten oder stillgelegt?
 - Der `ConfigStore` wird nicht weiter betrieben. Seine Modulimplementierung,
   Tests und Dokumentation wurden entfernt; vorhandene Instanzen muessen vor dem
@@ -678,9 +665,10 @@ erst nach den Sicherheits-, Kompatibilitaets- und Migrationsgrundlagen.
 - Fuer fertig konfigurierte Chart-Ansichten wird nach Abschluss der vorherigen
   Modernisierungsphasen die in Phase 6 beschriebene lokale,
   dienstunabhaengige Verteilung mit gemeinsamer Export-/Importbasis umgesetzt.
-- Wird die automatische dauerhafte Master-/Slave-Synchronisierung des
-  `SyncModule` produktiv benoetigt? Fuer einmaligen Export, Import oder Kopieren
-  ist das Modul nicht erforderlich.
+- Das experimentelle `SyncModule` wurde vollstaendig entfernt. Vorhandene
+  Instanzen muessen vor dem Update geloescht werden; Modul-ID und Praefix werden
+  nicht wiederverwendet. Die Entscheidung ist in
+  `docs/adr/0002-remove-sync-module.md` dokumentiert.
 - Welche IPSView-Versionen und vorhandenen Projekte muessen als reale
   Regressionstestfaelle dienen?
 - Welche Browser und Geraeteklassen sind fuer die Kacheldarstellung verbindlich?

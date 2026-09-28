@@ -45,10 +45,9 @@ der Modernisierung kompatibel bleiben.
 | [`SymconJSLiveGauge`](SymconJSLiveGauge) | Animierte Messinstrumente |
 | [`SymconJSLiveProgressbar`](SymconJSLiveProgressbar) | Konfigurierbare Fortschrittsanzeigen und SVG-Import |
 | [`SymconJSLiveRadarChart`](SymconJSLiveRadarChart) | Radardiagramme mit Archivdaten |
-| [`SymconJSLiveSyncModule`](SymconJSLiveSyncModule) | Synchronisation ausgewählter Konfigurationsparameter zwischen Instanzen |
 
 Die zehn Visualisierungsmodule verwenden den JSLive-Splitter als übergeordnete
-Instanz. Das SyncModule ist ein eigenständiges Sondermodul.
+Instanz.
 
 ## Installation und Verwendung
 
@@ -77,14 +76,13 @@ erkannt werden. Debug daher nur in einer geschützten Testumgebung verwenden.
 
 - Die definierte Symcon-9-[Laufzeitmatrix](docs/SYCON_RUNTIME_MATRIX.md) ist auf
   realen Testinstallationen noch nicht ausgeführt.
-- Die eigentliche Synchronisierung des SyncModule arbeitet lokal. Seine
-  Modultyp-Liste wird jedoch noch vom nicht mehr erreichbaren Dienst
-  `jslive.babenschneider.net` geladen; dadurch ist die Auswahl im
-  Konfigurationsformular derzeit nicht nutzbar. Der weitere Bedarf des Moduls
-  wird separat entschieden.
 - Der nicht mehr erreichbare, vollständig von einem externen Dienst abhängige
   ConfigStore wurde entfernt. Vorhandene ConfigStore-Instanzen müssen vor einem
   Update auf diesen Stand gelöscht werden.
+- Das experimentelle SyncModule wurde ebenfalls entfernt. Vorhandene
+  SyncModule-Instanzen müssen vor einem Update auf diesen Stand gelöscht
+  werden. Seine Modul-ID wird nicht wiederverwendet; eine spätere lokale
+  Verteilung von Konfigurationen wird als neue, getrennte Funktion entwickelt.
 - Das bestehende [Webhook-Sicherheitsmodell](docs/WEBHOOK_SECURITY_MODEL.md)
   ist dokumentiert und durch Vertragstests charakterisiert. Es verwendet
   weiterhin Kennwörter in URLs, Wildcard-CORS und GET für Schreibzugriffe; der

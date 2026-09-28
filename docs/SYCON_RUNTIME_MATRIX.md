@@ -31,15 +31,15 @@ Testbaum und ein Backup beziehungsweise Snapshot festzulegen.
 
 | ID | Ausgangspunkt | Ziel und Umfang | Status |
 | --- | --- | --- | --- |
-| `S90-FRESH` | frische IP-Symcon-9.0-Testinstallation | JSLive auf dem zu prüfenden Commit installieren und alle 12 Module neu anlegen | nicht ausgeführt |
+| `S90-FRESH` | frische IP-Symcon-9.0-Testinstallation | JSLive auf dem zu prüfenden Commit installieren und alle 11 Module neu anlegen | nicht ausgeführt |
 | `S90-UPGRADE` | IP-Symcon 9.0 mit dem bisherigen JSLive-`main` und repräsentativen Instanzen | auf denselben JSLive-Prüfcommit aktualisieren; Konfiguration, Idents, Werte und Verbindungen erhalten | nicht ausgeführt |
-| `S91-FRESH` | frische IP-Symcon-9.1-Testinstallation | JSLive auf dem Prüfcommit installieren und alle 12 Module neu anlegen | nicht ausgeführt |
+| `S91-FRESH` | frische IP-Symcon-9.1-Testinstallation | JSLive auf dem Prüfcommit installieren und alle 11 Module neu anlegen | nicht ausgeführt |
 | `S91-UPGRADE` | erfolgreich abgenommener 9.0-Snapshot | IP-Symcon auf 9.1 aktualisieren, ohne den JSLive-Commit zu wechseln, und alle Instanzen erneut prüfen | nicht ausgeführt |
 
-`S90-UPGRADE` berücksichtigt die dokumentierte Entfernung des ConfigStore:
-Eine eventuell vorhandene ConfigStore-Instanz wird vor dem Bibliotheksupdate
-manuell gelöscht. Sie darf weder automatisch migriert noch unter ihrer alten
-Modul-ID neu verwendet werden.
+`S90-UPGRADE` berücksichtigt die dokumentierte Entfernung von ConfigStore und
+SyncModule: Eventuell vorhandene Instanzen beider Module werden vor dem
+Bibliotheksupdate manuell gelöscht. Sie werden nicht automatisch migriert und
+ihre bisherigen Modul-IDs werden nicht wiederverwendet.
 
 ## Nachweis je Durchlauf
 
@@ -77,8 +77,7 @@ werden synthetisch angelegt:
   direkten Testkindern;
 - eine eingebettete minimale iCalendar-Datei ohne Personen- oder Ortsdaten;
 - ein kleines lokales SVG und je ein lokales PNG/JPEG/GIF für Progressbar;
-- eine zweite kompatible Modulinstanz für Konfigurationsübernahme und, falls
-  das SyncModule beibehalten wird, für die lokale Synchronisation.
+- eine zweite kompatible Modulinstanz für die Konfigurationsübernahme.
 
 Nach jedem Szenario wird der Testbaum aus dem Snapshot zurückgesetzt. Es werden
 keine realen Skripte ausgeführt und keine produktiven Variablen, Medien oder
@@ -124,7 +123,6 @@ Diese Prüfungen gelten für jede instanziierbare Modulklasse:
 | `SymconJSLiveGauge` | numerische Variable, radialer und linearer Modus, Min/Max, Präzision, Highlights und Live-Aktualisierung prüfen | Canvas-Gauge-Asset muss lokal und ohne externen Dienst laden |
 | `SymconJSLiveProgressbar` | numerische Variable, mindestens zwei Presets, eigenes SVG, alle vier erlaubten Füllbildtypen und Live-Aktualisierung prüfen | dynamischer Bildtyp muss auf der MIME-Allowlist bleiben; fremde Typen müssen binär zurückfallen |
 | `SymconJSLiveRadarChart` | archivierte Variable, mehrere Datensätze, absolute/relative Perioden, Offset, Skala und Browserdarstellung prüfen | Archiv-, Zeitzonen- und absolute Jahresgrenzen mit festen Testdaten prüfen |
-| `SymconJSLiveSyncModule` | Instanz und Formular ohne Endlosschleife öffnen; bereits gültige lokale Master-/Slave-Konfiguration nur in isolierten Fixtures prüfen | Modultyp-Liste hängt vom abgeschalteten Dienst ab; produktiver Bedarf und Entfernung sind vor Strict-Migration zu entscheiden |
 
 ## Webhook- und Browser-Gate
 
@@ -173,6 +171,5 @@ Für `S90-UPGRADE` und `S91-UPGRADE` gelten zusätzlich:
 - Eine reine Quelltext-, Stub- oder CI-Prüfung darf nie als bestandener
   Symcon-Laufzeittest eingetragen werden.
 
-Bekannte Startblocker sind der fehlende Calendar-`setData`-Handler und die
-externe Modultyp-Liste des SyncModule. Beide bleiben sichtbar, bis über
-Reparatur, Ersatz oder Entfernung entschieden wurde.
+Bekannter Startblocker ist der fehlende Calendar-`setData`-Handler. Er bleibt
+sichtbar, bis über Reparatur oder Entfernung entschieden wurde.

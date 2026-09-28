@@ -5,7 +5,7 @@ Grenzen für eine spätere Migration von JSLive auf `IPSModuleStrict`. In diesem
 Schritt wird noch keine Modulklasse umgestellt und kein Laufzeitverhalten
 geändert.
 
-Die maschinenlesbare Liste aller 87 öffentlichen Methodendeklarationen und
+Die maschinenlesbare Liste aller 81 öffentlichen Methodendeklarationen und
 ihrer vorgesehenen Zielsignaturen liegt unter
 [`tests/fixtures/strict-module-public-methods.json`](../tests/fixtures/strict-module-public-methods.json).
 Der Test `tests/strict-module-migration.php` verhindert, dass neue oder
@@ -49,9 +49,8 @@ IP-Symcon 8.1 verfügbaren `IPSModuleStrict`:
 | `SymconJSLiveGauge/module.php` | 5 | `JSLiveModule` | zusätzlicher Daten-Endpunkt |
 | `SymconJSLiveProgressbar/module.php` | 5 | `JSLiveModule` | SVG-Import mit gemischtem Rückgabevertrag |
 | `SymconJSLiveRadarChart/module.php` | 6 | `JSLiveModule` | Actions und Archivdaten |
-| `SymconJSLiveSyncModule/module.php` | 6 | `IPSModuleStrict`, falls beibehalten | eigenständige Klasse ohne JSLive-Datenfluss |
 
-Alle 87 Deklarationen benötigen mindestens eine Signaturanpassung: Die beiden
+Alle 81 Deklarationen benötigen mindestens eine Signaturanpassung: Die beiden
 Konstruktoren besitzen untypisierte Parameter; alle übrigen öffentlichen
 Methoden besitzen aktuell keinen Rückgabetyp. Die Zieldatei verwendet `mixed`
 nur dort, wo der bisherige öffentliche Vertrag tatsächlich unterschiedliche
@@ -182,40 +181,32 @@ Unterpfade `/WS` und `/js`. Intern registriert die native API den Bezeichner
 zusätzliche Kernel-Ready-Nachricht entfallen kann, wird in der 9.0/9.1-
 Laufzeitmatrix geprüft und nicht allein aus dem Quelltext angenommen.
 
-## Weitere Namens- und Signaturkollisionen
+## Weitere Signaturgrenzen
 
-Das SyncModule überschreibt `SetBuffer()` und `GetBuffer()` mit serialisierenden
-Wrappern und damit inkompatiblen Verträgen zur Strict-Basisklasse. Vor einer
-etwaigen Migration werden beide Methoden in eindeutig lokale Wrapper umbenannt,
-beispielsweise `SetSerializedBuffer()` und `GetSerializedBuffer()`. Alle
-internen Aufrufer müssen gemeinsam umgestellt werden; gespeicherte
-Buffer-Namen und serialisierte Inhalte bleiben dabei unverändert.
-
-Auch folgende Punkte benötigen vor dem Umschalten einen fokussierten Test:
+Folgende Punkte benötigen vor dem Umschalten einen fokussierten Test:
 
 - `GetConfigurationForm()` muss bei jedem Pfad einen gültigen String liefern;
 - JSON-Encoding-Fehler dürfen keinen `false`-Wert in eine String-Signatur
   tragen;
 - die heute gemischten Rückgaben von Konfigurationsimport, SVG-Import und
   Standardskripterzeugung bleiben zunächst `mixed`;
-- Form-Callbacks `changeModule()` und `changeInstance()` behalten ihre
-  bisherigen Eingabetypen und sichtbaren Seiteneffekte;
 - keine Modul-ID, kein Präfix und kein automatisch erzeugter PHP-Funktionsname
   ändert sich.
 
 ## Schrittfolge und Rückfallgrenze
 
-1. Über Beibehaltung oder Entfernung des eigenständigen SyncModule entscheiden.
-2. Strict-Datenflusskodierung in einer isolierten 9.0/9.1-Testinstanz belegen
+Das experimentelle SyncModule wurde vor der Strict-Migration entfernt; die
+Entscheidung und ihre Upgrade-Folge sind in
+[`adr/0002-remove-sync-module.md`](adr/0002-remove-sync-module.md) dokumentiert.
+
+1. Strict-Datenflusskodierung in einer isolierten 9.0/9.1-Testinstanz belegen
    und den zentralen `DataFlowHelper` nur bei nachgewiesenem Bedarf erweitern.
-3. Falls benötigt, die Legacy-Profil-Darstellung zentral ergänzen und über den
+2. Falls benötigt, die Legacy-Profil-Darstellung zentral ergänzen und über den
    bestehenden Helper-Sync beziehen.
-4. Das SyncModule separat migrieren, sofern es erhalten bleibt; seine
-   serialisierenden Buffer-Wrapper vorher entkoppeln.
-5. `JSLiveModule`, alle zehn Kindmodule und den Splitter koordiniert migrieren.
-6. Den manuellen Hook-Workaround durch die native Hook-API ersetzen, ohne das
+3. `JSLiveModule`, alle zehn Kindmodule und den Splitter koordiniert migrieren.
+4. Den manuellen Hook-Workaround durch die native Hook-API ersetzen, ohne das
    dokumentierte Sicherheits- und Routingmodell zu verändern.
-7. Die vier Szenarien aus `SYCON_RUNTIME_MATRIX.md` vollständig ausführen.
+5. Die vier Szenarien aus `SYCON_RUNTIME_MATRIX.md` vollständig ausführen.
 
 Der Rückfallpunkt ist der letzte gemeinsam grüne Commit vor der jeweiligen
 Strict-Gruppe. Es gibt keine automatische Rückmigration einer bereits

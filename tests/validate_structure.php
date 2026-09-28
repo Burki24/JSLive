@@ -16,8 +16,16 @@ $expectedModules = [
     'SymconJSLiveDoughnutPie'         => 3,
     'SymconJSLiveGauge'               => 3,
     'SymconJSLiveProgressbar'         => 3,
-    'SymconJSLiveRadarChart'          => 3,
-    'SymconJSLiveSyncModule'          => 3
+    'SymconJSLiveRadarChart'          => 3
+];
+
+$retiredModuleIds = [
+    '{39EE8DDC-C72A-CEA0-2774-CB86F244A515}' => 'SymconJSLiveConfigStore',
+    '{6C44628E-B623-7B92-D61D-0B3EAF4D6345}' => 'SymconJSLiveSyncModule'
+];
+$retiredPrefixes = [
+    'SymconJSLiveConfigStore',
+    'SymconJSLiveModuleSync'
 ];
 
 $readmePath = $root . '/README.md';
@@ -37,7 +45,8 @@ foreach ([
     'docs/RELEASE_PROCESS.md',
     'docs/STRICT_MODULE_MIGRATION.md',
     'docs/SYCON_RUNTIME_MATRIX.md',
-    'docs/WEBHOOK_SECURITY_MODEL.md'
+    'docs/WEBHOOK_SECURITY_MODEL.md',
+    'docs/adr/0002-remove-sync-module.md'
 ] as $requiredDocumentation) {
     if (!is_file($root . '/' . $requiredDocumentation)) {
         $errors[] = 'Missing required project documentation: ' . $requiredDocumentation;
@@ -161,6 +170,8 @@ foreach ($discoveredModules as $directory => $modulePath) {
     $id = $module['id'] ?? null;
     if (!isSymconGuid($id)) {
         $errors[] = $directory . '/module.json contains an invalid id.';
+    } elseif (isset($retiredModuleIds[$id])) {
+        $errors[] = $directory . '/module.json reuses retired module id from ' . $retiredModuleIds[$id] . ': ' . $id;
     } elseif (isset($moduleIds[$id])) {
         $errors[] = 'Duplicate module id in ' . $moduleIds[$id] . ' and ' . $directory . ': ' . $id;
     } else {
@@ -170,6 +181,8 @@ foreach ($discoveredModules as $directory => $modulePath) {
     $prefix = $module['prefix'] ?? null;
     if (!is_string($prefix) || preg_match('/^[A-Za-z][A-Za-z0-9_]*$/', $prefix) !== 1) {
         $errors[] = $directory . '/module.json contains an invalid prefix.';
+    } elseif (in_array($prefix, $retiredPrefixes, true)) {
+        $errors[] = $directory . '/module.json reuses retired module prefix: ' . $prefix;
     } elseif (isset($prefixes[$prefix])) {
         $errors[] = 'Duplicate module prefix in ' . $prefixes[$prefix] . ' and ' . $directory . ': ' . $prefix;
     } else {
