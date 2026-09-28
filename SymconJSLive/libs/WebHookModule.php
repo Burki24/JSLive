@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once dirname(__DIR__, 2) . '/libs/helper/DataFlowHelper.php';
+require_once dirname(__DIR__, 2) . '/libs/helper/DebugHelper.php';
 
 //Constants will be defined with IP-Symcon 5.0 and newer
 if (!defined('IPS_KERNELMESSAGE')) {
@@ -15,6 +16,7 @@ if (!defined('KR_READY')) {
 class WebHookModule extends IPSModule
 {
     use \Burki24\SymconModuleHelper\DataFlowHelper;
+    use \Burki24\SymconModuleHelper\DebugHelper;
 
     private $hook = '';
 
@@ -63,7 +65,9 @@ class WebHookModule extends IPSModule
      */
     protected function ProcessHookData()
     {
-        $this->SendDebug('WebHook', 'Array POST: ' . print_r($_POST, true), 0);
+        if ($this->ReadPropertyBoolean('Debug')) {
+            $this->SendSafeDebug('WebHook', ['post' => $_POST], PHP_INT_MAX, ['pw']);
+        }
     }
 
     protected function json_encode_advanced(array $arr, $sequential_keys = false, $quotes = false, $beautiful_json = true, $decimals = 2)

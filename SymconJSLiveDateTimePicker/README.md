@@ -45,7 +45,8 @@ Variablenzuordnung.
 
 Der Browserwert wird gegen die konfigurierte Variablen-ID geprüft. Trotzdem
 sollten nur passende und bewusst beschreibbare Variablen verwendet werden.
-Die Debug-Ausgabe protokolliert beim Schreiben keinen übergebenen Zeitwert.
+Bei aktiviertem `Debug` enthält die gemeinsame Browser-Diagnose auch den
+übergebenen Zeitwert.
 Die bestehende `~HTMLBox`-/IPSView-Ausgabe bleibt kompatibel; die native
 Symcon-Kachel ist eine spätere Migrationsstufe.
 

@@ -302,11 +302,11 @@ Prioritaet hoch:
 
 - `ConfigStore` und `SyncModule` deaktivieren die TLS-Zertifikatspruefung fuer
   externe HTTPS-Aufrufe.
-- Der Webhook schreibt bei Fehlern gesendetes und erwartetes Kennwort in den
-  Debugkanal; Debugpfade koennen komplette Request-, Server- und Nutzdaten
-  enthalten. Das Kennwort wird zudem als Query-Parameter transportiert. Die
-  oeffentliche Methode `Debug_LoadLogFile` gibt ausserdem die komplette
-  Symcon-Logdatei ungefiltert aus.
+- Der Webhook transportiert das Kennwort als Query-Parameter. Bekannte
+  Zugangsdatenfelder werden im Debug maskiert; die bewusst vollstaendige
+  Diagnose kann jedoch unbekannte Geheimnisse aus freien Texten, Skripten
+  und Medien enthalten. Die oeffentliche Methode `Debug_LoadLogFile` gibt
+  ausserdem die komplette Symcon-Logdatei ungefiltert aus.
 - Die statische Asset-Auslieferung bildet den Requestpfad ohne kanonische
   Begrenzungspruefung auf einen Dateipfad ab. Ob daraus in der Symcon-Runtime ein
   ausnutzbarer Pfadzugriff entsteht, muss mit einem gezielten Test geklaert
@@ -484,11 +484,14 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
 ### Phase 1 - Sicherheitsgrenzen
 
 1. TLS-Pruefung in Store/Sync aktivieren und Fehlerbehandlung ergaenzen.
-2. Kennwoerter und private Payloads aus Logs entfernen; `DebugHelper` nutzen.
-   Numerische Messwerte gelten in keinem JSLive-Modul als schutzbeduerftig und
-   duerfen bei aktiviertem Debug einzeln ohne kuenstliche Anzahlbegrenzung
-   erscheinen. Frei eingegebene Texte, Zugangsdaten und rohe Browser- oder
-   Konfigurations-Payloads bleiben davon ausgenommen.
+2. Debug-Ausgaben aller Module ueber `DebugHelper` fuehren. Die bewusst
+   aktivierbare Diagnose enthaelt vollstaendige Browser-, Konfigurations- und
+   Austausch-Payloads einschliesslich freier Texte, einzelner Messwerte,
+   Skripte und Medien ohne Laengenbegrenzung. Bekannte Zugangsdatenfelder
+   werden strukturiert maskiert, auch in eingebettetem JSON und Base64-JSON.
+   Zugangsdaten in beliebigem Freitext oder Skriptcode koennen nicht verlaesslich
+   erkannt werden; Debug bleibt deshalb standardmaessig ausgeschaltet und
+   darf nur in einer geschuetzten Testumgebung aktiviert werden.
 3. Webhook-Pfade kanonisch begrenzen, Query-Verarbeitung und HTTP-Antworten
    haerten; `HttpResponseHelper`/`VisualizationAssetHelper` gezielt integrieren.
 4. CORS-, Authentisierungs- und Schreibberechtigungsmodell dokumentieren und

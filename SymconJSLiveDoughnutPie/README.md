@@ -36,8 +36,9 @@ Konfiguration.
 Die Standardvorlage ist `Doughnut-PIE.html`. Chart.js, Moment und das
 Datalabels-Plugin werden aus dem JSLive-Bestand ausgeliefert. Eigene Vorlagen
 werden als HTML/JavaScript ausgeführt und dürfen nur aus vertrauenswürdigen
-Quellen stammen. Die modulspezifische Diagnose protokolliert keine vollständigen
-Browser-Abfragen oder unbekannten Befehlsnamen.
+Quellen stammen. Bei aktiviertem `Debug` werden vollständige Browser-Abfragen
+über die gemeinsame Diagnose protokolliert; bekannte Zugangsdatenfelder werden
+maskiert.
 
 ## Technische Daten
 

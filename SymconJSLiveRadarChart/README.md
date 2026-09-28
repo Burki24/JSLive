@@ -39,8 +39,9 @@ Datalabels-Plugin werden aus dem JSLive-Bestand ausgeliefert. Eigene Vorlagen
 werden als HTML/JavaScript ausgeführt und müssen vertrauenswürdig sein.
 Die modulspezifische Diagnose verwendet `DebugHelper`. Bei aktivem `Debug`
 werden numerische Archivwerte einzeln und ohne künstliche Anzahlbegrenzung
-ausgegeben. Roh-Payloads und frei eingegebene Schlüssel werden nicht
-ungefiltert protokolliert.
+ausgegeben. Zusätzlich werden vollständige Browser- und Konfigurationsdaten
+einschließlich frei eingegebener Texte protokolliert; bekannte Zugangsdatenfelder
+werden maskiert.
 
 ## Technische Daten
 

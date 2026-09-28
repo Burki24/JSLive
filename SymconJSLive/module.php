@@ -212,6 +212,7 @@ class SymconJSLive extends WebHookModule
         }
 
         if (strpos($_SERVER['SCRIPT_NAME'], '/hook/JSLive/WS') !== false) {
+            // The WS route has no response body; its request is already logged above when Debug is enabled.
         } elseif (strpos($_SERVER['SCRIPT_NAME'], '/hook/JSLive/js') !== false) {
             //get javascript files load from webhook
             $subpath = substr($_SERVER['SCRIPT_NAME'], strlen('/hook/JSLive/'));

@@ -66,6 +66,12 @@ Die detaillierte Modulkonfiguration ist in den jeweiligen Modulverzeichnissen
 dokumentiert. Diese Dokumentation wird im Zuge der Modernisierung schrittweise
 überarbeitet.
 
+Die Option `Debug` ist standardmäßig ausgeschaltet. Wird sie aktiviert,
+protokollieren Splitter und Module vollständige Browser-, Konfigurations- und
+Austauschdaten, auch freie Texte, Skripte und Medien. Bekannte Zugangsdatenfelder
+werden maskiert; beliebig im Inhalt versteckte Geheimnisse können nicht sicher
+erkannt werden. Debug daher nur in einer geschützten Testumgebung verwenden.
+
 ## Bekannte Einschränkungen
 
 - Die Symcon-9-Laufzeitprüfung aller Module ist noch nicht abgeschlossen.

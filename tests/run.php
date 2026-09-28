@@ -25,7 +25,9 @@ $tests = [
     __DIR__ . '/custom-debug.php',
     __DIR__ . '/config-store-debug.php',
     __DIR__ . '/radar-debug.php',
-    __DIR__ . '/chart-debug.php'
+    __DIR__ . '/chart-debug.php',
+    __DIR__ . '/full-debug-payload.php',
+    __DIR__ . '/sync-full-debug.php'
 ];
 
 $commands = [

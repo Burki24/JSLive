@@ -42,9 +42,9 @@ Die Standardvorlage ist `Chart.html`. Chart.js, Moment und die benötigten
 Plugins werden derzeit über den JSLive-Hook ausgeliefert. Eigene Vorlagen
 werden als HTML/JavaScript ausgeführt und müssen vertrauenswürdig sein.
 Die Diagnose verwendet `DebugHelper`: Bei aktivem `Debug` werden numerische
-Messwerte einzeln und ohne künstliche Anzahlbegrenzung ausgegeben. Roh-Payloads,
-Browser-Abfragen und importierte Konfigurationen werden nicht ungefiltert
-protokolliert.
+Messwerte einzeln und ohne künstliche Anzahlbegrenzung ausgegeben. Zusätzlich
+werden vollständige Browser-Abfragen und Konfigurationstransfers protokolliert;
+bekannte Zugangsdatenfelder werden maskiert.
 
 ## Technische Daten
 

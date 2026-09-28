@@ -65,6 +65,11 @@ final class WebhookRoutingHarness extends SymconJSLive
         $this->debugMessages = [];
     }
 
+    public function setDebugEnabled(bool $enabled): void
+    {
+        $this->properties['Debug'] = $enabled;
+    }
+
     public function ReadPropertyBoolean(string $name): bool
     {
         return (bool) ($this->properties[$name] ?? false);
@@ -204,6 +209,28 @@ $contentMessage = decodeWebhookMessage($harness->childMessages[0]);
 assertWebhookRouting(
     ($contentMessage['inner']['cmd'] ?? null) === 'getContend',
     'The historical default command spelling changed.'
+);
+
+$harness->resetCapturedData();
+$harness->setDebugEnabled(true);
+$longText = str_repeat('D', 17_000);
+$debugResponse = $harness->route(
+    '/hook/JSLive/getData',
+    'instance=42&pw=synthetic-secret&title=Free+text',
+    ['content' => $longText, 'Password' => 'synthetic-post-password']
+);
+assertWebhookRouting($debugResponse['output'] === '', 'Debug changed the getData response without a child result.');
+assertWebhookRouting($harness->debugMessages !== [], 'Enabled Debug must log the complete webhook request.');
+$loggedRequest = json_decode($harness->debugMessages[0]['data'], true, 512, JSON_THROW_ON_ERROR);
+assertWebhookRouting(
+    ($loggedRequest['queryData']['title'] ?? null) === 'Free text'
+        && ($loggedRequest['post']['content'] ?? null) === $longText,
+    'Webhook Debug omitted or shortened request content.'
+);
+assertWebhookRouting(
+    ($loggedRequest['queryData']['pw'] ?? null) === '***'
+        && ($loggedRequest['post']['Password'] ?? null) === '***',
+    'Webhook Debug exposed a known credential.'
 );
 
 echo "JSLive webhook routing contracts verified.\n";

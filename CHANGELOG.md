@@ -18,28 +18,17 @@ Patchstelle, beispielsweise `v0.10.0`.
   gebracht.
 - Splitter und Kindmodul-Basisklasse verwenden den zentral synchronisierten
   `DataFlowHelper` fuer ihre bestehenden Datenaustausch-Umschlaege.
-- Splitter, SyncModule und Kindmodul-Basisklasse verwenden den zentralen
-  `DebugHelper`; sensible Konfigurations-, Webhook- und Nachrichtendaten werden
-  strukturiert maskiert und nicht mehr ungefiltert protokolliert.
-- Gauge und Progressbar verwenden ebenfalls `DebugHelper` fuer ihre eigenen
-  Diagnosen; unbekannte Befehlsnamen gelangen nicht mehr in die Debug-Ausgabe.
-- ColorPicker und DateTimePicker verwenden `DebugHelper` fuer ihre eigenen
-  Diagnosen; uebergebene Werte und gerendertes HTML werden nicht mehr geloggt.
-- AdvTextfield und Calendar verwenden `DebugHelper` fuer ihre eigenen Diagnosen;
-  Textinhalte, Quellnamen und iCalendar-URLs werden nicht mehr geloggt.
-- DoughnutPie verwendet `DebugHelper` fuer seine eigenen Diagnosen;
-  Browser-Abfragen und unbekannte Befehlsnamen werden nicht mehr geloggt.
-- Custom verwendet `DebugHelper` fuer seine eigenen Diagnosen; eingebettete
-  Bibliotheken, Objekt- und Schreibwerte werden nicht mehr geloggt.
-- ConfigStore verwendet `DebugHelper` fuer seine Diagnose einer ungueltigen
-  Modulauswahl; der uebergebene Index wird nicht mehr geloggt.
-- RadarChart verwendet `DebugHelper` fuer eigene Diagnosen. Roh-Payloads, freie
-  Schluessel und Befehlsnamen werden nicht mehr ungefiltert geloggt; bei
-  aktivem Debug bleiben alle einzelnen numerischen Archivwerte sichtbar.
-- Chart verwendet `DebugHelper` fuer eigene Diagnosen. Roh-Payloads,
-  Browser-Abfragen und importierte Konfigurationen werden nicht mehr
-  ungefiltert geloggt; einzelne numerische Messwerte bleiben bei aktivem Debug
-  ohne kuenstliche Anzahlbegrenzung sichtbar.
+- Splitter, Kindmodul-Basisklasse und alle 13 Module verwenden `DebugHelper`.
+  Bei aktiviertem Debug erscheinen vollstaendige Browser-, Konfigurations-
+  und Austausch-Payloads einschliesslich freier Texte, Skripte und Medien;
+  bekannte Zugangsdatenfelder werden auch in eingebettetem JSON maskiert.
+  Debug bleibt standardmaessig deaktiviert.
+- Chart und RadarChart geben bei aktiviertem Debug einzelne numerische
+  Archivwerte ohne kuenstliche Anzahlbegrenzung aus. Ihre modulspezifischen
+  Diagnosen wurden auf `DebugHelper` umgestellt.
+- ConfigStore und SyncModule erhalten jeweils eine eigene Debug-Option im
+  Konfigurationsformular; ihre vollstaendigen Austauschdaten sind damit nur
+  bei bewusst aktivierter Diagnose sichtbar.
 
 ### Added
 

@@ -61,8 +61,8 @@ Die aktuelle Bestandsversion lädt Teile von FullCalendar und iCalendar noch von
 externen CDNs. Dadurch ist die Auslieferung nicht vollständig offline und
 reproduzierbar. Die Konsolidierung und lokale Versionierung dieser Ressourcen
 ist als eigene Modernisierungsphase vorgesehen. iCalendar-URLs sollten nur aus
-vertrauenswürdigen Quellen verwendet werden. Die modulspezifische Diagnose beim
-Laden einer Quelle protokolliert weder Quellnamen noch iCalendar-URLs.
+vertrauenswürdigen Quellen verwendet werden. Bei aktiviertem `Debug` können
+vollständige Konfigurationsdaten auch Quellnamen und iCalendar-URLs enthalten.
 
 ## Technische Daten
 

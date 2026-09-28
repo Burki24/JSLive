@@ -39,8 +39,10 @@ markiert und übersprungen.
 Der Bestandsstand ruft für die dynamische Modulliste den externen Dienst
 `https://jslive.babenschneider.net/` auf und deaktiviert dabei die TLS-
 Zertifikatsprüfung. Dieser Pfad ist vor einem produktiven Einsatz zu härten.
-Synchronisierte Konfigurationen können sensible Daten enthalten und gehören
-nicht in ungeschützte Logs oder Exporte.
+Die neue Option `Debug` ist standardmäßig ausgeschaltet. Bei Aktivierung
+protokolliert der gemeinsame `DebugHelper` vollständige Synchronisations-
+und Austauschdaten. Bekannte Zugangsdatenfelder werden maskiert; Debug nur in
+einer geschützten Testumgebung verwenden.
 
 ## Technische Daten
 

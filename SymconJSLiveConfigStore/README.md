@@ -43,8 +43,11 @@ Das Laden kann bestehende Modulkonfigurationen überschreiben, `ApplyChanges()`
 auslösen oder eine neue Instanz erzeugen. Nur vertrauenswürdige und zum
 Modultyp passende Konfigurationen verwenden. Der externe Dienst, sein Protokoll
 und seine Verfügbarkeit sind nicht Bestandteil der lokalen JSLive-Testumgebung.
-Die Diagnose einer ungültigen Modulauswahl verwendet den gemeinsamen
-`DebugHelper` und protokolliert den übergebenen Index nicht.
+Die neue Option `Debug` ist standardmäßig ausgeschaltet. Bei Aktivierung
+protokolliert der gemeinsame `DebugHelper` vollständige Formular- und
+Store-Austauschdaten einschließlich exportierter Konfigurationen und Medien.
+Bekannte Zugangsdatenfelder werden maskiert; Debug nur in einer geschützten
+Testumgebung verwenden.
 
 ## Technische Daten
 
