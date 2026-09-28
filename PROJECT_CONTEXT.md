@@ -141,7 +141,9 @@ Vorhandene lokale Pruefungen:
   verbliebenen Modulvertraege, ihrer PHP-Quellen und der bestehenden Hook-Pfade;
 - `tests/webhook-routing.php`: Verhaltens-Harness fuer Authentisierungs- und
   Instanz-Gates, Data-ID/JSON-Umschlag, direkte globale Konfiguration und den
-  historischen Standardbefehl `getContend`;
+  historischen Standardbefehl `getContend`; zusaetzlich sichert er die
+  Auslieferung erlaubter JavaScript-Assets und die Abweisung kanonischer
+  Pfadausbrueche ab;
 - `tests/configuration-transfer.php`: vollstaendiger und formulargefilterter
   Export, erfolgreicher Import bekannter Properties mit Erhalt ausgelassener
   Werte sowie nebenwirkungsfreie Ablehnung leerer, fehlerhafter,
@@ -291,6 +293,14 @@ eine Lizenz-/Versionsliste und automatisierte Browserpruefungen.
 
 ## 11. Technische Schulden und Risiken
 
+Bereits abgesicherte Sicherheitsgrenzen:
+
+- Die statische Asset-Auslieferung loest angeforderte Dateien kanonisch auf,
+  akzeptiert nur regulaere Dateien innerhalb von `SymconJSLive/js` und weist
+  relative Pfadausbrueche mit HTTP 404 ab. Ein Regressionstest belegt sowohl
+  die regulaere Auslieferung als auch die Abweisung des frueher moeglichen
+  Zugriffs auf `module.php` ueber `../`.
+
 Prioritaet hoch:
 
 - Der Webhook transportiert das Kennwort als Query-Parameter. Bekannte
@@ -298,10 +308,6 @@ Prioritaet hoch:
   Diagnose kann jedoch unbekannte Geheimnisse aus freien Texten, Skripten
   und Medien enthalten. Die oeffentliche Methode `Debug_LoadLogFile` gibt
   ausserdem die komplette Symcon-Logdatei ungefiltert aus.
-- Die statische Asset-Auslieferung bildet den Requestpfad ohne kanonische
-  Begrenzungspruefung auf einen Dateipfad ab. Ob daraus in der Symcon-Runtime ein
-  ausnutzbarer Pfadzugriff entsteht, muss mit einem gezielten Test geklaert
-  werden.
 - Import-, Store-, Custom- und Sync-Funktionen koennen Skripte erzeugen,
   Variablen/Medien schreiben, Skripte ausfuehren oder komplette
   Instanzkonfigurationen anwenden.
@@ -492,9 +498,14 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    Zugangsdaten in beliebigem Freitext oder Skriptcode koennen nicht verlaesslich
    erkannt werden; Debug bleibt deshalb standardmaessig ausgeschaltet und
    darf nur in einer geschuetzten Testumgebung aktiviert werden.
-3. Webhook-Pfade kanonisch begrenzen, Query-Verarbeitung und HTTP-Antworten
-   haerten; `HttpResponseHelper`/`VisualizationAssetHelper` gezielt integrieren.
-4. CORS-, Authentisierungs- und Schreibberechtigungsmodell dokumentieren und
+3. Statische Webhook-Assetpfade kanonisch auf `SymconJSLive/js` begrenzen
+   (abgeschlossen; erlaubte Dateien und relative Pfadausbrueche sind getestet).
+   Der `VisualizationAssetHelper` ist fuer diesen historischen, dynamischen
+   Webhook-Pfad nicht geeignet und bleibt der spaeteren Visualisierungs-
+   umstellung vorbehalten.
+4. Query-Verarbeitung und die verbliebenen HTTP-Antworten haerten;
+   `HttpResponseHelper` gezielt weiter integrieren.
+5. CORS-, Authentisierungs- und Schreibberechtigungsmodell dokumentieren und
    testen.
 
 ### Phase 2 - Symcon 9.0 / PHP 8.5 stabilisieren

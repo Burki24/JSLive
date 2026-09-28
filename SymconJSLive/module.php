@@ -200,28 +200,29 @@ class SymconJSLive extends WebHookModule
      */
     protected function ProcessHookData()
     {
+        $scriptName = (string) ($_SERVER['SCRIPT_NAME'] ?? '');
 
         if ($this->ReadPropertyBoolean('Debug')) {
             parse_str((string) ($_SERVER['QUERY_STRING'] ?? ''), $debugQuery);
             $this->SendSafeDebug('WebHook', [
-                'scriptName'    => $_SERVER['SCRIPT_NAME'] ?? null,
+                'scriptName'    => $scriptName,
                 'requestMethod' => $_SERVER['REQUEST_METHOD'] ?? null,
                 'queryData'     => $debugQuery,
                 'post'          => $_POST
             ], PHP_INT_MAX, ['pw']);
         }
 
-        if (strpos($_SERVER['SCRIPT_NAME'], '/hook/JSLive/WS') !== false) {
+        if ($scriptName === '/hook/JSLive/WS' || str_starts_with($scriptName, '/hook/JSLive/WS/')) {
             // The WS route has no response body; its request is already logged above when Debug is enabled.
-        } elseif (strpos($_SERVER['SCRIPT_NAME'], '/hook/JSLive/js') !== false) {
+        } elseif ($scriptName === '/hook/JSLive/js' || str_starts_with($scriptName, '/hook/JSLive/js/')) {
             //get javascript files load from webhook
-            $subpath = substr($_SERVER['SCRIPT_NAME'], strlen('/hook/JSLive/'));
-            $path = __DIR__ . '/' . $subpath;
+            $subpath = substr($scriptName, strlen('/hook/JSLive/'));
+            $path = $this->ResolveStaticAssetPath($scriptName);
 
             if ($this->ReadPropertyBoolean('Debug'))
                 $this->SendSafeDebug('WebHook', 'JS PATH =>' . $path);
 
-            if (!file_exists($path)) {
+            if ($path === null) {
                 $this->SendPlainTextResponse(404, '');
                 return;
             }
@@ -288,7 +289,7 @@ class SymconJSLive extends WebHookModule
             }
         }else {
             //Daten vom Modul Laden
-            $Type = substr($_SERVER['SCRIPT_NAME'], strlen('/hook/JSLive/'));
+            $Type = substr($scriptName, strlen('/hook/JSLive/'));
             if (empty($Type)) $Type = 'getContend';
 
             $queryData = [];
@@ -485,6 +486,33 @@ class SymconJSLive extends WebHookModule
                 echo $contend;
             }
         }
+    }
+
+    private function ResolveStaticAssetPath(string $scriptName): ?string
+    {
+        $assetRoute = '/hook/JSLive/js/';
+        if (!str_starts_with($scriptName, $assetRoute)) {
+            return null;
+        }
+
+        $assetRoot = realpath(__DIR__ . '/js');
+        $requestedPath = realpath(__DIR__ . '/' . substr($scriptName, strlen('/hook/JSLive/')));
+        if ($assetRoot === false || $requestedPath === false || !is_file($requestedPath)) {
+            return null;
+        }
+
+        $normalizedRoot = str_replace('\\', '/', $assetRoot);
+        $normalizedPath = str_replace('\\', '/', $requestedPath);
+        if (DIRECTORY_SEPARATOR === '\\') {
+            $normalizedRoot = strtolower($normalizedRoot);
+            $normalizedPath = strtolower($normalizedPath);
+        }
+
+        if (!str_starts_with($normalizedPath, rtrim($normalizedRoot, '/') . '/')) {
+            return null;
+        }
+
+        return $requestedPath;
     }
 
     private function ReplacePlaceholder(string $htmlData, int $IntID, bool $viewport)

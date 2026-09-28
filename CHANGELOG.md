@@ -34,6 +34,13 @@ Patchstelle, beispielsweise `v0.10.0`.
   Hostnamen, begrenzt Weiterleitungen auf HTTPS und behandelt Transport-, HTTP-
   sowie ungueltige JSON-Antworten kontrolliert.
 
+### Security
+
+- Die statische Webhook-Auslieferung akzeptiert nur noch regulaere Dateien,
+  deren kanonischer Pfad innerhalb von `SymconJSLive/js` liegt. Relative
+  Pfadausbrueche werden mit HTTP 404 abgewiesen; ein Regressionstest sichert
+  erlaubte Assets und den bisherigen Quelltextzugriff ueber `../` ab.
+
 ### Removed
 
 - Der vollstaendig vom nicht mehr erreichbaren Dienst

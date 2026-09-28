@@ -33,6 +33,9 @@ final class WebhookRoutingHarness extends SymconJSLive
 
     /** @var list<array{message: string, data: string}> */
     public array $debugMessages = [];
+
+    /** @var list<int> */
+    public array $responseStatusCodes = [];
     /** @var array<string, bool|int|string> */
     private array $properties = [
         'Debug'             => false,
@@ -63,6 +66,7 @@ final class WebhookRoutingHarness extends SymconJSLive
         $this->childResponses = [];
         $this->childMessages = [];
         $this->debugMessages = [];
+        $this->responseStatusCodes = [];
     }
 
     public function setDebugEnabled(bool $enabled): void
@@ -99,6 +103,7 @@ final class WebhookRoutingHarness extends SymconJSLive
     {
         $previousServer = $_SERVER;
         $previousPost = $_POST;
+        header_remove();
         $_SERVER = [
             'SCRIPT_NAME'          => $scriptName,
             'QUERY_STRING'         => $queryString,
@@ -120,6 +125,17 @@ final class WebhookRoutingHarness extends SymconJSLive
         }
 
         return ['output' => (string) $output, 'result' => $result];
+    }
+
+    protected function GetMimeType($extension)
+    {
+        return 'application/octet-stream';
+    }
+
+    protected function SendPlainTextResponse(int $statusCode, string $message): void
+    {
+        $this->responseStatusCodes[] = $statusCode;
+        echo $message;
     }
 }
 
@@ -145,6 +161,23 @@ function decodeWebhookMessage(string $json): array
 }
 
 $harness = new WebhookRoutingHarness();
+
+$assetResponse = $harness->route('/hook/JSLive/js/util.js', '');
+assertWebhookRouting(
+    $assetResponse['output'] === file_get_contents(dirname(__DIR__) . '/SymconJSLive/js/util.js'),
+    'A JavaScript asset inside the public directory must remain available.'
+);
+
+$escapedAssetResponse = $harness->route('/hook/JSLive/js/../module.php', '');
+assertWebhookRouting(
+    $escapedAssetResponse['output'] === '',
+    'The asset route must not expose files outside the public JavaScript directory.'
+);
+assertWebhookRouting(
+    $harness->responseStatusCodes === [404],
+    'An asset path outside the public JavaScript directory must return HTTP 404.'
+);
+$harness->resetCapturedData();
 
 $deniedResponse = $harness->route('/hook/JSLive/getData', 'instance=42&pw=wrong-secret');
 assertWebhookRouting($deniedResponse['output'] === '', 'A rejected password must not produce response data.');
