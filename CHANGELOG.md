@@ -82,6 +82,11 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 - Lokale Struktur-, Vertrags- und Verhaltenstests sichern die charakterisierte
   Bestandsarchitektur, Konfigurationspfade und ausgewaehlte Render-/Datenfluesse.
+- Das Webhook-Sicherheitsmodell dokumentiert die bestehenden oeffentlichen und
+  kennwortgeschuetzten Routen, Wildcard-CORS, GET-Schreibzugriffe sowie die
+  zusaetzlichen Ziel- und Read-only-Grenzen der schreibfaehigen Kindmodule.
+  Vertragstests sichern dieses Bestandsverhalten ab, ohne die Zugriffspolitik
+  in diesem Schritt zu aendern.
 - Gemeinsame GitHub-Actions-Pruefungen fuer Tests und Style sowie CodeQL fuer
   JavaScript-/TypeScript-Quellen sind eingerichtet.
 - Der Metadatenworkflow erhoeht auf `dev` die gemeinsame Library-Version pro

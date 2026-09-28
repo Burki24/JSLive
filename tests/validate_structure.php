@@ -32,9 +32,9 @@ if ($readme === false) {
     }
 }
 
-foreach (['CHANGELOG.md', 'docs/RELEASE_PROCESS.md'] as $requiredDocumentation) {
+foreach (['CHANGELOG.md', 'docs/RELEASE_PROCESS.md', 'docs/WEBHOOK_SECURITY_MODEL.md'] as $requiredDocumentation) {
     if (!is_file($root . '/' . $requiredDocumentation)) {
-        $errors[] = 'Missing required release documentation: ' . $requiredDocumentation;
+        $errors[] = 'Missing required project documentation: ' . $requiredDocumentation;
     }
 }
 

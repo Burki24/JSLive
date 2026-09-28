@@ -348,6 +348,35 @@ assertWebhookRouting(!str_contains($deniedDebug, 'wrong-secret'), 'Rejected pass
 assertWebhookRouting(!str_contains($deniedDebug, 'synthetic-secret'), 'Configured passwords must not be logged.');
 assertWebhookRouting(str_contains($deniedDebug, '***'), 'Rejected password diagnostics must be masked.');
 
+$harness->resetCapturedData();
+$harness->setChildResponses(['OK']);
+$writeResponse = $harness->route(
+    '/hook/JSLive/setData',
+    'instance=42&pw=synthetic-secret&obj=17&val=synthetic-write',
+    [],
+    ['REQUEST_METHOD' => 'GET']
+);
+assertWebhookRouting($writeResponse['output'] === 'OK', 'An authenticated GET write changed its response body.');
+assertWebhookRouting(count($harness->childMessages) === 1, 'An authenticated GET write must reach one child module.');
+$writeMessage = decodeWebhookMessage($harness->childMessages[0]);
+assertWebhookRouting(
+    ($writeMessage['inner']['cmd'] ?? null) === 'setData'
+        && ($writeMessage['inner']['queryData']['obj'] ?? null) === '17'
+        && ($writeMessage['inner']['queryData']['val'] ?? null) === 'synthetic-write',
+    'The established setData GET contract must forward its target and value unchanged.'
+);
+
+$harness->resetCapturedData();
+$harness->setPassword('');
+$harness->setChildResponses(['{"value":44}']);
+$passwordlessResponse = $harness->route('/hook/JSLive/getData', 'instance=42');
+assertWebhookRouting(
+    $passwordlessResponse['output'] === '{"value":44}' && count($harness->childMessages) === 1,
+    'An empty configured password must preserve the established authentication bypass.'
+);
+$harness->setPassword('synthetic-secret');
+
+$harness->resetCapturedData();
 $harness->setChildResponses(['{"value":42}']);
 $dataResponse = $harness->route(
     '/hook/JSLive/getData',
@@ -465,6 +494,30 @@ assertWebhookRouting(
     $unmatchedCssResponse['output'] === 'Instance Not in List!'
         && $harness->responseStatusCodes === [404],
     'An unmatched CSS instance must return its existing message with HTTP 404.'
+);
+
+$harness->resetCapturedData();
+$harness->setChildResponses([
+    json_encode(
+        [
+            'InstanceID'  => '42',
+            'Contend'     => '.fixture { color: green; }',
+            'lastModify'  => 'Mon, 01 Jan 2024 00:00:00 GMT',
+            'EnableCache' => false
+        ],
+        JSON_THROW_ON_ERROR
+    )
+]);
+$publicCssResponse = $harness->route('/hook/JSLive/getCSS', 'instance=42');
+assertWebhookRouting(
+    $publicCssResponse['output'] === '.fixture { color: green; }'
+        && count($harness->childMessages) === 1,
+    'getCSS must remain the only password-exempt dynamic child route.'
+);
+$publicCssMessage = decodeWebhookMessage($harness->childMessages[0]);
+assertWebhookRouting(
+    ($publicCssMessage['inner']['cmd'] ?? null) === 'getCSS',
+    'The public CSS route changed its child command.'
 );
 
 $harness->resetCapturedData();

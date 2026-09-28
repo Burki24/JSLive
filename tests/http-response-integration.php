@@ -46,6 +46,14 @@ httpResponseIntegrationAssert(
     'JSLive must protect successful webhook response groups against MIME sniffing.'
 );
 httpResponseIntegrationAssert(
+    substr_count($source, "header('Access-Control-Allow-Origin: *');") === 2,
+    'JSLive must preserve wildcard CORS for static assets and dynamic module responses.'
+);
+httpResponseIntegrationAssert(
+    str_contains($source, "header('Access-Control-Allow-Methods: POST, GET, OPTIONS');"),
+    'JSLive must preserve its advertised static-asset CORS methods.'
+);
+httpResponseIntegrationAssert(
     substr_count($source, "header('Content-Type: application/json');") === 3,
     'JSLive must declare JSON content types for global, export and child JSON responses.'
 );

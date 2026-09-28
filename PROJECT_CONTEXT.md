@@ -151,7 +151,12 @@ Vorhandene lokale Pruefungen:
   ausserdem die explizite JSON-Kennzeichnung der direkten globalen
   Konfiguration und aller etablierten JSON-Kindbefehle, die feste
   Kennzeichnung der uebrigen Antworttypen sowie den abgesicherten
-  Downloadnamen des Konfigurationsexports;
+  Downloadnamen des Konfigurationsexports. Ausserdem sind die
+  Authentisierungsausnahmen, der kennwortgeschuetzte GET-Schreibpfad und das
+  Verhalten bei leerem Splitter-Kennwort charakterisiert;
+- `tests/webhook-security-model.php`: exakte Bestandsaufnahme aller vom
+  Browser erreichbaren Kindmodulbefehle, der Module mit `setData` sowie der
+  derzeit fehlenden Calendar-Schreibimplementierung;
 - `tests/configuration-transfer.php`: vollstaendiger und formulargefilterter
   Export, erfolgreicher Import bekannter Properties mit Erhalt ausgelassener
   Werte sowie nebenwirkungsfreie Ablehnung leerer, fehlerhafter,
@@ -337,6 +342,11 @@ Bereits abgesicherte Sicherheitsgrenzen:
   Steuerzeichen und ungueltige Dateipfadzeichen aus Modul- und Objektnamen.
   Ein kompatibler ASCII-Name und ein UTF-8-`filename*` erhalten weiterhin
   lesbare Downloadnamen einschliesslich Umlauten.
+- `docs/WEBHOOK_SECURITY_MODEL.md` beschreibt die tatsaechliche CORS-,
+  Authentisierungs- und Schreibgrenze. Tests belegen insbesondere die
+  `getCSS`-Ausnahme, die Deaktivierung der Pruefung bei leerem Kennwort, den
+  historischen `setData`-GET-Aufruf und die Zielbegrenzungen von Custom,
+  ColorPicker und DateTimePicker.
 
 Prioritaet hoch:
 
@@ -561,7 +571,10 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    (abgeschlossen; regulaere, internationale und manipulierte Namen sind
    getestet).
 10. CORS-, Authentisierungs- und Schreibberechtigungsmodell dokumentieren und
-   testen.
+   testen (abgeschlossen; das bestehende Modell ist dokumentiert und durch
+   Vertrags- sowie Negativtests charakterisiert. Eine spaetere Aenderung von
+   URL-Kennwort, Wildcard-CORS, GET-Schreibzugriffen oder `getCSS`-Ausnahme
+   benoetigt eine eigene Migration und Symcon-Laufzeitabnahme).
 
 ### Phase 2 - Symcon 9.0 / PHP 8.5 stabilisieren
 

@@ -83,9 +83,10 @@ erkannt werden. Debug daher nur in einer geschützten Testumgebung verwenden.
 - Der nicht mehr erreichbare, vollständig von einem externen Dienst abhängige
   ConfigStore wurde entfernt. Vorhandene ConfigStore-Instanzen müssen vor einem
   Update auf diesen Stand gelöscht werden.
-- Die Webhook-Authentisierung und sensible Debugausgaben werden in einer
-  eigenen Sicherheitsphase überarbeitet. Der Webhook sollte nicht ungeschützt
-  öffentlich erreichbar sein.
+- Das bestehende [Webhook-Sicherheitsmodell](docs/WEBHOOK_SECURITY_MODEL.md)
+  ist dokumentiert und durch Vertragstests charakterisiert. Es verwendet
+  weiterhin Kennwörter in URLs, Wildcard-CORS und GET für Schreibzugriffe; der
+  Webhook sollte deshalb nicht ungeschützt öffentlich erreichbar sein.
 - Calendar und ColorPicker beziehen noch einzelne Frontend-Ressourcen von
   externen CDNs. Die vollständige lokale und reproduzierbare Auslieferung ist
   geplant.

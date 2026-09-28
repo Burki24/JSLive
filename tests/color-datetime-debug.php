@@ -93,6 +93,23 @@ if (str_contains(json_encode($dateTime->debug, JSON_THROW_ON_ERROR), (string) $t
     throw new RuntimeException('DateTimePicker logged the browser supplied timestamp.');
 }
 
+$writesBeforeDeniedRequests = $writes;
+$result = $color->ReceiveData(debugRequest([
+    'cmd'       => 'setData',
+    'queryData' => ['var' => 99, 'val' => 'synthetic-denied-color']
+]));
+if ($result !== 'VARIABLE NOT IN LIST SET!' || $writes !== $writesBeforeDeniedRequests) {
+    throw new RuntimeException('ColorPicker accepted a variable outside its configured datasets.');
+}
+
+$result = $dateTime->ReceiveData(debugRequest([
+    'cmd'       => 'setData',
+    'queryData' => ['var' => 99, 'val' => $timestamp]
+]));
+if ($result !== 'VARIABLE NOT SET!' || $writes !== $writesBeforeDeniedRequests) {
+    throw new RuntimeException('DateTimePicker accepted a variable other than its configured target.');
+}
+
 foreach ([$color, $dateTime] as $module) {
     $module->debug = [];
     $result = $module->ReceiveData(debugRequest(['cmd' => 'unknown?password=synthetic-secret']));

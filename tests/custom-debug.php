@@ -8,13 +8,21 @@ if (!class_exists('IPSModule')) {
         /** @var list<array{message: string, data: string, format: int}> */
         public array $debug = [];
 
+        /** @var list<array{Object: int, ReadOnly: bool}> */
+        public array $datasets;
+
+        public function __construct()
+        {
+            $this->datasets = array_map(static fn (int $id): array => [
+                'Object'   => $id,
+                'ReadOnly' => false
+            ], [42, 43, 44, 45]);
+        }
+
         public function ReadPropertyString(string $name): string
         {
             if ($name === 'Datasets') {
-                return json_encode(array_map(static fn (int $id): array => [
-                    'Object'   => $id,
-                    'ReadOnly' => false
-                ], [42, 43, 44, 45]), JSON_THROW_ON_ERROR);
+                return json_encode($this->datasets, JSON_THROW_ON_ERROR);
             }
             if ($name === 'Libraries') {
                 return json_encode([[
@@ -45,13 +53,13 @@ $writes = [];
 
 function IPS_ObjectExists(int $id): bool
 {
-    return in_array($id, [42, 43, 44, 45], true);
+    return in_array($id, [42, 43, 44, 45, 46], true);
 }
 
 function IPS_GetObject(int $id): array
 {
     return [
-        'ObjectType'       => [42 => 2, 43 => 3, 44 => 5, 45 => 6][$id],
+        'ObjectType'       => [42 => 2, 43 => 3, 44 => 5, 45 => 6, 46 => 2][$id],
         'ObjectName'       => 'Synthetic object',
         'ObjectIsHidden'   => false,
         'ObjectIsDisabled' => false,
@@ -174,6 +182,22 @@ if ($result !== 'OK' || $writes[3] !== ['id' => 42, 'value' => 'synthetic-privat
     throw new RuntimeException('Custom changed its linked variable write contract.');
 }
 assertNoCustomSecret($module, 'synthetic-private-link-write');
+
+$writesBeforeDeniedRequests = $writes;
+$module->datasets[0]['ReadOnly'] = true;
+$result = $module->ReceiveData(debugRequest([
+    'cmd' => 'setData', 'queryData' => ['obj' => 42, 'val' => 'synthetic-denied-write']
+]));
+if ($result !== 'ACCESS DENIED' || $writes !== $writesBeforeDeniedRequests) {
+    throw new RuntimeException('Custom no longer enforces the configured read-only boundary.');
+}
+
+$result = $module->ReceiveData(debugRequest([
+    'cmd' => 'setData', 'queryData' => ['obj' => 46, 'val' => 'synthetic-unlisted-write']
+]));
+if ($result !== 'ERROR' || $writes !== $writesBeforeDeniedRequests) {
+    throw new RuntimeException('Custom accepted an object outside its configured datasets.');
+}
 
 $module->debug = [];
 $result = (new ReflectionMethod(SymconJSLiveCustom::class, 'LoadDataFromObject'))->invoke($module, 42);

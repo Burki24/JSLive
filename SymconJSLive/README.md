@@ -27,6 +27,12 @@ Die Standardadresse ist nur für einen lokalen Symcon-Dienst gedacht. Für eine
 externe Erreichbarkeit sollte der Hook ausschließlich über eine abgesicherte
 TLS-Verbindung und mit gesetztem Passwort veröffentlicht werden.
 
+Das bestehende CORS-, Kennwort- und Schreibmodell einschließlich der bewusst
+öffentlichen Asset- und CSS-Pfade ist im
+[Webhook-Sicherheitsmodell](../docs/WEBHOOK_SECURITY_MODEL.md) dokumentiert.
+Vollständige JSLive-Links enthalten das Kennwort und sind wie Zugangsdaten zu
+behandeln.
+
 ## Vorlagen und Datenvertrag
 
 `UpdateTemplates(int $category)` kopiert die mitgelieferten HTML-Vorlagen in
