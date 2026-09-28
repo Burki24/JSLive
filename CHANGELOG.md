@@ -80,6 +80,10 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Added
 
+- Eine verbindliche Laufzeitmatrix definiert Fresh- und Upgrade-Abnahmen aller
+  verbliebenen Module unter IP-Symcon 9.0/9.1 und PHP 8.5. Ein Vertragstest
+  sichert Szenarien, Module und erforderliche Nachweise, ohne noch nicht
+  ausgeführte Laufzeittests als Kompatibilitätsfreigabe auszugeben.
 - Lokale Struktur-, Vertrags- und Verhaltenstests sichern die charakterisierte
   Bestandsarchitektur, Konfigurationspfade und ausgewaehlte Render-/Datenfluesse.
 - Das Webhook-Sicherheitsmodell dokumentiert die bestehenden oeffentlichen und

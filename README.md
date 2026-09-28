@@ -24,8 +24,9 @@ der Modernisierung kompatibel bleiben.
 - Zielplattform: IP-Symcon 9.0/9.1 und PHP 8.5
 - Lokale Vertrags-, Struktur- und Verhaltenstests sowie StylePHP laufen in der
   GitHub-CI.
-- Eine vollständige Laufzeitmatrix auf realen Symcon-9-Installationen und die
-  Freigabe als modernisierte stabile Version stehen noch aus.
+- Die [Laufzeitmatrix für IP-Symcon 9.0/9.1 und PHP 8.5](docs/SYCON_RUNTIME_MATRIX.md)
+  ist definiert; ihre Ausführung auf realen Testinstallationen und die Freigabe
+  als modernisierte stabile Version stehen noch aus.
 - Die bestehende Ausgabe über `~HTMLBox` und IPSView bleibt vorerst erhalten.
   Eine native Kacheldarstellung wird später schrittweise ergänzt.
 
@@ -74,7 +75,8 @@ erkannt werden. Debug daher nur in einer geschützten Testumgebung verwenden.
 
 ## Bekannte Einschränkungen
 
-- Die Symcon-9-Laufzeitprüfung aller Module ist noch nicht abgeschlossen.
+- Die definierte Symcon-9-[Laufzeitmatrix](docs/SYCON_RUNTIME_MATRIX.md) ist auf
+  realen Testinstallationen noch nicht ausgeführt.
 - Die eigentliche Synchronisierung des SyncModule arbeitet lokal. Seine
   Modultyp-Liste wird jedoch noch vom nicht mehr erreichbaren Dienst
   `jslive.babenschneider.net` geladen; dadurch ist die Auswahl im
