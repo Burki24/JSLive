@@ -553,6 +553,26 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
 Neue Funktionen, UI-Erweiterungen und weitergehende Architekturarbeiten folgen
 erst nach den Sicherheits-, Kompatibilitaets- und Migrationsgrundlagen.
 
+1. Den vorhandenen lokalen Konfigurationsimport/-export vor einer Erweiterung
+   charakterisieren und absichern. Das Austauschformat erhaelt eine Version;
+   installationsgebundene Werte werden ausgeschlossen und Skripte nur nach
+   ausdruecklicher Auswahl uebertragen.
+2. `SymconJSLiveChart` als Pilot fuer eine lokale Aktion
+   **Konfiguration verteilen** verwenden. Die geoeffnete Instanz dient als
+   Quelle; kompatible Zielinstanzen werden automatisch mit Name und Objektpfad
+   angeboten und koennen gemeinsam ausgewaehlt werden.
+3. Vor der Verteilung auswaehlbare Konfigurationsbereiche, eine
+   Aenderungsvorschau und eine ausdrueckliche Bestaetigung bereitstellen. Das
+   Ergebnis wird pro Zielinstanz ausgewiesen; die vorherige Konfiguration wird
+   fuer eine kontrollierte Ruecksicherung aufbewahrt.
+4. Dasselbe versionierte Austauschformat fuer benannte lokale Vorlagen sowie
+   Datei-Export und Datei-Import fertig konfigurierter Chart-Ansichten
+   verwenden. Ein externer Dienst ist dafuer nicht vorgesehen.
+5. Zunaechst keine automatische Dauersynchronisierung einfuehren. Erst nach der
+   Abnahme des Chart-Piloten entscheiden, ob die lokale Verteilung auf weitere
+   Module ausgerollt wird und ob das bisherige `SyncModule` noch einen eigenen
+   produktiven Anwendungsfall besitzt oder entfernt werden kann.
+
 ## 13. Entschiedene Punkte und offene Entscheidungen
 
 - Der einmalige Versionsuebergang von `0.9.9.9` auf `0.10` wurde als getrennter
@@ -567,8 +587,9 @@ erst nach den Sicherheits-, Kompatibilitaets- und Migrationsgrundlagen.
   Tests und Dokumentation wurden entfernt; vorhandene Instanzen muessen vor dem
   Update geloescht werden. Die Entscheidung ist in
   `docs/adr/0001-remove-config-store.md` dokumentiert.
-- Fuer fertig konfigurierte Chart-Ansichten wird spaeter eine lokale,
-  dienstunabhaengige Export-/Importfunktion entworfen.
+- Fuer fertig konfigurierte Chart-Ansichten wird nach Abschluss der vorherigen
+  Modernisierungsphasen die in Phase 6 beschriebene lokale,
+  dienstunabhaengige Verteilung mit gemeinsamer Export-/Importbasis umgesetzt.
 - Wird die automatische dauerhafte Master-/Slave-Synchronisierung des
   `SyncModule` produktiv benoetigt? Fuer einmaligen Export, Import oder Kopieren
   ist das Modul nicht erforderlich.
