@@ -60,6 +60,11 @@ Patchstelle, beispielsweise `v0.10.0`.
 - `getGlobalConfig` sowie alle etablierten JSON-Kindbefehle deklarieren
   `application/json`. Die globale Konfigurationsantwort wird explizit nicht
   gecacht und wie die uebrigen Erfolgsantworten gegen MIME-Sniffing geschuetzt.
+- Erfolgreiche HTML-, CSS-, JavaScript-, SVG-, Kalender- und Plain-Text-
+  Antworten deklarieren feste Inhaltstypen mit UTF-8-Zeichensatz. Vom
+  Progressbar-Kindmodul gelieferte Bildtypen werden auf die vier tatsaechlich
+  konfigurierbaren Formate begrenzt; unbekannte oder manipulierte Angaben
+  verwenden `application/octet-stream`, ohne den Bildinhalt zu veraendern.
 
 ### Removed
 

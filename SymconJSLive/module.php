@@ -347,18 +347,22 @@ class SymconJSLive extends WebHookModule
             }
 
             if (strtolower($Type) == 'getsvg') {
-                header('Content-type: image/svg+xml');
+                header('Content-Type: image/svg+xml; charset=utf-8');
                 //header("Content-Type: text/html");
             }elseif (strtolower($Type) == 'exportconfiguration') {
                 $date = new DateTime();
                 header('Content-disposition: attachment; filename=' . IPS_GetInstance($queryData['instance'])['ModuleInfo']['ModuleName'] . '_' . IPS_GetObject($queryData['instance'])['ObjectName'] . '_ID' . $queryData['instance'] . '_' . $date->format('Y-m-d_H-i-s') . '.json');
-                header('Content-type: application/json');
+                header('Content-Type: application/json');
             }elseif (strtolower($Type) == 'loadfile') {
                 //Here Do Nothing
             }elseif (strtolower($Type) == 'getfillimg') {
                 //Here Do Nothing
-            }elseif (strtolower($Type) == 'getCSS') {
+            }elseif (strtolower($Type) == 'getcss') {
                 //Here Do Nothing
+            }elseif (strtolower($Type) == 'getics') {
+                header('Content-Type: text/calendar; charset=utf-8');
+            }elseif (strtolower($Type) == 'setdata') {
+                header('Content-Type: text/plain; charset=utf-8');
             }elseif (in_array(strtolower($Type), [
                 'getconfiguration',
                 'getdata',
@@ -369,7 +373,7 @@ class SymconJSLive extends WebHookModule
             ], true)) {
                 header('Content-Type: application/json');
             }else {
-                header('Content-Type: text/html');
+                header('Content-Type: text/html; charset=utf-8');
             }
 
             $lastmodified = gmdate('D, d M Y H:i:s', time()) . ' GMT';
@@ -396,7 +400,7 @@ class SymconJSLive extends WebHookModule
 
                 $contend = $arr_data['Contend'];
                 $lastmodified = $arr_data['lastModify'];
-                header('Content-Type: text/html');
+                header('Content-Type: text/html; charset=utf-8');
                 $useCache = true;
 
                 if (!$arr_data['EnableCache']) {
@@ -407,15 +411,15 @@ class SymconJSLive extends WebHookModule
             elseif (strtolower($Type) == 'loadfile') {
                 $arr_data = json_decode($contend[0], true);
                 if (strtolower($arr_data['Type']) == 'css') {
-                    header('Content-type: text/css');
+                    header('Content-Type: text/css; charset=utf-8');
                 } else {
-                    header('Content-type: text/javascript');
+                    header('Content-Type: text/javascript; charset=utf-8');
                 }
                 $contend = $arr_data['Contend'];
                 $useCache = true;
             }elseif (strtolower($Type) == 'getfillimg') {
                 $arr_data = json_decode($contend[0], true);
-                header('Content-type: ' . $arr_data['Type']);
+                header('Content-Type: ' . $this->NormalizeImageMimeType($arr_data['Type'] ?? null));
                 $contend = base64_decode($arr_data['Contend']);
                 $useCache = true;
             }elseif (strtolower($Type) == 'getcss') {
@@ -439,7 +443,7 @@ class SymconJSLive extends WebHookModule
 
                 $contend = $arr_data['Contend'];
                 $lastmodified = $arr_data['lastModify'];
-                header('Content-type: text/css');
+                header('Content-Type: text/css; charset=utf-8');
                 $useCache = false; //cache ist aktuell verbuggt bei css
             }else {
                 $contend = $contend[0];
@@ -482,6 +486,23 @@ class SymconJSLive extends WebHookModule
                 echo $contend;
             }
         }
+    }
+
+    protected function NormalizeImageMimeType(mixed $mimeType): string
+    {
+        if (!is_string($mimeType)) {
+            return 'application/octet-stream';
+        }
+
+        $mimeType = strtolower(trim($mimeType));
+
+        return match ($mimeType) {
+            'image/gif',
+            'image/jpeg',
+            'image/png',
+            'image/svg+xml' => $mimeType,
+            default         => 'application/octet-stream'
+        };
     }
 
     private function IsNotModified(int $lastModified, string $etag): bool

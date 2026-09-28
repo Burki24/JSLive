@@ -46,8 +46,8 @@ httpResponseIntegrationAssert(
     'JSLive must protect successful webhook response groups against MIME sniffing.'
 );
 httpResponseIntegrationAssert(
-    substr_count($source, "header('Content-Type: application/json');") === 2,
-    'JSLive must declare JSON content types for global and child JSON responses.'
+    substr_count($source, "header('Content-Type: application/json');") === 3,
+    'JSLive must declare JSON content types for global, export and child JSON responses.'
 );
 httpResponseIntegrationAssert(
     str_contains($source, "'getconfiguration',")
@@ -57,6 +57,19 @@ httpResponseIntegrationAssert(
         && str_contains($source, "'getlanguage',")
         && str_contains($source, "'getupdate'"),
     'JSLive must classify all established child JSON commands as JSON responses.'
+);
+httpResponseIntegrationAssert(
+    str_contains($source, "header('Content-Type: text/html; charset=utf-8');")
+        && str_contains($source, "header('Content-Type: text/css; charset=utf-8');")
+        && str_contains($source, "header('Content-Type: text/javascript; charset=utf-8');")
+        && str_contains($source, "header('Content-Type: text/calendar; charset=utf-8');")
+        && str_contains($source, "header('Content-Type: text/plain; charset=utf-8');")
+        && str_contains($source, "header('Content-Type: image/svg+xml; charset=utf-8');"),
+    'JSLive must declare explicit content types for established non-JSON text responses.'
+);
+httpResponseIntegrationAssert(
+    str_contains($source, '$this->NormalizeImageMimeType($arr_data[\'Type\'] ?? null)'),
+    'JSLive must normalize child-provided image MIME types before emitting a header.'
 );
 
 $helper = new HttpResponseIntegrationHarness();

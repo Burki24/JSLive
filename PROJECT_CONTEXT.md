@@ -325,6 +325,12 @@ Bereits abgesicherte Sicherheitsgrenzen:
   `getLanguage` und `getUpdate` sind als JSON-Antworten charakterisiert und
   senden `application/json`. Die globale Konfiguration wird mit `no-store` und
   `nosniff` ausgeliefert.
+- Erfolgreiche HTML-, CSS-, JavaScript-, SVG-, Kalender- und Plain-Text-
+  Antworten deklarieren feste Inhaltstypen mit UTF-8-Zeichensatz. Der
+  dynamische Bildpfad akzeptiert nur die vier im Progressbar-Formular
+  angebotenen MIME-Typen und faellt bei unbekannten oder manipulierten Angaben
+  auf `application/octet-stream` zurueck. Der bestehende Binaerinhalt bleibt
+  dabei unveraendert.
 
 Prioritaet hoch:
 
@@ -541,8 +547,12 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    (abgeschlossen; globale Konfiguration und alle etablierten JSON-Kindbefehle
    sind erfasst).
 8. Erfolgreiche HTML-, CSS-, JavaScript-, SVG- und Binaerantworten
-   charakterisieren und ihre HTTP-Header schrittweise haerten.
-9. CORS-, Authentisierungs- und Schreibberechtigungsmodell dokumentieren und
+   charakterisieren und ihre HTTP-Header schrittweise haerten (abgeschlossen;
+   feste Texttypen sowie eine Allowlist mit sicherem Fallback fuer dynamische
+   Bildtypen sind getestet).
+9. Den dynamisch erzeugten Dateinamen der Exportantwort charakterisieren und
+   den `Content-Disposition`-Header gegen ungueltige Zeichen absichern.
+10. CORS-, Authentisierungs- und Schreibberechtigungsmodell dokumentieren und
    testen.
 
 ### Phase 2 - Symcon 9.0 / PHP 8.5 stabilisieren

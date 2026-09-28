@@ -84,6 +84,11 @@ final class WebhookRoutingHarness extends SymconJSLive
         $this->properties['enableCache'] = $enabled;
     }
 
+    public function resolveImageMimeTypeForTest(mixed $mimeType): string
+    {
+        return $this->NormalizeImageMimeType($mimeType);
+    }
+
     public function ReadPropertyBoolean(string $name): bool
     {
         return (bool) ($this->properties[$name] ?? false);
@@ -178,6 +183,36 @@ function decodeWebhookMessage(string $json): array
 }
 
 $harness = new WebhookRoutingHarness();
+
+foreach (['image/gif', 'image/jpeg', 'image/png', 'image/svg+xml'] as $imageMimeType) {
+    assertWebhookRouting(
+        $harness->resolveImageMimeTypeForTest($imageMimeType) === $imageMimeType,
+        'Configured image MIME types must remain available.'
+    );
+}
+foreach (['text/html', "image/png\r\nX-Test: injected", '', ['image/png']] as $invalidMimeType) {
+    assertWebhookRouting(
+        $harness->resolveImageMimeTypeForTest($invalidMimeType) === 'application/octet-stream',
+        'Unknown or malformed image MIME types must use the binary fallback.'
+    );
+}
+
+$imageBytes = 'synthetic-image-bytes';
+$harness->setChildResponses([
+    json_encode([
+        'Contend' => base64_encode($imageBytes),
+        'Type'    => "image/png\r\nX-Test: injected"
+    ], JSON_THROW_ON_ERROR)
+]);
+$imageResponse = $harness->route(
+    '/hook/JSLive/getFillImg',
+    'instance=42&pw=synthetic-secret'
+);
+assertWebhookRouting(
+    $imageResponse['output'] === $imageBytes,
+    'Image MIME normalization must not alter the established response body.'
+);
+$harness->resetCapturedData();
 
 $assetResponse = $harness->route('/hook/JSLive/js/util.js', '');
 assertWebhookRouting(
