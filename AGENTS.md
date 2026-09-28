@@ -31,7 +31,7 @@ JSLive. Projektspezifische Fakten und offene Entscheidungen stehen in
 - `dev` ist der dauerhafte Entwicklungs- und Integrationsbranch. `main`
   enthaelt ausschliesslich kontrolliert freigegebene Produktstaende.
 - Die Library verwendet eine gemeinsame Version im Format
-  `Hauptversion.Nebenstand` fuer alle 13 Module. Git-Tags ergaenzen die
+  `Hauptversion.Nebenstand` fuer alle enthaltenen Module. Git-Tags ergaenzen die
   Patchstelle als `v<Library-Version>.0`.
 - `library.json` stand fuer den einmaligen Bootstrap auf `0.10`. Der
   Metadatenworkflow pflegt auf `dev` anschliessend `version`, `build` und

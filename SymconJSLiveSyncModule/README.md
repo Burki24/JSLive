@@ -9,8 +9,8 @@ ausgewählten Instanzen übertragen.
 
 - IP-Symcon 9.0 oder 9.1 mit PHP 8.5
 - mindestens zwei kompatible Instanzen eines JSLive-Moduls
-- Netzwerkzugriff auf den vom Modul verwendeten JSLive-Moduldienst für die
-  Modulliste
+- eine bereits lokal verfügbare Modultyp-Liste; der historische externe Dienst
+  dafür ist nicht mehr erreichbar
 
 Eine `SymconJSLiveSyncModule`-Instanz anlegen. Unter `SelectType` den zu
 synchronisierenden Modultyp auswählen, unter `InstanceList` die Instanzen
@@ -36,12 +36,17 @@ Die Synchronisation kann Konfigurationen anderer Instanzen überschreiben und
 Parameter verwenden. Ungültige oder gelöschte Instanzen werden im Formular
 markiert und übersprungen.
 
-Für die dynamische Modulliste wird der externe Dienst
-`https://jslive.babenschneider.net/` aufgerufen. Die HTTPS-Anfrage prüft
-Zertifikat und Hostnamen, erlaubt auch bei Weiterleitungen nur HTTPS und
-begrenzt Verbindungs- sowie Gesamtlaufzeit. Transport-, HTTP- und ungültige
-JSON-Antworten werden kontrolliert behandelt. Der negative Fehlerpfad wird
-lokal geprüft; ein realer Integrationstest des externen Dienstes steht aus.
+Für die dynamische Modulliste wird noch der nicht mehr erreichbare externe
+Dienst `https://jslive.babenschneider.net/` aufgerufen. Dadurch kann die
+Modultyp-Auswahl bei neuen oder geänderten Instanzen derzeit nicht aufgebaut
+werden. Eine bereits gültig konfigurierte Synchronisierung arbeitet dagegen
+lokal und benötigt den Dienst während der Laufzeit nicht. Vor einer weiteren
+Verwendung ist zu entscheiden, ob die dauerhafte Master-/Slave-Synchronisierung
+benötigt wird; andernfalls kann das Modul entfallen.
+
+Die HTTPS-Anfrage prüft Zertifikat und Hostnamen, erlaubt auch bei
+Weiterleitungen nur HTTPS und begrenzt Verbindungs- sowie Gesamtlaufzeit.
+Transport-, HTTP- und ungültige JSON-Antworten werden kontrolliert behandelt.
 Die neue Option `Debug` ist standardmäßig ausgeschaltet. Bei Aktivierung
 protokolliert der gemeinsame `DebugHelper` vollständige Synchronisations-
 und Austauschdaten. Bekannte Zugangsdatenfelder werden maskiert; Debug nur in

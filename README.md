@@ -19,7 +19,8 @@ der Modernisierung kompatibel bleiben.
 - Bibliotheksversion: `0.10` (Migrationsstand für die automatische
   Versionierung; noch keine Produktfreigabe), Build 35
 - Nicht vom Bot erzeugte Pushes nach `dev` erhalten automatisch eine gemeinsame
-  neue Library-Version für alle 13 Module; der Workflow erzeugt keine Releases.
+  neue Library-Version für alle enthaltenen Module; der Workflow erzeugt keine
+  Releases.
 - Zielplattform: IP-Symcon 9.0/9.1 und PHP 8.5
 - Lokale Vertrags-, Struktur- und Verhaltenstests sowie StylePHP laufen in der
   GitHub-CI.
@@ -43,11 +44,10 @@ der Modernisierung kompatibel bleiben.
 | [`SymconJSLiveGauge`](SymconJSLiveGauge) | Animierte Messinstrumente |
 | [`SymconJSLiveProgressbar`](SymconJSLiveProgressbar) | Konfigurierbare Fortschrittsanzeigen und SVG-Import |
 | [`SymconJSLiveRadarChart`](SymconJSLiveRadarChart) | Radardiagramme mit Archivdaten |
-| [`SymconJSLiveConfigStore`](SymconJSLiveConfigStore) | Austausch und Import von Modulkonfigurationen über einen externen Dienst |
 | [`SymconJSLiveSyncModule`](SymconJSLiveSyncModule) | Synchronisation ausgewählter Konfigurationsparameter zwischen Instanzen |
 
 Die zehn Visualisierungsmodule verwenden den JSLive-Splitter als übergeordnete
-Instanz. ConfigStore und SyncModule sind eigenständige Sondermodule.
+Instanz. Das SyncModule ist ein eigenständiges Sondermodul.
 
 ## Installation und Verwendung
 
@@ -75,10 +75,14 @@ erkannt werden. Debug daher nur in einer geschützten Testumgebung verwenden.
 ## Bekannte Einschränkungen
 
 - Die Symcon-9-Laufzeitprüfung aller Module ist noch nicht abgeschlossen.
-- ConfigStore und SyncModule prüfen bei externen HTTPS-Aufrufen Zertifikat und
-  Hostnamen, folgen ausschließlich HTTPS-Weiterleitungen und behandeln
-  Transport-, HTTP- und ungültige JSON-Antworten kontrolliert. Ein realer
-  Integrationstest des externen Dienstes steht weiterhin aus.
+- Die eigentliche Synchronisierung des SyncModule arbeitet lokal. Seine
+  Modultyp-Liste wird jedoch noch vom nicht mehr erreichbaren Dienst
+  `jslive.babenschneider.net` geladen; dadurch ist die Auswahl im
+  Konfigurationsformular derzeit nicht nutzbar. Der weitere Bedarf des Moduls
+  wird separat entschieden.
+- Der nicht mehr erreichbare, vollständig von einem externen Dienst abhängige
+  ConfigStore wurde entfernt. Vorhandene ConfigStore-Instanzen müssen vor einem
+  Update auf diesen Stand gelöscht werden.
 - Die Webhook-Authentisierung und sensible Debugausgaben werden in einer
   eigenen Sicherheitsphase überarbeitet. Der Webhook sollte nicht ungeschützt
   öffentlich erreichbar sein.

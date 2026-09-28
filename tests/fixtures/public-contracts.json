@@ -75,15 +75,6 @@
                 "{79D59629-E9C5-44F1-0F34-0FBC5C88F307}"
             ]
         },
-        "SymconJSLiveConfigStore": {
-            "id": "{39EE8DDC-C72A-CEA0-2774-CB86F244A515}",
-            "name": "SymconJSLiveConfigStore",
-            "type": 4,
-            "prefix": "SymconJSLiveConfigStore",
-            "parentRequirements": [],
-            "childRequirements": [],
-            "implemented": []
-        },
         "SymconJSLiveCustom": {
             "id": "{784C3E34-F175-98D1-6022-8ADDFAE45CE5}",
             "name": "SymconJSLiveCustom",
@@ -507,37 +498,6 @@
                 "Create",
                 "LoadOtherConfiguration",
                 "ReceiveData"
-            ]
-        },
-        "SymconJSLiveConfigStore/module.php": {
-            "properties": [
-                "Debug:boolean",
-                "ForumUsername:string",
-                "UserID:string"
-            ],
-            "variables": [],
-            "actions": [],
-            "publicMethods": [
-                "ApplyChanges",
-                "ChangeInstanceList",
-                "CheckPending",
-                "Create",
-                "DeleteConfiguration",
-                "GetConfigurationForm",
-                "GetForumUser",
-                "LoadConfiguration",
-                "OnSelectInstanceChange",
-                "Preview",
-                "ReadUserID",
-                "RequestAccess",
-                "SearchInstanceList",
-                "SearchStoreList",
-                "SelectInstanceType",
-                "SetVote",
-                "StoreListChangeDirection",
-                "StoreListChangeStartBy",
-                "UpdateConfiguration",
-                "UploadConfig"
             ]
         },
         "SymconJSLiveCustom/module.php": {

@@ -13,12 +13,13 @@ Patchstelle, beispielsweise `v0.10.0`.
   Migrationsschritt auf den gemeinsamen Entwicklungsstand `0.10` ueberfuehrt.
 - Changelog, Versionsschema und Release-Ablauf wurden nach dem freigegebenen
   OpenHomeAlarm-Verfahren vereinheitlicht.
-- Alle 13 Module und ihre PHP-8.5-Grenzen wurden ohne Aenderung der
+- Alle verbliebenen Module und ihre PHP-8.5-Grenzen wurden ohne Aenderung der
   oeffentlichen Vertraege schrittweise auf den gemeinsamen StylePHP-Stand
   gebracht.
 - Splitter und Kindmodul-Basisklasse verwenden den zentral synchronisierten
   `DataFlowHelper` fuer ihre bestehenden Datenaustausch-Umschlaege.
-- Splitter, Kindmodul-Basisklasse und alle 13 Module verwenden `DebugHelper`.
+- Splitter, Kindmodul-Basisklasse und alle verbliebenen Module verwenden
+  `DebugHelper`.
   Bei aktiviertem Debug erscheinen vollstaendige Browser-, Konfigurations-
   und Austausch-Payloads einschliesslich freier Texte, Skripte und Medien;
   bekannte Zugangsdatenfelder werden auch in eingebettetem JSON maskiert.
@@ -26,12 +27,20 @@ Patchstelle, beispielsweise `v0.10.0`.
 - Chart und RadarChart geben bei aktiviertem Debug einzelne numerische
   Archivwerte ohne kuenstliche Anzahlbegrenzung aus. Ihre modulspezifischen
   Diagnosen wurden auf `DebugHelper` umgestellt.
-- ConfigStore und SyncModule erhalten jeweils eine eigene Debug-Option im
-  Konfigurationsformular; ihre vollstaendigen Austauschdaten sind damit nur
-  bei bewusst aktivierter Diagnose sichtbar.
-- ConfigStore und SyncModule pruefen fuer ihren externen Dienst TLS-Zertifikat
-  und Hostnamen, begrenzen Weiterleitungen auf HTTPS und behandeln Transport-,
-  HTTP- sowie ungueltige JSON-Antworten kontrolliert.
+- Das SyncModule erhaelt eine eigene Debug-Option im Konfigurationsformular;
+  seine vollstaendigen Austauschdaten sind damit nur bei bewusst aktivierter
+  Diagnose sichtbar.
+- Das SyncModule prueft fuer seinen externen Dienst TLS-Zertifikat und
+  Hostnamen, begrenzt Weiterleitungen auf HTTPS und behandelt Transport-, HTTP-
+  sowie ungueltige JSON-Antworten kontrolliert.
+
+### Removed
+
+- Der vollstaendig vom nicht mehr erreichbaren Dienst
+  `jslive.babenschneider.net` abhaengige `SymconJSLiveConfigStore` wurde aus der
+  Library entfernt. Vorhandene ConfigStore-Instanzen muessen vor einem Update
+  auf diesen Stand geloescht werden. Ein spaeterer lokaler Export und Import
+  fertig konfigurierter Chart-Ansichten wird als getrennte Funktion entwickelt.
 
 ### Added
 

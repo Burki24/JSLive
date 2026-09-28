@@ -20,7 +20,6 @@ if (!class_exists('IPSModule')) {
     }
 }
 
-require_once dirname(__DIR__) . '/SymconJSLiveConfigStore/module.php';
 require_once dirname(__DIR__) . '/SymconJSLiveSyncModule/module.php';
 
 function assertTlsHttpClient(bool $condition, string $message): void
@@ -45,16 +44,14 @@ function invokeRejectedHttpRequest(object $module): array
 
 assertTlsHttpClient(function_exists('curl_init'), 'The PHP cURL extension is required for the HTTP client test.');
 
-foreach ([
-    'ConfigStore' => [
-        'module' => new SymconJSLiveConfigStore(),
-        'source' => dirname(__DIR__) . '/SymconJSLiveConfigStore/module.php'
-    ],
+$fixtures = [
     'SyncModule' => [
         'module' => new SymconJSLiveModuleSync(),
         'source' => dirname(__DIR__) . '/SymconJSLiveSyncModule/module.php'
     ]
-] as $name => $fixture) {
+];
+
+foreach ($fixtures as $name => $fixture) {
     $source = file_get_contents($fixture['source']);
     assertTlsHttpClient($source !== false, $name . ' source must be readable.');
     assertTlsHttpClient(
@@ -83,4 +80,4 @@ foreach ([
     );
 }
 
-fwrite(STDOUT, "ConfigStore and SyncModule TLS HTTP clients verified.\n");
+fwrite(STDOUT, "SyncModule TLS HTTP client verified.\n");

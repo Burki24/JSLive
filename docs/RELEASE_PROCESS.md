@@ -1,8 +1,8 @@
 # Release-Prozess
 
 Dieses Verfahren erstellt Releases aus einem eindeutig geprueften Commit. Es
-gilt gemeinsam fuer alle 13 Module der JSLive-Library; einzelne Module erhalten
-keine voneinander abweichenden Versionen.
+gilt gemeinsam fuer alle enthaltenen Module der JSLive-Library; einzelne Module
+erhalten keine voneinander abweichenden Versionen.
 
 ## Versionsschema
 

@@ -11,7 +11,6 @@ $expectedModules = [
     'SymconJSLiveCalendar'            => 3,
     'SymconJSLiveChart'               => 3,
     'SymconJSLiveColorPicker'         => 3,
-    'SymconJSLiveConfigStore'         => 4,
     'SymconJSLiveCustom'              => 3,
     'SymconJSLiveDateTimePicker'      => 3,
     'SymconJSLiveDoughnutPie'         => 3,
