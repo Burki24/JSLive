@@ -42,8 +42,21 @@ httpResponseIntegrationAssert(
     'JSLive must not emit the obsolete custom HTTP 200 status line.'
 );
 httpResponseIntegrationAssert(
-    substr_count($source, "header('X-Content-Type-Options: nosniff');") === 2,
-    'JSLive must protect both successful webhook response groups against MIME sniffing.'
+    substr_count($source, "header('X-Content-Type-Options: nosniff');") === 3,
+    'JSLive must protect successful webhook response groups against MIME sniffing.'
+);
+httpResponseIntegrationAssert(
+    substr_count($source, "header('Content-Type: application/json');") === 2,
+    'JSLive must declare JSON content types for global and child JSON responses.'
+);
+httpResponseIntegrationAssert(
+    str_contains($source, "'getconfiguration',")
+        && str_contains($source, "'getdata',")
+        && str_contains($source, "'getfeed',")
+        && str_contains($source, "'getfonts',")
+        && str_contains($source, "'getlanguage',")
+        && str_contains($source, "'getupdate'"),
+    'JSLive must classify all established child JSON commands as JSON responses.'
 );
 
 $helper = new HttpResponseIntegrationHarness();

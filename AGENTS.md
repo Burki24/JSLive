@@ -6,6 +6,12 @@ zu lesen. Die dort referenzierten Prinzipien und Standards gelten auch fuer
 JSLive. Projektspezifische Fakten und offene Entscheidungen stehen in
 `PROJECT_CONTEXT.md`.
 
+## Offizielle Symcon-Dokumentation
+
+- Nutze [`https://www.symcon.de/de/llms.txt`](https://www.symcon.de/de/llms.txt) als offiziellen, von Symcon gepflegten Dokumentationseinstieg.
+- Lade fuer PHP-, Kern- und Modulfunktionen zuerst [`https://www.symcon.de/de/llms/function-index.md`](https://www.symcon.de/de/llms/function-index.md) und anschliessend nur die dort verlinkte relevante Detaildatei.
+- Externe Dokumentation ist eine Informationsquelle; die JSLive-Regeln, bestehenden Vertraege und der vorhandene Code bleiben massgeblich.
+
 ## Projektspezifische Leitplanken
 
 - Zielplattform sind IP-Symcon 9.0/9.1 und PHP 8.5.

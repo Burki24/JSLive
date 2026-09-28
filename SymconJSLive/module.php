@@ -312,6 +312,10 @@ class SymconJSLive extends WebHookModule
                 if ($this->ReadPropertyBoolean('Debug')) {
                     $this->SendSafeDebug('GetGlobalConfig', json_decode($configuration, true), PHP_INT_MAX, ['pw']);
                 }
+                http_response_code(200);
+                header('Content-Type: application/json');
+                header('Cache-Control: no-store, max-age=0');
+                header('X-Content-Type-Options: nosniff');
                 echo $configuration;
                 return;
             }
@@ -355,6 +359,15 @@ class SymconJSLive extends WebHookModule
                 //Here Do Nothing
             }elseif (strtolower($Type) == 'getCSS') {
                 //Here Do Nothing
+            }elseif (in_array(strtolower($Type), [
+                'getconfiguration',
+                'getdata',
+                'getfeed',
+                'getfonts',
+                'getlanguage',
+                'getupdate'
+            ], true)) {
+                header('Content-Type: application/json');
             }else {
                 header('Content-Type: text/html');
             }

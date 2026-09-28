@@ -57,6 +57,9 @@ Patchstelle, beispielsweise `v0.10.0`.
   pruefen ETags und `If-Modified-Since` sicher, akzeptieren quotierte ETags und
   liefern bei unveraendertem Inhalt HTTP 304 ohne Response-Body. Fehlende
   Conditional-Request-Header loesen unter PHP 8.5 keinen Fehler mehr aus.
+- `getGlobalConfig` sowie alle etablierten JSON-Kindbefehle deklarieren
+  `application/json`. Die globale Konfigurationsantwort wird explizit nicht
+  gecacht und wie die uebrigen Erfolgsantworten gegen MIME-Sniffing geschuetzt.
 
 ### Removed
 

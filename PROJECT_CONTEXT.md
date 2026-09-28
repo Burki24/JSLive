@@ -147,7 +147,9 @@ Vorhandene lokale Pruefungen:
   Gleichheitszeichen, exakte Kennwortvergleiche und JavaScript-sichere
   `init.js`-Parameter einschliesslich ungueltiger UTF-8-Eingaben sowie die
   Statuscodes der Plain-Text-Abbruchpfade und Conditional Requests fuer
-  statische Assets sowie gecachte Modulantworten ab;
+  statische Assets sowie gecachte Modulantworten ab. Der Test charakterisiert
+  ausserdem die explizite JSON-Kennzeichnung der direkten globalen
+  Konfiguration und aller etablierten JSON-Kindbefehle;
 - `tests/configuration-transfer.php`: vollstaendiger und formulargefilterter
   Export, erfolgreicher Import bekannter Properties mit Erhalt ausgelassener
   Werte sowie nebenwirkungsfreie Ablehnung leerer, fehlerhafter,
@@ -319,6 +321,10 @@ Bereits abgesicherte Sicherheitsgrenzen:
 - Statische Assets und gecachte Modulantworten pruefen ETag und
   `If-Modified-Since` ohne unsichere Server-Arrayzugriffe, akzeptieren quotierte
   ETags und beenden unveraenderte Antworten mit HTTP 304 ohne Body.
+- `getGlobalConfig`, `getConfiguration`, `getData`, `getFeed`, `getFonts`,
+  `getLanguage` und `getUpdate` sind als JSON-Antworten charakterisiert und
+  senden `application/json`. Die globale Konfiguration wird mit `no-store` und
+  `nosniff` ausgeliefert.
 
 Prioritaet hoch:
 
@@ -531,9 +537,12 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    `nosniff` sind getestet).
 6. Conditional Requests fuer statische Assets und gecachte Modulantworten
    haerten (abgeschlossen; ETag-, Datums- und Body-Verhalten sind getestet).
-7. Erfolgreiche JSON-, HTML-, SVG- und Binaerantworten charakterisieren und
-   ihre HTTP-Header schrittweise haerten.
-8. CORS-, Authentisierungs- und Schreibberechtigungsmodell dokumentieren und
+7. Erfolgreiche JSON-Antworten charakterisieren und ihre Header haerten
+   (abgeschlossen; globale Konfiguration und alle etablierten JSON-Kindbefehle
+   sind erfasst).
+8. Erfolgreiche HTML-, CSS-, JavaScript-, SVG- und Binaerantworten
+   charakterisieren und ihre HTTP-Header schrittweise haerten.
+9. CORS-, Authentisierungs- und Schreibberechtigungsmodell dokumentieren und
    testen.
 
 ### Phase 2 - Symcon 9.0 / PHP 8.5 stabilisieren
