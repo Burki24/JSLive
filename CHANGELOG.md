@@ -21,6 +21,8 @@ Patchstelle, beispielsweise `v0.10.0`.
 - Nachrichten vom Splitter an Kindmodule tragen die Zielinstanz zusaetzlich als
   eindeutiges aeusseres Routingfeld `InstanceID`. Der Empfangsfilter wertet
   dieses Feld aus, statt die Instanz-ID im maskierten inneren `Buffer` zu suchen.
+- Die HTML-Platzhalterersetzung konvertiert numerische Instanz-IDs unter PHP 8.5
+  explizit in Strings und bricht dadurch gecachte Chart-Ausgaben nicht mehr ab.
 - Splitter, Kindmodul-Basisklasse und alle verbliebenen Module verwenden
   `DebugHelper`.
   Bei aktiviertem Debug erscheinen vollstaendige Browser-, Konfigurations-

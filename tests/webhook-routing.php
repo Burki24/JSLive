@@ -189,6 +189,24 @@ function decodeWebhookMessage(string $json): array
 
 $harness = new WebhookRoutingHarness();
 
+$updateHtmlResponse = json_decode(
+    (string) $harness->ForwardData(json_encode([
+        'Buffer' => json_encode([
+            'Type'       => 'UpdateHtml',
+            'InstanceID' => 49951,
+            'Html'       => 'Instance {INSTANCE}',
+            'ViewPort'   => false
+        ], JSON_THROW_ON_ERROR)
+    ], JSON_THROW_ON_ERROR)),
+    true,
+    512,
+    JSON_THROW_ON_ERROR
+);
+assertWebhookRouting(
+    ($updateHtmlResponse['output'] ?? null) === 'Instance 49951',
+    'Numeric instance IDs must be converted safely when replacing HTML placeholders.'
+);
+
 foreach (['image/gif', 'image/jpeg', 'image/png', 'image/svg+xml'] as $imageMimeType) {
     assertWebhookRouting(
         $harness->resolveImageMimeTypeForTest($imageMimeType) === $imageMimeType,

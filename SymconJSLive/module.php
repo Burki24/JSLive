@@ -621,7 +621,7 @@ class SymconJSLive extends WebHookModule
         $htmlData = str_replace('{GLOBAL}', $this->json_encode_advanced($this->GetConfigurationData()), $htmlData);
         $htmlData = str_replace('{ADDRESS}', $address, $htmlData);
         $htmlData = str_replace('{PASSWORD}', $this->ReadPropertyString('Password'), $htmlData);
-        $htmlData = str_replace('{INSTANCE}', $IntID, $htmlData);
+        $htmlData = str_replace('{INSTANCE}', (string) $IntID, $htmlData);
 
         if ($viewport) {
             $htmlData = str_replace('{VIEWPORT}', '<meta name="viewport" content="' . $this->ReadPropertyString('viewport_content') . '">', $htmlData);

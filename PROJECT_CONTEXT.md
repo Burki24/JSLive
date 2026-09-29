@@ -150,7 +150,8 @@ Vorhandene lokale Pruefungen:
   Kennzeichnung der uebrigen Antworttypen sowie den abgesicherten
   Downloadnamen des Konfigurationsexports. Ausserdem sind die
   Authentisierungsausnahmen, der kennwortgeschuetzte GET-Schreibpfad und das
-  Verhalten bei leerem Splitter-Kennwort charakterisiert;
+  Verhalten bei leerem Splitter-Kennwort sowie die PHP-8.5-sichere
+  Platzhalterersetzung numerischer Instanz-IDs charakterisiert;
 - `tests/webhook-security-model.php`: exakte Bestandsaufnahme aller vom
   Browser erreichbaren Kindmodulbefehle, der Module mit `setData` sowie der
   derzeit fehlenden Calendar-Schreibimplementierung;
