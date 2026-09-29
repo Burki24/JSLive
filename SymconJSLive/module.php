@@ -52,7 +52,10 @@ class SymconJSLive extends WebHookModule
         $sendData = ['cmd' => 'UpdateCache', 'instance' => 0];
         $this->SendDataToChildren($this->EncodeDataFlowMessage(
             '{79D59629-E9C5-44F1-0F34-0FBC5C88F307}',
-            ['Buffer' => json_encode($sendData, JSON_THROW_ON_ERROR)]
+            [
+                'InstanceID' => '0',
+                'Buffer'     => json_encode($sendData, JSON_THROW_ON_ERROR)
+            ]
         ));
     }
 
@@ -333,7 +336,10 @@ class SymconJSLive extends WebHookModule
             $sendData = ['cmd' => $Type, 'instance' => $queryData['instance'], 'queryData' => $queryData];
             $contend = $this->SendDataToChildren($this->EncodeDataFlowMessage(
                 '{79D59629-E9C5-44F1-0F34-0FBC5C88F307}',
-                ['Buffer' => json_encode($sendData, JSON_THROW_ON_ERROR)]
+                [
+                    'InstanceID' => $queryData['instance'],
+                    'Buffer'     => json_encode($sendData, JSON_THROW_ON_ERROR)
+                ]
             ));
 
             if (!is_array($contend) || count($contend) == 0) {

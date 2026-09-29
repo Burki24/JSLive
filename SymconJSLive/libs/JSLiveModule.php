@@ -428,12 +428,13 @@ class JSLiveModule extends IPSModule
         $this->RegisterPropertyBoolean('ShowDefault', true);
         $this->RegisterPropertyString('LastUploadedConfig', '');
     }
+
     public function ApplyChanges()
     {
         //Never delete this line!
         parent::ApplyChanges();
 
-        $this->SetReceiveDataFilter('.*instance\\\":[ \\\"]*(' . $this->InstanceID . '|0)[\\\”]*.*');
+        $this->SetReceiveDataFilter($this->BuildReceiveDataFilter());
 
         //updateindetnlist
         $this->UpdateIdentList();
@@ -455,6 +456,10 @@ class JSLiveModule extends IPSModule
         $file_arr = file(IPS_GetLogDir() . 'logfile.log');
 
         print_r($file_arr);
+    }
+    protected function BuildReceiveDataFilter(): string
+    {
+        return '.*"InstanceID":"(' . $this->InstanceID . '|0)".*';
     }
 
     protected function GetFonts()

@@ -18,6 +18,9 @@ Patchstelle, beispielsweise `v0.10.0`.
   gebracht.
 - Splitter und Kindmodul-Basisklasse verwenden den zentral synchronisierten
   `DataFlowHelper` fuer ihre bestehenden Datenaustausch-Umschlaege.
+- Nachrichten vom Splitter an Kindmodule tragen die Zielinstanz zusaetzlich als
+  eindeutiges aeusseres Routingfeld `InstanceID`. Der Empfangsfilter wertet
+  dieses Feld aus, statt die Instanz-ID im maskierten inneren `Buffer` zu suchen.
 - Splitter, Kindmodul-Basisklasse und alle verbliebenen Module verwenden
   `DebugHelper`.
   Bei aktiviertem Debug erscheinen vollstaendige Browser-, Konfigurations-

@@ -182,6 +182,9 @@ Vorhandene lokale Pruefungen:
   Custom-Modul, ohne schreibende Aktionen auszufuehren;
 - `tests/data-flow-integration.php`: statische Charakterisierung der
   DataFlowHelper-Anbindung;
+- `tests/child-routing-filter.php`: reale Data-Flow-Umschlaege fuer die eigene
+  Zielinstanz und Broadcast `0` sowie Negativfaelle fuer fremde, aehnliche und
+  nur im inneren `Buffer` passende Instanz-IDs;
 - `tests/helper_integrity.py`: Versionen, Hashes und Vollstaendigkeit der
   vendorten Helper;
 - PHP-Syntaxcheck aller PHP-Dateien.
