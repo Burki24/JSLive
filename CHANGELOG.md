@@ -30,6 +30,9 @@ Patchstelle, beispielsweise `v0.10.0`.
   numerischen Querywerte vor strikt typisierten PHP-8.5-Aufrufen explizit in
   Ganzzahlen. Direkte Modulansichten und Zeitaktionen brechen dadurch nicht
   mehr mit einem `TypeError` ab.
+- Der DateTimePicker fuehrt beim Schreiben eine konfigurierte benutzerdefinierte
+  Variablenaktion aus und faellt nur ohne Custom- oder Profilaktion auf das
+  direkte Setzen des Zeitwerts zurueck.
 - Splitter, Kindmodul-Basisklasse und alle verbliebenen Module verwenden
   `DebugHelper`.
   Bei aktiviertem Debug erscheinen vollstaendige Browser-, Konfigurations-

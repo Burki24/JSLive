@@ -42,11 +42,19 @@ if (!class_exists('IPSModule')) {
 
 /** @var list<array{id: int, value: mixed}> */
 $writes = [];
+/** @var list<array{id: int, value: mixed}> */
+$directWrites = [];
 
 function RequestAction(int $id, mixed $value): void
 {
     global $writes;
     $writes[] = compact('id', 'value');
+}
+
+function SetValue(int $id, mixed $value): void
+{
+    global $directWrites;
+    $directWrites[] = compact('id', 'value');
 }
 
 function IPS_VariableExists(int $id): bool
@@ -56,7 +64,7 @@ function IPS_VariableExists(int $id): bool
 
 function IPS_GetVariable(int $id): array
 {
-    return ['VariableAction' => 1];
+    return ['VariableAction' => 0, 'VariableCustomAction' => 1];
 }
 
 require_once dirname(__DIR__) . '/SymconJSLiveColorPicker/module.php';
@@ -86,8 +94,8 @@ $result = $dateTime->ReceiveData(debugRequest([
     'cmd'       => 'setData',
     'queryData' => ['var' => '42', 'val' => (string) $timestamp]
 ]));
-if ($result !== 'OK' || $writes[1] !== ['id' => 42, 'value' => $timestamp]) {
-    throw new RuntimeException('DateTimePicker changed its successful write contract.');
+if ($result !== 'OK' || ($writes[1] ?? null) !== ['id' => 42, 'value' => $timestamp] || $directWrites !== []) {
+    throw new RuntimeException('DateTimePicker must use a configured custom variable action.');
 }
 if (str_contains(json_encode($dateTime->debug, JSON_THROW_ON_ERROR), (string) $timestamp)) {
     throw new RuntimeException('DateTimePicker logged the browser supplied timestamp.');

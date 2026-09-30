@@ -163,7 +163,9 @@ class SymconJSLiveDateTimePicker extends JSLiveModule
 
         $this->SendSafeDebug('SetData', 'Update Variable');
 
-        if (IPS_GetVariable($variableID)['VariableAction'] > 0) {
+        $variable = IPS_GetVariable($variableID);
+        $actionID = $variable['VariableCustomAction'] ?: $variable['VariableAction'];
+        if ($actionID > 0) {
             RequestAction($variableID, $timeVal->getTimestamp());
         }else {
             SetValue($variableID, $timeVal->getTimestamp());
