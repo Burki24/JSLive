@@ -9,6 +9,7 @@ if (!class_exists('IPSModule')) {
         public array $debug = [];
 
         public bool $debugEnabled = true;
+        protected int $InstanceID = 42;
 
         public function ReadPropertyInteger(string $name): int
         {
@@ -61,6 +62,16 @@ function IPS_GetInstanceListByModuleID(string $moduleID): array
     return [99];
 }
 
+function IPS_GetConfiguration(int $instanceID): string
+{
+    return json_encode(['title_text' => 'Synthetic chart'], JSON_THROW_ON_ERROR);
+}
+
+function IPS_GetInstance(int $instanceID): array
+{
+    return ['ModuleInfo' => ['ModuleID' => '{SYNTHETIC-CHART-MODULE}']];
+}
+
 function AC_GetAggregationType(int $archiveID, int $variableID): int
 {
     return 0;
@@ -79,6 +90,22 @@ function debugRequest(array $buffer): string
 }
 
 $module = new SymconJSLiveChart();
+$configuration = json_decode(
+    $module->ReceiveData(debugRequest(['cmd' => 'getConfiguration', 'queryData' => []])),
+    true,
+    512,
+    JSON_THROW_ON_ERROR
+);
+$language = json_decode(
+    $module->ReceiveData(debugRequest(['cmd' => 'getLanguage', 'queryData' => []])),
+    true,
+    512,
+    JSON_THROW_ON_ERROR
+);
+if ($language !== $configuration) {
+    throw new RuntimeException('Chart language route must retain the configuration response expected by its loader.');
+}
+
 $result = json_decode($module->ReceiveData(debugRequest([
     'cmd' => 'getData', 'queryData' => ['var' => 42, 'password' => 'synthetic-secret']
 ])), true, 512, JSON_THROW_ON_ERROR);

@@ -54,6 +54,9 @@ Patchstelle, beispielsweise `v0.10.0`.
 - Chart und RadarChart geben bei aktiviertem Debug einzelne numerische
   Archivwerte ohne kuenstliche Anzahlbegrenzung aus. Ihre modulspezifischen
   Diagnosen wurden auf `DebugHelper` umgestellt.
+- Die Chart-Kompatibilitaetsroute `getLanguage` liefert wieder die vom
+  bestehenden Frontend-Loader erwartete Konfigurationsstruktur, ohne unter
+  PHP 8.5 auf nicht initialisierte Variablen zuzugreifen.
 
 ### Security
 

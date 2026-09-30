@@ -524,10 +524,9 @@ class SymconJSLiveChart extends JSLiveModule
 
         switch ($buffer['cmd']) {
             case 'getConfiguration':
+            case 'getLanguage':
                 $conf = json_decode(IPS_GetConfiguration($this->InstanceID), true);
                 $mid = IPS_GetInstance($this->InstanceID)['ModuleInfo']['ModuleID'];
-                return json_encode(['Config' => $conf, 'ModuleID' => $mid]);
-            case 'getLanguage':
                 return json_encode(['Config' => $conf, 'ModuleID' => $mid]);
             case 'getFonts':
                 return json_encode($this->GetFonts());
