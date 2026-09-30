@@ -8,7 +8,6 @@ $errors = [];
 $expectedModules = [
     'SymconJSLive'                    => 2,
     'SymconJSLiveAdvTextfield'        => 3,
-    'SymconJSLiveCalendar'            => 3,
     'SymconJSLiveChart'               => 3,
     'SymconJSLiveColorPicker'         => 3,
     'SymconJSLiveCustom'              => 3,
@@ -21,11 +20,13 @@ $expectedModules = [
 
 $retiredModuleIds = [
     '{39EE8DDC-C72A-CEA0-2774-CB86F244A515}' => 'SymconJSLiveConfigStore',
-    '{6C44628E-B623-7B92-D61D-0B3EAF4D6345}' => 'SymconJSLiveSyncModule'
+    '{6C44628E-B623-7B92-D61D-0B3EAF4D6345}' => 'SymconJSLiveSyncModule',
+    '{46B41C3B-DDAE-BA35-2A1E-6CF4B7F9BF7A}' => 'SymconJSLiveCalendar'
 ];
 $retiredPrefixes = [
     'SymconJSLiveConfigStore',
-    'SymconJSLiveModuleSync'
+    'SymconJSLiveModuleSync',
+    'SymconJSLiveCalendar'
 ];
 
 $readmePath = $root . '/README.md';
@@ -46,7 +47,8 @@ foreach ([
     'docs/STRICT_MODULE_MIGRATION.md',
     'docs/SYCON_RUNTIME_MATRIX.md',
     'docs/WEBHOOK_SECURITY_MODEL.md',
-    'docs/adr/0002-remove-sync-module.md'
+    'docs/adr/0002-remove-sync-module.md',
+    'docs/adr/0003-remove-calendar-module.md'
 ] as $requiredDocumentation) {
     if (!is_file($root . '/' . $requiredDocumentation)) {
         $errors[] = 'Missing required project documentation: ' . $requiredDocumentation;

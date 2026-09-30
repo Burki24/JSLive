@@ -40,15 +40,6 @@
             "ReceiveData": "public function ReceiveData(string $JSONString): string",
             "LoadOtherConfiguration": "public function LoadOtherConfiguration(int $id): mixed"
         },
-        "SymconJSLiveCalendar/module.php": {
-            "Create": "public function Create(): void",
-            "ApplyChanges": "public function ApplyChanges(): void",
-            "GetConfigurationForm": "public function GetConfigurationForm(): string",
-            "ReceiveData": "public function ReceiveData(string $JSONString): string",
-            "LoadOtherConfiguration": "public function LoadOtherConfiguration(int $id): mixed",
-            "GetCSSLink": "public function GetCSSLink(): string",
-            "GetDefaultCSSLink": "public function GetDefaultCSSLink(): string"
-        },
         "SymconJSLiveChart/module.php": {
             "Create": "public function Create(): void",
             "ApplyChanges": "public function ApplyChanges(): void",

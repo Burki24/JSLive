@@ -10,7 +10,6 @@ if (!class_exists('IPSModule')) {
 
 $moduleClasses = [
     'SymconJSLiveAdvTextfield'  => 'SymconJSLiveAdvTextfield/module.php',
-    'SymconJSLiveCalendar'      => 'SymconJSLiveCalendar/module.php',
     'SymconJSLiveChart'         => 'SymconJSLiveChart/module.php',
     'SymconJSLiveColorPicker'   => 'SymconJSLiveColorPicker/module.php',
     'SymconJSLiveCustom'        => 'SymconJSLiveCustom/module.php',
@@ -23,7 +22,6 @@ $moduleClasses = [
 
 $expectedCommands = [
     'SymconJSLiveAdvTextfield'   => ['exportConfiguration', 'getContend', 'getData', 'setData'],
-    'SymconJSLiveCalendar'       => ['exportConfiguration', 'getContend', 'getData', 'getFeed', 'getCSS', 'setData', 'getICS'],
     'SymconJSLiveChart'          => ['getConfiguration', 'getLanguage', 'getFonts', 'exportConfiguration', 'getContend', 'getUpdate', 'getData'],
     'SymconJSLiveColorPicker'    => ['exportConfiguration', 'getContend', 'getData', 'setData'],
     'SymconJSLiveCustom'         => ['exportConfiguration', 'getContend', 'getData', 'setData', 'loadFile'],
@@ -66,17 +64,11 @@ $writeModules = array_keys(array_filter(
 ));
 if ($writeModules !== [
     'SymconJSLiveAdvTextfield',
-    'SymconJSLiveCalendar',
     'SymconJSLiveColorPicker',
     'SymconJSLiveCustom',
     'SymconJSLiveDateTimePicker'
 ]) {
     throw new RuntimeException('The characterized setData module inventory changed.');
-}
-
-$calendarSource = file_get_contents($root . '/SymconJSLiveCalendar/module.php');
-if ($calendarSource === false || preg_match('/function\s+SetData\s*\(/', $calendarSource) === 1) {
-    throw new RuntimeException('Calendar setData implementation changed; update the documented security model.');
 }
 
 fwrite(STDOUT, "JSLive webhook command and write model verified.\n");

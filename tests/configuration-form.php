@@ -63,7 +63,7 @@ $GLOBALS['jsliveConfigurationFormState'] = [
     'updates'    => [],
     'instances'  => [
         42 => [
-            'ModuleInfo' => ['ModuleName' => 'SymconJSLiveCalendar']
+            'ModuleInfo' => ['ModuleName' => 'SymconJSLiveChart']
         ]
     ]
 ];
@@ -75,14 +75,7 @@ if (!function_exists('IPS_GetInstance')) {
     }
 }
 
-if (!function_exists('IPS_GetInstanceListByModuleID')) {
-    function IPS_GetInstanceListByModuleID(string $moduleID): array
-    {
-        return [];
-    }
-}
-
-require_once dirname(__DIR__) . '/SymconJSLiveCalendar/module.php';
+require_once dirname(__DIR__) . '/SymconJSLiveChart/module.php';
 
 /**
  * @throws RuntimeException When the condition is not met.
@@ -129,10 +122,7 @@ function flattenConfigurationFormItems(array $items): array
     return $flattened;
 }
 
-/**
- * @param array<string, mixed> $form
- * @return list<array<string, mixed>>
- */
+/** @param array<string, mixed> $form */
 function getConfigurationFormItems(array $form): array
 {
     return array_merge(
@@ -154,34 +144,36 @@ function findConfigurationFormItem(array $form, string $name): array
 }
 
 /** @param array<string, mixed> $form */
-function findHeaderDependentRow(array $form): array
+function findTitleDependentRow(array $form): array
 {
     foreach (getConfigurationFormItems($form) as $item) {
-        if (($item['requireItem'] ?? null) !== 'header_display') {
+        if (($item['requireItem'] ?? null) !== 'title_display') {
             continue;
         }
 
         foreach (flattenConfigurationFormItems($item['items'] ?? []) as $child) {
-            if (($child['name'] ?? null) === 'header_backgroundColor') {
+            if (($child['name'] ?? null) === 'title_fontSize') {
                 return $item;
             }
         }
     }
 
-    throw new RuntimeException('The synthetic header-dependent row was not found.');
+    throw new RuntimeException('The title-dependent row was not found.');
 }
 
-/** @return array{module: SymconJSLiveCalendar, form: array<string, mixed>} */
-function renderCalendarConfigurationForm(int $viewLevel, bool $headerDisplay): array
+/** @return array{module: SymconJSLiveChart, form: array<string, mixed>} */
+function renderChartConfigurationForm(int $viewLevel, bool $titleDisplay): array
 {
     $GLOBALS['jsliveConfigurationFormState']['properties'][42] = [
-        'Debug'          => false,
-        'ViewLevel'      => $viewLevel,
-        'header_display' => $headerDisplay,
-        'customViews'    => '[]'
+        'Debug'               => false,
+        'ViewLevel'           => $viewLevel,
+        'title_display'       => $titleDisplay,
+        'Axes'                => '[]',
+        'Datasets'            => '[]',
+        'xaxes_override_list' => '[]'
     ];
 
-    $module = new SymconJSLiveCalendar(42);
+    $module = new SymconJSLiveChart(42);
     $form = json_decode($module->GetConfigurationForm(), true, 512, JSON_THROW_ON_ERROR);
     assertConfigurationForm(
         is_array($form) && is_array($form['elements'] ?? null) && is_array($form['actions'] ?? null),
@@ -203,92 +195,69 @@ function latestConfigurationFormUpdate(string $name, string $property): mixed
     throw new RuntimeException('Configuration form update not found: ' . $name . '.' . $property);
 }
 
-$basic = renderCalendarConfigurationForm(0, false);
-$disabledExpertOption = findConfigurationFormItem($basic['form'], 'title_fontSize_unitType');
+$basic = renderChartConfigurationForm(0, false);
 assertConfigurationForm(
-    ($disabledExpertOption['visible'] ?? null) === true && ($disabledExpertOption['enabled'] ?? null) === false,
-    'A higher-level field marked viewdisable must remain visible and become disabled.'
+    (findConfigurationFormItem($basic['form'], 'xaxes_overrideDynamic')['visible'] ?? null) === false,
+    'An expert field must be hidden at the basic view level.'
 );
-$advancedOnly = findConfigurationFormItem($basic['form'], 'buttons_borderWidth');
+$hiddenTitleRow = findTitleDependentRow($basic['form']);
 assertConfigurationForm(
-    ($advancedOnly['visible'] ?? null) === false,
-    'A viewlevelexactly field must be hidden outside its configured level.'
-);
-$hiddenHeaderRow = findHeaderDependentRow($basic['form']);
-assertConfigurationForm(
-    ($hiddenHeaderRow['visible'] ?? null) === false,
+    ($hiddenTitleRow['visible'] ?? null) === false,
     'A requireItem field must be hidden while its controlling property is false.'
 );
 assertConfigurationForm(
-    is_string($hiddenHeaderRow['name'] ?? null)
-        && ($hiddenHeaderRow['name'] ?? '') !== ''
-        && ($hiddenHeaderRow['disableExport'] ?? null) === true,
+    is_string($hiddenTitleRow['name'] ?? null)
+        && ($hiddenTitleRow['name'] ?? '') !== ''
+        && ($hiddenTitleRow['disableExport'] ?? null) === true,
     'An unnamed dynamic field must receive a non-exported technical name.'
 );
-$headerController = findConfigurationFormItem($basic['form'], 'header_display');
+$titleController = findConfigurationFormItem($basic['form'], 'title_display');
 assertConfigurationForm(
-    ($headerController['onChange'] ?? null)
-        === "SymconJSLiveCalendar_ReloadConfigurationForm(\$id, 'header_display', (string) \$header_display);",
+    ($titleController['onChange'] ?? null)
+        === "SymconJSLiveChart_ReloadConfigurationForm(\$id, 'title_display', (string) \$title_display);",
     'A requireItem controller must reload its dependent fields.'
 );
 
-$advanced = renderCalendarConfigurationForm(1, true);
-$advancedOnly = findConfigurationFormItem($advanced['form'], 'buttons_borderWidth');
+$advanced = renderChartConfigurationForm(1, true);
 assertConfigurationForm(
-    ($advancedOnly['visible'] ?? null) === true && ($advancedOnly['caption'] ?? null) === 'Width (Advance)',
-    'An advanced field must be visible and labelled at view level 1.'
-);
-assertConfigurationForm(
-    (findConfigurationFormItem($advanced['form'], 'buttons_borderWidth_Expert')['visible'] ?? null) === false,
-    'An expert-only field must remain hidden at view level 1.'
-);
-assertConfigurationForm(
-    (findHeaderDependentRow($advanced['form'])['visible'] ?? null) === true,
+    (findTitleDependentRow($advanced['form'])['visible'] ?? null) === true,
     'A requireItem field must remain visible while its controlling property is true.'
 );
-
-$expert = renderCalendarConfigurationForm(2, true);
-$expertOnly = findConfigurationFormItem($expert['form'], 'buttons_borderWidth_Expert');
 assertConfigurationForm(
-    ($expertOnly['visible'] ?? null) === true && ($expertOnly['caption'] ?? null) === 'Width (CSS) (Expert)',
-    'An expert-only field must be visible and labelled at view level 2.'
-);
-assertConfigurationForm(
-    (findConfigurationFormItem($expert['form'], 'buttons_borderWidth')['visible'] ?? null) === false,
-    'An exact level-1 field must be hidden at view level 2.'
+    (findConfigurationFormItem($advanced['form'], 'xaxes_overrideDynamic')['visible'] ?? null) === false,
+    'An expert field must remain hidden at view level 1.'
 );
 
-$reload = renderCalendarConfigurationForm(0, false);
-$reloadHeaderRow = findHeaderDependentRow($reload['form']);
+$expert = renderChartConfigurationForm(2, true);
+$expertOnly = findConfigurationFormItem($expert['form'], 'xaxes_overrideDynamic');
+assertConfigurationForm(
+    ($expertOnly['visible'] ?? null) === true
+        && ($expertOnly['caption'] ?? null) === 'override dynamic scaling (Expert)',
+    'An expert field must be visible and labelled at view level 2.'
+);
+
+$reload = renderChartConfigurationForm(0, false);
+$reloadTitleRow = findTitleDependentRow($reload['form']);
 $GLOBALS['jsliveConfigurationFormState']['updates'] = [];
-$reload['module']->ReloadConfigurationForm('header_display', 'true');
+$reload['module']->ReloadConfigurationForm('title_display', 'true');
 assertConfigurationForm(
-    latestConfigurationFormUpdate($reloadHeaderRow['name'], 'visible') === true,
+    latestConfigurationFormUpdate($reloadTitleRow['name'], 'visible') === true,
     'ReloadConfigurationForm must reveal requireItem fields when their controller is enabled.'
 );
 
 $GLOBALS['jsliveConfigurationFormState']['updates'] = [];
-$reload['module']->ReloadConfigurationForm('header_display', 'false');
+$reload['module']->ReloadConfigurationForm('title_display', 'false');
 assertConfigurationForm(
-    latestConfigurationFormUpdate($reloadHeaderRow['name'], 'visible') === false,
+    latestConfigurationFormUpdate($reloadTitleRow['name'], 'visible') === false,
     'ReloadConfigurationForm must hide requireItem fields when their controller is disabled.'
 );
 
 $GLOBALS['jsliveConfigurationFormState']['updates'] = [];
-$reload['module']->ReloadConfigurationForm('ViewLevel', '1');
+$reload['module']->ReloadConfigurationForm('ViewLevel', '2');
 assertConfigurationForm(
-    latestConfigurationFormUpdate('buttons_borderWidth', 'visible') === true
-        && latestConfigurationFormUpdate('buttons_borderWidth', 'enabled') === true,
+    latestConfigurationFormUpdate('xaxes_overrideDynamic', 'visible') === true
+        && latestConfigurationFormUpdate('xaxes_overrideDynamic', 'enabled') === true,
     'ReloadConfigurationForm must reveal and enable fields matching the selected view level.'
-);
-assertConfigurationForm(
-    latestConfigurationFormUpdate('buttons_borderWidth_Expert', 'visible') === false,
-    'ReloadConfigurationForm must hide exact-level fields that do not match the selected level.'
-);
-assertConfigurationForm(
-    latestConfigurationFormUpdate('title_fontSize_unitType', 'visible') === true
-        && latestConfigurationFormUpdate('title_fontSize_unitType', 'enabled') === false,
-    'ReloadConfigurationForm must disable higher-level viewdisable fields instead of hiding them.'
 );
 
 echo "JSLive configuration form contracts verified.\n";

@@ -518,46 +518,10 @@ assertWebhookRouting(
 );
 
 $harness->resetCapturedData();
-$harness->setChildResponses([
-    json_encode(
-        [
-            'InstanceID'  => '99',
-            'Contend'     => '.other { color: red; }',
-            'lastModify'  => 'Mon, 01 Jan 2024 00:00:00 GMT',
-            'EnableCache' => false
-        ],
-        JSON_THROW_ON_ERROR
-    )
-]);
-$unmatchedCssResponse = $harness->route('/hook/JSLive/getCSS', 'instance=42');
+$retiredCssResponse = $harness->route('/hook/JSLive/getCSS', 'instance=42');
 assertWebhookRouting(
-    $unmatchedCssResponse['output'] === 'Instance Not in List!'
-        && $harness->responseStatusCodes === [404],
-    'An unmatched CSS instance must return its existing message with HTTP 404.'
-);
-
-$harness->resetCapturedData();
-$harness->setChildResponses([
-    json_encode(
-        [
-            'InstanceID'  => '42',
-            'Contend'     => '.fixture { color: green; }',
-            'lastModify'  => 'Mon, 01 Jan 2024 00:00:00 GMT',
-            'EnableCache' => false
-        ],
-        JSON_THROW_ON_ERROR
-    )
-]);
-$publicCssResponse = $harness->route('/hook/JSLive/getCSS', 'instance=42');
-assertWebhookRouting(
-    $publicCssResponse['output'] === '.fixture { color: green; }'
-        && count($harness->childMessages) === 1,
-    'getCSS must remain the only password-exempt dynamic child route.'
-);
-$publicCssMessage = decodeWebhookMessage($harness->childMessages[0]);
-assertWebhookRouting(
-    ($publicCssMessage['inner']['cmd'] ?? null) === 'getCSS',
-    'The public CSS route changed its child command.'
+    $retiredCssResponse['output'] === '' && $harness->childMessages === [],
+    'The retired Calendar CSS route must no longer bypass dynamic-route authentication.'
 );
 
 $harness->resetCapturedData();

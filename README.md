@@ -36,7 +36,6 @@ der Modernisierung kompatibel bleiben.
 | --- | --- |
 | [`SymconJSLive`](SymconJSLive) | Splitter, Webhook `/hook/JSLive`, gemeinsame Links, Konfiguration und Assets |
 | [`SymconJSLiveAdvTextfield`](SymconJSLiveAdvTextfield) | Erweitertes Textfeld mit HTML-/Skript-Template |
-| [`SymconJSLiveCalendar`](SymconJSLiveCalendar) | Kalenderdarstellung und ICS-Quellen |
 | [`SymconJSLiveChart`](SymconJSLiveChart) | Linien- und Balkendiagramme mit Archivdaten |
 | [`SymconJSLiveColorPicker`](SymconJSLiveColorPicker) | Farbauswahl und Rückschreiben von Werten |
 | [`SymconJSLiveCustom`](SymconJSLiveCustom) | Benutzerdefinierte HTML-/JavaScript-Ausgaben und Objektaktionen |
@@ -46,7 +45,7 @@ der Modernisierung kompatibel bleiben.
 | [`SymconJSLiveProgressbar`](SymconJSLiveProgressbar) | Konfigurierbare Fortschrittsanzeigen und SVG-Import |
 | [`SymconJSLiveRadarChart`](SymconJSLiveRadarChart) | Radardiagramme mit Archivdaten |
 
-Die zehn Visualisierungsmodule verwenden den JSLive-Splitter als übergeordnete
+Die neun Visualisierungsmodule verwenden den JSLive-Splitter als übergeordnete
 Instanz.
 
 ## Installation und Verwendung
@@ -83,13 +82,15 @@ erkannt werden. Debug daher nur in einer geschützten Testumgebung verwenden.
   SyncModule-Instanzen müssen vor einem Update auf diesen Stand gelöscht
   werden. Seine Modul-ID wird nicht wiederverwendet; eine spätere lokale
   Verteilung von Konfigurationen wird als neue, getrennte Funktion entwickelt.
+- Das Calendar-Modul wurde entfernt. Vorhandene Calendar-Instanzen müssen vor
+  einem Update auf diesen Stand gelöscht werden. Seine Modul-ID und sein Präfix
+  werden nicht wiederverwendet.
 - Das bestehende [Webhook-Sicherheitsmodell](docs/WEBHOOK_SECURITY_MODEL.md)
   ist dokumentiert und durch Vertragstests charakterisiert. Es verwendet
   weiterhin Kennwörter in URLs, Wildcard-CORS und GET für Schreibzugriffe; der
   Webhook sollte deshalb nicht ungeschützt öffentlich erreichbar sein.
-- Calendar und ColorPicker beziehen noch einzelne Frontend-Ressourcen von
-  externen CDNs. Die vollständige lokale und reproduzierbare Auslieferung ist
-  geplant.
+- ColorPicker bezieht noch eine Frontend-Ressource von einem externen CDN. Die
+  vollständige lokale und reproduzierbare Auslieferung ist geplant.
 - Mehrere Frontend-Bibliotheken liegen derzeit in unterschiedlichen Versionen
   im Repository. Aktualisierungen erfolgen erst nach einer Nutzungs- und
   Lizenzinventur.

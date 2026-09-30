@@ -3,7 +3,8 @@
 Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
 `25fd163340dac13cafdb5b39d32dd14cada2cbb1`. Am 28.09.2026 wurde die
 Bestandsaufnahme um die beschlossene Entfernung von ConfigStore und SyncModule
-fortgeschrieben.
+fortgeschrieben. Am 30.09.2026 wurde auch das Calendar-Modul einschliesslich
+seiner spezifischen Webhook-Pfade und Frontend-Assets entfernt.
 
 ## 1. Zweck und Zielbild
 
@@ -43,7 +44,6 @@ Architektur oder ein gleichzeitiger Austausch aller Frontend-Bibliotheken.
 | --- | ---: | --- |
 | `SymconJSLive` | 2 | Splitter, Webhook `/hook/JSLive`, Asset-Auslieferung, gemeinsame Links und Konfiguration |
 | `SymconJSLiveAdvTextfield` | 3 | Erweitertes Textfeld |
-| `SymconJSLiveCalendar` | 3 | Kalenderdarstellung und ICS-Quellen |
 | `SymconJSLiveChart` | 3 | Linien-/Balkendiagramme und Archivdaten |
 | `SymconJSLiveColorPicker` | 3 | Farbauswahl und Rueckschreiben von Werten |
 | `SymconJSLiveCustom` | 3 | Benutzerdefinierte HTML-/JavaScript-Ausgaben und Objektaktionen |
@@ -53,7 +53,7 @@ Architektur oder ein gleichzeitiger Austausch aller Frontend-Bibliotheken.
 | `SymconJSLiveProgressbar` | 3 | Fortschrittsanzeigen und SVG-Import |
 | `SymconJSLiveRadarChart` | 3 | Radardiagramme und Archivdaten |
 
-Die zehn Visualisierungsmodule verwenden die gemeinsame Basisklasse
+Die neun Visualisierungsmodule verwenden die gemeinsame Basisklasse
 `SymconJSLive/libs/JSLiveModule.php` und den gemeinsamen Splitter.
 
 ## 4. Architektur und Datenfluss
@@ -69,7 +69,7 @@ Vereinfachter Ablauf:
 2. Der Splitter prueft Request und Kennwort, liefert Assets aus oder sendet einen
    JSON-Befehl ueber `SendDataToChildren`.
 3. Das adressierte Kindmodul verarbeitet Befehle wie `getContend`, `getData`,
-   `getUpdate`, `setData`, `getCSS`, `getSVG` oder Konfigurationsimport/-export.
+   `getUpdate`, `setData`, `getSVG` oder Konfigurationsimport/-export.
 4. Das Kindmodul fordert gemeinsame Werte und Links mit `SendDataToParent` an.
 5. Variablenaenderungen werden ueber MessageSink verarbeitet; Aktualisierungen
    koennen ueber den WebHook-Control-WebSocket an den Browser gepusht werden.
@@ -82,7 +82,7 @@ ueber Templates, Platzhalter und grosse Property-Mengen erzeugt.
 
 Zu erhalten und vor Refactorings durch Charakterisierungstests abzusichern sind:
 
-- alle 11 verbliebenen Modul-IDs, Praefixe und die beiden Data-IDs;
+- alle 10 verbliebenen Modul-IDs, Praefixe und die beiden Data-IDs;
 - der Hook-Pfad `/hook/JSLive` und seine Unterpfade;
 - die JSON-Umschlaege `DataID`, `Buffer`, `Type`, `InstanceID` sowie die
   bestehenden Befehlsnamen, einschliesslich historischer Schreibweisen;
@@ -128,7 +128,7 @@ Die Ueberschneidung liegt bei Standards, CI und Helper-Infrastruktur.
 
 Vorhandene lokale Pruefungen:
 
-- `tests/validate_structure.php`: Bibliothek, 11 Module, Modul-READMEs,
+- `tests/validate_structure.php`: Bibliothek, 10 Module, Modul-READMEs,
   Metadaten, Helper-Konfiguration, CodeQL-Sprache sowie die feste Einbindung
   der gemeinsamen Style- und Metadatenworkflows;
 - `tests/test_update_library_metadata.py`: Erhoehung der gemeinsamen
@@ -153,21 +153,20 @@ Vorhandene lokale Pruefungen:
   Verhalten bei leerem Splitter-Kennwort sowie die PHP-8.5-sichere
   Platzhalterersetzung numerischer Instanz-IDs charakterisiert;
 - `tests/webhook-security-model.php`: exakte Bestandsaufnahme aller vom
-  Browser erreichbaren Kindmodulbefehle, der Module mit `setData` sowie der
-  derzeit fehlenden Calendar-Schreibimplementierung;
+  Browser erreichbaren Kindmodulbefehle und der Module mit `setData`;
 - `tests/runtime-matrix.php`: Vollstaendigkeitspruefung der definierten Fresh-
-  und Upgrade-Laufzeitabnahmen fuer IP-Symcon 9.0/9.1, aller 11 Module und der
+  und Upgrade-Laufzeitabnahmen fuer IP-Symcon 9.0/9.1, aller 10 Module und der
   erforderlichen Ergebnisnachweise;
-- `tests/strict-module-migration.php`: exakte Inventur der 81 oeffentlichen
+- `tests/strict-module-migration.php`: exakte Inventur der 74 oeffentlichen
   Methodendeklarationen und ihrer vorgesehenen Type Hints sowie der Grenzen
   fuer Variablen, Parent-Verbindung, Datenfluss und native Hooks;
 - `tests/configuration-transfer.php`: vollstaendiger und formulargefilterter
   Export, erfolgreicher Import bekannter Properties mit Erhalt ausgelassener
   Werte sowie nebenwirkungsfreie Ablehnung leerer, fehlerhafter,
   unvollstaendiger und modulfremder Importe;
-- `tests/configuration-form.php`: reales Calendar-Formular mit initialer und
-  dynamischer Auswertung von `viewlevel`, `viewdisable`,
-  `viewlevelexactly` und `requireItem` in verschachtelten Strukturen;
+- `tests/configuration-form.php`: reales Chart-Formular mit initialer und
+  dynamischer Auswertung von `viewlevel` und `requireItem` in verschachtelten
+  Strukturen;
 - `tests/adv-textfield-rendering.php`: gebuendeltes und skriptbasiertes
   AdvTextfield-Template mit zweistufiger Platzhalterverarbeitung,
   CSS-Farb-/Fontaufbereitung sowie cachefreiem, gecachtem und neu aufgebautem
@@ -217,7 +216,8 @@ Webhook-Routing, DataFlow und Vertragspruefung abgesichert. Danach wurde
 `SymconJSLiveDoughnutPie` einzeln formatiert und gegen den Vertrags-Snapshot und
 die Gesamtsuite geprueft. Danach wurde `SymconJSLiveCalendar` isoliert formatiert
 und mit seinem realen Konfigurationsformular-Harness sowie dem Vertrags-Snapshot
-geprueft. Danach wurde das damals noch enthaltene `SymconJSLiveSyncModule`
+geprueft; es wurde am 30.09.2026 gemaess ADR 0003 vollstaendig entfernt. Danach
+wurde das damals noch enthaltene `SymconJSLiveSyncModule`
 isoliert formatiert und gegen den Vertrags-Snapshot sowie die Gesamtsuite
 geprueft; es wurde am 28.09.2026 nach separater Bewertung vollstaendig entfernt.
 Danach wurde
@@ -283,7 +283,7 @@ Browserbibliotheken sowie einzelne Modulaktionen.
 ## 9. Konfigurationsformulare und Darstellungen
 
 Alle Module besitzen `form.json` und `locale.json`. Die grossen
-Visualisierungsmodule, besonders Calendar, Chart, Gauge und RadarChart, haben
+Visualisierungsmodule, besonders Chart, Gauge und RadarChart, haben
 umfangreiche, tief verschachtelte Formulare. Eigene Metafelder wie `viewlevel`,
 `viewdisable`, `viewlevelexactly` und `requireItem` werden durch
 `JSLiveModule.php` ausgewertet. Dieses Verhalten ist Teil des bestehenden
@@ -297,16 +297,15 @@ Idents, Datentypen, Aktionen und bestehende Anwenderkonfigurationen erhalten.
 ## 10. Frontend-Abhaengigkeiten
 
 Das Repository vendort unter anderem Chart.js 3.6.0 und 4.3.3,
-chartjs-plugin-datalabels 2.2.0, chartjs-plugin-streaming 3.1.0, FullCalendar
-5.10.0, iro.js 5.5.0, Moment.js 2.27.0, jQuery, canvas-gauges,
+chartjs-plugin-datalabels 2.2.0, chartjs-plugin-streaming 3.1.0, iro.js 5.5.0,
+Moment.js 2.27.0, jQuery, canvas-gauges,
 MCDatepicker und loading-bar. Mehrere Versionen und unminifizierte/minifizierte
 Kopien liegen parallel vor.
 
-Calendar laedt zusaetzlich FullCalendar 5.10.1, dessen iCalendar-Plugin und
-ical.js 1.4.0 von CDNs. ColorPicker laedt iro.js trotz lokaler Kopie extern.
-Damit sind Darstellung, Offline-Betrieb und Lieferkette nicht vollstaendig
-reproduzierbar. Es fehlen ein Paketmanifest, ein dokumentierter Buildprozess,
-eine Lizenz-/Versionsliste und automatisierte Browserpruefungen.
+ColorPicker laedt iro.js trotz lokaler Kopie extern. Damit sind Darstellung,
+Offline-Betrieb und Lieferkette nicht vollstaendig reproduzierbar. Es fehlen ein
+Paketmanifest, ein dokumentierter Buildprozess, eine Lizenz-/Versionsliste und
+automatisierte Browserpruefungen.
 
 ## 11. Technische Schulden und Risiken
 
@@ -324,7 +323,7 @@ Bereits abgesicherte Sicherheitsgrenzen:
   auf positive Ganzzahlen begrenzt. AdvTextfield verarbeitet den bereits
   decodierten Wert ohne eine zweite Decodierung, sodass woertliche
   Prozentsequenzen erhalten bleiben.
-- Alle sechs Plain-Text-Abbruchpfade verwenden den `HttpResponseHelper`.
+- Alle fuenf Plain-Text-Abbruchpfade verwenden den `HttpResponseHelper`.
   Fehlende Queryparameter liefern HTTP 400, nicht erreichbare oder nicht
   passende Kindinstanzen HTTP 404. Der Authentisierungsfehler behaelt bewusst
   seine leere HTTP-200-Antwort. Erfolgreiche Routen setzen ihren Status
@@ -332,11 +331,11 @@ Bereits abgesicherte Sicherheitsgrenzen:
 - Statische Assets und gecachte Modulantworten pruefen ETag und
   `If-Modified-Since` ohne unsichere Server-Arrayzugriffe, akzeptieren quotierte
   ETags und beenden unveraenderte Antworten mit HTTP 304 ohne Body.
-- `getGlobalConfig`, `getConfiguration`, `getData`, `getFeed`, `getFonts`,
+- `getGlobalConfig`, `getConfiguration`, `getData`, `getFonts`,
   `getLanguage` und `getUpdate` sind als JSON-Antworten charakterisiert und
   senden `application/json`. Die globale Konfiguration wird mit `no-store` und
   `nosniff` ausgeliefert.
-- Erfolgreiche HTML-, CSS-, JavaScript-, SVG-, Kalender- und Plain-Text-
+- Erfolgreiche HTML-, CSS-, JavaScript-, SVG- und Plain-Text-
   Antworten deklarieren feste Inhaltstypen mit UTF-8-Zeichensatz. Der
   dynamische Bildpfad akzeptiert nur die vier im Progressbar-Formular
   angebotenen MIME-Typen und faellt bei unbekannten oder manipulierten Angaben
@@ -348,9 +347,9 @@ Bereits abgesicherte Sicherheitsgrenzen:
   lesbare Downloadnamen einschliesslich Umlauten.
 - `docs/WEBHOOK_SECURITY_MODEL.md` beschreibt die tatsaechliche CORS-,
   Authentisierungs- und Schreibgrenze. Tests belegen insbesondere die
-  `getCSS`-Ausnahme, die Deaktivierung der Pruefung bei leerem Kennwort, den
-  historischen `setData`-GET-Aufruf und die Zielbegrenzungen von Custom,
-  ColorPicker und DateTimePicker.
+  Deaktivierung der Pruefung bei leerem Kennwort, den historischen
+  `setData`-GET-Aufruf und die Zielbegrenzungen von Custom, ColorPicker und
+  DateTimePicker.
 
 Prioritaet hoch:
 
@@ -392,7 +391,7 @@ Prioritaet mittel:
 
 Dokumentationsluecken:
 
-- Die Root-README beschreibt nun alle 11 verbliebenen Module, den
+- Die Root-README beschreibt nun alle 10 verbliebenen Module, den
   Modernisierungsstatus, Installation, CI und bekannte
   Sicherheits-/Betriebseinschraenkungen;
 - Alle verbliebenen Module besitzen eine README. Die zuvor fehlenden Dateien
@@ -418,9 +417,8 @@ ausdruecklich nicht als erhaltenswerte Vertraege festgeschrieben.
 Export, sichere Import-Ablehnung und erfolgreicher Import bekannter Properties
 sind ebenfalls charakterisiert. Die zuvor fehlerhafte Schluesselpruefung des
 Imports ist korrigiert und durch einen gezielten Regressionstest abgesichert.
-Der gemeinsame dynamische Formularvertrag ist anhand des realen
-Calendar-Formulars fuer initiale Darstellung und Live-Aktualisierung
-charakterisiert.
+Der gemeinsame dynamische Formularvertrag ist anhand des realen Chart-Formulars
+fuer initiale Darstellung und Live-Aktualisierung charakterisiert.
 Die zweistufige HTML-Erzeugung ist fuer AdvTextfield als erstes Pilotmodul mit
 Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
 
@@ -451,8 +449,8 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
      Gesamtsuite pruefen (abgeschlossen; Rendering-, Browser- und
      Symcon-Laufzeitpruefung ausstehend);
    - `Calendar` isoliert formatieren und mit Formular- und Vertragspruefung
-     absichern (abgeschlossen; ICS-, Event-, Browser- und
-     Symcon-Laufzeitpruefung ausstehend);
+     absichern (historisch abgeschlossen; das Modul wurde anschliessend gemaess
+     ADR 0003 entfernt);
    - das damals noch enthaltene `SyncModule` isoliert formatieren und gegen
      Vertrags-Snapshot und Gesamtsuite pruefen (historisch abgeschlossen; das
      Modul wurde anschliessend gemaess ADR 0002 entfernt);
@@ -570,8 +568,8 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
 10. CORS-, Authentisierungs- und Schreibberechtigungsmodell dokumentieren und
    testen (abgeschlossen; das bestehende Modell ist dokumentiert und durch
    Vertrags- sowie Negativtests charakterisiert. Eine spaetere Aenderung von
-   URL-Kennwort, Wildcard-CORS, GET-Schreibzugriffen oder `getCSS`-Ausnahme
-   benoetigt eine eigene Migration und Symcon-Laufzeitabnahme).
+   URL-Kennwort, Wildcard-CORS oder GET-Schreibzugriffen benoetigt eine eigene
+   Migration und Symcon-Laufzeitabnahme).
 
 ### Phase 2 - Symcon 9.0 / PHP 8.5 stabilisieren
 
@@ -581,13 +579,14 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    Abnahmen sowie Nachweise; die Ausfuehrung steht noch aus).
 2. Die Migration von `IPSModule` auf `IPSModuleStrict` als eigenes Vorhaben
    vorbereiten (abgeschlossen: `docs/STRICT_MODULE_MIGRATION.md` und
-   `tests/fixtures/strict-module-public-methods.json` erfassen alle 81
+   `tests/fixtures/strict-module-public-methods.json` erfassen alle 74
    oeffentlichen Methodendeklarationen, Zielsignaturen, Variablenregistrierung/-
    schreibzugriff, Parent-Automatik, Datenfluss, Hooks und Rueckfallgrenzen; die
    produktive Migration ist noch nicht begonnen).
-3. Das experimentelle `SyncModule` wurde vor der Strict-Migration entfernt;
-   Modul-ID und Praefix werden nicht wiederverwendet.
-4. Die gemeinsame Basisklasse `JSLiveModule` und ihre zehn Kindmodule in einem
+3. Das experimentelle `SyncModule` und das Calendar-Modul wurden vor der
+   Strict-Migration entfernt; ihre Modul-IDs und Praefixe werden nicht
+   wiederverwendet.
+4. Die gemeinsame Basisklasse `JSLiveModule` und ihre neun Kindmodule in einem
    koordinierten, eigenen Schritt migrieren. Data-IDs, Parent-Verbindung,
    Datenkodierung, Variablen-Idents, Actions und oeffentliche PHP-Aufrufe muessen
    dabei kompatibel bleiben.
@@ -660,7 +659,7 @@ erst nach den Sicherheits-, Kompatibilitaets- und Migrationsgrundlagen.
   `HELPER_SYNC_APP_PRIVATE_KEY` fehlen im JSLive-Repository. Die App
   `Burki24 Helper Sync` ist bereits installiert; die beiden Eintraege bleiben
   das externe Gate vor dem ersten Push des schreibenden Workflows.
-- Welche der 11 verbliebenen Module werden produktiv noch benoetigt, und welche
+- Welche der 10 verbliebenen Module werden produktiv noch benoetigt, und welche
   werden nur kompatibel erhalten oder stillgelegt?
 - Der `ConfigStore` wird nicht weiter betrieben. Seine Modulimplementierung,
   Tests und Dokumentation wurden entfernt; vorhandene Instanzen muessen vor dem
@@ -673,6 +672,10 @@ erst nach den Sicherheits-, Kompatibilitaets- und Migrationsgrundlagen.
   Instanzen muessen vor dem Update geloescht werden; Modul-ID und Praefix werden
   nicht wiederverwendet. Die Entscheidung ist in
   `docs/adr/0002-remove-sync-module.md` dokumentiert.
+- Das Calendar-Modul wurde vollstaendig entfernt. Vorhandene Instanzen muessen
+  vor dem Update geloescht werden; Modul-ID und Praefix werden nicht
+  wiederverwendet. Die Entscheidung ist in
+  `docs/adr/0003-remove-calendar-module.md` dokumentiert.
 - Welche IPSView-Versionen und vorhandenen Projekte muessen als reale
   Regressionstestfaelle dienen?
 - Welche Browser und Geraeteklassen sind fuer die Kacheldarstellung verbindlich?

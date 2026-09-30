@@ -28,7 +28,7 @@ externe Erreichbarkeit sollte der Hook ausschließlich über eine abgesicherte
 TLS-Verbindung und mit gesetztem Passwort veröffentlicht werden.
 
 Das bestehende CORS-, Kennwort- und Schreibmodell einschließlich der bewusst
-öffentlichen Asset- und CSS-Pfade ist im
+öffentlichen Asset-Pfade ist im
 [Webhook-Sicherheitsmodell](../docs/WEBHOOK_SECURITY_MODEL.md) dokumentiert.
 Vollständige JSLive-Links enthalten das Kennwort und sind wie Zugangsdaten zu
 behandeln.
@@ -40,7 +40,7 @@ eine Symcon-Kategorie. Eigene Vorlagen werden als HTML/JavaScript im Browser
 ausgeführt und dürfen nur aus vertrauenswürdigen Quellen stammen.
 
 Die Kindmodule sprechen über den Hook unter anderem die bestehenden Aktionen
-`getContend`, `getData`, `setData`, `getCSS`, `getSVG` und
+`getContend`, `getData`, `setData`, `getSVG` und
 `exportConfiguration` an. Die Namen und JSON-Strukturen sind öffentliche
 Verträge und werden bei der Modernisierung rückwärtskompatibel behandelt.
 

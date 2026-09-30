@@ -69,12 +69,12 @@ target instance exactly once.
 
 ## Configuration form harness
 
-`configuration-form.php` loads the real Calendar form through its public
+`configuration-form.php` loads the real Chart form through its public
 configuration-form entry point. It verifies initial and live updates for the
-shared `viewlevel`, `viewdisable`, `viewlevelexactly` and `requireItem`
-metadata, including nested fields, generated non-exported technical names and
-controller `onChange` wiring. Random technical names are checked by behavior
-and are deliberately not stored as fixtures.
+shared `viewlevel` and `requireItem` metadata, including nested fields,
+generated non-exported technical names and controller `onChange` wiring.
+Random technical names are checked by behavior and are deliberately not stored
+as fixtures.
 
 ## AdvTextfield rendering harness
 

@@ -64,7 +64,7 @@ if ($logged['queryData']['pw'] !== '***'
 }
 
 foreach ([
-    'AdvTextfield', 'Calendar', 'Chart', 'ColorPicker', 'Custom',
+    'AdvTextfield', 'Chart', 'ColorPicker', 'Custom',
     'DateTimePicker', 'DoughnutPie', 'Gauge', 'Progressbar', 'RadarChart'
 ] as $name) {
     $source = file_get_contents(dirname(__DIR__) . '/SymconJSLive' . $name . '/module.php');

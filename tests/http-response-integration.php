@@ -34,8 +34,8 @@ httpResponseIntegrationAssert(
     'JSLive must use the HttpResponseHelper trait.'
 );
 httpResponseIntegrationAssert(
-    substr_count($source, '$this->SendPlainTextResponse(') === 6,
-    'JSLive must route all six plain-text webhook exits through HttpResponseHelper.'
+    substr_count($source, '$this->SendPlainTextResponse(') === 5,
+    'JSLive must route all five plain-text webhook exits through HttpResponseHelper.'
 );
 httpResponseIntegrationAssert(
     !str_contains($source, "header('HTTP/1.1 200 X')"),
@@ -60,7 +60,6 @@ httpResponseIntegrationAssert(
 httpResponseIntegrationAssert(
     str_contains($source, "'getconfiguration',")
         && str_contains($source, "'getdata',")
-        && str_contains($source, "'getfeed',")
         && str_contains($source, "'getfonts',")
         && str_contains($source, "'getlanguage',")
         && str_contains($source, "'getupdate'"),
@@ -70,7 +69,6 @@ httpResponseIntegrationAssert(
     str_contains($source, "header('Content-Type: text/html; charset=utf-8');")
         && str_contains($source, "header('Content-Type: text/css; charset=utf-8');")
         && str_contains($source, "header('Content-Type: text/javascript; charset=utf-8');")
-        && str_contains($source, "header('Content-Type: text/calendar; charset=utf-8');")
         && str_contains($source, "header('Content-Type: text/plain; charset=utf-8');")
         && str_contains($source, "header('Content-Type: image/svg+xml; charset=utf-8');"),
     'JSLive must declare explicit content types for established non-JSON text responses.'

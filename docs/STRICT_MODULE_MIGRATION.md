@@ -5,7 +5,7 @@ Grenzen für eine spätere Migration von JSLive auf `IPSModuleStrict`. In diesem
 Schritt wird noch keine Modulklasse umgestellt und kein Laufzeitverhalten
 geändert.
 
-Die maschinenlesbare Liste aller 81 öffentlichen Methodendeklarationen und
+Die maschinenlesbare Liste aller 74 öffentlichen Methodendeklarationen und
 ihrer vorgesehenen Zielsignaturen liegt unter
 [`tests/fixtures/strict-module-public-methods.json`](../tests/fixtures/strict-module-public-methods.json).
 Der Test `tests/strict-module-migration.php` verhindert, dass neue oder
@@ -40,7 +40,6 @@ IP-Symcon 8.1 verfügbaren `IPSModuleStrict`:
 | `SymconJSLive/libs/WebHookModule.php` | 4 | `IPSModuleStrict` | alten manuellen Hook-Workaround durch native Hook-API ersetzen |
 | `SymconJSLive/libs/JSLiveModule.php` | 16 | `IPSModuleStrict` | gemeinsame Basis und öffentlich geerbte PHP-/JSON-RPC-Funktionen |
 | `SymconJSLiveAdvTextfield/module.php` | 4 | `JSLiveModule` | eigene `ReceiveData`-Route und Konfigurationsübernahme |
-| `SymconJSLiveCalendar/module.php` | 7 | `JSLiveModule` | zusätzliche Formular- und CSS-Link-Funktionen |
 | `SymconJSLiveChart/module.php` | 9 | `JSLiveModule` | Actions, dynamische Formularfunktionen und Archivdaten |
 | `SymconJSLiveColorPicker/module.php` | 4 | `JSLiveModule` | schreibfähige Browserroute |
 | `SymconJSLiveCustom/module.php` | 5 | `JSLiveModule` | Skript-/Medienzugriffe und gemischter Rückgabevertrag |
@@ -50,7 +49,7 @@ IP-Symcon 8.1 verfügbaren `IPSModuleStrict`:
 | `SymconJSLiveProgressbar/module.php` | 5 | `JSLiveModule` | SVG-Import mit gemischtem Rückgabevertrag |
 | `SymconJSLiveRadarChart/module.php` | 6 | `JSLiveModule` | Actions und Archivdaten |
 
-Alle 81 Deklarationen benötigen mindestens eine Signaturanpassung: Die beiden
+Alle 74 Deklarationen benötigen mindestens eine Signaturanpassung: Die beiden
 Konstruktoren besitzen untypisierte Parameter; alle übrigen öffentlichen
 Methoden besitzen aktuell keinen Rückgabetyp. Die Zieldatei verwendet `mixed`
 nur dort, wo der bisherige öffentliche Vertrag tatsächlich unterschiedliche
@@ -122,7 +121,7 @@ umgebogen werden.
 
 ## Parent-Verbindung
 
-Alle zehn Visualisierungsmodule rufen derzeit in `Create()`
+Alle neun Visualisierungsmodule rufen derzeit in `Create()`
 `ConnectParent('{9FFF3FC0-FD51-C289-FA36-BC1C370946CF}')` auf. Diese Methode
 ist unter `IPSModuleStrict` nicht verfügbar.
 
@@ -133,7 +132,7 @@ ist unter `IPSModuleStrict` nicht verfügbar.
 - Splitter-Kindanforderung beziehungsweise Kind-Implementierung:
   `{79D59629-E9C5-44F1-0F34-0FBC5C88F307}`.
 
-Die erste Umsetzung entfernt daher die zehn direkten `ConnectParent()`-Aufrufe
+Die erste Umsetzung entfernt daher die neun direkten `ConnectParent()`-Aufrufe
 und nutzt die automatische Kompatibilitätsauflösung. `GetCompatibleParents()`
 wird nur ergänzt, wenn die Fresh-Installation aus der Laufzeitmatrix belegt,
 dass die Standardheuristik den vorhandenen oder neu anzulegenden
@@ -146,9 +145,9 @@ Der aktuelle `DataFlowHelper` erzeugt einen JSON-Umschlag mit unveränderter
 `DataID` und einem inneren JSON-String in `Buffer`. Es bestehen sieben
 Sendepfade: fünf vom Kind zum Splitter und zwei vom Splitter zu den Kindern.
 Die öffentlichen Verträge sind eine `ForwardData()`-Methode im Splitter sowie
-`ReceiveData()` in der gemeinsamen Basis und allen zehn Kindmodulen.
+`ReceiveData()` in der gemeinsamen Basis und allen neun Kindmodulen.
 
-Die Strict-Umstellung muss Splitter, `JSLiveModule` und alle zehn Kindmodule in
+Die Strict-Umstellung muss Splitter, `JSLiveModule` und alle neun Kindmodule in
 einem koordinierten Schritt migrieren. Dabei bleiben beide Data-IDs und die
 Struktur des inneren JSON unverändert; nur der von Strict geforderte binäre
 Transport wird an einer zentralen Helper-Grenze mit `bin2hex` und `hex2bin`
@@ -195,15 +194,17 @@ Folgende Punkte benötigen vor dem Umschalten einen fokussierten Test:
 
 ## Schrittfolge und Rückfallgrenze
 
-Das experimentelle SyncModule wurde vor der Strict-Migration entfernt; die
-Entscheidung und ihre Upgrade-Folge sind in
-[`adr/0002-remove-sync-module.md`](adr/0002-remove-sync-module.md) dokumentiert.
+Das experimentelle SyncModule und das Calendar-Modul wurden vor der
+Strict-Migration entfernt; ihre Upgrade-Folgen sind in
+[`adr/0002-remove-sync-module.md`](adr/0002-remove-sync-module.md) und
+[`adr/0003-remove-calendar-module.md`](adr/0003-remove-calendar-module.md)
+dokumentiert.
 
 1. Strict-Datenflusskodierung in einer isolierten 9.0/9.1-Testinstanz belegen
    und den zentralen `DataFlowHelper` nur bei nachgewiesenem Bedarf erweitern.
 2. Falls benötigt, die Legacy-Profil-Darstellung zentral ergänzen und über den
    bestehenden Helper-Sync beziehen.
-3. `JSLiveModule`, alle zehn Kindmodule und den Splitter koordiniert migrieren.
+3. `JSLiveModule`, alle neun Kindmodule und den Splitter koordiniert migrieren.
 4. Den manuellen Hook-Workaround durch die native Hook-API ersetzen, ohne das
    dokumentierte Sicherheits- und Routingmodell zu verändern.
 5. Die vier Szenarien aus `SYCON_RUNTIME_MATRIX.md` vollständig ausführen.

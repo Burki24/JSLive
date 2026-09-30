@@ -31,15 +31,15 @@ Testbaum und ein Backup beziehungsweise Snapshot festzulegen.
 
 | ID | Ausgangspunkt | Ziel und Umfang | Status |
 | --- | --- | --- | --- |
-| `S90-FRESH` | frische IP-Symcon-9.0-Testinstallation | JSLive auf dem zu prüfenden Commit installieren und alle 11 Module neu anlegen | nicht ausgeführt |
+| `S90-FRESH` | frische IP-Symcon-9.0-Testinstallation | JSLive auf dem zu prüfenden Commit installieren und alle 10 Module neu anlegen | nicht ausgeführt |
 | `S90-UPGRADE` | IP-Symcon 9.0 mit dem bisherigen JSLive-`main` und repräsentativen Instanzen | auf denselben JSLive-Prüfcommit aktualisieren; Konfiguration, Idents, Werte und Verbindungen erhalten | nicht ausgeführt |
-| `S91-FRESH` | frische IP-Symcon-9.1-Testinstallation | JSLive auf dem Prüfcommit installieren und alle 11 Module neu anlegen | nicht ausgeführt |
+| `S91-FRESH` | frische IP-Symcon-9.1-Testinstallation | JSLive auf dem Prüfcommit installieren und alle 10 Module neu anlegen | nicht ausgeführt |
 | `S91-UPGRADE` | erfolgreich abgenommener 9.0-Snapshot | IP-Symcon auf 9.1 aktualisieren, ohne den JSLive-Commit zu wechseln, und alle Instanzen erneut prüfen | nicht ausgeführt |
 
-`S90-UPGRADE` berücksichtigt die dokumentierte Entfernung von ConfigStore und
-SyncModule: Eventuell vorhandene Instanzen beider Module werden vor dem
-Bibliotheksupdate manuell gelöscht. Sie werden nicht automatisch migriert und
-ihre bisherigen Modul-IDs werden nicht wiederverwendet.
+`S90-UPGRADE` berücksichtigt die dokumentierte Entfernung von ConfigStore,
+SyncModule und Calendar: Eventuell vorhandene Instanzen dieser Module werden
+vor dem Bibliotheksupdate manuell gelöscht. Sie werden nicht automatisch
+migriert und ihre bisherigen Modul-IDs werden nicht wiederverwendet.
 
 ## Nachweis je Durchlauf
 
@@ -61,7 +61,7 @@ Installationsdaten protokolliert:
 | Ergebnis | `PASS`, `FAIL` oder `BLOCKED` mit Verweis auf den betroffenen Prüfpunkt |
 
 Screenshots, Exportdateien und Logs dürfen keine Kennwörter, privaten
-Objekt-IDs, internen Adressen oder realen Kalender-/Messdaten enthalten.
+Objekt-IDs, internen Adressen oder realen Messdaten enthalten.
 
 ## Isolierte Testdaten
 
@@ -75,7 +75,6 @@ werden synthetisch angelegt:
 - ein Testskript, das ausschließlich synthetische Parameter zurückgibt;
 - ein Textmedium, ein Link auf eine Testvariable und eine Kategorie mit
   direkten Testkindern;
-- eine eingebettete minimale iCalendar-Datei ohne Personen- oder Ortsdaten;
 - ein kleines lokales SVG und je ein lokales PNG/JPEG/GIF für Progressbar;
 - eine zweite kompatible Modulinstanz für die Konfigurationsübernahme.
 
@@ -114,7 +113,6 @@ Diese Prüfungen gelten für jede instanziierbare Modulklasse:
 | --- | --- | --- |
 | `SymconJSLive` | zufälliges nicht leeres Kennwort, Formular, Hook-Registrierung, lokale und vollständige Links, statische Assets, `getGlobalConfig`, Cache, Kompression und WebSocket-Aktualisierung prüfen | Hook-Pfad, Kennwort-Queryparameter und Antwortverträge müssen unverändert bleiben |
 | `SymconJSLiveAdvTextfield` | Variable `Content`, Standardtemplate, HTMLBox/IPSView, Lesen und Schreiben eines synthetischen Textes sowie Konfigurationsübernahme prüfen | geschrieben werden darf nur die eigene `Content`-Variable |
-| `SymconJSLiveCalendar` | Formular, eingebettete ICS-Datei, `getICS`, `getFeed`, `getCSS`, Toolbar und Browserdarstellung prüfen | `setData` ist deklariert, aber nicht implementiert; Entfernung oder Reparatur ist vor Freigabe zu entscheiden; CDN-Abhängigkeiten separat protokollieren |
 | `SymconJSLiveChart` | archivierte Floatvariable, mehrere Zeiträume, Offset, Achsen, `getData`/`getUpdate`, Periodenvariablen und Browserdarstellung prüfen | Archiv-, Zeitzonen- und absolute Jahresgrenzen mit festen Testdaten prüfen |
 | `SymconJSLiveColorPicker` | mindestens zwei konfigurierte Farbvariablen, Lesen, erlaubtes Schreiben über Variablenaktion und Ablehnung einer fremden ID prüfen | iro.js wird noch extern geladen; Offlinefehler getrennt vom PHP-Modul bewerten |
 | `SymconJSLiveCustom` | Variable, Read-only-Dataset, Kategorie, Link, Testskript, Textmedium, lokale JS/CSS-Datei und Standardtemplate prüfen | keine Ziele außerhalb der Datasets; Read-only muss Schreiben, Medienänderung und Skriptausführung verhindern |
@@ -129,8 +127,8 @@ Diese Prüfungen gelten für jede instanziierbare Modulklasse:
 Pro Plattformversion werden mindestens diese End-to-End-Pfade geprüft:
 
 - Standardausgabe `getContend` mit richtigem und falschem Kennwort;
-- öffentliche statische Assets und die bestehende `getCSS`-Ausnahme;
-- JSON-, HTML-, CSS-, JavaScript-, SVG-, ICS-, Text- und Bildantworten samt
+- öffentliche statische Assets;
+- JSON-, HTML-, CSS-, JavaScript-, SVG-, Text- und Bildantworten samt
   `nosniff`, Cache- und Content-Type-Headern;
 - ETag und `If-Modified-Since` mit HTTP 304 ohne Body;
 - `setData` per bestehendem GET-Vertrag für AdvTextfield, ColorPicker,
@@ -170,6 +168,3 @@ Für `S90-UPGRADE` und `S91-UPGRADE` gelten zusätzlich:
   einschließlich Migrationsfolge ausdrücklich beschlossen und umgesetzt wurde.
 - Eine reine Quelltext-, Stub- oder CI-Prüfung darf nie als bestandener
   Symcon-Laufzeittest eingetragen werden.
-
-Bekannter Startblocker ist der fehlende Calendar-`setData`-Handler. Er bleibt
-sichtbar, bis über Reparatur oder Entfernung entschieden wurde.

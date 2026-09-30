@@ -296,9 +296,8 @@ class SymconJSLive extends WebHookModule
             $passwordIsSet = $this->ReadPropertyString('Password');
             if (!empty($passwordIsSet)) {
                 $password = $queryData['pw'] ?? '';
-                //Keinpassword bei CSS Abfrage!
 
-                if (!hash_equals($passwordIsSet, $password) && strtolower($Type) != 'getcss') {
+                if (!hash_equals($passwordIsSet, $password)) {
                     $this->SendSafeDebug('WebHook', 'WRONG PASSWORD!');
                     $this->SendPlainTextResponse(200, '');
                     $this->SendSafeDebug('WebHook', [
@@ -367,16 +366,11 @@ class SymconJSLive extends WebHookModule
                 //Here Do Nothing
             }elseif (strtolower($Type) == 'getfillimg') {
                 //Here Do Nothing
-            }elseif (strtolower($Type) == 'getcss') {
-                //Here Do Nothing
-            }elseif (strtolower($Type) == 'getics') {
-                header('Content-Type: text/calendar; charset=utf-8');
             }elseif (strtolower($Type) == 'setdata') {
                 header('Content-Type: text/plain; charset=utf-8');
             }elseif (in_array(strtolower($Type), [
                 'getconfiguration',
                 'getdata',
-                'getfeed',
                 'getfonts',
                 'getlanguage',
                 'getupdate'
@@ -432,29 +426,6 @@ class SymconJSLive extends WebHookModule
                 header('Content-Type: ' . $this->NormalizeImageMimeType($arr_data['Type'] ?? null));
                 $contend = base64_decode($arr_data['Contend']);
                 $useCache = true;
-            }elseif (strtolower($Type) == 'getcss') {
-                $arr_data = [];
-
-                foreach ($contend as $s_contend) {
-                    $c_data = json_decode($contend[0], true);
-                    if ($c_data['InstanceID'] == $queryData['instance']) {
-                        $arr_data = $c_data;
-                        break;
-                    }
-                }
-
-                if (count($arr_data) == 0) {
-                    $this->SendSafeDebug('WebHook-' . $Type, 'Instance Not in List! (getCSS)');
-                    $this->SendPlainTextResponse(404, 'Instance Not in List!');
-                    return;
-                }
-
-                $this->SendSafeDebug('TEST', ['lastModify' => $arr_data['lastModify']]);
-
-                $contend = $arr_data['Contend'];
-                $lastmodified = $arr_data['lastModify'];
-                header('Content-Type: text/css; charset=utf-8');
-                $useCache = false; //cache ist aktuell verbuggt bei css
             }else {
                 $contend = $contend[0];
             }

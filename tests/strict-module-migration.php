@@ -88,8 +88,8 @@ foreach ([
     }
 }
 
-if ($methodCount !== 81) {
-    throw new RuntimeException('Expected 81 inventoried public methods, got ' . $methodCount . '.');
+if ($methodCount !== 74) {
+    throw new RuntimeException('Expected 74 inventoried public methods, got ' . $methodCount . '.');
 }
 
 fwrite(STDOUT, "JSLive IPSModuleStrict migration inventory is complete.\n");

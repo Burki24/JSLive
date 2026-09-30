@@ -25,7 +25,6 @@ Kennwortprüfung.
 | --- | --- | --- | --- | --- |
 | `/hook/JSLive/js/*` | keines | `Access-Control-Allow-Origin: *`; beworben werden `POST, GET, OPTIONS` | nicht erzwungen | öffentliche, nur lesende Asset-Auslieferung |
 | `/hook/JSLive/WS[/...]` | keines im Splitter | keine Antwort des Splitters | nicht erzwungen | historischer WebSocket-Pfad des WebHook-Control |
-| `/hook/JSLive/getCSS` | bewusst ausgenommen | `Access-Control-Allow-Origin: *` | nicht erzwungen | nur lesendes, instanzbezogenes CSS |
 | `/hook/JSLive/getGlobalConfig` | erforderlich, sofern konfiguriert | kein CORS-Header | nicht erzwungen | vollständige Splitter-Konfiguration einschließlich Kennwort |
 | übrige dynamische Routen | erforderlich, sofern konfiguriert | `Access-Control-Allow-Origin: *` | nicht erzwungen | Lesen, Export oder bei `setData` Schreiben |
 
@@ -39,9 +38,8 @@ Für dynamische Routen gilt zusätzlich:
 - Ein leeres konfiguriertes Kennwort deaktiviert die Prüfung vollständig. Das
   Konfigurationsformular verhindert dies bei regulärer Eingabe, der
   Laufzeitvertrag erlaubt es historisch dennoch.
-- `getCSS` ist auch bei gesetztem Kennwort ohne `pw` erreichbar. Statische
-  Assets und der WebSocket-Pfad durchlaufen die dynamische Kennwortprüfung
-  ebenfalls nicht.
+- Statische Assets und der WebSocket-Pfad durchlaufen die dynamische
+  Kennwortprüfung nicht.
 - Die Instanz-ID und alle modulspezifischen Werte werden als Queryparameter an
   das Kindmodul weitergereicht. Der aktuelle Browsercode verwendet auch für
   `setData` eine GET-Anfrage.
@@ -56,7 +54,6 @@ und besitzt keine Origin-Allowlist.
 | Modul | Nur lesende Befehle | Schreibender Befehl |
 | --- | --- | --- |
 | AdvTextfield | `exportConfiguration`, `getContend`, `getData` | `setData` |
-| Calendar | `exportConfiguration`, `getContend`, `getData`, `getFeed`, `getCSS`, `getICS` | `setData` ist deklariert, aber nicht implementiert |
 | Chart | `getConfiguration`, `getLanguage`, `getFonts`, `exportConfiguration`, `getContend`, `getUpdate`, `getData` | keiner |
 | ColorPicker | `exportConfiguration`, `getContend`, `getData` | `setData` |
 | Custom | `exportConfiguration`, `getContend`, `getData`, `loadFile` | `setData` |
@@ -86,10 +83,6 @@ jedes Symcon-Objekt. Die Kindmodule begrenzen ihre Ziele zusätzlich:
   Objekttyp kann es Variablen direkt setzen, Medieninhalt schreiben, Links
   auflösen oder konfigurierte Skripte mit Browserparametern ausführen. Custom
   besitzt daher die weitreichendste Schreibgrenze.
-- Calendar führt seinen deklarierten `setData`-Befehl derzeit nicht aus, weil
-  die aufgerufene Methode fehlt. Das ist eine bekannte Bestandsabweichung und
-  keine nutzbare Berechtigung.
-
 Der Konfigurationsimport liegt außerhalb des Webhook-
 Kennwortmodells. Er wird über öffentliche Modulfunktionen beziehungsweise die
 lokale Symcon-Datenverbindung ausgeführt und benötigt eigene Laufzeit- und
@@ -110,8 +103,8 @@ Berechtigungsprüfungen.
 ## Noch nicht geänderte Verträge
 
 Eine Einschränkung von Wildcard-CORS, die Verlagerung des Kennworts aus der
-URL, eine verpflichtende POST-Methode für Schreibzugriffe, die Entfernung der
-`getCSS`-Ausnahme oder geänderte Fehlerstatus würden bestehende Browser-,
-IPSView- und Template-Aufrufe beeinflussen. Solche Änderungen benötigen eine
-eigene Migrationsentscheidung, aktualisierte Clients und eine Abnahme unter
-IP-Symcon 9; sie sind nicht Teil dieser Charakterisierung.
+URL, eine verpflichtende POST-Methode für Schreibzugriffe oder geänderte
+Fehlerstatus würden bestehende Browser-, IPSView- und Template-Aufrufe
+beeinflussen. Solche Änderungen benötigen eine eigene Migrationsentscheidung,
+aktualisierte Clients und eine Abnahme unter IP-Symcon 9; sie sind nicht Teil
+dieser Charakterisierung.

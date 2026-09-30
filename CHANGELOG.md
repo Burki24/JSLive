@@ -81,7 +81,7 @@ Patchstelle, beispielsweise `v0.10.0`.
 - `getGlobalConfig` sowie alle etablierten JSON-Kindbefehle deklarieren
   `application/json`. Die globale Konfigurationsantwort wird explizit nicht
   gecacht und wie die uebrigen Erfolgsantworten gegen MIME-Sniffing geschuetzt.
-- Erfolgreiche HTML-, CSS-, JavaScript-, SVG-, Kalender- und Plain-Text-
+- Erfolgreiche HTML-, CSS-, JavaScript-, SVG- und Plain-Text-
   Antworten deklarieren feste Inhaltstypen mit UTF-8-Zeichensatz. Vom
   Progressbar-Kindmodul gelieferte Bildtypen werden auf die vier tatsaechlich
   konfigurierbaren Formate begrenzt; unbekannte oder manipulierte Angaben
@@ -105,10 +105,15 @@ Patchstelle, beispielsweise `v0.10.0`.
   Instanzen muessen vor einem Update geloescht werden. Die Modul-ID
   `{6C44628E-B623-7B92-D61D-0B3EAF4D6345}` wird nicht wiederverwendet; eine
   spaetere lokale Einmalverteilung wird getrennt entworfen.
+- `SymconJSLiveCalendar` wurde einschliesslich seiner Templates,
+  FullCalendar-Assets, ICS-/CSS-Webhooks und modulspezifischen Tests entfernt.
+  Vorhandene Calendar-Instanzen muessen vor einem Update auf diesen Stand
+  geloescht werden. Die Modul-ID `{46B41C3B-DDAE-BA35-2A1E-6CF4B7F9BF7A}`
+  und das Praefix `SymconJSLiveCalendar` werden nicht wiederverwendet.
 
 ### Added
 
-- Eine getestete `IPSModuleStrict`-Migrationsinventur erfasst alle 81
+- Eine getestete `IPSModuleStrict`-Migrationsinventur erfasst alle 74
   oeffentlichen Methodendeklarationen mit Zielsignaturen sowie die geaenderten
   Grenzen fuer Variablenregistrierung, Schreibzugriff, Parent-Verbindung,
   Datenfluss und Webhooks. Die produktiven Modulklassen bleiben in diesem
