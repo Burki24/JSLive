@@ -33,6 +33,11 @@ Patchstelle, beispielsweise `v0.10.0`.
 - Der DateTimePicker fuehrt beim Schreiben eine konfigurierte benutzerdefinierte
   Variablenaktion aus und faellt nur ohne Custom- oder Profilaktion auf das
   direkte Setzen des Zeitwerts zurueck.
+- Der Progressbar stellt vollstaendige benutzerdefinierte SVG-Grafiken auch bei
+  gespeicherter Stroke-Auswahl im von der Loading-Bar-Bibliothek unterstuetzten
+  Fill-Modus dar. Dadurch bleiben Wertaktualisierungen ohne JavaScript-Fehler
+  funktionsfaehig; benutzerdefinierte SVG-Pfade und Presets behalten ihren
+  konfigurierten Stroke-Modus.
 - Splitter, Kindmodul-Basisklasse und alle verbliebenen Module verwenden
   `DebugHelper`.
   Bei aktiviertem Debug erscheinen vollstaendige Browser-, Konfigurations-

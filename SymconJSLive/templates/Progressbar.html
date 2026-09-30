@@ -103,7 +103,8 @@
             output["path"] = configuration.shape_path;
         }
 
-        output["type"] =  configuration.Type;
+        // loading-bar cannot animate an image as a stroke because its image branch has no stroke path.
+        output["type"] = configuration.shape_svg === true ? "fill" : configuration.Type;
         if(configuration.shape_svg === false && configuration.shape_path === "")  output["preset"] =  configuration.shape_preset; //fan line bubble circle
 
         output["precision"] = configuration.data_precision;

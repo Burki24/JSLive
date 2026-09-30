@@ -6,6 +6,9 @@ Run the project checks from the repository root:
 php tests/run.php
 ```
 
+Der Runner verwendet neben PHP auch Python 3 fuer die Metadaten- und
+Helper-Pruefungen sowie Node.js fuer die JavaScript-Renderingvertraege.
+
 The official Symcon style configuration is available through the `.style`
 submodule. Its local read-only check is:
 
@@ -81,3 +84,10 @@ and parent placeholder stages, CSS color conversion, unique font inclusion,
 current-value escaping and the cache-disabled, cache-hit and cache-rebuild
 responses. The test asserts stable rendering contracts instead of storing the
 complete generated HTML as a snapshot.
+
+## Progressbar rendering harness
+
+`progressbar-rendering.js` fuehrt die reale `LoadBarConfig()`-Funktion aus der
+gebuendelten Progressbar-Vorlage aus. Der Test sichert ab, dass vollstaendige
+SVG-Grafiken den unterstuetzten Fill-Modus verwenden, waehrend Presets und
+benutzerdefinierte Pfade ihre konfigurierte Stroke-Darstellung behalten.

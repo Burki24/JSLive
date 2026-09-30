@@ -19,7 +19,7 @@ Wertebereich und Form konfigurieren und mit dem Splitter verbinden.
 | --- | --- |
 | Daten | `Variable`, `data_min`, `data_max`, Präzision und Animationszeiten |
 | Form | `shape_preset` (unter anderem Linie, Kreis, Fan, Rainbow, Energy oder Text) |
-| Eigene Form | `shape_svg` beziehungsweise `shape_path`; SVG-Pfade können über `LoadSvg(string $base64)` geladen werden |
+| Eigene Form | `shape_svg` beziehungsweise `shape_path`; vollständige SVG-Grafiken werden technisch im Fill-Modus dargestellt, SVG-Pfade können über `LoadSvg(string $base64)` für den Stroke-Modus geladen werden |
 | Darstellung | Stroke-/Fill-Richtung, Farben, Alpha, Trail, Dash, Schrift und Position |
 | Ausgabe | HTMLBox/IPSView, eigene Vorlage über `TemplateScriptID`, Viewport und IFrame-Größe |
 | Betrieb | Browser-Cache, Debug sowie optionale Größenüberschreibungen |
