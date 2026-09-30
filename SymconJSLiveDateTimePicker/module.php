@@ -145,27 +145,28 @@ class SymconJSLiveDateTimePicker extends JSLiveModule
             return 'NO VARIABLE, OR VALUE SET!';
         }
 
-        if ($querydata['var'] != $this->ReadPropertyInteger('Variable')) {
+        $variableID = $this->ReadPropertyInteger('Variable');
+        if ($querydata['var'] != $variableID) {
             $this->SendSafeDebug('SetData', 'VARIABLE NOT SET!');
             return 'VARIABLE NOT SET!';
         }
 
-        if (!IPS_VariableExists($this->ReadPropertyInteger('Variable'))) {
+        if (!IPS_VariableExists($variableID)) {
             $this->SendSafeDebug('SetData', 'VARIABLE NOT EXIST!');
             return 'VARIABLE NOT EXIST!';
         }
 
         $curTimezone = new DateTime();
         $timeVal = new DateTime();
-        $timeVal->setTimestamp($querydata['val']);
+        $timeVal->setTimestamp((int) $querydata['val']);
         $timeVal->sub(new DateInterval('PT' . $timeVal->getOffset() . 'S'));
 
         $this->SendSafeDebug('SetData', 'Update Variable');
 
-        if (IPS_GetVariable($querydata['var'])['VariableAction'] > 0) {
-            RequestAction($querydata['var'], $timeVal->getTimestamp());
+        if (IPS_GetVariable($variableID)['VariableAction'] > 0) {
+            RequestAction($variableID, $timeVal->getTimestamp());
         }else {
-            SetValue($querydata['var'], $timeVal->getTimestamp());
+            SetValue($variableID, $timeVal->getTimestamp());
         }
 
         return 'OK';

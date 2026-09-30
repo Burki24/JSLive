@@ -354,6 +354,28 @@ assertWebhookRouting(
 $harness->setCacheEnabled(false);
 $harness->resetCapturedData();
 
+$harness->setChildResponses([
+    json_encode(
+        [
+            'InstanceID'     => '42',
+            'Contend'        => '<div>Instance {INSTANCE}</div>',
+            'lastModify'     => 'Mon, 01 Jan 2024 00:00:00 GMT',
+            'EnableCache'    => false,
+            'EnableViewport' => true
+        ],
+        JSON_THROW_ON_ERROR
+    )
+]);
+$uncachedContentResponse = $harness->route(
+    '/hook/JSLive/',
+    'instance=42&pw=synthetic-secret'
+);
+assertWebhookRouting(
+    $uncachedContentResponse['output'] === '<div>Instance 42</div>',
+    'An uncached module response must accept the numeric instance ID from the query string.'
+);
+$harness->resetCapturedData();
+
 $deniedResponse = $harness->route('/hook/JSLive/getData', 'instance=42&pw=wrong-secret');
 assertWebhookRouting($deniedResponse['output'] === '', 'A rejected password must not produce response data.');
 assertWebhookRouting($harness->childMessages === [], 'A rejected password must not reach child modules.');

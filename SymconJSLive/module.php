@@ -415,7 +415,7 @@ class SymconJSLive extends WebHookModule
 
                 if (!$arr_data['EnableCache']) {
                     //wenn cache deaktiviert dann global aktualiesieren!
-                    $contend = $this->ReplacePlaceholder($contend, $queryData['instance'], $arr_data['EnableViewport']);
+                    $contend = $this->ReplacePlaceholder($contend, (int) $queryData['instance'], $arr_data['EnableViewport']);
                 }
             }
             elseif (strtolower($Type) == 'loadfile') {

@@ -84,7 +84,7 @@ $dateTime = new SymconJSLiveDateTimePicker();
 $timestamp = 1700000000;
 $result = $dateTime->ReceiveData(debugRequest([
     'cmd'       => 'setData',
-    'queryData' => ['var' => 42, 'val' => $timestamp]
+    'queryData' => ['var' => '42', 'val' => (string) $timestamp]
 ]));
 if ($result !== 'OK' || $writes[1] !== ['id' => 42, 'value' => $timestamp]) {
     throw new RuntimeException('DateTimePicker changed its successful write contract.');

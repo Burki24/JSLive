@@ -26,6 +26,10 @@ Patchstelle, beispielsweise `v0.10.0`.
 - Der DateTimePicker konvertiert numerische Zeitwerte bei der
   HTML-Platzhalterersetzung explizit in Strings und erzeugt unter PHP 8.5 wieder
   seine HTML-/IPSView-Ausgabe.
+- Ungecachte HTML-Webhooks und DateTimePicker-Schreibaufrufe konvertieren ihre
+  numerischen Querywerte vor strikt typisierten PHP-8.5-Aufrufen explizit in
+  Ganzzahlen. Direkte Modulansichten und Zeitaktionen brechen dadurch nicht
+  mehr mit einem `TypeError` ab.
 - Splitter, Kindmodul-Basisklasse und alle verbliebenen Module verwenden
   `DebugHelper`.
   Bei aktiviertem Debug erscheinen vollstaendige Browser-, Konfigurations-
