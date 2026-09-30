@@ -84,6 +84,11 @@ final class WebhookRoutingHarness extends SymconJSLive
         $this->properties['enableCache'] = $enabled;
     }
 
+    public function setCompressionEnabled(bool $enabled): void
+    {
+        $this->properties['enableCompression'] = $enabled;
+    }
+
     public function resolveImageMimeTypeForTest(mixed $mimeType): string
     {
         return $this->NormalizeImageMimeType($mimeType);
@@ -117,7 +122,7 @@ final class WebhookRoutingHarness extends SymconJSLive
     }
 
     /**
-     * @param array<string, string> $serverOverrides
+     * @param array<string, string|null> $serverOverrides
      *
      * @return array{output: string, result: mixed, statusCode: int|false}
      */
@@ -135,6 +140,11 @@ final class WebhookRoutingHarness extends SymconJSLive
             'QUERY_STRING'         => $queryString,
             'HTTP_ACCEPT_ENCODING' => ''
         ], $serverOverrides);
+        foreach ($serverOverrides as $name => $value) {
+            if ($value === null) {
+                unset($_SERVER[$name]);
+            }
+        }
         $_POST = $post;
 
         ob_start();
@@ -435,6 +445,29 @@ assertWebhookRouting(
     ($dataMessage['inner']['queryData']['var'] ?? null) === '17',
     'getData no longer forwards module-specific query values.'
 );
+
+$harness->resetCapturedData();
+$harness->setCompressionEnabled(true);
+$harness->setChildResponses(['{"value":42}']);
+set_error_handler(static function (int $severity, string $message, string $file, int $line): never
+{
+    throw new ErrorException($message, 0, $severity, $file, $line);
+});
+try {
+    $headerlessDataResponse = $harness->route(
+        '/hook/JSLive/getData',
+        'instance=42&pw=synthetic-secret&var=17',
+        [],
+        ['HTTP_ACCEPT_ENCODING' => null]
+    );
+} finally {
+    restore_error_handler();
+}
+assertWebhookRouting(
+    $headerlessDataResponse['output'] === '{"value":42}',
+    'A request without Accept-Encoding must retain the uncompressed response body.'
+);
+$harness->setCompressionEnabled(false);
 
 $harness->resetCapturedData();
 $harness->setPassword('synthetic secret+=&');

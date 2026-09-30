@@ -457,7 +457,8 @@ class SymconJSLive extends WebHookModule
                 ]);
             }
 
-            if ($this->ReadPropertyBoolean('enableCompression') && strstr($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) {
+            if ($this->ReadPropertyBoolean('enableCompression')
+                && str_contains((string) ($_SERVER['HTTP_ACCEPT_ENCODING'] ?? ''), 'gzip')) {
                 $compressed = gzencode($contend);
                 header('Content-Encoding: gzip');
                 header('Content-Length: ' . strlen($compressed));

@@ -57,6 +57,9 @@ Patchstelle, beispielsweise `v0.10.0`.
 - Die Chart-Kompatibilitaetsroute `getLanguage` liefert wieder die vom
   bestehenden Frontend-Loader erwartete Konfigurationsstruktur, ohne unter
   PHP 8.5 auf nicht initialisierte Variablen zuzugreifen.
+- Dynamische Webhook-Antworten behandeln Clients ohne `Accept-Encoding`-Header
+  als nicht gzip-faehig, statt unter PHP 8.5 eine Warnung in den Response-Body
+  zu schreiben.
 
 ### Security
 
