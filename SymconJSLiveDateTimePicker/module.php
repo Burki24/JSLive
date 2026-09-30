@@ -178,10 +178,10 @@ class SymconJSLiveDateTimePicker extends JSLiveModule
 
         //variables
         if (IPS_VariableExists($this->ReadPropertyInteger('Variable'))) {
-            $htmlData = str_replace('{VALUE}', GetValue($this->ReadPropertyInteger('Variable')), $htmlData);
+            $htmlData = str_replace('{VALUE}', (string) GetValue($this->ReadPropertyInteger('Variable')), $htmlData);
         }else {
             $this->SendSafeDebug('SetData', 'VARIABLE NOT EXIST!');
-            $htmlData = str_replace('{VALUE}', 0, $htmlData);
+            $htmlData = str_replace('{VALUE}', '0', $htmlData);
         }
 
         //Load Fonts

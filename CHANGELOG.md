@@ -23,6 +23,9 @@ Patchstelle, beispielsweise `v0.10.0`.
   dieses Feld aus, statt die Instanz-ID im maskierten inneren `Buffer` zu suchen.
 - Die HTML-Platzhalterersetzung konvertiert numerische Instanz-IDs unter PHP 8.5
   explizit in Strings und bricht dadurch gecachte Chart-Ausgaben nicht mehr ab.
+- Der DateTimePicker konvertiert numerische Zeitwerte bei der
+  HTML-Platzhalterersetzung explizit in Strings und erzeugt unter PHP 8.5 wieder
+  seine HTML-/IPSView-Ausgabe.
 - Splitter, Kindmodul-Basisklasse und alle verbliebenen Module verwenden
   `DebugHelper`.
   Bei aktiviertem Debug erscheinen vollstaendige Browser-, Konfigurations-
