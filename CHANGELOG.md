@@ -38,6 +38,13 @@ Patchstelle, beispielsweise `v0.10.0`.
   Fill-Modus dar. Dadurch bleiben Wertaktualisierungen ohne JavaScript-Fehler
   funktionsfaehig; benutzerdefinierte SVG-Pfade und Presets behalten ihren
   konfigurierten Stroke-Modus.
+- Die oeffentlichen Callbacks dynamischer Konfigurationsformulare verwenden
+  unter PHP 8.5 unterstuetzte skalare Parametertypen. Boolesche und numerische
+  Werte werden ueber einen String transportiert und intern typisiert;
+  Chart-Listenzeilen werden als JSON-String uebergeben und validiert. Dadurch
+  registriert IP-Symcon die betroffenen Modulfunktionen ohne Type-Hint-Warnungen.
+  Eigene Aufrufe der beiden Chart-Formularcallbacks muessen Arraywerte nun mit
+  `json_encode()` uebergeben.
 - Splitter, Kindmodul-Basisklasse und alle verbliebenen Module verwenden
   `DebugHelper`.
   Bei aktiviertem Debug erscheinen vollstaendige Browser-, Konfigurations-

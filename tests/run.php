@@ -11,6 +11,7 @@ $tests = [
     __DIR__ . '/strict-module-migration.php',
     __DIR__ . '/configuration-transfer.php',
     __DIR__ . '/configuration-form.php',
+    __DIR__ . '/public-form-callbacks.php',
     __DIR__ . '/adv-textfield-rendering.php',
     __DIR__ . '/datetime-rendering.php',
     __DIR__ . '/radar-chart-dates.php',

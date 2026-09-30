@@ -347,13 +347,14 @@ class SymconJSLiveChart extends JSLiveModule
     }
 
     /**
-     * @param $arr $item that was add/change/remove
-     * @param $type 0 = add, 1 = edit, 2 = remove
+     * @param string $arr JSON-encoded item that was added, changed or removed
+     * @param int $type 0 = add, 1 = edit, 2 = remove
      * @return void
      */
-    public function ReloadFormAxes($arr, $type)
+    public function ReloadFormAxes(string $arr, int $type): void
     {
-        if (is_null($arr)) return;
+        $arr = json_decode($arr, true);
+        if (!is_array($arr)) return;
         $formData = json_decode($this->GetBuffer('ConfigurationBuffer'), true);
         $axes = json_decode($this->GetBuffer('AxesBuffer'), true);
 
@@ -427,18 +428,19 @@ class SymconJSLiveChart extends JSLiveModule
         $this->SetBuffer('ConfigurationBuffer', json_encode($formData));
         $this->SetBuffer('AxesBuffer', json_encode($axes));
 
-        $this->ReloadFormDatasets([], 3);
+        $this->ReloadFormDatasets('[]', 3);
 
     }
 
     /**
-     * @param $arr
-     * @param $type 0 = add / 1 = change / 2 = remove / 3 = update
+     * @param string $arr JSON-encoded item
+     * @param int $type 0 = add / 1 = change / 2 = remove / 3 = update
      * @return void
      */
-    public function ReloadFormDatasets($arr, $type)
+    public function ReloadFormDatasets(string $arr, int $type): void
     {
-        if (is_null($arr)) return;
+        $arr = json_decode($arr, true);
+        if (!is_array($arr)) return;
         return;
         $formData = json_decode($this->GetBuffer('ConfigurationBuffer'), true);
         $axes = json_decode($this->GetBuffer('AxesBuffer'), true);

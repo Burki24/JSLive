@@ -229,3 +229,12 @@ Eine Strict-Gruppe ist erst abgeschlossen, wenn:
 
 Die vorliegende Bestandsaufnahme ist noch keine Freigabe für
 `IPSModuleStrict`; sie definiert die Voraussetzungen dafür.
+
+## Bereits gehärtete Formular-Callbacks
+
+Die öffentlich exportierten Formular-Callbacks verwenden bereits die vom
+Legacy-Modullader unterstützten skalaren Parametertypen. Dynamische
+Formularwerte werden als String übertragen und intern wieder in Boolean- oder
+Integerwerte überführt. Chart-Listenzeilen werden als JSON-String transportiert
+und vor der Verarbeitung defensiv dekodiert. Diese Transportkodierung bleibt
+auch bei der späteren Strict-Migration Teil des öffentlichen Callback-Vertrags.

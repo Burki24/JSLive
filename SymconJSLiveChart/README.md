@@ -36,6 +36,12 @@ Der bestehende JSLive-Vertrag umfasst `getContend`, `getData` und
 für den angeforderten Zeitraum; `LoadOtherConfiguration(int $id)` übernimmt die
 Konfiguration einer anderen Chart-Instanz.
 
+Die vom Konfigurationsformular verwendeten öffentlichen Callbacks
+`ReloadFormAxes(string $arr, int $type)` und
+`ReloadFormDatasets(string $arr, int $type)` erwarten die jeweilige Listenzeile
+als JSON-String. Eigene Skriptaufrufe müssen Arraywerte daher mit
+`json_encode()` übergeben.
+
 ## Frontend und Sicherheit
 
 Die Standardvorlage ist `Chart.html`. Chart.js, Moment und die benötigten

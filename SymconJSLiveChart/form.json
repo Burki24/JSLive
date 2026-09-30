@@ -1261,9 +1261,9 @@
             "delete": true,
             "edit": true,
             "changeOrder": true,
-            "onAdd": "SymconJSLiveChart_ReloadFormAxes($id, $Axes, 0);",
-            "onEdit": "SymconJSLiveChart_ReloadFormAxes($id, $Axes, 1);",
-            "onDelete": "SymconJSLiveChart_ReloadFormAxes($id, $Axes, 2);",
+            "onAdd": "SymconJSLiveChart_ReloadFormAxes($id, json_encode($Axes), 0);",
+            "onEdit": "SymconJSLiveChart_ReloadFormAxes($id, json_encode($Axes), 1);",
+            "onDelete": "SymconJSLiveChart_ReloadFormAxes($id, json_encode($Axes), 2);",
             "columns": [
                 {
                     "caption": "Ident",
@@ -1490,8 +1490,8 @@
             "delete": true,
             "edit": true,
             "changeOrder": true,
-            "onAdd": " SymconJSLiveChart_ReloadFormDatasets($id, $Datasets, 0);",
-            "onEdit": " SymconJSLiveChart_ReloadFormDatasets($id, $Datasets, 1);",
+            "onAdd": " SymconJSLiveChart_ReloadFormDatasets($id, json_encode($Datasets), 0);",
+            "onEdit": " SymconJSLiveChart_ReloadFormDatasets($id, json_encode($Datasets), 1);",
             "columns": [
                 {
                     "caption": "Type",

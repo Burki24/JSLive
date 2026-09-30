@@ -322,9 +322,10 @@ class JSLiveModule extends IPSModule
 
         return $formData;
     }
-    public function ReloadConfigurationForm($name, $value)
+    public function ReloadConfigurationForm(string $name, string $value): void
     {
         $configData = json_decode($this->GetBuffer('ConfigurationBuffer'), true);
+        $value = $this->NormalizeConfigurationFormValue($name, $value);
 
         $this->RecursiveReloadForm($name, $value, $configData['elements']);
         $this->RecursiveReloadForm($name, $value, $configData['actions']);
@@ -922,10 +923,20 @@ class JSLiveModule extends IPSModule
             if (array_key_exists('edit', $item) && is_array($item['edit']) && array_key_exists('options', $item['edit'])) $arr[$key]['edit']['options'] = $this->RecursiveAddFormFunction($arr[$key]['edit']['options'], $addFunctions);
 
             if (array_key_exists('name', $item) && in_array($item['name'], $addFunctions)) {
-                $arr[$key]['onChange'] = IPS_GetInstance($this->InstanceID)['ModuleInfo']['ModuleName'] . "_ReloadConfigurationForm(\$id, '" . $item['name'] . "', \$" . $item['name'] . ');';
+                $arr[$key]['onChange'] = IPS_GetInstance($this->InstanceID)['ModuleInfo']['ModuleName'] . "_ReloadConfigurationForm(\$id, '" . $item['name'] . "', (string) \$" . $item['name'] . ');';
             }
         }
         return array_values($arr);
+    }
+    private function NormalizeConfigurationFormValue(string $name, string $value): bool|int|string
+    {
+        if ($name === 'ViewLevel') {
+            return (int) $value;
+        }
+
+        $booleanValue = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+
+        return $booleanValue ?? $value;
     }
     private function RecursiveReloadForm($name, $value, $arr)
     {

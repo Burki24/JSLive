@@ -228,7 +228,7 @@ assertConfigurationForm(
 $headerController = findConfigurationFormItem($basic['form'], 'header_display');
 assertConfigurationForm(
     ($headerController['onChange'] ?? null)
-        === "SymconJSLiveCalendar_ReloadConfigurationForm(\$id, 'header_display', \$header_display);",
+        === "SymconJSLiveCalendar_ReloadConfigurationForm(\$id, 'header_display', (string) \$header_display);",
     'A requireItem controller must reload its dependent fields.'
 );
 
@@ -261,14 +261,21 @@ assertConfigurationForm(
 $reload = renderCalendarConfigurationForm(0, false);
 $reloadHeaderRow = findHeaderDependentRow($reload['form']);
 $GLOBALS['jsliveConfigurationFormState']['updates'] = [];
-$reload['module']->ReloadConfigurationForm('header_display', true);
+$reload['module']->ReloadConfigurationForm('header_display', 'true');
 assertConfigurationForm(
     latestConfigurationFormUpdate($reloadHeaderRow['name'], 'visible') === true,
     'ReloadConfigurationForm must reveal requireItem fields when their controller is enabled.'
 );
 
 $GLOBALS['jsliveConfigurationFormState']['updates'] = [];
-$reload['module']->ReloadConfigurationForm('ViewLevel', 1);
+$reload['module']->ReloadConfigurationForm('header_display', 'false');
+assertConfigurationForm(
+    latestConfigurationFormUpdate($reloadHeaderRow['name'], 'visible') === false,
+    'ReloadConfigurationForm must hide requireItem fields when their controller is disabled.'
+);
+
+$GLOBALS['jsliveConfigurationFormState']['updates'] = [];
+$reload['module']->ReloadConfigurationForm('ViewLevel', '1');
 assertConfigurationForm(
     latestConfigurationFormUpdate('buttons_borderWidth', 'visible') === true
         && latestConfigurationFormUpdate('buttons_borderWidth', 'enabled') === true,
