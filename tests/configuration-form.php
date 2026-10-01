@@ -87,6 +87,32 @@ function assertConfigurationForm(bool $condition, string $message): void
     }
 }
 
+$moduleBaseSource = file_get_contents(dirname(__DIR__) . '/SymconJSLive/libs/JSLiveModule.php');
+assertConfigurationForm($moduleBaseSource !== false, 'Unable to read the child-module base source.');
+assertConfigurationForm(
+    str_contains(
+        $moduleBaseSource,
+        "require_once dirname(__DIR__, 2) . '/libs/helper/ConfigurationFormHelper.php';"
+    ),
+    'JSLiveModule must load the vendored ConfigurationFormHelper.'
+);
+assertConfigurationForm(
+    str_contains($moduleBaseSource, 'use \\Burki24\\SymconModuleHelper\\ConfigurationFormHelper {')
+        && str_contains($moduleBaseSource, 'LoadConfigurationForm as private LoadStaticConfigurationForm;'),
+    'JSLiveModule must alias the helper loader without changing its public LoadConfigurationForm contract.'
+);
+assertConfigurationForm(
+    str_contains($moduleBaseSource, '$formData = $this->LoadStaticConfigurationForm();'),
+    'JSLiveModule must load form.json through ConfigurationFormHelper.'
+);
+assertConfigurationForm(
+    !str_contains(
+        $moduleBaseSource,
+        "realpath(__DIR__ . '/../../' . get_called_class() . '/form.json')"
+    ),
+    'JSLiveModule must not keep its manual configuration-form path resolver.'
+);
+
 /**
  * @param list<array<string, mixed>> $items
  * @return list<array<string, mixed>>

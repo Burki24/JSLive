@@ -37,6 +37,10 @@ Patchstelle, beispielsweise `v0.10.0`.
   gebracht.
 - Splitter und Kindmodul-Basisklasse verwenden den zentral synchronisierten
   `DataFlowHelper` fuer ihre bestehenden Datenaustausch-Umschlaege.
+- Die gemeinsame Kindmodul-Basisklasse lädt und validiert die statischen
+  `form.json`-Dateien über den zentral synchronisierten
+  `ConfigurationFormHelper`. Die öffentliche dynamische Formularlogik und
+  `LoadConfigurationForm()` bleiben unverändert.
 - Nachrichten vom Splitter an Kindmodule tragen die Zielinstanz zusaetzlich als
   eindeutiges aeusseres Routingfeld `InstanceID`. Der Empfangsfilter wertet
   dieses Feld aus, statt die Instanz-ID im maskierten inneren `Buffer` zu suchen.

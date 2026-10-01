@@ -102,20 +102,21 @@ und Regressionstests.
 
 ## 6. Helper-Abgleich mit SymconDevelopment
 
-`.helper-sync.json` bezieht elf Helper-Pakete. Aktuell produktiv eingebunden ist
-nur `DataFlowHelper`.
+`.helper-sync.json` bezieht elf Helper-Pakete. Produktiv eingebunden sind
+`ConfigurationFormHelper`, `DataFlowHelper`, `DebugHelper` und
+`HttpResponseHelper`.
 
 | Zentraler Helper | Heutiger lokaler Bestand bzw. moegliche Nutzung |
 | --- | --- |
-| `ConfigurationFormHelper` | Teilueberschneidung mit eigener dynamischer Formularlogik; nicht ohne Charakterisierung ersetzbar |
+| `ConfigurationFormHelper` | Laedt und validiert in `JSLiveModule` den statischen `form.json`-Anteil; die charakterisierte dynamische Filter- und Reload-Logik bleibt lokal |
 | `DataFlowHelper` | Bereits in Splitter und Kindmodul-Basisklasse integriert |
-| `DebugHelper` | Ersatz fuer unmaskierte Debug-Ausgaben und sensible Payloads |
-| `HttpResponseHelper` | Ersatz fuer einen Teil der manuellen Header-/Echo-Antworten |
-| `PersistentJsonCacheHelper` | Kandidat fuer JSON-Buffer; Altmodule serialisieren teils PHP-Daten |
+| `DebugHelper` | In Splitter, gemeinsamer Kindmodul-Basis und allen Kindmodulen integriert |
+| `HttpResponseHelper` | Fuer die fuenf Plain-Text-Abbruchantworten des Splitters integriert |
+| `PersistentJsonCacheHelper` | Nicht fuer die heute bewusst fluechtigen Laufzeitbuffer geeignet; eine Umstellung auf persistente Attribute benoetigt eine eigene Migration |
 | `ResponsiveVisualizationHelper` | Kandidat fuer Viewport-/Iframe-CSS |
-| `VariableHelper` | Kandidat fuer wiederholte Objekt-/Variablenzugriffe |
+| `VariableHelper` | Passt nicht auf konfigurierte externe Objekt-IDs; eigene Strict-Modulvariablen verwenden bereits den nativen Ident-Zugriff |
 | `VariablePresentationHelper` | Basis fuer native Darstellungen statt neuer Legacy-Profile |
-| `VisualizationAssetHelper` | Kandidat fuer kontrollierte lokale Asset-Auslieferung |
+| `VisualizationAssetHelper` | Passt nicht auf den historischen dynamischen Webhook-Pfad; bleibt einer spaeteren HTML-SDK-Visualisierung vorbehalten |
 | `VisualizationThemeHelper` | Kandidat fuer gemeinsame Theme-CSS-Werte |
 | `VisualizationThemeConfigurationHelper` | Kandidat fuer gemeinsame Theme-Konfiguration |
 
@@ -169,7 +170,8 @@ Vorhandene lokale Pruefungen:
   unvollstaendiger und modulfremder Importe;
 - `tests/configuration-form.php`: reales Chart-Formular mit initialer und
   dynamischer Auswertung von `viewlevel` und `requireItem` in verschachtelten
-  Strukturen;
+  Strukturen sowie Integration des `ConfigurationFormHelper` fuer das statische
+  Laden und Validieren von `form.json`;
 - `tests/adv-textfield-rendering.php`: gebuendeltes und skriptbasiertes
   AdvTextfield-Template mit zweistufiger Platzhalterverarbeitung,
   CSS-Farb-/Fontaufbereitung sowie cachefreiem, gecachtem und neu aufgebautem
@@ -633,10 +635,17 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
 
 ### Phase 3 - Helper-Integration
 
-1. Zuerst risikoarme Querschnittsfunktionen: Debug und HTTP-Antworten.
-2. Danach Assets, Variablenzugriffe und persistente JSON-Caches.
-3. Form-, Responsive- und Theme-Helper pro Pilotmodul einfuehren; Verhalten vor
-   und nach der Umstellung vergleichen.
+1. Abgeschlossen: Die risikoarmen Querschnittsfunktionen fuer Debug und die
+   Plain-Text-HTTP-Antworten verwenden `DebugHelper` und `HttpResponseHelper`.
+2. Bewertet: `VisualizationAssetHelper` passt nicht auf den historischen
+   dynamischen Webhook-Pfad, `VariableHelper` nicht auf konfigurierte externe
+   Objekt-IDs und `PersistentJsonCacheHelper` nicht ohne Migration auf die
+   heute fluechtigen Laufzeitbuffer. Diese Helper werden deshalb nicht
+   erzwungen integriert.
+3. Begonnen: `ConfigurationFormHelper` uebernimmt in der gemeinsamen
+   Kindmodul-Basis das statische Laden und Validieren von `form.json`; die
+   bestehende dynamische Formularlogik bleibt unveraendert. Responsive- und
+   Theme-Helper folgen erst an einem geeigneten Darstellungspiloten.
 4. Nur nach erfolgreicher Wiederverwendung generalisierbare JSLive-Funktionen
    in `SymconDevelopment` bzw. `Symcon_ModuleHelper` vorschlagen.
 

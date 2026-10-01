@@ -2,11 +2,15 @@
 
 declare(strict_types=1);
 
+require_once dirname(__DIR__, 2) . '/libs/helper/ConfigurationFormHelper.php';
 require_once dirname(__DIR__, 2) . '/libs/helper/DataFlowHelper.php';
 require_once dirname(__DIR__, 2) . '/libs/helper/DebugHelper.php';
 
 class JSLiveModule extends IPSModuleStrict
 {
+    use \Burki24\SymconModuleHelper\ConfigurationFormHelper {
+        LoadConfigurationForm as private LoadStaticConfigurationForm;
+    }
     use \Burki24\SymconModuleHelper\DataFlowHelper;
     use \Burki24\SymconModuleHelper\DebugHelper;
 
@@ -306,20 +310,10 @@ class JSLiveModule extends IPSModuleStrict
     }
     public function LoadConfigurationForm(): array
     {
-        $formData = [];
-        $jsonPath = realpath(__DIR__ . '/../../' . get_called_class() . '/form.json');
+        $formData = $this->LoadStaticConfigurationForm();
 
-        if ($this->ReadPropertyBoolean('Debug')) $this->SendSafeDebug('GetConfigurationForm', $jsonPath);
-        if ($jsonPath === false) {
-            throw new RuntimeException('Unable to resolve the configuration form path.');
-        }
-        $formContents = file_get_contents($jsonPath);
-        if ($formContents === false) {
-            throw new RuntimeException('Unable to read the configuration form.');
-        }
-        $formData = json_decode($formContents, true, 512, JSON_THROW_ON_ERROR);
-        if (!is_array($formData)) {
-            throw new UnexpectedValueException('The configuration form must be a JSON object.');
+        if ($this->ReadPropertyBoolean('Debug')) {
+            $this->SendSafeDebug('GetConfigurationForm', get_called_class() . '/form.json');
         }
 
         //Remove Confoniguration for Basic => 0; Advance => 1; Expert => 2
