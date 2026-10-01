@@ -41,6 +41,10 @@ Patchstelle, beispielsweise `v0.10.0`.
   `form.json`-Dateien über den zentral synchronisierten
   `ConfigurationFormHelper`. Die öffentliche dynamische Formularlogik und
   `LoadConfigurationForm()` bleiben unverändert.
+- Die mitgelieferten Frontend-Abhaengigkeiten sind erstmals je Modul mit
+  Version, Ladeweg, Laufzeitstatus und vorhandenem Lizenznachweis inventarisiert.
+  Ein Regressionstest stellt sicher, dass neue Template-Ressourcen in dieser
+  Inventur erfasst werden; produktive Assets und Ladepfade bleiben unveraendert.
 - Nachrichten vom Splitter an Kindmodule tragen die Zielinstanz zusaetzlich als
   eindeutiges aeusseres Routingfeld `InstanceID`. Der Empfangsfilter wertet
   dieses Feld aus, statt die Instanz-ID im maskierten inneren `Buffer` zu suchen.

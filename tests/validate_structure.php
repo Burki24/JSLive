@@ -46,6 +46,7 @@ if ($readme === false) {
 
 foreach ([
     'CHANGELOG.md',
+    'docs/FRONTEND_DEPENDENCIES.md',
     'docs/RELEASE_PROCESS.md',
     'docs/STRICT_MODULE_MIGRATION.md',
     'docs/SYCON_RUNTIME_MATRIX.md',

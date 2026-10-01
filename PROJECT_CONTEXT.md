@@ -305,16 +305,25 @@ Idents, Datentypen, Aktionen und bestehende Anwenderkonfigurationen erhalten.
 
 ## 10. Frontend-Abhaengigkeiten
 
-Das Repository vendort unter anderem Chart.js 3.6.0 und 4.3.3,
-chartjs-plugin-datalabels 2.2.0, chartjs-plugin-streaming 3.1.0, iro.js 5.5.0,
-Moment.js 2.27.0, jQuery, canvas-gauges,
-MCDatepicker und loading-bar. Mehrere Versionen und unminifizierte/minifizierte
-Kopien liegen parallel vor.
+Die Nutzung je Modul, lokale und externe Ladewege, erkannte Versionen,
+Lizenznachweise sowie unbenutzte und parallele Bestandsdateien sind in
+`docs/FRONTEND_DEPENDENCIES.md` inventarisiert. Ein Regressionstest gleicht die
+Ressourcenreferenzen der mitgelieferten Templates mit dieser Inventur ab.
 
-ColorPicker laedt iro.js trotz lokaler Kopie extern. Damit sind Darstellung,
+Aktiv eingesetzt werden unter anderem Chart.js 4.3.3 und 4.4.1,
+chartjs-plugin-datalabels 2.2.0, chartjs-plugin-streaming 3.1.0, Moment.js
+2.27.0, jQuery 3.6.0, Canvas Gauges 2.1.7 und Loading Bar. Daneben liegen
+unbenutzte Chart.js-3.x-Bestaende, MCDatepicker, eine lokale iro.js-5.5.0-Kopie
+und einzelne CSS-Dateien parallel vor.
+
+ColorPicker laedt iro.js trotz lokaler Kopie extern; die dynamischen
+Schriftdefinitionen laden WOFF2-Dateien von Google. Damit sind Darstellung,
 Offline-Betrieb und Lieferkette nicht vollstaendig reproduzierbar. Es fehlen ein
-Paketmanifest, ein dokumentierter Buildprozess, eine Lizenz-/Versionsliste und
-automatisierte Browserpruefungen.
+Paketmanifest, ein dokumentierter Buildprozess und vollstaendige lokale
+Lizenznachweise fuer MCDatepicker und die Schriften sowie automatisierte
+Browserpruefungen. Eine vorschnelle Bereinigung ist nicht zulaessig, weil
+benutzerdefinierte Template-Skripte und der historische HTMLBox-Pfad weitere
+lokale Assets verwenden koennen.
 
 ## 11. Technische Schulden und Risiken
 
@@ -651,7 +660,9 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
 
 ### Phase 4 - Frontend konsolidieren
 
-1. Nutzung jeder Bibliothek und jedes Plugins je Modul erfassen.
+1. Erledigt: Nutzung jeder Bibliothek und jedes Plugins je Modul ist in
+   `docs/FRONTEND_DEPENDENCIES.md` erfasst und durch einen Referenztest
+   abgesichert.
 2. Externe CDN-Ressourcen lokal, versioniert und lizenzdokumentiert bereitstellen.
 3. Unbenutzte oder doppelte Assets entfernen, danach Bibliotheken einzeln mit
    visuellen Regressionstests aktualisieren.
