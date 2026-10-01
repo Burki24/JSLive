@@ -32,9 +32,8 @@ Konfiguration einer anderen ColorPicker-Instanz.
 ## Frontend und Sicherheit
 
 Die Standardvorlage ist `ColorPicker.html`. Sie lädt die Bibliothek iro.js in
-der Bestandsversion noch von jsDelivr; dadurch ist der ColorPicker aktuell
-nicht vollständig offline reproduzierbar. Das wird in einem späteren Schritt
-auf eine geprüfte lokale Ressource umgestellt.
+der fest versionierten Ausgabe 5.5.0 lokal über den JSLive-Hook. Damit benötigt
+die Standardvorlage keine externe CDN-Verbindung.
 
 Eigene Vorlagen laufen als HTML/JavaScript im Browser. Schreibzugriffe auf
 Variablen sollten nur über geschützte JSLive-Hooks und vertrauenswürdige

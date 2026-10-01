@@ -94,11 +94,10 @@ erkannt werden. Debug daher nur in einer geschützten Testumgebung verwenden.
   ist dokumentiert und durch Vertragstests charakterisiert. Es verwendet
   weiterhin Kennwörter in URLs, Wildcard-CORS und GET für Schreibzugriffe; der
   Webhook sollte deshalb nicht ungeschützt öffentlich erreichbar sein.
-- ColorPicker bezieht noch eine Frontend-Ressource von einem externen CDN. Die
-  vollständige lokale und reproduzierbare Auslieferung ist geplant.
 - Mehrere Frontend-Bibliotheken liegen derzeit in unterschiedlichen Versionen
-  im Repository. Aktualisierungen erfolgen erst nach einer Nutzungs- und
-  Lizenzinventur.
+  im Repository. Aktualisierungen erfolgen erst nach der dokumentierten
+  Nutzungs-, Quellen- und Lizenzinventur. Die von den mitgelieferten Templates
+  benötigten iro.js- und Font-Ressourcen werden bereits lokal ausgeliefert.
 
 Weitere technische Details, Risiken und der priorisierte Modernisierungsplan
 stehen in [`PROJECT_CONTEXT.md`](PROJECT_CONTEXT.md). Die

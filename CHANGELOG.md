@@ -44,7 +44,11 @@ Patchstelle, beispielsweise `v0.10.0`.
 - Die mitgelieferten Frontend-Abhaengigkeiten sind erstmals je Modul mit
   Version, Ladeweg, Laufzeitstatus und vorhandenem Lizenznachweis inventarisiert.
   Ein Regressionstest stellt sicher, dass neue Template-Ressourcen in dieser
-  Inventur erfasst werden; produktive Assets und Ladepfade bleiben unveraendert.
+  Inventur erfasst werden.
+- ColorPicker lädt iro.js 5.5.0 nun aus dem lokalen Modulbestand statt über
+  jsDelivr. Die 20 bisher von Google geladenen WOFF2-Schriften werden ebenfalls
+  lokal über den JSLive-Hook ausgeliefert; Ursprungs-URLs, SHA-256-Werte und
+  zugehörige OFL-/Apache-/MPL-Lizenztexte sind im Repository enthalten.
 - Nachrichten vom Splitter an Kindmodule tragen die Zielinstanz zusaetzlich als
   eindeutiges aeusseres Routingfeld `InstanceID`. Der Empfangsfilter wertet
   dieses Feld aus, statt die Instanz-ID im maskierten inneren `Buffer` zu suchen.

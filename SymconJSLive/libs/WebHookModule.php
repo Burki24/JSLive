@@ -123,13 +123,21 @@ class WebHookModule extends IPSModuleStrict
     // -------------------------------------------------------------------------
     protected function GetMimeType($extension)
     {
+        $knownMimeTypes = [
+            'woff2' => 'font/woff2'
+        ];
+        $normalizedExtension = strtolower((string) $extension);
+        if (array_key_exists($normalizedExtension, $knownMimeTypes)) {
+            return $knownMimeTypes[$normalizedExtension];
+        }
+
         $lines = file(IPS_GetKernelDirEx() . 'mime.types');
         foreach ($lines as $line) {
             $type = explode("\t", $line, 2);
             if (count($type) == 2) {
                 $types = explode(' ', trim($type[1]));
                 foreach ($types as $ext) {
-                    if ($ext == $extension) {
+                    if ($ext == $normalizedExtension) {
                         return $type[0];
                     }
                 }

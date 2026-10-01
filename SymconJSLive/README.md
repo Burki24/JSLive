@@ -56,9 +56,11 @@ Verträge und werden bei der Modernisierung rückwärtskompatibel behandelt.
 
 ## Bekannte Einschränkungen
 
-Die Bestandsversion enthält sowohl lokal ausgelieferte Bibliotheken als auch
-einzelne externe Frontend-Ressourcen. Eine vollständige, reproduzierbare und
-lokale Auslieferung ist als eigener Modernisierungsschritt geplant.
+Die mitgelieferten Templates und Stylesheets laden ihre Frontend-Ressourcen
+lokal über `/hook/JSLive/js/`. Quellen, Versionen, Hashes und Lizenznachweise
+der vendorten Bibliotheken und Schriften sind in der zentralen
+Frontend-Inventur dokumentiert. Benutzerdefinierte Templates können weiterhin
+eigene externe Ressourcen einbinden.
 
 ## Lizenz
 

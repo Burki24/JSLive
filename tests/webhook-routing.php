@@ -94,6 +94,11 @@ final class WebhookRoutingHarness extends SymconJSLive
         return $this->NormalizeImageMimeType($mimeType);
     }
 
+    public function resolveStaticMimeTypeForTest(string $extension): string
+    {
+        return parent::GetMimeType($extension);
+    }
+
     public function buildDownloadContentDispositionForTest(string $filename): string
     {
         return $this->BuildDownloadContentDisposition($filename);
@@ -223,6 +228,10 @@ foreach (['image/gif', 'image/jpeg', 'image/png', 'image/svg+xml'] as $imageMime
         'Configured image MIME types must remain available.'
     );
 }
+assertWebhookRouting(
+    $harness->resolveStaticMimeTypeForTest('woff2') === 'font/woff2',
+    'Vendored WOFF2 fonts must be served with the font/woff2 MIME type.'
+);
 foreach (['text/html', "image/png\r\nX-Test: injected", '', ['image/png']] as $invalidMimeType) {
     assertWebhookRouting(
         $harness->resolveImageMimeTypeForTest($invalidMimeType) === 'application/octet-stream',
@@ -271,6 +280,13 @@ $assetResponse = $harness->route('/hook/JSLive/js/util.js', '');
 assertWebhookRouting(
     $assetResponse['output'] === file_get_contents(dirname(__DIR__) . '/SymconJSLive/js/util.js'),
     'A JavaScript asset inside the public directory must remain available.'
+);
+
+$fontAsset = 'TUZyzwprpvBS1izr_vOECuSf.woff2';
+$fontResponse = $harness->route('/hook/JSLive/js/fonts/' . $fontAsset, '');
+assertWebhookRouting(
+    $fontResponse['output'] === file_get_contents(dirname(__DIR__) . '/SymconJSLive/js/fonts/' . $fontAsset),
+    'A vendored WOFF2 font inside the public directory must remain available.'
 );
 
 $escapedAssetResponse = $harness->route('/hook/JSLive/js/../module.php', '');
