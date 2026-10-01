@@ -98,8 +98,10 @@ Frontend-Abhaengigkeiten.
    einschliesslich der Skripte auf MCP-CURRENT entfernt. Migration und
    Rueckfall sind dokumentiert. CI und gezielte Laufzeitabnahme der
    Chart.js-Bereinigung auf JSLive 0.71 sind bestanden.
-3. Lokal umgesetzt: Chart.js 4.5.1 vereinheitlicht die drei Standardvorlagen.
+3. Erledigt: Chart.js 4.5.1 vereinheitlicht die drei Standardvorlagen.
    Hash-, Referenz- und Webhook-Tests sichern Distribution und Ladepfade ab.
    Der lokale Browservergleich ist in der Laufzeitmatrix dokumentiert;
-   CI und Abnahme nach dem Modulupdate dieses Versionsschritts stehen noch aus.
+   CI und gezielte Abnahme nach Modulupdate auf 0.72 und Neustart sind bestanden.
+   Der dabei bestaetigte alte Radar-Tooltip-Fehler wird separat korrigiert;
+   diese Template-Korrektur benoetigt noch CI und Abnahme nach Modulupdate.
 

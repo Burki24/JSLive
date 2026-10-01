@@ -305,6 +305,46 @@ noch aus. Fuer diesen Asset-Schritt ist kein weiterer Dienstneustart
 vorausgesetzt; bei aktivem HTML-Cache Ausgaben ueber das bestehende
 `ApplyChanges()` erneuern und danach im Browser neu laden.
 
+## Gezielte Abnahme von 0.72 und separater Radar-Tooltip-Fix
+
+Am 01.10.2026 ist JSLive 0.72, Build 88703236, auf MCP-CURRENT bestaetigt
+(Quellcommit `5498104`, Metadatencommit `eed3eef`). Der zweite gemeldete
+Neustart ist durch die Kernel-Startzeit **20:20:27 Uhr MESZ** belegt; beim
+ersten Versuch war noch 0.71 installiert. Symcon 9.1 / PHP 8.5.8, alle elf
+Instanzen aktiv. Tests, Check Style und CodeQL fuer 0.72 sind erfolgreich.
+
+Der installierte neue Bundle und seine Source Map liefern HTTP 200 und sind
+SHA-256-identisch zum Repository. Beide alten 4.x-URLs bleiben erreichbar
+und inhaltlich unveraendert (lokale CRLF-/Server-LF-Zeilenenden beruecksichtigt).
+Alle drei Diagramme laden im Browser ausschliesslich 4.5.1 und rendern nach
+Neustart mit HTTP 200, WebSocket 101, funktionierender Legende und ohne
+initiale JavaScript-/Ressourcenfehler. Chart- und Doughnut-Tooltips funktionieren.
+Keine JSLive-Warnungen oder -Fehler seit dem Neustart. Der bekannte
+Radar-Tooltip-Fehler wurde erneut bestaetigt; daher kein uneingeschraenktes
+Gesamt-PASS trotz bestandener Bereitstellung des Versionsupdates.
+
+Der lokale Folgeschritt korrigiert ausschliesslich den Radar-Tooltip-Callback:
+Datensatzname und `formattedValue` aus dem Chart.js-4-Kontext ersetzen das
+nicht mehr uebergebene zweite Argument und den unpassenden `.y`-Zugriff.
+Properties, Datensaetze, PHP-Vertraege, Chart.js und Plugins bleiben unveraendert.
+
+Nachweise fuer den noch nicht installierten Fix:
+
+- `node tests/radar-tooltip.js` reproduzierte zuerst den urspruenglichen
+  `TypeError` und besteht nach der Korrektur mit sieben Faellen. Der Test
+  fuehrt den Original-Callback aus dem Template aus und prueft seine
+  Registrierung in der Standardkonfiguration, Nullwerte, negative Werte,
+  Dezimal-/lokalisierte Werte, numerische Strings sowie leere/fehlende Namen.
+  Er ist ueber `php tests/run.php` auch in der bestehenden CI eingebunden.
+- Edge 155.0.4283.18, 1024 x 768: Die unveraenderte installierte Radar-Ansicht
+  reproduzierte den Fehler. Nur im isolierten Testbrowser wurde der lokale
+  Callback eingesetzt. Echtes Hover auf einen Datenpunkt zeigte danach
+  Datensatzname und Wert; keine JavaScript-Fehler. Weitere rein clientseitige
+  Daten prueften -12.5, 0 und 24.75 mit von Chart.js erzeugten Tooltip-Kontexten.
+- Keine Symcon-Konfiguration und kein Variablenwert wurden geaendert.
+  Eigene Template-Skripte bleiben unangetastet. CI und gezielte Laufzeitabnahme
+  nach dem Modulupdate des Fixes stehen noch aus.
+
 ## Ergebnisregeln
 
 - `PASS`: alle verpflichtenden Punkte sind mit frischem Laufzeitnachweis grün.

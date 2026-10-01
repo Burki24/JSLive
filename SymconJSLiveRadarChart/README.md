@@ -44,6 +44,11 @@ einschließlich frei eingegebener Texte protokolliert; bekannte Zugangsdatenfeld
 werden maskiert.
 
 Die Standardvorlage verwendet die lokal versionierte Chart.js 4.5.1.
+Tooltips zeigen den Datensatznamen und den von Chart.js formatierten Wert,
+auch für Nullwerte und negative Zahlen. Die Standardvorlage verwendet dafür
+den Chart.js-4-Tooltip-Kontext. Eigene `TemplateScriptID`-Vorlagen werden nicht
+automatisch angepasst. Nach einem Modulupdate die Ansicht neu laden und bei
+aktivem HTML-Cache diesen über das bestehende `ApplyChanges()` neu aufbauen.
 Die alten URLs mit 4.3.3 und 4.4.1 bleiben für eigene Vorlagen unverändert.
 Für eigene Vorlagen mit historischen
 Chart.js-3.x-/Plugin-Pfaden gilt die

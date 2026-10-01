@@ -39,6 +39,7 @@ $tests = [
 
 $commands = [
     ['Test Progressbar rendering', 'node tests/progressbar-rendering.js'],
+    ['Test Radar tooltip', 'node tests/radar-tooltip.js'],
     ['Verify vendored helper integrity', 'python3 tests/helper_integrity.py'],
     ['Test library metadata updater', 'python3 tests/test_update_library_metadata.py']
 ];

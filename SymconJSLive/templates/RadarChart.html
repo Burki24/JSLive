@@ -472,35 +472,9 @@
 
         return { "start": sDate, "end": eDate};
     }
-    function UpdateTooltipLabel(tooltipItem, data){
-        var dataset = data.datasets[tooltipItem.datasetIndex];
-
-        var Suffix = "";
-        var Prefix = "";
-        var blocks = [];
-
-
-        /*required = {id: data.datasets[tooltipItem.datasetIndex].yAxisID};
-        AxisData = [];
-        Axiskeys = getMatchingKeys(config_axes, required);
-
-
-        Axiskeys.forEach(function(part, index) {
-            Suffix = config_axes[part].Suffix;
-            Prefix = config_axes[part].Prefix;
-        });*/
-
-        if (dataset.label) {
-            blocks.push(dataset.label + ': ');
-        }
-        if (Prefix !== "") {
-            blocks.push(Prefix);
-        }
-        blocks.push(dataset.data[tooltipItem.index].y)
-        if (Suffix !== "") {
-            blocks.push(Suffix);
-        }
-        return blocks.join('');
+    function UpdateTooltipLabel(context){
+        var label = context.dataset.label;
+        return (label ? label + ': ' : '') + context.formattedValue;
     }
     function UpdateLastValue(){
         config_dataset.forEach(function (part, index) {

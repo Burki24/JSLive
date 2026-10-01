@@ -179,6 +179,9 @@ Vorhandene lokale Pruefungen:
 - `tests/radar-chart-dates.php`: Datumsbereiche und Offset-Berechnung des
   RadarChart fuer alle acht Perioden in relativem und absolutem Modus sowie
   numerische Labels im Custom-Data-Pfad;
+- `tests/radar-tooltip.js`: der aus der Standardvorlage geladene und in deren
+  Chart-Konfiguration registrierte Tooltip-Callback mit sieben Faellen fuer
+  Zahlenwerte, Formatierung und optionale Datensatznamen;
 - `tests/chart-dates.php`: Datumsbereiche und Offset-Berechnung des Chart fuer
   alle acht Perioden in beiden Zeitmodi sowie numerische Webhook-Querywerte fuer
   Dataset- und Variablen-IDs;
@@ -677,16 +680,18 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    drei Skripten keine Treffer. Die Browserabnahme von 0.70 nach Dienstneustart
    ist erfolgt; auch CI und gezielte Laufzeitabnahme der Chart.js-Bereinigung
    auf 0.71 (Metadatencommit `787d24a`) sind bestanden.
-4. Lokal umgesetzt: Die drei Diagrammvorlagen verwenden gemeinsam Chart.js
+4. Erledigt: Die drei Diagrammvorlagen verwenden gemeinsam Chart.js
    4.5.1 aus einer integritaetsgeprueften, lokal versionierten Distribution.
    Alte 4.x-Pfade, Moment und Plugins bleiben unveraendert. Der lokale
-   Browservergleich ist in der Laufzeitmatrix dokumentiert; CI und
-   Laufzeitabnahme nach Modulupdate stehen fuer diesen Versionsschritt noch aus.
+   Browservergleich ist in der Laufzeitmatrix dokumentiert; CI und gezielte
+   Laufzeitabnahme des Versionsschritts auf 0.72 nach Neustart sind bestanden.
    Der Browservergleich hat einen bereits mit 4.4.1 vorhandenen Radar-Tooltip-
-   Fehler bestaetigt (alte Callback-Signatur); diesen anschliessend separat
-   mit Regressionstest korrigieren, bevor die Diagrammbedienung als bestanden gilt.
-   Anschliessend weitere Bibliotheken einzeln pruefen. iro.js bleibt auf
-   Wunsch unveraendert.
+   Fehler bestaetigt (alte Callback-Signatur).
+5. Lokal korrigiert: Radar-Tooltips verwenden den Chart.js-4-Kontext und dessen
+   formatierten Wert. Sieben Regressionstestfaelle und der Browser-Kandidatentest
+   sind bestanden. CI und Abnahme nach Modulupdate stehen fuer diese separate
+   Template-Korrektur noch aus. Anschliessend weitere Bibliotheken einzeln
+   pruefen. iro.js bleibt auf Wunsch unveraendert.
 
 ### Phase 5 - IPSView und Kacheldarstellung
 

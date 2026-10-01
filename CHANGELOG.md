@@ -110,6 +110,10 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Fixed
 
+- Radar-Tooltips verwenden den Chart.js-4-Kontext statt der alten
+  Zwei-Argument-Signatur und zeigen Datensatzname sowie formatierten Wert
+  ohne JavaScript-Fehler an. Sie setzen keine kartesischen `.y`-Daten mehr
+  voraus; sieben Regressionstestfälle sind in die Testsuite eingebunden.
 - `LoadConnectAddress` findet wieder das Connect Control statt des Archive
   Control, uebergibt dessen Instanz-ID an `CC_GetUrl` und liefert die URL an
   den bestehenden Formularcallback zurueck. Der optionale Startpfad schreibt
