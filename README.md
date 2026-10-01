@@ -26,9 +26,10 @@ der Modernisierung kompatibel bleiben.
 - Zielplattform: IP-Symcon 9.0/9.1 und PHP 8.5
 - Lokale Vertrags-, Struktur- und Verhaltenstests sowie StylePHP laufen in der
   GitHub-CI.
-- Die [Laufzeitmatrix für IP-Symcon 9.0/9.1 und PHP 8.5](docs/SYCON_RUNTIME_MATRIX.md)
-  ist definiert; ihre Ausführung auf realen Testinstallationen und die Freigabe
-  als modernisierte stabile Version stehen noch aus.
+- Die [Laufzeitmatrix für IP-Symcon 9 und PHP 8.5](docs/SYCON_RUNTIME_MATRIX.md)
+  wird auf der aktuellen, über den Symcon-MCP erreichbaren Testebene
+  ausgeführt. Die Baseline unter IP-Symcon 9.1 und PHP 8.5.8 ist bestanden;
+  die Freigabe als modernisierte stabile Version steht noch aus.
 - Die bestehende Ausgabe über `~HTMLBox` und IPSView bleibt vorerst erhalten.
   Eine native Kacheldarstellung wird später schrittweise ergänzt.
 

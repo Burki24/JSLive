@@ -157,9 +157,9 @@ Vorhandene lokale Pruefungen:
   Platzhalterersetzung numerischer Instanz-IDs charakterisiert;
 - `tests/webhook-security-model.php`: exakte Bestandsaufnahme aller vom
   Browser erreichbaren Kindmodulbefehle und der Module mit `setData`;
-- `tests/runtime-matrix.php`: Vollstaendigkeitspruefung der definierten Fresh-
-  und Upgrade-Laufzeitabnahmen fuer IP-Symcon 9.0/9.1, aller 10 Module und der
-  erforderlichen Ergebnisnachweise;
+- `tests/runtime-matrix.php`: Vollstaendigkeitspruefung der verbindlichen,
+  ueber den Symcon-MCP erreichbaren IP-Symcon-9-Testebene, aller 10 Module und
+  der erforderlichen Ergebnisnachweise;
 - `tests/strict-module-migration.php`: exakte Inventur der 74 oeffentlichen
   Methodendeklarationen und ihrer vorgesehenen Type Hints sowie der Grenzen
   fuer Variablen, Parent-Verbindung, Datenfluss und native Hooks;
@@ -594,9 +594,12 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
 ### Phase 2 - Symcon 9.0 / PHP 8.5 stabilisieren
 
 1. Laufzeittests auf Symcon-9-Testinstanzen fuer alle verbliebenen Module
-   definieren (abgeschlossen: `docs/SYCON_RUNTIME_MATRIX.md` beschreibt Fresh-
-   und Upgrade-Szenarien fuer 9.0/9.1, gemeinsame und modulspezifische
-   Abnahmen sowie Nachweise; die Ausfuehrung steht noch aus).
+   definieren und ausfuehren (abgeschlossen: `docs/SYCON_RUNTIME_MATRIX.md`
+   beschreibt die aktuelle, ueber den Symcon-MCP erreichbare Testebene sowie
+   gemeinsame und modulspezifische Abnahmen. Die Baseline wurde am 01.10.2026
+   unter IP-Symcon 9.1 und PHP 8.5.8 erfolgreich ausgefuehrt. Aufgrund der
+   festgelegten Kompatibilitaet innerhalb IP-Symcon 9 wird keine separate
+   9.0-Testinstallation vorgehalten).
 2. Die Migration von `IPSModule` auf `IPSModuleStrict` als eigenes Vorhaben
    vorbereiten (abgeschlossen: `docs/STRICT_MODULE_MIGRATION.md` und
    `tests/fixtures/strict-module-public-methods.json` erfassen alle 74

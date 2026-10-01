@@ -9,6 +9,11 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Changed
 
+- Die Laufzeitabnahme verwendet die aktuelle, ueber den Symcon-MCP erreichbare
+  IP-Symcon-9-Testebene statt separater 9.0-/9.1-Fresh- und Upgrade-Systeme.
+  Die erste Baseline unter IP-Symcon 9.1 und PHP 8.5.8 ist mit allen zehn
+  Modultypen, zweimaligem ApplyChanges, Browser-, WebSocket-, Pull- und
+  Neustartpruefung bestanden.
 - Die historische Vierkomponenten-Version `0.9.9.9` wurde als einmaliger
   Migrationsschritt auf den gemeinsamen Entwicklungsstand `0.10` ueberfuehrt.
 - Changelog, Versionsschema und Release-Ablauf wurden nach dem freigegebenen

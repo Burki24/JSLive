@@ -9,9 +9,12 @@ if ($matrix === false) {
     throw new RuntimeException('Missing docs/SYCON_RUNTIME_MATRIX.md.');
 }
 
-foreach (['S90-FRESH', 'S90-UPGRADE', 'S91-FRESH', 'S91-UPGRADE'] as $scenario) {
-    if (!str_contains($matrix, '`' . $scenario . '`')) {
-        throw new RuntimeException('Runtime matrix is missing scenario ' . $scenario . '.');
+if (!str_contains($matrix, '`MCP-CURRENT`')) {
+    throw new RuntimeException('Runtime matrix is missing the MCP-CURRENT test plane.');
+}
+foreach (['S90-FRESH', 'S90-UPGRADE', 'S91-FRESH', 'S91-UPGRADE'] as $retiredScenario) {
+    if (str_contains($matrix, '`' . $retiredScenario . '`')) {
+        throw new RuntimeException('Runtime matrix still contains retired scenario ' . $retiredScenario . '.');
     }
 }
 
@@ -31,8 +34,8 @@ foreach ([
     'IP-Symcon version and build',
     'PHP version',
     'JSLive commit',
-    'Fresh installation',
-    'Upgrade installation',
+    'Test plane',
+    'Update path',
     'ApplyChanges twice',
     'Service restart',
     'Message log'

@@ -1,13 +1,15 @@
 # IP-Symcon-Laufzeitmatrix
 
-Diese Matrix definiert die noch auszuführenden Laufzeitabnahmen für JSLive
-unter IP-Symcon 9.0 und 9.1 mit PHP 8.5. Sie ergänzt die lokalen Stubs und
-Vertragstests; ein grüner CI-Lauf ersetzt keine Ausführung in der echten
-Symcon-Laufzeit.
+Diese Matrix definiert die Laufzeitabnahme für JSLive auf der jeweils über den
+Symcon-MCP erreichbaren IP-Symcon-9-Testebene mit PHP 8.5. Sie ergänzt die
+lokalen Stubs und Vertragstests; ein grüner CI-Lauf ersetzt keine Ausführung in
+der echten Symcon-Laufzeit.
 
-Bis Ergebnisse mit Commit, Symcon-Build und Testumgebung protokolliert wurden,
-bleiben alle Szenarien **nicht ausgeführt**. Aus der Definition dieser Matrix
-werden keine Kompatibilitätsangaben in `library.json` abgeleitet.
+Die Zielplattform bleibt IP-Symcon 9.0/9.1. Aufgrund der für JSLive
+maßgeblichen Kompatibilität innerhalb dieser Produktlinie wird keine separate
+9.0-Installation vorgehalten. Verbindlich ist die aktuelle MCP-Testebene; aus
+dieser Festlegung werden keine Kompatibilitätsangaben in `library.json`
+abgeleitet.
 
 ## Plattformgrundlage
 
@@ -20,26 +22,18 @@ externen Referenzen:
 - [Migration von 8.1 auf 9.0](https://www.symcon.de/de/service/dokumentation/installation/migrationen/v81-v90-q1-2026/)
 - [PHP-Modul-SDK und IPSModuleStrict](https://www.symcon.de/de/service/dokumentation/entwicklerbereich/sdk-tools/sdk-php/module/)
 - [WebHook Control](https://www.symcon.de/de/service/dokumentation/modulreferenz/core-instances/webhook-control/)
-- [Download-Archiv für ältere Testversionen](https://www.symcon.de/de/service/dokumentation/entwicklerbereich/download-archiv/)
 
-Am 28.09.2026 wurde auf dem lokalen Rechner ausschließlich lesend ein
-verfügbarer Testkandidat mit IP-Symcon 9.1 und PHP 8.5.8 festgestellt. Das ist
-noch kein Laufzeitergebnis. Vor der ersten Ausführung sind ein isolierter
-Testbaum und ein Backup beziehungsweise Snapshot festzulegen.
-
-## Verbindliche Szenarien
+## Verbindliche Testebene
 
 | ID | Ausgangspunkt | Ziel und Umfang | Status |
 | --- | --- | --- | --- |
-| `S90-FRESH` | frische IP-Symcon-9.0-Testinstallation | JSLive auf dem zu prüfenden Commit installieren und alle 10 Module neu anlegen | nicht ausgeführt |
-| `S90-UPGRADE` | IP-Symcon 9.0 mit dem bisherigen JSLive-`main` und repräsentativen Instanzen | auf denselben JSLive-Prüfcommit aktualisieren; Konfiguration, Idents, Werte und Verbindungen erhalten | nicht ausgeführt |
-| `S91-FRESH` | frische IP-Symcon-9.1-Testinstallation | JSLive auf dem Prüfcommit installieren und alle 10 Module neu anlegen | nicht ausgeführt |
-| `S91-UPGRADE` | erfolgreich abgenommener 9.0-Snapshot | IP-Symcon auf 9.1 aktualisieren, ohne den JSLive-Commit zu wechseln, und alle Instanzen erneut prüfen | nicht ausgeführt |
+| `MCP-CURRENT` | aktuelle, über den Symcon-MCP erreichbare IP-Symcon-9-Installation mit isoliertem synthetischem JSLive-Testbaum | den installierten Prüfcommit mit allen 10 Modultypen nach Bibliotheksupdate, zweimaligem ApplyChanges, Browserzugriff und Dienstneustart prüfen | `PASS` am 01.10.2026 |
 
-`S90-UPGRADE` berücksichtigt die dokumentierte Entfernung von ConfigStore,
-SyncModule und Calendar: Eventuell vorhandene Instanzen dieser Module werden
-vor dem Bibliotheksupdate manuell gelöscht. Sie werden nicht automatisch
-migriert und ihre bisherigen Modul-IDs werden nicht wiederverwendet.
+Die Testebene bleibt für folgende Prüfcommits bestehen. Bibliotheksupdates
+werden gegen die vorhandenen Instanzen geprüft; Änderungen an Anlage- oder
+Löschpfaden erfordern zusätzlich eine neu angelegte beziehungsweise entfernte
+Testinstanz des betroffenen Modultyps. ConfigStore, SyncModule und Calendar
+bleiben entfernt; ihre früheren Modul-IDs werden nicht wiederverwendet.
 
 ## Nachweis je Durchlauf
 
@@ -52,8 +46,8 @@ Installationsdaten protokolliert:
 | PHP version | durch die Symcon-Laufzeit gemeldete PHP-Version |
 | JSLive commit | vollständiger geprüfter Git-Commit; der Metadaten-Bot-Commit wird ebenfalls notiert |
 | Plattform | Betriebssystem beziehungsweise SymBox/Docker und Architektur |
-| Fresh installation | ja/nein sowie Szenario-ID |
-| Upgrade installation | Ausgangsversion und Upgrade-Pfad oder nicht zutreffend |
+| Test plane | Kennung der verwendeten MCP-Testebene |
+| Update path | vorherige und installierte JSLive-Version beziehungsweise Neuinstallation |
 | Browser/Client | Verwaltungskonsole, Browser und gegebenenfalls IPSView-Version |
 | ApplyChanges twice | Ergebnis der zweimaligen unveränderten Anwendung |
 | Service restart | Ergebnis nach vollständigem Neustart des IP-Symcon-Dienstes |
@@ -78,9 +72,9 @@ werden synthetisch angelegt:
 - ein kleines lokales SVG und je ein lokales PNG/JPEG/GIF für Progressbar;
 - eine zweite kompatible Modulinstanz für die Konfigurationsübernahme.
 
-Nach jedem Szenario wird der Testbaum aus dem Snapshot zurückgesetzt. Es werden
-keine realen Skripte ausgeführt und keine produktiven Variablen, Medien oder
-Kalenderquellen verwendet.
+Nach jedem Durchlauf werden temporär geänderte Properties und Werte auf ihren
+Ausgangszustand zurückgesetzt. Es werden keine realen Skripte ausgeführt und
+keine produktiven Variablen, Medien oder Kalenderquellen verwendet.
 
 ## Gemeinsame Laufzeitprüfungen
 
@@ -124,7 +118,8 @@ Diese Prüfungen gelten für jede instanziierbare Modulklasse:
 
 ## Webhook- und Browser-Gate
 
-Pro Plattformversion werden mindestens diese End-to-End-Pfade geprüft:
+Pro Prüfcommit werden auf `MCP-CURRENT` mindestens diese End-to-End-Pfade
+geprüft:
 
 - Standardausgabe `getContend` mit richtigem und falschem Kennwort;
 - öffentliche statische Assets;
@@ -142,9 +137,9 @@ Das detaillierte Zugriffsmodell steht in
 [`WEBHOOK_SECURITY_MODEL.md`](WEBHOOK_SECURITY_MODEL.md). Eine Änderung von
 CORS, Kennworttransport oder HTTP-Methode gehört nicht in diese Baseline.
 
-## Upgrade-Gate
+## Update-Gate
 
-Für `S90-UPGRADE` und `S91-UPGRADE` gelten zusätzlich:
+Für Bibliotheksupdates auf `MCP-CURRENT` gelten zusätzlich:
 
 - alle bestehenden Instanz-IDs und Parent-Verbindungen bleiben erhalten;
 - Properties, JSON-Listen, TemplateScriptIDs und Variablen-Idents bleiben
@@ -157,6 +152,32 @@ Für `S90-UPGRADE` und `S91-UPGRADE` gelten zusätzlich:
 - zweimaliges ApplyChanges nach dem Upgrade bleibt idempotent;
 - ein anschließender Service restart erzeugt keine neue Migration und keinen
   erneuten Seiteneffekt.
+
+## Abnahme vom 01.10.2026
+
+| Evidence field | Ergebnis |
+| --- | --- |
+| IP-Symcon version and build | 9.1, Revision `rust-dab58090190ab6ce72c9c1d036c2e935edff313f` |
+| PHP version | 8.5.8, SAPI `Symcon`, 64 Bit |
+| JSLive commit | Quellcommit `766b68bff55ac38b245ab5e8785a91d351f1808c`; Metadatencommit `573f18de409b6e46441d2e5b05dfa7a237f396dd` |
+| Plattform | Windows, amd64 |
+| Test plane | `MCP-CURRENT` mit isoliertem synthetischem JSLive-Testbaum |
+| Update path | JSLive 0.60 auf 0.61; installierte Produktivdateien inhaltlich identisch zum lokalen Prüfstand |
+| Browser/Client | Microsoft Edge 155.0.4283.18, automatisierter Headless-Lauf |
+| ApplyChanges twice | alle vorhandenen Instanzen der 10 Modultypen zweimal unverändert erfolgreich angewendet; Status anschließend aktiv, keine doppelten Variablen oder Hooks |
+| Service restart | Kernel-Startzeit änderte sich nach vollständigem Dienstneustart; Instanzen, Formulare, Hook und Browserausgaben anschließend erneut erfolgreich geprüft |
+| Message log | keine JSLive-Warnung und kein JSLive-Fehler während ApplyChanges, Browserprüfung oder Neustart |
+| Ergebnis | `PASS` |
+
+Alle neun Visualisierungsmodule lieferten nach dem Neustart HTTP 200, gültige
+modulspezifische DOM-Strukturen und jeweils eine offene WebSocket-Verbindung
+ohne JavaScript-, Seiten-, Netzwerk- oder Socketfehler. Eine synthetische
+Variablenänderung und ihre Rücksetzung wurden als zwei WebSocket-Frames
+empfangen. Im vorübergehend aktivierten Pull-Modus wurden bei drei Sekunden
+Intervall vier erfolgreiche Datenabrufe in acht Sekunden beobachtet; Modus und
+Testwert wurden danach auf ihren Ausgangszustand zurückgesetzt. Die einzige
+beobachtete HTTP-404-Konsolenmeldung betraf das optionale `/favicon.ico` und
+nicht JSLive.
 
 ## Ergebnisregeln
 

@@ -156,10 +156,10 @@ Die Strict-Umstellung muss Splitter, `JSLiveModule` und alle neun Kindmodule in
 einem koordinierten Schritt migrieren. Dabei bleiben beide Data-IDs und die
 Struktur des inneren JSON unverändert; nur der von Strict geforderte binäre
 Transport wird an einer zentralen Helper-Grenze mit `bin2hex` und `hex2bin`
-behandelt. Vor einer Änderung des zentral synchronisierten Helpers ist mit
-einem echten 9.0/9.1-Harness festzustellen, welche Schicht die HEX-Kodierung
-liefert. Eine parallele Mischung aus altem und neuem Transport ist nicht
-freigegeben.
+behandelt. Vor einer Änderung des zentral synchronisierten Helpers ist auf der
+echten, über den Symcon-MCP erreichbaren Testebene festzustellen, welche Schicht
+die HEX-Kodierung liefert. Eine parallele Mischung aus altem und neuem
+Transport ist nicht freigegeben.
 
 Abnahmekriterien:
 
@@ -182,8 +182,8 @@ Die Migration erhält den externen Pfad `/hook/JSLive` einschließlich der
 Unterpfade `/WS` und `/js`. Intern registriert die native API den Bezeichner
 `JSLive`; `ProcessHookData(): void` bleibt die einzige Routinggrenze. Ein
 `Destroy(): void` gibt die Registrierung mit `UnregisterHook()` frei. Ob die
-zusätzliche Kernel-Ready-Nachricht entfallen kann, wird in der 9.0/9.1-
-Laufzeitmatrix geprüft und nicht allein aus dem Quelltext angenommen.
+zusätzliche Kernel-Ready-Nachricht entfallen kann, wird auf der
+`MCP-CURRENT`-Testebene geprüft und nicht allein aus dem Quelltext angenommen.
 
 ## Weitere Signaturgrenzen
 
@@ -205,14 +205,16 @@ Strict-Migration entfernt; ihre Upgrade-Folgen sind in
 [`adr/0003-remove-calendar-module.md`](adr/0003-remove-calendar-module.md)
 dokumentiert.
 
-1. Strict-Datenflusskodierung in einer isolierten 9.0/9.1-Testinstanz belegen
-   und den zentralen `DataFlowHelper` nur bei nachgewiesenem Bedarf erweitern.
+1. Strict-Datenflusskodierung auf der isolierten `MCP-CURRENT`-Testebene
+   belegen und den zentralen `DataFlowHelper` nur bei nachgewiesenem Bedarf
+   erweitern.
 2. Falls benötigt, die Legacy-Profil-Darstellung zentral ergänzen und über den
    bestehenden Helper-Sync beziehen.
 3. `JSLiveModule`, alle neun Kindmodule und den Splitter koordiniert migrieren.
 4. Den manuellen Hook-Workaround durch die native Hook-API ersetzen, ohne das
    dokumentierte Sicherheits- und Routingmodell zu verändern.
-5. Die vier Szenarien aus `SYCON_RUNTIME_MATRIX.md` vollständig ausführen.
+5. Die Abnahme aus `SYCON_RUNTIME_MATRIX.md` auf `MCP-CURRENT` vollständig
+   ausführen.
 
 Der Rückfallpunkt ist der letzte gemeinsam grüne Commit vor der jeweiligen
 Strict-Gruppe. Es gibt keine automatische Rückmigration einer bereits
