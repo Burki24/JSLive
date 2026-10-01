@@ -5,9 +5,9 @@ Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
 Bestandsaufnahme um die beschlossene Entfernung von ConfigStore und SyncModule
 fortgeschrieben. Am 30.09.2026 wurde auch das Calendar-Modul einschliesslich
 seiner spezifischen Webhook-Pfade und Frontend-Assets entfernt. Am 01.10.2026
-wurden der lokale und der entfernte `dev`-Stand auf Commit
-`e3af8ff9d26a38bfcdd14a16ceaf8b7ccb30b2fa` abgeglichen und die nachfolgenden
-Statusangaben aktualisiert.
+wurden der lokale und der entfernte `dev`-Stand zuletzt auf Commit
+`7c5a15aa648b67b8e22441cb8f6cf4e37744a4ea` abgeglichen und die nachfolgenden
+Statusangaben nach der `IPSModuleStrict`-Laufzeitabnahme aktualisiert.
 
 ## 1. Zweck und Zielbild
 
@@ -26,13 +26,13 @@ Architektur oder ein gleichzeitiger Austausch aller Frontend-Bibliotheken.
 
 ## 2. Repository- und Branch-Stand
 
-- Arbeitsbranch: `dev`; beim Abgleich am 01.10.2026 waren Arbeitsbaum,
-  lokaler Branch und `origin/dev` auf `e3af8ff` synchron.
+- Arbeitsbranch: `dev`; vor diesem Kompatibilitaetsschritt waren Arbeitsbaum,
+  lokaler Branch und `origin/dev` auf `7c5a15a` synchron.
 - `dev` lag zu diesem Zeitpunkt 148 Commits vor `main` und vor
   `upstream/main`; beide enthielten keine Commits, die `dev` fehlten.
 - `upstream/Beta` ist ein historischer Vorfahr und lag 235 Commits hinter
   `dev`, ohne eigene Abweichung.
-- `library.json` stand auf Version `0.55`, Build `133588734`. Version, Build und
+- `library.json` stand auf Version `0.65`, Build `40106253`. Version, Build und
   Datum werden auf `dev` vom Metadatenworkflow aus dem jeweiligen Quellcommit
   erzeugt und nicht manuell gepflegt. Der einmalige Bootstrap vom historischen
   Stand `0.9.9.9` auf das Schema `Hauptversion.Nebenstand` begann mit `0.10`.
@@ -243,10 +243,11 @@ StylePHP formatierte JSON-Dateien auf. Sie wurden mit dem offiziellen
 `json-check.php fix` rein mechanisch formatiert; ein kanonischer Inhaltsvergleich
 gegen den Ausgangscommit bestaetigt unveraenderte JSON-Daten.
 
-Noch nicht abgedeckt sind Symcon-Laufzeitverhalten, Webhook-Authentisierung und
-Pfadbehandlung, modulspezifische Formulardynamik ausserhalb des gemeinsamen
-Metadatenvertrags, Migrationen, Renderausgaben der weiteren Module,
-Browserbibliotheken sowie einzelne Modulaktionen.
+Die verbindliche Symcon-Laufzeitmatrix, Webhook-Authentisierung und
+Pfadbehandlung sind abgedeckt. Noch nicht vollstaendig automatisiert sind
+modulspezifische Formulardynamik ausserhalb der vorhandenen Harnesses,
+Migrationen, visuelle Regressionen der Browserbibliotheken sowie einzelne
+schreibende Modulaktionen.
 
 ## 8. Symcon-9-/PHP-8.5-Stand
 
@@ -271,9 +272,11 @@ Browserbibliotheken sowie einzelne Modulaktionen.
   koordiniert auf `IPSModuleStrict` umgestellt. Die 74 inventarisierten
   oeffentlichen Methoden besitzen vollstaendige Type Hints, die Kindmodule
   verwenden die automatische Parent-Kompatibilitaet und der Splitter die native
-  Hook-API. Die lokale Test- und Syntaxpruefung ist bestanden; die erneute
-  MCP-CURRENT-Laufzeitabnahme des Migrationsstands steht noch aus.
-- `library.json` deklariert derzeit keine Symcon-Kompatibilitaet.
+  Hook-API. Die lokale Test- und Syntaxpruefung sowie die erneute
+  MCP-CURRENT-Laufzeitabnahme des Migrationsstands einschliesslich
+  Dienstneustart sind bestanden.
+- `library.json` deklariert nach der bestandenen Laufzeitmatrix IP-Symcon 9.0
+  als Mindestversion.
 - `Output` und `IPSView` werden als Stringvariablen mit dem Legacy-Profil
   `~HTMLBox` angelegt. Symcon 9 unterstuetzt dies weiter, fuer modernisierte
   Variablen sind native Variablendarstellungen vorzuziehen.
@@ -451,23 +454,22 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    - Testquellen als erste mechanische Gruppe formatieren und pruefen
      (abgeschlossen);
    - `Gauge` und `Progressbar` als erste Produktionsgruppe formatieren und
-     pruefen (abgeschlossen; Symcon-Laufzeitpruefung weiterhin ausstehend);
+     pruefen (abgeschlossen; Laufzeitmatrix am 01.10.2026 bestanden);
    - `ColorPicker` und `DateTimePicker` als zweite Produktionsgruppe formatieren
-     und pruefen (abgeschlossen; Symcon-Laufzeitpruefung weiterhin ausstehend);
+     und pruefen (abgeschlossen; Laufzeitmatrix am 01.10.2026 bestanden);
    - `AdvTextfield` einzeln formatieren und mit dem Rendering-Harness pruefen
-     (abgeschlossen; Symcon-Laufzeitpruefung weiterhin ausstehend);
+     (abgeschlossen; Laufzeitmatrix am 01.10.2026 bestanden);
    - `WebHookModule.php` isoliert formatieren und mit dem Routing-Harness pruefen
-     (abgeschlossen; Sicherheits- und Symcon-Laufzeitpruefung ausstehend);
+     (abgeschlossen; Sicherheits- und Laufzeitpruefung bestanden);
    - `JSLiveModule.php` isoliert formatieren und mit Konfigurations-, Formular-,
      Rendering- und DataFlow-Harnesses pruefen (abgeschlossen; ein notwendiger
-     expliziter `srand()`-Seed-Cast ist enthalten, Symcon-Laufzeitpruefung steht
-     weiterhin aus);
+     expliziter `srand()`-Seed-Cast ist enthalten; Laufzeitmatrix bestanden);
    - den zentralen Splitter isoliert formatieren und mit Webhook-, DataFlow- und
      Vertragspruefungen absichern (abgeschlossen; Sicherheits- und
-     Symcon-Laufzeitpruefung ausstehend);
+     Laufzeitpruefung bestanden);
    - `DoughnutPie` einzeln formatieren und gegen Vertrags-Snapshot und
-     Gesamtsuite pruefen (abgeschlossen; Rendering-, Browser- und
-     Symcon-Laufzeitpruefung ausstehend);
+     Gesamtsuite pruefen (abgeschlossen; Browser- und Laufzeit-Smoke-Test
+     bestanden, visuelle Regressionstests bleiben ausstehend);
    - `Calendar` isoliert formatieren und mit Formular- und Vertragspruefung
      absichern (historisch abgeschlossen; das Modul wurde anschliessend gemaess
      ADR 0003 entfernt);
@@ -475,14 +477,15 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
      Vertrags-Snapshot und Gesamtsuite pruefen (historisch abgeschlossen; das
      Modul wurde anschliessend gemaess ADR 0002 entfernt);
    - `RadarChart` isoliert formatieren und seine Datums- und Offset-Berechnung
-     fuer PHP 8.5 absichern (abgeschlossen; Archivdaten-, Rendering-, Browser-
-     und Symcon-Laufzeitpruefung ausstehend);
+     fuer PHP 8.5 absichern (abgeschlossen; Browser- und Laufzeitmatrix
+     bestanden, visuelle Regressionstests bleiben ausstehend);
    - `Chart` isoliert formatieren und Datums-, Offset- und Webhook-Querygrenzen
-     fuer PHP 8.5 absichern (abgeschlossen; Archivdaten-, Rendering-, Browser-
-     und Symcon-Laufzeitpruefung ausstehend);
+     fuer PHP 8.5 absichern (abgeschlossen; Browser- und Laufzeitmatrix
+     bestanden, visuelle Regressionstests bleiben ausstehend);
    - `Custom` isoliert formatieren und numerische Konfigurations- und
-     Webhook-Grenzen fuer PHP 8.5 absichern (abgeschlossen; schreibende Objekt-,
-     Skript-, Medien-, Browser- und Symcon-Laufzeitpruefung ausstehend);
+     Webhook-Grenzen fuer PHP 8.5 absichern (abgeschlossen; Browser- und
+     Laufzeit-Smoke-Test bestanden, weitergehende schreibende Objekt-, Skript-
+     und Medienpfade bleiben ausstehend);
    - bestehenden PHP-Code schrittweise mit Vertrags- und Verhaltenstests
      formatieren (abgeschlossen; repositoryweit keine Style-Abweichungen);
    - `Symcon_ModuleCI/style@v1.0.0` als verpflichtenden, getrennt erkennbaren
@@ -606,8 +609,8 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    `tests/fixtures/strict-module-public-methods.json` erfassen alle 74
    oeffentlichen Methodendeklarationen, Zielsignaturen, Variablenregistrierung/-
    schreibzugriff, Parent-Automatik, Datenfluss, Hooks und Rueckfallgrenzen. Die
-   Produktivklassen und Test-Stubs sind umgestellt; die Laufzeitabnahme ist noch
-   offen).
+   Produktivklassen und Test-Stubs sind umgestellt; die Laufzeitabnahme auf
+   MCP-CURRENT ist einschliesslich Dienstneustart bestanden).
 3. Das experimentelle `SyncModule` und das Calendar-Modul wurden vor der
    Strict-Migration entfernt; ihre Modul-IDs und Praefixe werden nicht
    wiederverwendet.
@@ -623,7 +626,8 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    erreichbaren JSON-Fehlerpfade sind fuer die Strict-Migration gehaertet.
    Weitergehende Array-, Buffer- und Netzwerkhaertung bleibt in getrennten
    Schritten moeglich.
-7. Kompatibilitaetsangaben erst nach erfolgreicher Laufzeitmatrix setzen.
+7. Abgeschlossen: Nach erfolgreicher Laufzeitmatrix deklariert `library.json`
+   IP-Symcon 9.0 als Mindestversion.
 8. Migrationen fuer jede unvermeidbare Vertragsaenderung vor der Aenderung
    spezifizieren und testen.
 

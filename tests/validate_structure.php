@@ -113,7 +113,7 @@ function isSymconGuid(mixed $value): bool
 $libraryPath = $root . '/library.json';
 $library = readJsonObject($libraryPath, $errors);
 if ($library !== null) {
-    foreach (['id', 'author', 'name', 'url', 'version', 'build', 'date'] as $key) {
+    foreach (['id', 'author', 'name', 'url', 'compatibility', 'version', 'build', 'date'] as $key) {
         if (!array_key_exists($key, $library)) {
             $errors[] = 'library.json is missing required field: ' . $key;
         }
@@ -127,6 +127,9 @@ if ($library !== null) {
     }
     if (($library['url'] ?? null) !== $expectedModuleUrl) {
         $errors[] = 'library.json must link to the JSLive repository.';
+    }
+    if (($library['compatibility'] ?? null) !== ['version' => '9.0']) {
+        $errors[] = 'library.json must require IP-Symcon 9.0 or newer.';
     }
     if (isset($library['version']) && (!is_string($library['version']) || preg_match('/^\d+\.\d+$/', $library['version']) !== 1)) {
         $errors[] = 'library.json version must use the Hauptversion.Nebenstand format.';

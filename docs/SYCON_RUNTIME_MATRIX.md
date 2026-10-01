@@ -7,9 +7,9 @@ der echten Symcon-Laufzeit.
 
 Die Zielplattform bleibt IP-Symcon 9.0/9.1. Aufgrund der für JSLive
 maßgeblichen Kompatibilität innerhalb dieser Produktlinie wird keine separate
-9.0-Installation vorgehalten. Verbindlich ist die aktuelle MCP-Testebene; aus
-dieser Festlegung werden keine Kompatibilitätsangaben in `library.json`
-abgeleitet.
+9.0-Installation vorgehalten. Verbindlich ist die aktuelle MCP-Testebene. Nach
+der vollständigen Abnahme des `IPSModuleStrict`-Migrationsstands deklariert
+`library.json` IP-Symcon 9.0 als Mindestversion.
 
 ## Plattformgrundlage
 
@@ -27,7 +27,7 @@ offiziellen Seiten sind die maßgeblichen externen Referenzen:
 
 | ID | Ausgangspunkt | Ziel und Umfang | Status |
 | --- | --- | --- | --- |
-| `MCP-CURRENT` | aktuelle, über den Symcon-MCP erreichbare IP-Symcon-9-Installation mit isoliertem synthetischem JSLive-Testbaum | den installierten Prüfcommit mit allen 10 Modultypen nach Bibliotheksupdate, zweimaligem ApplyChanges, Browserzugriff und Dienstneustart prüfen | `PASS` am 01.10.2026 |
+| `MCP-CURRENT` | aktuelle, über den Symcon-MCP erreichbare IP-Symcon-9-Installation mit isoliertem synthetischem JSLive-Testbaum | den installierten Prüfcommit mit allen 10 Modultypen nach Bibliotheksupdate, zweimaligem ApplyChanges, Browserzugriff und Dienstneustart prüfen | `PASS` für JSLive 0.65 am 01.10.2026 |
 
 Die Testebene bleibt für folgende Prüfcommits bestehen. Bibliotheksupdates
 werden gegen die vorhandenen Instanzen geprüft; Änderungen an Anlage- oder
@@ -35,10 +35,9 @@ Löschpfaden erfordern zusätzlich eine neu angelegte beziehungsweise entfernte
 Testinstanz des betroffenen Modultyps. ConfigStore, SyncModule und Calendar
 bleiben entfernt; ihre früheren Modul-IDs werden nicht wiederverwendet.
 
-Der dokumentierte PASS vom 01.10.2026 ist die Vorher-Baseline auf JSLive 0.61.
-Für den `IPSModuleStrict`-Migrationscommit ist nach Installation ein neuer
-vollständiger Durchlauf erforderlich; bis dahin ist dieser Kandidat nur lokal
-verifiziert.
+Der erste dokumentierte PASS vom 01.10.2026 ist die Vorher-Baseline auf JSLive
+0.61. Der anschließend installierte `IPSModuleStrict`-Migrationsstand wurde mit
+JSLive 0.65 erneut vollständig geprüft und nach einem Dienstneustart bestätigt.
 
 ## Nachweis je Durchlauf
 
@@ -183,6 +182,32 @@ Intervall vier erfolgreiche Datenabrufe in acht Sekunden beobachtet; Modus und
 Testwert wurden danach auf ihren Ausgangszustand zurückgesetzt. Die einzige
 beobachtete HTTP-404-Konsolenmeldung betraf das optionale `/favicon.ico` und
 nicht JSLive.
+
+## Abnahme des IPSModuleStrict-Stands vom 01.10.2026
+
+| Evidence field | Ergebnis |
+| --- | --- |
+| IP-Symcon version and build | 9.1, Revision `rust-dab58090190ab6ce72c9c1d036c2e935edff313f` |
+| PHP version | 8.5.8, SAPI `Symcon`, 64 Bit |
+| JSLive commit | Quellcommit `263f90df89939efb2428c9d0117c7b01b21d332d`; Metadatencommit `7c5a15aa648b67b8e22441cb8f6cf4e37744a4ea` |
+| Plattform | Windows, amd64 |
+| Test plane | `MCP-CURRENT` mit isoliertem synthetischem JSLive-Testbaum |
+| Update path | JSLive 0.64 auf 0.65; installierte Metadaten- und Produktivdateien inhaltlich identisch zum lokalen Prüfstand |
+| Browser/Client | Microsoft Edge 155.0.4283.18, automatisierter Headless-Lauf |
+| ApplyChanges twice | alle zwölf vorhandenen Instanzen der zehn Modultypen zweimal unverändert erfolgreich angewendet; Status anschließend aktiv, Zustands-Snapshot unverändert |
+| Service restart | Kernel-Neustart nach Installation von JSLive 0.65 bestätigt; alle Instanzen, Formulare, nativen Hook-Routen, HTTP-Ausgaben und WebSocket-Verbindungen anschließend ohne zusätzliches ApplyChanges funktionsfähig |
+| Message log | keine JSLive-Warnung und kein JSLive-Fehler während ApplyChanges, Browserprüfung, WebSocket-/Pull-Test oder Neustart |
+| Ergebnis | `PASS` |
+
+Die vorhandenen Instanzen behielten ihre Parent-Verbindungen, öffentlichen
+Variablen, Profile, Actions und Werte. Eine temporär neu angelegte
+AdvTextfield-Instanz bestätigte zusätzlich den Fresh-Create-Pfad und wurde
+anschließend vollständig entfernt. Alle neun Browseransichten lieferten HTTP
+200 und ihre erwartete DOM-Struktur ohne erkannten JavaScript- oder
+Netzwerkfehler. Zwei synthetische Wertänderungen erzeugten zwei vollständige
+WebSocket-Textframes; im Pull-Modus wurden in elf realen Sekunden fünf
+`getData`-Abrufe beobachtet. Datenmodus und Testwert wurden danach auf ihren
+Ausgangszustand zurückgesetzt.
 
 ## Ergebnisregeln
 

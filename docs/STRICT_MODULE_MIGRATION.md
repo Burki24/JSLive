@@ -211,8 +211,10 @@ dokumentiert.
    koordiniert migriert.
 4. Abgeschlossen: Der manuelle Hook-Workaround ist durch die native Hook-API
    ersetzt, ohne das dokumentierte Sicherheits- und Routingmodell zu ändern.
-5. Offen: Die Abnahme aus `SYCON_RUNTIME_MATRIX.md` muss nach Installation des
-   Migrationsstands auf MCP-CURRENT vollständig ausgeführt werden.
+5. Abgeschlossen: Die Abnahme aus `SYCON_RUNTIME_MATRIX.md` wurde nach
+   Installation des Migrationsstands auf MCP-CURRENT einschließlich
+   zweimaligem `ApplyChanges()`, Browser-, WebSocket-, Pull- und
+   Dienstneustartprüfung vollständig ausgeführt.
 
 Der Rückfallpunkt ist der letzte gemeinsam grüne Commit vor der jeweiligen
 Strict-Gruppe. Es gibt keine automatische Rückmigration einer bereits
@@ -234,8 +236,9 @@ Eine Strict-Gruppe ist erst abgeschlossen, wenn:
   nachgewiesen sind;
 - lokale Tests, PHP-8.5-Syntax, StylePHP, JSON-Prüfung und CI grün sind.
 
-Der lokale Implementierungsstand ist noch keine Laufzeitfreigabe für
-`IPSModuleStrict`; diese folgt erst nach der erneuten MCP-CURRENT-Abnahme.
+Der Migrationsstand ist nach der erneuten MCP-CURRENT-Abnahme für die
+vereinbarte IP-Symcon-9-Testebene laufzeitgeprüft. Auf dieser Grundlage
+deklariert `library.json` IP-Symcon 9.0 als Mindestversion.
 
 ## Bereits gehärtete Formular-Callbacks
 

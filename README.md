@@ -9,9 +9,9 @@ Ein zentraler Splitter stellt den Webhook, gemeinsame Konfiguration und statisch
 Assets bereit. Die Visualisierungsmodule erzeugen daraus HTML-, CSS- und
 JavaScript-Ausgaben für IP-Symcon und bestehende IPSView-Installationen.
 
-Das Bestandsprojekt wird derzeit auf IP-Symcon 9.0/9.1 und PHP 8.5 vorbereitet.
-Die öffentlichen Modulverträge und vorhandenen Installationen sollen während
-der Modernisierung kompatibel bleiben.
+Der aktuelle Entwicklungsstand unterstützt IP-Symcon 9.0/9.1 und PHP 8.5.
+Die öffentlichen Modulverträge und vorhandenen Installationen bleiben während
+der weiteren Modernisierung kompatibel.
 
 ## Projektstatus
 
@@ -23,7 +23,7 @@ der Modernisierung kompatibel bleiben.
 - Nicht vom Bot erzeugte Pushes nach `dev` erhalten automatisch eine gemeinsame
   neue Library-Version für alle enthaltenen Module; der Workflow erzeugt keine
   Releases.
-- Zielplattform: IP-Symcon 9.0/9.1 und PHP 8.5
+- Zielplattform und deklarierte Mindestversion: IP-Symcon 9.0/9.1 und PHP 8.5
 - Lokale Vertrags-, Struktur- und Verhaltenstests sowie StylePHP laufen in der
   GitHub-CI.
 - Die [Laufzeitmatrix für IP-Symcon 9 und PHP 8.5](docs/SYCON_RUNTIME_MATRIX.md)
@@ -35,7 +35,7 @@ der Modernisierung kompatibel bleiben.
 - Splitter und Visualisierungsmodule sind im aktuellen Arbeitsstand koordiniert
   auf `IPSModuleStrict`, automatische Parent-Kompatibilität und die native
   Hook-API umgestellt. Die abschließende MCP-CURRENT-Laufzeitabnahme dieses
-  Migrationsstands steht noch aus.
+  Migrationsstands einschließlich Dienstneustart ist bestanden.
 
 ## Module
 
@@ -80,9 +80,6 @@ erkannt werden. Debug daher nur in einer geschützten Testumgebung verwenden.
 
 ## Bekannte Einschränkungen
 
-- Die vor der Strict-Migration bestandene
-  [Symcon-9-Laufzeitmatrix](docs/SYCON_RUNTIME_MATRIX.md) muss nach Installation
-  des aktuellen Migrationsstands erneut vollständig ausgeführt werden.
 - Der nicht mehr erreichbare, vollständig von einem externen Dienst abhängige
   ConfigStore wurde entfernt. Vorhandene ConfigStore-Instanzen müssen vor einem
   Update auf diesen Stand gelöscht werden.
@@ -106,7 +103,7 @@ erkannt werden. Debug daher nur in einer geschützten Testumgebung verwenden.
 Weitere technische Details, Risiken und der priorisierte Modernisierungsplan
 stehen in [`PROJECT_CONTEXT.md`](PROJECT_CONTEXT.md). Die
 [`IPSModuleStrict`-Migration](docs/STRICT_MODULE_MIGRATION.md) dokumentiert die
-implementierten Signaturen, Kompatibilitätsgrenzen und die noch ausstehende
+implementierten Signaturen, Kompatibilitätsgrenzen und die bestandene
 Laufzeitabnahme.
 
 ## Entwicklung und Prüfungen

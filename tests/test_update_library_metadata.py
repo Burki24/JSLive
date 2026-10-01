@@ -42,6 +42,7 @@ def main() -> None:
             json.dumps(
                 {
                     'id': '{00000000-0000-0000-0000-000000000000}',
+                    'compatibility': {'version': '9.0'},
                     'version': '0.10',
                     'build': 35,
                     'date': 1714338025,
@@ -59,6 +60,9 @@ def main() -> None:
 
         if updated['date'] != 1785081600:
             raise SystemExit('Unix timestamp was not written correctly.')
+
+        if updated.get('compatibility') != {'version': '9.0'}:
+            raise SystemExit('Symcon compatibility metadata was not preserved.')
 
         updated = run_update(library_file, base_version='0.11', increment=2)
         if updated['version'] != '0.13':
