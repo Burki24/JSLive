@@ -82,6 +82,14 @@ configuration. A valid import updates known properties, preserves omitted
 properties, ignores unknown fields, records the uploaded payload and applies the
 target instance exactly once.
 
+## MessageSink registration harness
+
+`message-sink-registration.php` prueft die inkrementelle Verwaltung der
+Variablenmeldungen. Unveraenderte Sender werden nicht erneut registriert, neue
+Sender erhalten beide etablierten Meldungen und entfernte Sender werden von
+beiden Meldungen abgemeldet. Gateway-Registrierung und gespeicherte
+Variablenliste bleiben Teil des Vertrags.
+
 ## Configuration form harness
 
 `configuration-form.php` loads the real Chart form through its public

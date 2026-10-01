@@ -69,6 +69,9 @@ Patchstelle, beispielsweise `v0.10.0`.
   Control, uebergibt dessen Instanz-ID an `CC_GetUrl` und liefert die URL an
   den bestehenden Formularcallback zurueck. Der optionale Startpfad schreibt
   nur eine gefundene URL in eine zuvor leere Adresse.
+- Die MessageSink-Verwaltung registriert unveraenderte Variablen nicht mehr
+  erneut. Neue Sender werden weiterhin fuer beide Variablenmeldungen
+  registriert und entfernte Sender von beiden abgemeldet.
 
 ### Security
 

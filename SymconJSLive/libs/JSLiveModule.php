@@ -623,9 +623,9 @@ class JSLiveModule extends IPSModule
         $this->RegisterMessage($gw_id, 10503); //wenn verfügbar!
 
         foreach ($newVariables as $var) {
-            $oldVariables = array_diff($oldVariables, [$var]);
-
             if (in_array($var, $oldVariables)) {
+                $oldVariables = array_diff($oldVariables, [$var]);
+
                 if ($this->ReadPropertyBoolean('Debug'))
                     $this->SendSafeDebug('UpdateMessageSink', ['skip' => $var]);
                 continue;

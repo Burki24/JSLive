@@ -356,6 +356,11 @@ Bereits abgesicherte Sicherheitsgrenzen:
 
 Bereits behobene technische Schulden:
 
+- Die MessageSink-Verwaltung prueft die bisherige Variablenliste jetzt vor dem
+  Entfernen bereits bekannter Sender. Unveraenderte Variablen werden dadurch
+  nicht erneut registriert; neue und entfernte Sender behalten ihre bisherigen
+  An- und Abmeldepfade. Ein Regressionstest prueft auch einen wiederholten
+  unveraenderten Abgleich.
 - `LoadConnectAddress` verwendet die offizielle Connect-Control-Modul-ID,
   liefert die gefundene URL an den bestehenden Formularcallback und befuellt
   im Startpfad nur eine leere Adresse. Fehlt die Connect-Instanz oder ihre URL,
@@ -386,8 +391,6 @@ Prioritaet mittel:
   Server-Arrayzugriffe und `rand()` fuer Kennwoerter;
 - serialisierte PHP-Daten in Buffern und `unserialize` ohne erlaubte Klassen;
 - grosse Basisklasse, duplizierte Hilfsfunktionen und sehr grosse Moduldateien;
-- die MessageSink-Verwaltung registriert bereits bekannte Variablen erneut,
-  weil sie vor der Mitgliedschaftspruefung aus der Altliste entfernt werden;
 - `SymconJSLiveDateTimePicker::LoadOtherConfiguration()` liest die nicht
   registrierte Property `Variables`; eine Korrektur benoetigt einen getrennten
   Verhaltens- und Regressionstest;
