@@ -291,7 +291,34 @@ foreach (['css/DatePicker1.css', 'css/fonts/Roboto.css'] as $stylesheetAsset) {
         'Active date picker and font stylesheets must remain available after the legacy asset cleanup.'
     );
 }
-foreach (['mc-calendar/mc-calendar.min.js', 'css/DateTimePicker1.css', 'css/font-face.css'] as $removedAsset) {
+foreach ([
+    'chartjs/chart.js',
+    'chartjs/chart.min.js',
+    'chartjs/plugins/chartjs-adapter-moment.js',
+    'chartjs/plugins/chartjs-plugin-datalabels.min.js',
+    'chartjs/plugins/chartjs-plugin-streaming.min.js'
+] as $chartAsset) {
+    $chartResponse = $harness->route('/hook/JSLive/js/' . $chartAsset, '');
+    assertWebhookRouting(
+        $chartResponse['statusCode'] === 200
+            && $chartResponse['output'] === file_get_contents(dirname(__DIR__) . '/SymconJSLive/js/' . $chartAsset),
+        'Active Chart.js bundles and plugins must remain available without substitution: ' . $chartAsset
+    );
+}
+foreach ([
+    'mc-calendar/mc-calendar.min.js',
+    'css/DateTimePicker1.css',
+    'css/font-face.css',
+    'chartjs/chart.esm.js',
+    'chartjs/chart.mjs',
+    'chartjs/helpers.esm.js',
+    'chartjs/helpers.mjs',
+    'chartjs/3.6.0/chart.min.js',
+    'chartjs/3.6.0/plugins/chartjs-adapter-moment.js',
+    'chartjs/3.6.0/plugins/chartjs-plugin-datalabels.min.js',
+    'chartjs/3.6.0/plugins/chartjs-plugin-streaming.min.js',
+    'chartjs/plugins/chartjs-plugin-datalabels.js'
+] as $removedAsset) {
     $harness->resetCapturedData();
     $removedAssetResponse = $harness->route('/hook/JSLive/js/' . $removedAsset, '');
     assertWebhookRouting(

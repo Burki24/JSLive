@@ -209,6 +209,39 @@ WebSocket-Textframes; im Pull-Modus wurden in elf realen Sekunden fünf
 `getData`-Abrufe beobachtet. Datenmodus und Testwert wurden danach auf ihren
 Ausgangszustand zurückgesetzt.
 
+## Gezielte Frontend-Abnahme von 0.70 am 01.10.2026
+
+Der Dienstneustart ist durch die neue Kernel-Startzeit **17:08:05 Uhr MESZ**
+bestaetigt. Geprueft wurde JSLive 0.70, Quellcommit `f582a6c`,
+Metadatencommit `2722afa`, auf MCP-CURRENT unter Symcon 9.1 und PHP 8.5.8.
+Alle elf vorhandenen JSLive-Instanzen melden Status 102.
+
+Die gezielte Browserpruefung mit Edge 155.0.4283.18 (Headless, 1024 x 768)
+umfasste DateTimePicker, ColorPicker, Chart, Doughnut/Pie und RadarChart.
+Alle fuenf Ansichten lieferten HTTP 200, renderten die erwarteten
+Bedienelemente beziehungsweise Diagramme und oeffneten jeweils eine
+WebSocket-Verbindung. Es traten keine JavaScript-, Seiten- oder
+Ressourcenfehler auf; die Screenshots wurden visuell kontrolliert.
+Ein separater clientseitiger Schrift-Ladetest zeigte die lokale Roboto-Schrift
+einschliesslich Umlauten mit `FontFace.status = loaded`. Dafuer wurde keine
+Symcon-Konfiguration geaendert. Seit dem Neustart wurden keine
+JSLive-Warnungen oder -Fehler im Symcon-Log gefunden.
+
+Ergebnis: Die gezielte Abnahme der Lokalisierung und ersten Asset-Bereinigung
+ist bestanden. Dies ist keine erneute vollstaendige Baseline: schreibende
+Bedienaktionen, zweimaliges ApplyChanges und ein Wechsel des Datenmodus wurden
+in diesem Lauf nicht ausgefuehrt.
+
+Die nachfolgende lokale Chart.js-Bereinigung wurde zusaetzlich mit denselben
+drei Diagrammansichten geprueft. Dabei lieferte der isolierte Testbrowser alle
+statischen Assets aus dem lokalen Arbeitsbaum; HTML und lesende Datenabfragen
+kamen weiterhin aus MCP-CURRENT. Chart verwendete weiter Version 4.3.3,
+Doughnut/Pie und RadarChart weiter 4.4.1. Alle Diagramme renderten ohne
+JavaScript- oder Ressourcenfehler und ohne horizontalen Ueberlauf; die
+Screenshots wurden visuell kontrolliert. Die entfernten Dateien wurden nicht
+angefordert. Dieser Kandidatentest ersetzt nicht die CI und die gezielte
+Abnahme nach dem noch ausstehenden Modulupdate.
+
 ## Ergebnisregeln
 
 - `PASS`: alle verpflichtenden Punkte sind mit frischem Laufzeitnachweis grün.

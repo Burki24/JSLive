@@ -40,6 +40,10 @@ Quellen stammen. Bei aktiviertem `Debug` werden vollständige Browser-Abfragen
 über die gemeinsame Diagnose protokolliert; bekannte Zugangsdatenfelder werden
 maskiert.
 
+Die Standardvorlage behält Chart.js 4.4.1. Für eigene Vorlagen mit historischen
+Chart.js-3.x-/Plugin-Pfaden gilt die
+[Asset-Migration](../docs/FRONTEND_ASSET_MIGRATION.md).
+
 ## Technische Daten
 
 | Eintrag | Wert |

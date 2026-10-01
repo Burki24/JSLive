@@ -67,6 +67,10 @@ Die unbenutzten Dateien `mc-calendar/mc-calendar.min.js`,
 Eigene Templates vor dem Update anhand der
 [Asset-Migration](../docs/FRONTEND_ASSET_MIGRATION.md) prüfen.
 
+Auch die historischen Chart.js-3.x-Dateien und ungenutzten Plugin-Kopien wurden
+entfernt. Die aktiven Chart.js-Bundles 4.3.3 und 4.4.1 bleiben erhalten; die
+Asset-Migration listet die neun zusätzlich entfallenden URLs einzeln auf.
+
 ## Lizenz
 
 JSLive steht unter der [GNU General Public License Version 3](../LICENSE).

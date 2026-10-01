@@ -3,8 +3,9 @@
 Stand: 01.10.2026. Diese Inventur bildet die mitgelieferten Templates und die
 vom Splitter unter `/hook/JSLive/js/` ausgelieferten Dateien ab. Die zuvor
 extern geladenen Ressourcen sind lokalisiert; Bibliotheksversionen wurden dabei
-nicht aktualisiert. Im ersten Bereinigungsschritt wurden MCDatepicker und zwei
-unbenutzte CSS-Dateien entfernt; die Chart.js-Bestaende bleiben unveraendert.
+nicht aktualisiert. MCDatepicker, zwei unbenutzte CSS-Dateien sowie die
+historischen Chart.js-3.x-Dateien und unbenutzten Plugin-Kopien sind entfernt.
+Die aktiven Chart.js-Versionen 4.3.3 und 4.4.1 bleiben unveraendert.
 
 Benutzerdefinierte Templates aus `TemplateScriptID` koennen weitere, hier nicht
 kontrollierbare Abhaengigkeiten laden. Sie gehoeren nicht zum reproduzierbaren
@@ -38,10 +39,8 @@ im historischen HTMLBox-Lader auf eine der Dateien unter
 | JSLive-Browserlaufzeit | `SymconJSLive/js/util.js`, `SymconJSLive/js/init.js`, `SymconJSLive/js/loader.js`, `SymconJSLive/js/jslive/Chart.js` | `util.js` direkt aktiv; die drei uebrigen Dateien indirekt aktiv ueber `HtmlBox-Chart.html` | Projektlizenz `LICENSE` (GPL-3.0) |
 | Chart.js 4.3.3 | `SymconJSLive/js/chartjs/chart.js` | aktiv nur in `SymconJSLiveChart` | MIT-Hinweis im Dateikopf |
 | Chart.js 4.4.1 | `SymconJSLive/js/chartjs/chart.min.js` | aktiv in DoughnutPie und RadarChart | MIT-Hinweis im Dateikopf |
-| Chart.js 3.9.1 Module/Helper | `SymconJSLive/js/chartjs/chart.esm.js`, `chart.mjs`, `helpers.esm.js`, `helpers.mjs` | unbenutzt; kein mitgeliefertes Template importiert diese Dateien | MIT-Hinweis im Dateikopf |
-| Chart.js 3.6.0 samt Plugins | `SymconJSLive/js/chartjs/3.6.0/` | unbenutzt; historischer Parallelbestand | MIT-Hinweise in den Dateikoepfen |
-| chartjs-adapter-moment 1.0.0 | `SymconJSLive/js/chartjs/plugins/chartjs-adapter-moment.js` | aktiv in den drei Chart-Modulen; bytegleiches Duplikat im unbenutzten Verzeichnis `3.6.0/plugins/` | MIT-Hinweis im Dateikopf |
-| chartjs-plugin-datalabels 2.2.0 | `SymconJSLive/js/chartjs/plugins/chartjs-plugin-datalabels.min.js` | aktiv in den drei Chart-Modulen; die unminifizierte Datei `chartjs-plugin-datalabels.js` ist unbenutzt | MIT-Hinweis im Dateikopf |
+| chartjs-adapter-moment 1.0.0 | `SymconJSLive/js/chartjs/plugins/chartjs-adapter-moment.js` | aktiv in den drei Chart-Modulen | MIT-Hinweis im Dateikopf |
+| chartjs-plugin-datalabels 2.2.0 | `SymconJSLive/js/chartjs/plugins/chartjs-plugin-datalabels.min.js` | aktiv in den drei Chart-Modulen | MIT-Hinweis im Dateikopf |
 | chartjs-plugin-streaming 3.1.0 | `SymconJSLive/js/chartjs/plugins/chartjs-plugin-streaming.min.js` | aktiv nur in `SymconJSLiveChart` | MIT-Hinweis im Dateikopf |
 | Moment.js 2.27.0 | `SymconJSLive/js/moment/2.27.0/Moment.js` | aktiv in den drei Chart-Modulen | MIT-Hinweis im Dateikopf |
 | Canvas Gauges 2.1.7 | `SymconJSLive/js/canvas-gauges/gauge.min.js` | aktiv in `SymconJSLiveGauge` | vollstaendiger MIT-Text im Dateikopf |
@@ -52,7 +51,7 @@ im historischen HTMLBox-Lader auf eine der Dateien unter
 
 Die parallelen Chart.js-Dateien sind nicht alle austauschbare Duplikate:
 `Chart.html` laedt 4.3.3, waehrend Doughnut/Pie und Radar 4.4.1 laden. Eine
-Bereinigung muss deshalb zuerst visuell und funktional nachweisen, dass alle
+Vereinheitlichung muss deshalb zuerst visuell und funktional nachweisen, dass alle
 drei Module mit derselben Version kompatibel sind.
 
 MCDatepicker (`SymconJSLive/js/mc-calendar/mc-calendar.min.js`) sowie
@@ -62,6 +61,13 @@ entfernt. Die bisherigen URLs liefern danach HTTP 404. Eigene Templates muessen
 vor einem Update gemaess [Asset-Migration](FRONTEND_ASSET_MIGRATION.md) geprueft
 werden. Die aktiven DatePicker- und DateTimePicker-Vorlagen nutzen weiterhin
 `css/DatePicker1.css`, Schriften ihre familienbezogenen CSS-Dateien.
+
+Im zweiten Schritt wurden die ungenutzten ES-Module/Helper von Chart.js 3.9.1,
+der Parallelbestand Chart.js 3.6.0 mit seinen drei Plugins sowie
+`chartjs/plugins/chartjs-plugin-datalabels.js` entfernt. Alle neun Pfade,
+Umstiegshinweise fuer eigene Templates und der Rueckfall auf 0.70 stehen in der
+[Asset-Migration](FRONTEND_ASSET_MIGRATION.md). Die aktiven Dateien und
+mitgelieferten Templates sind dabei unveraendert geblieben.
 
 ## Externe Laufzeitressourcen
 
@@ -78,13 +84,14 @@ Frontend-Abhaengigkeiten.
 ## Konsequenzen fuer Phase 4
 
 1. Erledigt: iro.js und die Schriftdateien werden lokal, fest versioniert und
-   mit Quellen, Hashes und Lizenztexten bereitgestellt. Die Browserabnahme muss
-   ColorPicker und mindestens eine dynamisch geladene Schrift pruefen.
-2. Begonnen: MCDatepicker und die beiden unbenutzten CSS-Dateien sind nach
-   Referenzpruefung einschliesslich der Skripte auf MCP-CURRENT entfernt.
-   Migration und Rueckfall sind dokumentiert. Als naechste Gruppe folgen die
-   unbenutzten Chart.js-3.x-Dateien; benutzerdefinierte Template-Skripte und der
-   historische HTMLBox-Pfad bleiben dabei zu beruecksichtigen.
+   mit Quellen, Hashes und Lizenztexten bereitgestellt. Die Browserabnahme von
+   0.70 nach Dienstneustart umfasst ColorPicker, DateTimePicker, die drei
+   Diagrammtypen und einen clientseitigen Ladetest der lokalen Roboto-Schrift.
+2. Lokal umgesetzt: MCDatepicker, die beiden unbenutzten CSS-Dateien und die
+   neun historischen Chart.js-/Plugin-Dateien sind nach Referenzpruefung
+   einschliesslich der Skripte auf MCP-CURRENT entfernt. Migration und
+   Rueckfall sind dokumentiert. Die Chart.js-Bereinigung benoetigt nach dem
+   Commit noch CI und Modulupdate mit anschliessender Laufzeitabnahme.
 3. Ein Versionsupdate oder die Vereinheitlichung von Chart.js folgt erst nach
    dieser Bereinigung und benoetigt visuelle Regressionstests fuer Chart,
    Doughnut/Pie und RadarChart.

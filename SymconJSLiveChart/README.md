@@ -47,6 +47,9 @@ als JSON-String. Eigene Skriptaufrufe müssen Arraywerte daher mit
 Die Standardvorlage ist `Chart.html`. Chart.js, Moment und die benötigten
 Plugins werden derzeit über den JSLive-Hook ausgeliefert. Eigene Vorlagen
 werden als HTML/JavaScript ausgeführt und müssen vertrauenswürdig sein.
+Die Standardvorlage behält Chart.js 4.3.3. Historische Chart.js-3.x-Dateien und
+ungenutzte Plugin-Kopien sind entfernt; eigene Vorlagen vor dem Update anhand
+der [Asset-Migration](../docs/FRONTEND_ASSET_MIGRATION.md) prüfen.
 Die Diagnose verwendet `DebugHelper`: Bei aktivem `Debug` werden numerische
 Messwerte einzeln und ohne künstliche Anzahlbegrenzung ausgegeben. Zusätzlich
 werden vollständige Browser-Abfragen und Konfigurationstransfers protokolliert;

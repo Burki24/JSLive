@@ -50,5 +50,34 @@ sind in der Git-Historie unter `78f9131` erhalten. Gesicherte eigene Templates
 gegebenenfalls separat zurueckspielen. Danach Browsercache leeren und die
 Datums-/Zeitauswahl sowie konfigurierte Schriften erneut pruefen.
 
-Weitere unbenutzte Chart.js-Dateien werden in einem getrennten Schritt mit
-eigener Kompatibilitaetsbewertung behandelt.
+## Zweiter Schritt: historische Chart.js-Dateien und Plugins
+
+Ausgangspunkt ist JSLive 0.70, Commit `2722afa`. Im nachfolgenden
+Entwicklungsstand werden neun weitere Dateien entfernt:
+
+| Entfallende Pfade unter `js/` | Migration eigener Templates |
+| --- | --- |
+| `chartjs/chart.esm.js`, `chartjs/chart.mjs`, `chartjs/helpers.esm.js`, `chartjs/helpers.mjs` | Historische ES-Module von Chart.js 3.9.1. Eigene `import`-Aufrufe vor dem Update auf eine selbst bereitgestellte, vollstaendige und fest versionierte Distribution umstellen oder die Vorlage bewusst auf die mitgelieferte Chart.js-4-API migrieren. Die aktiven klassischen Browserbundles sind kein direkter Ersatz fuer ES-Module. |
+| `chartjs/3.6.0/chart.min.js` | Chart.js 3.6.0. Eigene Vorlagen vor dem Update mit passender Plugin-Kombination auf Chart.js 4 migrieren und visuell pruefen oder ihre bisherige Version selbst bereitstellen. Kein automatischer Versionswechsel. |
+| `chartjs/3.6.0/plugins/chartjs-adapter-moment.js` | Bytegleich zur weiterhin bereitgestellten Version 1.0.0 unter `chartjs/plugins/chartjs-adapter-moment.js`; nur den Pfad anpassen. |
+| `chartjs/3.6.0/plugins/chartjs-plugin-datalabels.min.js`, `chartjs/3.6.0/plugins/chartjs-plugin-streaming.min.js` | Historische Plugins nur zusammen mit dem jeweiligen Chart.js-Hauptversionswechsel migrieren und testen. Die aktiven Plugins liegen unter `chartjs/plugins/`; sie werden nicht automatisch an den alten URLs ausgeliefert. |
+| `chartjs/plugins/chartjs-plugin-datalabels.js` | Die ebenfalls enthaltene Version 2.2.0 unter `chartjs/plugins/chartjs-plugin-datalabels.min.js` verwenden und die Beschriftungen pruefen. |
+
+Kein mitgeliefertes Template, keine PHP-Assetreferenz und auch der historische
+HTMLBox-Lader binden diese neun Dateien ein. Die erneute rein lesende Suche in
+den drei Skripten auf MCP-CURRENT am 01.10.2026 fand keine Verweise auf
+`chartjs/3.6.0`, die vier ES-Module oder `chartjs-plugin-datalabels.js`.
+Die Grenzen dieser Suche entsprechen dem ersten Schritt.
+
+Die aktiven Dateien `chartjs/chart.js` (4.3.3), `chartjs/chart.min.js` (4.4.1)
+und ihre drei Plugins bleiben bytegleich erhalten. Ebenso bleiben alle
+mitgelieferten Templates und Modulkonfigurationen in diesem Schritt erhalten.
+Der Webhook-Test prueft die Auslieferung dieser aktiven Dateien und HTTP 404
+mit leerem Body fuer alle neun entfallenden URLs. Die Diagramme werden im
+Browser zusaetzlich mit den lokalen Kandidaten-Assets geprueft; dies ersetzt
+nicht die anschliessende Abnahme nach dem Modulupdate in Symcon.
+
+Die Update- und Wiederholungsregeln des ersten Schritts gelten auch hier.
+Bei eigenen aktiven Referenzen zuerst migrieren, bei Fehlern den vollstaendigen
+Stand 0.70 wiederherstellen; alle neun Dateien bleiben unter `2722afa` in der
+Git-Historie verfuegbar. Es werden keine Anwenderskripte automatisch veraendert.

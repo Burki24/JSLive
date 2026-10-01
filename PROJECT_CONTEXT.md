@@ -312,8 +312,9 @@ Ressourcenreferenzen der mitgelieferten Templates mit dieser Inventur ab.
 
 Aktiv eingesetzt werden unter anderem Chart.js 4.3.3 und 4.4.1,
 chartjs-plugin-datalabels 2.2.0, chartjs-plugin-streaming 3.1.0, Moment.js
-2.27.0, jQuery 3.6.0, Canvas Gauges 2.1.7 und Loading Bar. Daneben liegen
-unbenutzte Chart.js-3.x-Bestaende parallel vor. MCDatepicker und die beiden
+2.27.0, jQuery 3.6.0, Canvas Gauges 2.1.7 und Loading Bar. Die neun unbenutzten
+Chart.js-3.x-/Plugin-Dateien sind im lokalen Folgeschritt entfernt; die aktiven
+4.x-Versionen bleiben unveraendert. MCDatepicker und die beiden
 unbenutzten CSS-Dateien `DateTimePicker1.css` und `font-face.css` wurden im
 ersten Bereinigungsschritt entfernt. Migration, Referenzpruefung und Rueckfall
 sind in `docs/FRONTEND_ASSET_MIGRATION.md` dokumentiert.
@@ -668,10 +669,12 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
 2. Erledigt: Die festen externen CDN-/Font-Ressourcen der mitgelieferten
    Templates sind lokal, versioniert sowie mit Quellen, Hashes und
    Lizenztexten dokumentiert.
-3. Begonnen: MCDatepicker und zwei unbenutzte CSS-Dateien sind mit dokumentierter
-   Migration und Webhook-Regressionstests entfernt. Die Referenzsuche auf
-   MCP-CURRENT fand in drei Skripten keine Treffer. Unbenutzte Chart.js-Dateien
-   folgen als eigene Gruppe; danach Bibliotheken einzeln mit visuellen
+3. Lokal umgesetzt: MCDatepicker, zwei unbenutzte CSS-Dateien und neun
+   historische Chart.js-/Plugin-Dateien sind mit dokumentierter Migration und
+   Webhook-Regressionstests entfernt. Die Referenzsuche auf MCP-CURRENT fand in
+   drei Skripten keine Treffer. Die Browserabnahme von 0.70 nach Dienstneustart
+   ist erfolgt; die Chart.js-Bereinigung benoetigt noch CI, Modulupdate und
+   anschliessende Laufzeitabnahme. Danach Bibliotheken einzeln mit visuellen
    Regressionstests aktualisieren. iro.js bleibt auf Wunsch unveraendert.
 
 ### Phase 5 - IPSView und Kacheldarstellung

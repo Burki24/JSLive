@@ -9,6 +9,11 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Changed
 
+- Neun ungenutzte Chart.js-/Plugin-Dateien wurden entfernt: die ES-Module von
+  Chart.js 3.9.1, Chart.js 3.6.0 samt Plugins und die zusätzliche Datalabels-Datei.
+  Aktive Chart.js-Versionen und Templates bleiben unverändert. Eigene Templates
+  müssen vor dem Update anhand von `docs/FRONTEND_ASSET_MIGRATION.md` auf die
+  entfallenden URLs geprüft werden.
 - Der unbenutzte MCDatepicker und die alten Stylesheets `DateTimePicker1.css`
   und `font-face.css` wurden entfernt. Mitgelieferte Ansichten verwenden
   weiterhin ihre bisherigen aktiven Ressourcen. Für eigene Templates sind
