@@ -296,6 +296,9 @@ foreach ([
     'chartjs/chart.min.js',
     'chartjs/4.5.1/chart.umd.min.js',
     'chartjs/4.5.1/chart.umd.min.js.map',
+    'moment/2.27.0/Moment.js',
+    'moment/2.31.0/moment.min.js',
+    'moment/2.31.0/moment.min.js.map',
     'chartjs/plugins/chartjs-adapter-moment.js',
     'chartjs/plugins/chartjs-plugin-datalabels.min.js',
     'chartjs/plugins/chartjs-plugin-streaming.min.js'

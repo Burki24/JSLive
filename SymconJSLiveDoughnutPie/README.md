@@ -41,6 +41,8 @@ Quellen stammen. Bei aktiviertem `Debug` werden vollständige Browser-Abfragen
 maskiert.
 
 Die Standardvorlage verwendet die lokal versionierte Chart.js 4.5.1.
+Moment.js wird lokal als 2.31.0 geladen; der alte 2.27.0-Pfad bleibt für eigene
+Vorlagen erhalten. Adapter und Plugins sind unverändert.
 Die alten URLs mit 4.3.3 und 4.4.1 bleiben für eigene Vorlagen unverändert.
 Für eigene Vorlagen mit historischen
 Chart.js-3.x-/Plugin-Pfaden gilt die

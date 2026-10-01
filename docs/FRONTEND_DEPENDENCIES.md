@@ -18,14 +18,14 @@ Lieferumfang der Library.
 | --- | --- | --- |
 | `SymconJSLive` | `htmlbox/HtmlBox-Chart.html` | jQuery 3.6.0, `util.js`, `init.js`; danach indirekt `loader.js`, `jslive/Chart.js` und die ausgewaehlten lokalen Font-CSS-/WOFF2-Dateien |
 | `SymconJSLiveAdvTextfield` | `Textfield1.html`, `Textfield2.html`, `FormExample.html` | jQuery 3.6.0, `util.js`, `css/TextField.css` oder `css/FormExample.css` |
-| `SymconJSLiveChart` | `Chart.html` | jQuery 3.6.0, Chart.js 4.5.1, Moment.js 2.27.0, chartjs-adapter-moment 1.0.0, chartjs-plugin-streaming 3.1.0, chartjs-plugin-datalabels 2.2.0, `util.js` |
+| `SymconJSLiveChart` | `Chart.html` | jQuery 3.6.0, Chart.js 4.5.1, Moment.js 2.31.0, chartjs-adapter-moment 1.0.0, chartjs-plugin-streaming 3.1.0, chartjs-plugin-datalabels 2.2.0, `util.js` |
 | `SymconJSLiveColorPicker` | `ColorPicker.html` | jQuery 3.6.0, `util.js`, lokale iro.js 5.5.0 |
 | `SymconJSLiveCustom` | `Default.html` oder benutzerdefiniertes Template | Das mitgelieferte Default-Template nutzt jQuery 3.6.0 und `util.js`; benutzerdefinierte Skripte liegen ausserhalb dieser Inventur |
 | `SymconJSLiveDateTimePicker` | `TimePicker1.html`, `TimePicker2.html`, `TimePicker3.html`, `DatePicker1.html`, `DateTimePicker1.html` | jQuery 3.6.0, `util.js` und die jeweilige Template-CSS-Datei; DatePicker und DateTimePicker verwenden beide `css/DatePicker1.css` |
-| `SymconJSLiveDoughnutPie` | `Doughnut-PIE.html` | jQuery 3.6.0, Chart.js 4.5.1, Moment.js 2.27.0, chartjs-adapter-moment 1.0.0, chartjs-plugin-datalabels 2.2.0, `util.js` |
+| `SymconJSLiveDoughnutPie` | `Doughnut-PIE.html` | jQuery 3.6.0, Chart.js 4.5.1, Moment.js 2.31.0, chartjs-adapter-moment 1.0.0, chartjs-plugin-datalabels 2.2.0, `util.js` |
 | `SymconJSLiveGauge` | vier `CanvasGauges-*.html`-Templates | jQuery 3.6.0, Canvas Gauges 2.1.7, `util.js` |
 | `SymconJSLiveProgressbar` | `Progressbar.html` | jQuery 3.6.0, Loading Bar/`ldBar` mit nicht im Asset ausgewiesener Version, `loading-bar.css`, `util.js` |
-| `SymconJSLiveRadarChart` | `RadarChart.html` | jQuery 3.6.0, Chart.js 4.5.1, Moment.js 2.27.0, chartjs-adapter-moment 1.0.0, chartjs-plugin-datalabels 2.2.0, `util.js` |
+| `SymconJSLiveRadarChart` | `RadarChart.html` | jQuery 3.6.0, Chart.js 4.5.1, Moment.js 2.31.0, chartjs-adapter-moment 1.0.0, chartjs-plugin-datalabels 2.2.0, `util.js` |
 
 Alle mitgelieferten Visualisierungstemplates verwenden damit jQuery und
 `util.js`. Die Schriftwahl wird zentral durch `JSLiveModule.php` beziehungsweise
@@ -44,7 +44,8 @@ im historischen HTMLBox-Lader auf eine der Dateien unter
 | chartjs-adapter-moment 1.0.0 | `SymconJSLive/js/chartjs/plugins/chartjs-adapter-moment.js` | aktiv in den drei Chart-Modulen | MIT-Hinweis im Dateikopf |
 | chartjs-plugin-datalabels 2.2.0 | `SymconJSLive/js/chartjs/plugins/chartjs-plugin-datalabels.min.js` | aktiv in den drei Chart-Modulen | MIT-Hinweis im Dateikopf |
 | chartjs-plugin-streaming 3.1.0 | `SymconJSLive/js/chartjs/plugins/chartjs-plugin-streaming.min.js` | aktiv nur in `SymconJSLiveChart` | MIT-Hinweis im Dateikopf |
-| Moment.js 2.27.0 | `SymconJSLive/js/moment/2.27.0/Moment.js` | aktiv in den drei Chart-Modulen | MIT-Hinweis im Dateikopf |
+| Moment.js 2.31.0 | `SymconJSLive/js/moment/2.31.0/moment.min.js`, zugehoerige `.map` | aktiv in den drei Chart-Modulen; offizielle npm-Distribution | MIT-Lizenz, Quellen, Paketintegritaet und SHA-256 in `SymconJSLive/js/moment/2.31.0/SOURCES.md` |
+| Moment.js 2.27.0 | `SymconJSLive/js/moment/2.27.0/Moment.js` | unveraenderter Kompatibilitaetspfad fuer eigene Vorlagen | MIT-Hinweis im Dateikopf |
 | Canvas Gauges 2.1.7 | `SymconJSLive/js/canvas-gauges/gauge.min.js` | aktiv in `SymconJSLiveGauge` | vollstaendiger MIT-Text im Dateikopf |
 | iro.js 5.5.0 | `SymconJSLive/js/iro/5.5.0/iro.js` | aktiv im ColorPicker; lokal und fest versioniert | MPL-2.0-Hinweis im Dateikopf und `SymconJSLive/js/iro/5.5.0/LICENSE.txt` |
 | Loading Bar/ldBar | `SymconJSLive/js/loading-Bar/loading-bar.js`, `SymconJSLive/js/loading-Bar/loading-bar.css` | aktiv in `SymconJSLiveProgressbar`; Version im Bestand nicht ausgewiesen | `SymconJSLive/js/loading-Bar/LICENSE` (MIT) |
@@ -102,6 +103,13 @@ Frontend-Abhaengigkeiten.
    Hash-, Referenz- und Webhook-Tests sichern Distribution und Ladepfade ab.
    Der lokale Browservergleich ist in der Laufzeitmatrix dokumentiert;
    CI und gezielte Abnahme nach Modulupdate auf 0.72 und Neustart sind bestanden.
-   Der dabei bestaetigte alte Radar-Tooltip-Fehler wird separat korrigiert;
-   diese Template-Korrektur benoetigt noch CI und Abnahme nach Modulupdate.
+   Der dabei bestaetigte alte Radar-Tooltip-Fehler ist separat korrigiert und
+   mit CI und gezielter Abnahme von 0.73 nach Neustart bestaetigt.
+4. Lokal umgesetzt: Moment.js 2.31.0 ersetzt 2.27.0 in den drei Standardvorlagen.
+   Die aktuelle stabile Version wurde am 01.10.2026 gegen npm und den offiziellen
+   GitHub-Release geprueft. Der Core-Bundle behaelt den bisherigen Locale-Umfang
+   (`en`); Chart.js, Adapter und Plugins bleiben unveraendert. Der alte Moment-Pfad
+   bleibt erhalten, erhaelt aber nicht die Upstream-Korrekturen der neuen Version.
+   Adaptertests in UTC/Berlin und der gezielte Browservergleich sind bestanden;
+   CI und Abnahme nach dem Modulupdate stehen fuer diesen Schritt noch aus.
 

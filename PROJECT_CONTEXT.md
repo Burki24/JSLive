@@ -182,6 +182,9 @@ Vorhandene lokale Pruefungen:
 - `tests/radar-tooltip.js`: der aus der Standardvorlage geladene und in deren
   Chart-Konfiguration registrierte Tooltip-Callback mit sieben Faellen fuer
   Zahlenwerte, Formatierung und optionale Datensatznamen;
+- `tests/moment-adapter.js`: echte alte/neue Moment-Distribution mit Chart.js
+  und Adapter, Parsing, Formatierung, Kalendergrenzen und Zeitumstellung in
+  UTC/Berlin sowie eindeutige Einbindung und Ladereihenfolge der Vorlagen;
 - `tests/chart-dates.php`: Datumsbereiche und Offset-Berechnung des Chart fuer
   alle acht Perioden in beiden Zeitmodi sowie numerische Webhook-Querywerte fuer
   Dataset- und Variablen-IDs;
@@ -315,7 +318,8 @@ Ressourcenreferenzen der mitgelieferten Templates mit dieser Inventur ab.
 
 Aktiv eingesetzt werden in den Standardvorlagen unter anderem Chart.js 4.5.1,
 chartjs-plugin-datalabels 2.2.0, chartjs-plugin-streaming 3.1.0, Moment.js
-2.27.0, jQuery 3.6.0, Canvas Gauges 2.1.7 und Loading Bar. Die neun unbenutzten
+2.31.0, jQuery 3.6.0, Canvas Gauges 2.1.7 und Loading Bar. Moment 2.27.0 bleibt
+unter seinem alten Pfad fuer eigene Vorlagen erhalten. Die neun unbenutzten
 Chart.js-3.x-/Plugin-Dateien sind mit JSLive 0.71 entfernt und abgenommen.
 Die Altpfade fuer 4.3.3 und 4.4.1 bleiben fuer eigene Vorlagen unveraendert;
 die lokal umgesetzte Umstellung der Standardvorlagen auf 4.5.1 ist ein
@@ -687,11 +691,16 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    Laufzeitabnahme des Versionsschritts auf 0.72 nach Neustart sind bestanden.
    Der Browservergleich hat einen bereits mit 4.4.1 vorhandenen Radar-Tooltip-
    Fehler bestaetigt (alte Callback-Signatur).
-5. Lokal korrigiert: Radar-Tooltips verwenden den Chart.js-4-Kontext und dessen
+5. Erledigt: Radar-Tooltips verwenden den Chart.js-4-Kontext und dessen
    formatierten Wert. Sieben Regressionstestfaelle und der Browser-Kandidatentest
-   sind bestanden. CI und Abnahme nach Modulupdate stehen fuer diese separate
-   Template-Korrektur noch aus. Anschliessend weitere Bibliotheken einzeln
-   pruefen. iro.js bleibt auf Wunsch unveraendert.
+   sind bestanden. CI und gezielte Abnahme von 0.73 nach Neustart sind bestanden
+   (Quellcommit `e30de93`, Metadatencommit `73351d1`).
+6. Lokal umgesetzt: Moment.js 2.31.0 in den drei Standardvorlagen, mit
+   unveraendertem Altpfad, Chart.js und Plugins. Herkunft, Integritaet und Lizenz
+   sind dokumentiert. Adaptertests in UTC/Berlin sowie Browservergleich mit
+   pixelgleichen Bildern, Tooltips, WebSocket und Realtime-Achse sind bestanden.
+   CI und gezielte Abnahme nach Modulupdate stehen noch aus. Anschliessend
+   weitere Bibliotheken einzeln pruefen. iro.js bleibt auf Wunsch unveraendert.
 
 ### Phase 5 - IPSView und Kacheldarstellung
 

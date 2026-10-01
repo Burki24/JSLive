@@ -48,6 +48,8 @@ Die Standardvorlage ist `Chart.html`. Chart.js, Moment und die benötigten
 Plugins werden derzeit über den JSLive-Hook ausgeliefert. Eigene Vorlagen
 werden als HTML/JavaScript ausgeführt und müssen vertrauenswürdig sein.
 Die Standardvorlage verwendet die lokal versionierte Chart.js 4.5.1.
+Moment.js wird lokal als 2.31.0 geladen; der alte 2.27.0-Pfad bleibt für eigene
+Vorlagen erhalten. Adapter und Plugins sind unverändert.
 Die alten URLs mit 4.3.3 und 4.4.1 bleiben für eigene Vorlagen unverändert.
 Historische Chart.js-3.x-Dateien und
 ungenutzte Plugin-Kopien sind entfernt; eigene Vorlagen vor dem Update anhand

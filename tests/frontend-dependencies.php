@@ -32,6 +32,7 @@ foreach ([
     'chartjs-plugin-datalabels 2.2.0',
     'chartjs-plugin-streaming 3.1.0',
     'Moment.js 2.27.0',
+    'Moment.js 2.31.0',
     'Canvas Gauges 2.1.7',
     'iro.js 5.5.0',
     'Loading Bar/ldBar',
@@ -76,6 +77,21 @@ foreach ([
     }
     if ($chartSources === false || !str_contains($chartSources, $chartAsset) || !str_contains($chartSources, $expectedHash)) {
         throw new RuntimeException('Chart.js source inventory must record ' . $chartAsset . ' and its SHA-256.');
+    }
+}
+
+$momentSources = file_get_contents($root . '/SymconJSLive/js/moment/2.31.0/SOURCES.md');
+foreach ([
+    'moment.min.js'     => 'db2cf339996ce8387e2750fabfe5161c1418b204f6f197167a09cfe5d6655892',
+    'moment.min.js.map' => '3a971634e403e4b43b35b1f857e4f8750f0f17121beab40aacb1a63ad8557887',
+    'LICENSE'           => '64419cc68debfd9b7c27e9cd926c756181e0857709d2701094874e0fb1a41d28'
+] as $momentAsset => $expectedHash) {
+    $assetPath = $root . '/SymconJSLive/js/moment/2.31.0/' . $momentAsset;
+    if (!is_file($assetPath) || hash_file('sha256', $assetPath) !== $expectedHash) {
+        throw new RuntimeException('Missing or modified Moment.js distribution file: ' . $momentAsset . '.');
+    }
+    if ($momentSources === false || !str_contains($momentSources, $momentAsset) || !str_contains($momentSources, $expectedHash)) {
+        throw new RuntimeException('Moment.js source inventory must record ' . $momentAsset . ' and its SHA-256.');
     }
 }
 

@@ -9,10 +9,15 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Changed
 
+- Chart, Doughnut/Pie und RadarChart verwenden jetzt Moment.js 2.31.0 aus
+  einer lokal versionierten Distribution mit Lizenz- und Integritätsnachweisen.
+  Der alte 2.27.0-Pfad bleibt für eigene Templates unverändert. Adaptertests
+  sichern Datumsformatierung und Kalender-/Zeitumstellungsgrenzen in UTC/Berlin
+  ab; Chart.js und die Plugins bleiben bei diesem Schritt unverändert.
 - Chart, Doughnut/Pie und RadarChart verwenden gemeinsam die lokal gebündelte
   Chart.js-Version 4.5.1 mit Herkunfts-, Integritäts- und Lizenznachweisen.
   Die bisherigen URLs mit 4.3.3 und 4.4.1 bleiben für eigene Templates
-  unverändert; Moment und die Plugins werden nicht mit aktualisiert.
+  unverändert; Moment und die Plugins wurden bei diesem Schritt nicht mit aktualisiert.
 - Neun ungenutzte Chart.js-/Plugin-Dateien wurden entfernt: die ES-Module von
   Chart.js 3.9.1, Chart.js 3.6.0 samt Plugins und die zusätzliche Datalabels-Datei.
   Aktive Chart.js-Versionen und Templates blieben bei dieser Bereinigung unverändert. Eigene Templates

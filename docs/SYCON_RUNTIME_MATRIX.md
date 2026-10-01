@@ -345,6 +345,51 @@ Nachweise fuer den noch nicht installierten Fix:
   Eigene Template-Skripte bleiben unangetastet. CI und gezielte Laufzeitabnahme
   nach dem Modulupdate des Fixes stehen noch aus.
 
+## Gezielte Radar-Tooltip-Abnahme von 0.73 am 01.10.2026
+
+Quellcommit `e30de93`, Metadatencommit `73351d1`, Library 0.73,
+Build 238083731: Tests, Check Style und CodeQL sind erfolgreich.
+MCP-CURRENT meldet Symcon 9.1 / PHP 8.5.8, Kernel-Start um 21:36:16 Uhr MESZ
+und alle elf JSLive-Instanzen mit Status 102. Keine JSLive-Warnungen oder
+-Fehler seit dem Neustart gefunden.
+
+Der ausgelieferte Radar-Callback entspricht dem lokalen Quelltext. Echtes
+Hover zeigt Datensatzname und formatierten Wert, ohne im Browser eingesetzten
+Ersatzcode. HTTP 200, WebSocket 101 und keine JavaScript-Fehler; die sieben
+Callback-Regressionstests sowie Frontend-/Webhook-Pruefungen sind bestanden.
+Ergebnis: Die gezielte Abnahme des Radar-Fixes ist bestanden. Dies ergaenzt
+die Abnahme von 0.72; es ist kein neuer vollstaendiger Matrixdurchlauf.
+
+## Lokaler Kandidat: Moment.js 2.31.0 am 01.10.2026
+
+Ausgangsstand ist die abgenommene 0.73. Die drei Standardvorlagen verwenden
+lokal den neuen versionierten Moment-Bundle. Der bisherige 2.27.0-Pfad,
+Chart.js 4.5.1 und alle Plugins bleiben unveraendert.
+
+Edge 155.0.4283.18, Headless, Desktop 1024 x 768, Zeitzone Europe/Berlin:
+Getrennte Kontexte laden die originalen drei MCP-CURRENT-Ansichten (29122,
+46757, 27990). Nur im Kandidaten wird die Moment-Assetantwort browserlokal
+durch 2.31.0 ersetzt. Fixierte Browserzeit und identische im Arbeitsspeicher
+wiederverwendete lesende Datenantworten sichern den Vergleich ab; Animationen
+werden fuer Screenshots angehalten. `setData` ist gesperrt. Keine Symcon-Werte,
+Konfigurationen oder Serverdateien werden veraendert, keine Zugangsdaten oder
+API-Antworten als Testdateien gespeichert.
+
+| Pruefung | Ergebnis |
+| --- | --- |
+| Alle drei Diagramme, beide Moment-Versionen | HTTP 200, WebSocket 101, keine JavaScript-/HTTP-Ressourcenfehler |
+| Canvas-Bilder mit identischen Daten | Alle drei pixelgleich; Screenshots visuell kontrolliert |
+| Achsen und Layout | Endliche Achsengrenzen; kein horizontaler Ueberlauf |
+| Native Hover-Tooltips | Alle drei Diagramme mit beiden Versionen erfolgreich, gleiche Werte |
+| Realtime-Achse | Refresh-Callback ausgefuehrt und Achse mit beiden Versionen um 500 ms fortgeschritten |
+| Automatisierter echter Moment-/Chart.js-Adapter | 2.27.0 und 2.31.0 bestehen Parsing, Formatierung, ungueltige Daten, Monats-/Jahres-/ISO-Wochengrenzen und 23-/25-Stunden-Tage in UTC/Berlin |
+| Lokale Abschlusspruefungen | Gesamtsuite, Syntax aller 57 PHP-Dateien unter PHP 8.5.10, JSON-Validierung (36 Dateien), Style-Pruefung der drei geaenderten PHP-Tests und `git diff --check` bestanden |
+
+Ergebnis: Keine Regression in den geprueften Szenarien gefunden. Browserkontexte
+sind geschlossen. CI und die gezielte Abnahme des neuen Pfads nach Commit/Push
+und Modulupdate stehen noch aus; der Kandidatentest ist keine installierte
+Symcon-Abnahme und kein neuer vollstaendiger Matrixdurchlauf.
+
 ## Ergebnisregeln
 
 - `PASS`: alle verpflichtenden Punkte sind mit frischem Laufzeitnachweis grün.

@@ -118,3 +118,31 @@ Die Ergebnisse und ein bereits mit 4.4.1 vorhandener Radar-Tooltip-Fehler sind
 in `SYCON_RUNTIME_MATRIX.md` festgehalten. Der Versionsschritt behebt diesen
 Bestandsfehler nicht. Ein lokaler Browsernachweis ersetzt nicht CI und die
 gezielte Abnahme nach dem noch ausstehenden Modulupdate.
+
+## Vierter Schritt: Moment.js 2.31.0
+
+Ausgangspunkt ist die abgenommene JSLive 0.73, Commit `73351d1`.
+Nur die drei Standardvorlagen wechseln von `moment/2.27.0/Moment.js` auf
+`moment/2.31.0/moment.min.js`. Die am 01.10.2026 gegen npm und den offiziellen
+Release gepruefte aktuelle stabile Distribution wird mit Source Map, MIT-Lizenz,
+Paketintegritaet und Dateihashes geliefert. Chart.js 4.5.1, Adapter 1.0.0,
+Datalabels und Streaming bleiben unveraendert. Der Core-Bundle enthaelt weiterhin
+nur die Locale `en`; weder weitere Locales noch Moment Timezone kommen hinzu.
+
+Der alte Pfad bleibt bytegleich erreichbar. Eigene `TemplateScriptID`-Vorlagen
+werden nicht automatisch umgestellt und erhalten dadurch auch nicht die
+Upstream-Korrekturen von 2.31.0. Solche Vorlagen separat mit ihren Datumsformaten,
+Zeitzonen und Plugins pruefen und danach gezielt auf den neuen Pfad umstellen.
+Nur eine Moment-Version und diese vor dem Adapter laden.
+
+Properties, Datensaetze, PHP-Vertraege und gespeicherte Konfigurationen aendern
+sich nicht. Nach dem Modulupdate Diagramme neu laden; einen aktiven HTML-Cache
+ueber das bestehende `ApplyChanges()` erneuern. Wiederholung und Neustart fuehren
+keine persistente Migration aus. Bei Problemen den vollstaendigen Stand 0.73
+wiederherstellen und die Ausgaben erneut laden; eigene Vorlagen separat sichern.
+
+Adaptertests vergleichen beide Distributionen in UTC und Europe/Berlin,
+einschliesslich Parsing, Formatierung, Schaltjahr und Zeitumstellung. Referenz-,
+Hash- und Webhook-Tests sichern den neuen sowie den beibehaltenen Ladepfad ab.
+Der isolierte Browservergleich ist in `SYCON_RUNTIME_MATRIX.md` dokumentiert;
+CI und die gezielte Abnahme nach dem Modulupdate stehen noch aus.
