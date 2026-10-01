@@ -4,7 +4,10 @@ Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
 `25fd163340dac13cafdb5b39d32dd14cada2cbb1`. Am 28.09.2026 wurde die
 Bestandsaufnahme um die beschlossene Entfernung von ConfigStore und SyncModule
 fortgeschrieben. Am 30.09.2026 wurde auch das Calendar-Modul einschliesslich
-seiner spezifischen Webhook-Pfade und Frontend-Assets entfernt.
+seiner spezifischen Webhook-Pfade und Frontend-Assets entfernt. Am 01.10.2026
+wurden der lokale und der entfernte `dev`-Stand auf Commit
+`e3af8ff9d26a38bfcdd14a16ceaf8b7ccb30b2fa` abgeglichen und die nachfolgenden
+Statusangaben aktualisiert.
 
 ## 1. Zweck und Zielbild
 
@@ -23,20 +26,20 @@ Architektur oder ein gleichzeitiger Austausch aller Frontend-Bibliotheken.
 
 ## 2. Repository- und Branch-Stand
 
-- Arbeitsbranch: `dev`; Arbeitsbaum war bei Beginn der Bestandsaufnahme sauber
-  und mit `origin/dev` synchron.
-- `dev` liegt 34 Commits vor `main` und vor `upstream/main`; beide enthalten
-  keine Commits, die `dev` fehlen.
-- `upstream/Beta` ist ein historischer Vorfahr und liegt 121 Commits hinter
+- Arbeitsbranch: `dev`; beim Abgleich am 01.10.2026 waren Arbeitsbaum,
+  lokaler Branch und `origin/dev` auf `e3af8ff` synchron.
+- `dev` lag zu diesem Zeitpunkt 148 Commits vor `main` und vor
+  `upstream/main`; beide enthielten keine Commits, die `dev` fehlten.
+- `upstream/Beta` ist ein historischer Vorfahr und lag 235 Commits hinter
   `dev`, ohne eigene Abweichung.
-- Bibliotheksversion: `0.10`, Build 35. Die Version wurde als isolierter
-  Bootstrap vom historischen Stand `0.9.9.9` auf das kuenftige Schema
-  `Hauptversion.Nebenstand` umgestellt. Der vorbereitete Metadatenworkflow wird
-  diese drei Felder nach dem ersten nicht vom Bot erzeugten Push auf `dev`
-  aktualisieren.
-- Gegenueber `main` enthaelt `dev` im Wesentlichen CI, Struktur-/Integritaetstests,
-  den zentral bezogenen Helper-Bestand und die bereits erfolgte Anbindung des
-  `DataFlowHelper`.
+- `library.json` stand auf Version `0.55`, Build `133588734`. Version, Build und
+  Datum werden auf `dev` vom Metadatenworkflow aus dem jeweiligen Quellcommit
+  erzeugt und nicht manuell gepflegt. Der einmalige Bootstrap vom historischen
+  Stand `0.9.9.9` auf das Schema `Hauptversion.Nebenstand` begann mit `0.10`.
+- Gegenueber `main` enthaelt `dev` neben CI, Tests und zentral bezogenen
+  Helpern inzwischen die dokumentierten Sicherheitsgrenzen, PHP-8.5-
+  Korrekturen sowie die beschlossene Entfernung von ConfigStore, SyncModule
+  und Calendar. Ein erster modernisierter Release wurde noch nicht erstellt.
 
 ## 3. Module
 
@@ -134,7 +137,7 @@ Vorhandene lokale Pruefungen:
 - `tests/test_update_library_metadata.py`: Erhoehung der gemeinsamen
   Library-Version ab `0.10`, Build-Ableitung aus dem Quell-SHA, Commit-Zeit und
   Schutz vor einer Rueckstufung;
-- `tests/public-contracts.php`: maschinenlesbare Charakterisierung der 11
+- `tests/public-contracts.php`: maschinenlesbare Charakterisierung der 10
   verbliebenen Modulvertraege, ihrer PHP-Quellen und der bestehenden Hook-Pfade;
 - `tests/webhook-routing.php`: Verhaltens-Harness fuer Authentisierungs- und
   Instanz-Gates, Data-ID/JSON-Umschlag, direkte globale Konfiguration und den
@@ -351,6 +354,12 @@ Bereits abgesicherte Sicherheitsgrenzen:
   `setData`-GET-Aufruf und die Zielbegrenzungen von Custom, ColorPicker und
   DateTimePicker.
 
+Bereits behobene technische Schulden:
+
+- `SymconJSLiveDoughnutPie::GetData()` prueft konfigurierte Variablen seit
+  Commit `7f666fe` gegen die korrekte Liste und liefert mehrfach konfigurierte
+  Variablen nur noch einmal. Ein gezielter Regressionstest sichert den Pfad ab.
+
 Prioritaet hoch:
 
 - Der Webhook transportiert das Kennwort als Query-Parameter. Bekannte
@@ -358,9 +367,9 @@ Prioritaet hoch:
   Diagnose kann jedoch unbekannte Geheimnisse aus freien Texten, Skripten
   und Medien enthalten. Die oeffentliche Methode `Debug_LoadLogFile` gibt
   ausserdem die komplette Symcon-Logdatei ungefiltert aus.
-- Import-, Store-, Custom- und Sync-Funktionen koennen Skripte erzeugen,
-  Variablen/Medien schreiben, Skripte ausfuehren oder komplette
-  Instanzkonfigurationen anwenden.
+- Konfigurationsimport und Custom-Funktionen koennen Skripte erzeugen,
+  Variablen oder Medien schreiben, Skripte ausfuehren oder komplette
+  Instanzkonfigurationen anwenden. ConfigStore und SyncModule wurden entfernt.
 
 Prioritaet mittel:
 
@@ -375,9 +384,6 @@ Prioritaet mittel:
 - `SymconJSLiveDateTimePicker::LoadOtherConfiguration()` liest die nicht
   registrierte Property `Variables`; eine Korrektur benoetigt einen getrennten
   Verhaltens- und Regressionstest;
-- `SymconJSLiveDoughnutPie::GetData()` prueft neue Variablen gegen die falsche
-  Liste und verwendet `array_column()` auf einer Liste skalarer Variablen-IDs;
-  der Pfad benoetigt vor einer Korrektur einen gezielten Datensatztest;
 - `SymconJSLiveRadarChart::GetCorrectStartDate()` und
   `SymconJSLiveChart::GetCorrectStartDate()` verwenden in mehreren absoluten
   Perioden das Jahr eines neu erzeugten `DateTime`-Objekts statt durchgaengig das
@@ -492,9 +498,10 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
      jeder Metadatenaktualisierung die gemeinsame Testsuite ausfuehren;
    - fuer den schreibenden Bot die vorhandene GitHub-App-Konvention mit
      `HELPER_SYNC_APP_CLIENT_ID` und `HELPER_SYNC_APP_PRIVATE_KEY` verwenden;
-     die App `Burki24 Helper Sync` ist fuer JSLive installiert, die Pruefung am
-     27.09.2026 ergab jedoch, dass beide Repository-Eintraege noch fehlen und
-     vor dem ersten Push des Workflows einzurichten sind;
+     abgeschlossen: Die App `Burki24 Helper Sync` ist fuer JSLive installiert,
+     die erforderlichen Repository-Eintraege sind eingerichtet und mehrere
+     erfolgreiche Bot-Commits bis einschliesslich `e3af8ff` belegen den
+     schreibenden Workflow;
    - die generierten Felder in `library.json` nicht mehr manuell pflegen und
      diese Regel in `AGENTS.md`, Strukturtests und Projektdokumentation sichern;
    - ein `CHANGELOG.md` mit einem dauerhaft gepflegten Abschnitt `Unreleased`
@@ -655,10 +662,10 @@ erst nach den Sicherheits-, Kompatibilitaets- und Migrationsgrundlagen.
 
 - Der einmalige Versionsuebergang von `0.9.9.9` auf `0.10` wurde als getrennter
   Bootstrap committed und erfolgreich in der CI geprueft.
-- Die GitHub-App-Variable `HELPER_SYNC_APP_CLIENT_ID` und das Secret
-  `HELPER_SYNC_APP_PRIVATE_KEY` fehlen im JSLive-Repository. Die App
-  `Burki24 Helper Sync` ist bereits installiert; die beiden Eintraege bleiben
-  das externe Gate vor dem ersten Push des schreibenden Workflows.
+- Die GitHub-App `Burki24 Helper Sync` und ihre Repository-Eintraege sind
+  eingerichtet. Der Metadatenworkflow hat bis zum abgeglichenen Stand
+  `e3af8ff` wiederholt erfolgreich geschrieben; dieses fruehere externe Gate
+  ist geschlossen.
 - Welche der 10 verbliebenen Module werden produktiv noch benoetigt, und welche
   werden nur kompatibel erhalten oder stillgelegt?
 - Der `ConfigStore` wird nicht weiter betrieben. Seine Modulimplementierung,

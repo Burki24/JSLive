@@ -16,8 +16,10 @@ der Modernisierung kompatibel bleiben.
 ## Projektstatus
 
 - Entwicklungszweig: `dev`
-- Bibliotheksversion: `0.10` (Migrationsstand für die automatische
-  Versionierung; noch keine Produktfreigabe), Build 35
+- Die Bibliotheksversion und der Build werden auf `dev` automatisch aus dem
+  jeweiligen Quellcommit erzeugt. Die Felder in `library.json` werden nicht
+  manuell gepflegt; der aktuelle Entwicklungsstand ist noch keine
+  Produktfreigabe.
 - Nicht vom Bot erzeugte Pushes nach `dev` erhalten automatisch eine gemeinsame
   neue Library-Version für alle enthaltenen Module; der Workflow erzeugt keine
   Releases.
