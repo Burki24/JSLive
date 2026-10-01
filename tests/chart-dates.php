@@ -116,6 +116,19 @@ foreach ([false, true] as $relative) {
             )
         );
 
+        if (!$relative && $period >= 1) {
+            $startYear = (new DateTimeImmutable('@' . $range['start']))
+                ->setTimezone(new DateTimeZone('UTC'))
+                ->format('Y');
+            $endYear = (new DateTimeImmutable('@' . $range['end']))
+                ->setTimezone(new DateTimeZone('UTC'))
+                ->format('Y');
+            assertChartDate(
+                $startYear === '2024' && $endYear === '2024',
+                sprintf('Absolute period %d must use the reference timestamp year.', $period)
+            );
+        }
+
         $offsetRange = invokeChartDateMethod(
             $module,
             'GetOffsetDate',

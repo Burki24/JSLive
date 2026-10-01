@@ -1636,6 +1636,7 @@ class SymconJSLiveChart extends JSLiveModule
             $starttime = (int) date('U', $this->GetValue('StartDate'));
             $date_start->setTimestamp($starttime);
         }
+        $date_end = clone $date_start;
 
         if ($relativ) {
             //jetzt mintus zeitraum

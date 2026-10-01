@@ -870,6 +870,7 @@ class SymconJSLiveRadarChart extends JSLiveModule
         else {
             $date_start = new DateTime('NOW');
         }
+        $date_end = clone $date_start;
 
         if ($relativ) {
             //jetzt mintus zeitraum

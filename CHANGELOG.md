@@ -75,6 +75,9 @@ Patchstelle, beispielsweise `v0.10.0`.
 - `SymconJSLiveDateTimePicker::LoadOtherConfiguration()` bewahrt beim Kopieren
   die lokale Integer-Property `Variable`, statt die nicht registrierte
   String-Property `Variables` zu lesen und in die Konfiguration zu schreiben.
+- Absolute Zeitraeume von Chart und RadarChart leiten ihr Jahr nun durchgaengig
+  aus dem gewaehlten Referenzzeitpunkt ab, statt teilweise das aktuelle Jahr
+  eines separat erzeugten `DateTime`-Objekts zu verwenden.
 
 ### Security
 

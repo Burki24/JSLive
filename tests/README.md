@@ -115,6 +115,13 @@ einer zweiten DateTimePicker-Instanz. Darstellungswerte werden uebernommen,
 waehrend die lokale `Variable`-Bindung erhalten bleibt und kein nicht
 registrierter `Variables`-Schluessel erzeugt wird.
 
+## Chart date-range harnesses
+
+`chart-dates.php` und `radar-chart-dates.php` pruefen alle acht Perioden im
+relativen und absoluten Modus sowie ihre Offset-Berechnung. Absolute Bereiche
+muessen das Jahr des vorgegebenen Referenzzeitpunkts verwenden und duerfen
+nicht vom Ausfuehrungsdatum des Tests abhaengen.
+
 ## Progressbar rendering harness
 
 `progressbar-rendering.js` fuehrt die reale `LoadBarConfig()`-Funktion aus der

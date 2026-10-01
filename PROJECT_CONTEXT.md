@@ -356,6 +356,12 @@ Bereits abgesicherte Sicherheitsgrenzen:
 
 Bereits behobene technische Schulden:
 
+- `SymconJSLiveChart::GetCorrectStartDate()` und
+  `SymconJSLiveRadarChart::GetCorrectStartDate()` verwenden fuer Start und Ende
+  absoluter Zeitraeume denselben ausgewaehlten Zeitanker. Ein fester
+  Referenzzeitpunkt aus 2024 belegt in beiden Harnesses, dass die Perioden nicht
+  mehr unbemerkt in das aktuelle Jahr wechseln. Historische Intervallgrenzen
+  wurden in diesem Schritt nicht veraendert.
 - `SymconJSLiveDateTimePicker::LoadOtherConfiguration()` uebernimmt weiterhin
   die Darstellungswerte einer anderen DateTimePicker-Instanz, bewahrt aber die
   lokale Integer-Property `Variable`. Die nicht registrierte String-Property
@@ -396,11 +402,6 @@ Prioritaet mittel:
   Server-Arrayzugriffe und `rand()` fuer Kennwoerter;
 - serialisierte PHP-Daten in Buffern und `unserialize` ohne erlaubte Klassen;
 - grosse Basisklasse, duplizierte Hilfsfunktionen und sehr grosse Moduldateien;
-- `SymconJSLiveRadarChart::GetCorrectStartDate()` und
-  `SymconJSLiveChart::GetCorrectStartDate()` verwenden in mehreren absoluten
-  Perioden das Jahr eines neu erzeugten `DateTime`-Objekts statt durchgaengig das
-  Jahr des uebergebenen Zeitstempels. Dieses bestehende Zeitverhalten benoetigt
-  vor einer fachlichen Korrektur eine eigene Entscheidung und Regressionstests;
 - Das experimentelle SyncModule wurde entfernt. Seine externe Modultyp-Liste
   war nicht mehr erreichbar; ausserdem verwarf es gespeicherte
   Parameterauswahlen und besass fuer direkte Zielaenderungen keine Vorschau oder
