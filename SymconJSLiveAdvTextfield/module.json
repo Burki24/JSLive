@@ -2,10 +2,11 @@
     "id": "{DBAF2DB0-0FCF-8396-9476-3C087457D012}",
     "name": "SymconJSLiveAdvTextfield",
     "type": 3,
-    "vendor": "Swen Babenschneider",
+    "vendor": "Swen Babenschneider, Burkhard Kneiseler",
     "aliases": [
         "JSLive-Advance Textfield"
     ],
+    "url": "https://github.com/Burki24/JSLive",
     "parentRequirements": [
         "{751AABD7-E31D-024C-5CC0-82AC15B84095}"
     ],

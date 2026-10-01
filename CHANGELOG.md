@@ -9,6 +9,10 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Changed
 
+- Library und alle zehn Module nennen neben dem ursprünglichen Autor Swen
+  Babenschneider nun auch den aktuellen Maintainer Burkhard Kneiseler. Die
+  Library- und Modulmetadaten verlinken außerdem vollständig auf das
+  JSLive-Repository.
 - Splitter, gemeinsame Kindmodul-Basis und alle neun Visualisierungsmodule
   verwenden `IPSModuleStrict`. Alle 74 öffentlichen Methodendeklarationen sind
   vollständig typisiert, `ReceiveData()` liefert auf leeren Pfaden einen

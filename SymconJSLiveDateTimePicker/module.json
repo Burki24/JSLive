@@ -2,10 +2,11 @@
     "id": "{B6ABE101-157B-3F68-CE81-25CBE5A8444B}",
     "name": "SymconJSLiveDateTimePicker",
     "type": 3,
-    "vendor": "Swen Babenschneider",
+    "vendor": "Swen Babenschneider, Burkhard Kneiseler",
     "aliases": [
         "JSLive-DateTimePicker"
     ],
+    "url": "https://github.com/Burki24/JSLive",
     "parentRequirements": [
         "{751AABD7-E31D-024C-5CC0-82AC15B84095}"
     ],

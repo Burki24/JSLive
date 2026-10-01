@@ -18,6 +18,9 @@ $expectedModules = [
     'SymconJSLiveRadarChart'          => 3
 ];
 
+$expectedAuthors = 'Swen Babenschneider, Burkhard Kneiseler';
+$expectedModuleUrl = 'https://github.com/Burki24/JSLive';
+
 $retiredModuleIds = [
     '{39EE8DDC-C72A-CEA0-2774-CB86F244A515}' => 'SymconJSLiveConfigStore',
     '{6C44628E-B623-7B92-D61D-0B3EAF4D6345}' => 'SymconJSLiveSyncModule',
@@ -119,6 +122,12 @@ if ($library !== null) {
     if (isset($library['id']) && !isSymconGuid($library['id'])) {
         $errors[] = 'library.json contains an invalid id.';
     }
+    if (($library['author'] ?? null) !== $expectedAuthors) {
+        $errors[] = 'library.json must credit the current and original maintainers.';
+    }
+    if (($library['url'] ?? null) !== $expectedModuleUrl) {
+        $errors[] = 'library.json must link to the JSLive repository.';
+    }
     if (isset($library['version']) && (!is_string($library['version']) || preg_match('/^\d+\.\d+$/', $library['version']) !== 1)) {
         $errors[] = 'library.json version must use the Hauptversion.Nebenstand format.';
     }
@@ -163,10 +172,17 @@ foreach ($discoveredModules as $directory => $modulePath) {
         continue;
     }
 
-    foreach (['id', 'name', 'type', 'vendor', 'parentRequirements', 'childRequirements', 'implemented', 'prefix'] as $key) {
+    foreach (['id', 'name', 'type', 'vendor', 'url', 'parentRequirements', 'childRequirements', 'implemented', 'prefix'] as $key) {
         if (!array_key_exists($key, $module)) {
             $errors[] = $directory . '/module.json is missing required field: ' . $key;
         }
+    }
+
+    if (($module['vendor'] ?? null) !== $expectedAuthors) {
+        $errors[] = $directory . '/module.json must credit the current and original maintainers.';
+    }
+    if (($module['url'] ?? null) !== $expectedModuleUrl) {
+        $errors[] = $directory . '/module.json must link to the JSLive repository.';
     }
 
     $id = $module['id'] ?? null;

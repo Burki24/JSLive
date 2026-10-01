@@ -2,10 +2,11 @@
     "id": "{934051F5-EE82-953D-5241-A29D74CBC251}",
     "name": "SymconJSLiveProgressbar",
     "type": 3,
-    "vendor": "Swen Babenschneider",
+    "vendor": "Swen Babenschneider, Burkhard Kneiseler",
     "aliases": [
         "JSLive-Progressbar"
     ],
+    "url": "https://github.com/Burki24/JSLive",
     "parentRequirements": [
         "{751AABD7-E31D-024C-5CC0-82AC15B84095}"
     ],

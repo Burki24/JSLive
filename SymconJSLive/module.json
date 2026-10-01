@@ -2,10 +2,11 @@
     "id": "{9FFF3FC0-FD51-C289-FA36-BC1C370946CF}",
     "name": "SymconJSLive",
     "type": 2,
-    "vendor": "Swen Babenschneider",
+    "vendor": "Swen Babenschneider, Burkhard Kneiseler",
     "aliases": [
         "JSLive"
     ],
+    "url": "https://github.com/Burki24/JSLive",
     "parentRequirements": [],
     "childRequirements": [
         "{79D59629-E9C5-44F1-0F34-0FBC5C88F307}"

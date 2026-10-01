@@ -2,10 +2,11 @@
     "id": "{71B93700-9659-97C6-AD83-984C2B44139F}",
     "name": "SymconJSLiveGauge",
     "type": 3,
-    "vendor": "Swen Babenschneider",
+    "vendor": "Swen Babenschneider, Burkhard Kneiseler",
     "aliases": [
         "JSLive-Gauge"
     ],
+    "url": "https://github.com/Burki24/JSLive",
     "parentRequirements": [
         "{751AABD7-E31D-024C-5CC0-82AC15B84095}"
     ],

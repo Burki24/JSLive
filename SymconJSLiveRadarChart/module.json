@@ -2,10 +2,11 @@
     "id": "{95C8F306-4E51-949E-E25B-FD5C1F173295}",
     "name": "SymconJSLiveRadarChart",
     "type": 3,
-    "vendor": "Swen Babenschneider",
+    "vendor": "Swen Babenschneider, Burkhard Kneiseler",
     "aliases": [
         "JSLive-Radar Chart"
     ],
+    "url": "https://github.com/Burki24/JSLive",
     "parentRequirements": [
         "{751AABD7-E31D-024C-5CC0-82AC15B84095}"
     ],

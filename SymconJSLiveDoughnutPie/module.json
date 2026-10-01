@@ -2,10 +2,11 @@
     "id": "{9419245E-CE2E-F949-AAB6-714E2045632F}",
     "name": "SymconJSLiveDoughnutPie",
     "type": 3,
-    "vendor": "Swen Babenschneider",
+    "vendor": "Swen Babenschneider, Burkhard Kneiseler",
     "aliases": [
         "JSLive-Doughnut/Pie"
     ],
+    "url": "https://github.com/Burki24/JSLive",
     "parentRequirements": [
         "{751AABD7-E31D-024C-5CC0-82AC15B84095}"
     ],

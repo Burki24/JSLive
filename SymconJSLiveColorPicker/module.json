@@ -2,10 +2,11 @@
     "id": "{D65FDF52-B207-0EFD-4D5F-6E39E25B3759}",
     "name": "SymconJSLiveColorPicker",
     "type": 3,
-    "vendor": "Swen Babenschneider",
+    "vendor": "Swen Babenschneider, Burkhard Kneiseler",
     "aliases": [
         "JSLive-ColorPicker"
     ],
+    "url": "https://github.com/Burki24/JSLive",
     "parentRequirements": [
         "{751AABD7-E31D-024C-5CC0-82AC15B84095}"
     ],

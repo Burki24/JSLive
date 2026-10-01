@@ -1,8 +1,8 @@
 {
     "id": "{1189E095-5FC2-22A5-12DF-2B177A36DB8C}",
-    "author": "Swen Babenschneider",
+    "author": "Swen Babenschneider, Burkhard Kneiseler",
     "name": "JSLive Modules",
-    "url": "babenschneider.net",
+    "url": "https://github.com/Burki24/JSLive",
     "version": "0.64",
     "build": 198732668,
     "date": 1790839549
