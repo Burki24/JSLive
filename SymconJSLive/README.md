@@ -62,6 +62,11 @@ der vendorten Bibliotheken und Schriften sind in der zentralen
 Frontend-Inventur dokumentiert. Benutzerdefinierte Templates können weiterhin
 eigene externe Ressourcen einbinden.
 
+Die unbenutzten Dateien `mc-calendar/mc-calendar.min.js`,
+`css/DateTimePicker1.css` und `css/font-face.css` werden nicht mehr ausgeliefert.
+Eigene Templates vor dem Update anhand der
+[Asset-Migration](../docs/FRONTEND_ASSET_MIGRATION.md) prüfen.
+
 ## Lizenz
 
 JSLive steht unter der [GNU General Public License Version 3](../LICENSE).

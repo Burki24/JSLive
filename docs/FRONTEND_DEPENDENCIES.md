@@ -3,7 +3,8 @@
 Stand: 01.10.2026. Diese Inventur bildet die mitgelieferten Templates und die
 vom Splitter unter `/hook/JSLive/js/` ausgelieferten Dateien ab. Die zuvor
 extern geladenen Ressourcen sind lokalisiert; Bibliotheksversionen wurden dabei
-nicht aktualisiert und unbenutzte Assets noch nicht entfernt.
+nicht aktualisiert. Im ersten Bereinigungsschritt wurden MCDatepicker und zwei
+unbenutzte CSS-Dateien entfernt; die Chart.js-Bestaende bleiben unveraendert.
 
 Benutzerdefinierte Templates aus `TemplateScriptID` koennen weitere, hier nicht
 kontrollierbare Abhaengigkeiten laden. Sie gehoeren nicht zum reproduzierbaren
@@ -46,15 +47,21 @@ im historischen HTMLBox-Lader auf eine der Dateien unter
 | Canvas Gauges 2.1.7 | `SymconJSLive/js/canvas-gauges/gauge.min.js` | aktiv in `SymconJSLiveGauge` | vollstaendiger MIT-Text im Dateikopf |
 | iro.js 5.5.0 | `SymconJSLive/js/iro/5.5.0/iro.js` | aktiv im ColorPicker; lokal und fest versioniert | MPL-2.0-Hinweis im Dateikopf und `SymconJSLive/js/iro/5.5.0/LICENSE.txt` |
 | Loading Bar/ldBar | `SymconJSLive/js/loading-Bar/loading-bar.js`, `SymconJSLive/js/loading-Bar/loading-bar.css` | aktiv in `SymconJSLiveProgressbar`; Version im Bestand nicht ausgewiesen | `SymconJSLive/js/loading-Bar/LICENSE` (MIT) |
-| MCDatepicker | `SymconJSLive/js/mc-calendar/mc-calendar.min.js` | unbenutzt; Referenzen in DatePicker und DateTimePicker sind auskommentiert | Version und Lizenz im Bestand nicht ausgewiesen; separater Lizenztext fehlt |
 | Template-CSS | `SymconJSLive/js/css/DatePicker1.css`, `SymconJSLive/js/css/FormExample.css`, `SymconJSLive/js/css/TextField.css`, `SymconJSLive/js/css/TimePicker1.css`, `SymconJSLive/js/css/TimePicker2.css`, `SymconJSLive/js/css/TimePicker3.css` | aktiv gemaess Modultabelle | Projektlizenz `LICENSE` (GPL-3.0) |
-| Unbenutztes Template-CSS | `SymconJSLive/js/css/DateTimePicker1.css`, `SymconJSLive/js/css/font-face.css` | unbenutzt; keine aktive Referenz; die enthaltenen Font-Pfade sind dennoch lokal | Projektlizenz `LICENSE` (GPL-3.0) |
 | Web Fonts | 20 CSS-Dateien unter `SymconJSLive/js/css/fonts/` und 20 WOFF2-Dateien unter `SymconJSLive/js/fonts/` | bei konfigurierter Schrift dynamisch aktiv; lokal und ueber SHA-256 reproduzierbar | Quellen, Hashes und Lizenzzuordnung in `SymconJSLive/js/fonts/SOURCES.md`; 17 familienbezogene OFL-Texte und Apache-2.0 liegen unter `fonts/licenses/` |
 
 Die parallelen Chart.js-Dateien sind nicht alle austauschbare Duplikate:
 `Chart.html` laedt 4.3.3, waehrend Doughnut/Pie und Radar 4.4.1 laden. Eine
 Bereinigung muss deshalb zuerst visuell und funktional nachweisen, dass alle
 drei Module mit derselben Version kompatibel sind.
+
+MCDatepicker (`SymconJSLive/js/mc-calendar/mc-calendar.min.js`) sowie
+`SymconJSLive/js/css/DateTimePicker1.css` und
+`SymconJSLive/js/css/font-face.css` wurden als erste unbenutzte Asset-Gruppe
+entfernt. Die bisherigen URLs liefern danach HTTP 404. Eigene Templates muessen
+vor einem Update gemaess [Asset-Migration](FRONTEND_ASSET_MIGRATION.md) geprueft
+werden. Die aktiven DatePicker- und DateTimePicker-Vorlagen nutzen weiterhin
+`css/DatePicker1.css`, Schriften ihre familienbezogenen CSS-Dateien.
 
 ## Externe Laufzeitressourcen
 
@@ -73,10 +80,11 @@ Frontend-Abhaengigkeiten.
 1. Erledigt: iro.js und die Schriftdateien werden lokal, fest versioniert und
    mit Quellen, Hashes und Lizenztexten bereitgestellt. Die Browserabnahme muss
    ColorPicker und mindestens eine dynamisch geladene Schrift pruefen.
-2. Als naechster Schritt koennen die nachweislich unbenutzten Chart.js-3.x-Dateien,
-   MCDatepicker sowie die beiden unbenutzten CSS-Dateien einzeln entfernt
-   werden. Vorher sind benutzerdefinierte Template-Skripte und der historische
-   HTMLBox-Pfad als moegliche externe Nutzer zu beruecksichtigen.
+2. Begonnen: MCDatepicker und die beiden unbenutzten CSS-Dateien sind nach
+   Referenzpruefung einschliesslich der Skripte auf MCP-CURRENT entfernt.
+   Migration und Rueckfall sind dokumentiert. Als naechste Gruppe folgen die
+   unbenutzten Chart.js-3.x-Dateien; benutzerdefinierte Template-Skripte und der
+   historische HTMLBox-Pfad bleiben dabei zu beruecksichtigen.
 3. Ein Versionsupdate oder die Vereinheitlichung von Chart.js folgt erst nach
    dieser Bereinigung und benoetigt visuelle Regressionstests fuer Chart,
    Doughnut/Pie und RadarChart.

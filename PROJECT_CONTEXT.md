@@ -313,16 +313,17 @@ Ressourcenreferenzen der mitgelieferten Templates mit dieser Inventur ab.
 Aktiv eingesetzt werden unter anderem Chart.js 4.3.3 und 4.4.1,
 chartjs-plugin-datalabels 2.2.0, chartjs-plugin-streaming 3.1.0, Moment.js
 2.27.0, jQuery 3.6.0, Canvas Gauges 2.1.7 und Loading Bar. Daneben liegen
-unbenutzte Chart.js-3.x-Bestaende, MCDatepicker und einzelne CSS-Dateien
-parallel vor.
+unbenutzte Chart.js-3.x-Bestaende parallel vor. MCDatepicker und die beiden
+unbenutzten CSS-Dateien `DateTimePicker1.css` und `font-face.css` wurden im
+ersten Bereinigungsschritt entfernt. Migration, Referenzpruefung und Rueckfall
+sind in `docs/FRONTEND_ASSET_MIGRATION.md` dokumentiert.
 
 ColorPicker laedt die vorhandene iro.js-Version 5.5.0 nun lokal. Auch die 20
 dynamisch ausgewaehlten Schriftdateien werden unveraendert als lokale
 WOFF2-Dateien ueber den JSLive-Hook ausgeliefert. Ursprungs-URLs, SHA-256-Werte
 und die familienbezogenen OFL-/Apache-Lizenztexte sind im Asset-Verzeichnis
 dokumentiert. Es fehlen weiterhin ein Paketmanifest, ein dokumentierter
-Buildprozess, ein lokaler Lizenznachweis fuer das derzeit unbenutzte
-MCDatepicker-Asset sowie automatisierte Browserpruefungen. Eine vorschnelle
+Buildprozess sowie automatisierte Browserpruefungen. Eine vorschnelle
 Bereinigung ist nicht zulaessig, weil benutzerdefinierte Template-Skripte und
 der historische HTMLBox-Pfad weitere lokale Assets verwenden koennen.
 
@@ -667,8 +668,11 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
 2. Erledigt: Die festen externen CDN-/Font-Ressourcen der mitgelieferten
    Templates sind lokal, versioniert sowie mit Quellen, Hashes und
    Lizenztexten dokumentiert.
-3. Unbenutzte oder doppelte Assets entfernen, danach Bibliotheken einzeln mit
-   visuellen Regressionstests aktualisieren.
+3. Begonnen: MCDatepicker und zwei unbenutzte CSS-Dateien sind mit dokumentierter
+   Migration und Webhook-Regressionstests entfernt. Die Referenzsuche auf
+   MCP-CURRENT fand in drei Skripten keine Treffer. Unbenutzte Chart.js-Dateien
+   folgen als eigene Gruppe; danach Bibliotheken einzeln mit visuellen
+   Regressionstests aktualisieren. iro.js bleibt auf Wunsch unveraendert.
 
 ### Phase 5 - IPSView und Kacheldarstellung
 

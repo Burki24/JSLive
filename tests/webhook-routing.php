@@ -283,6 +283,24 @@ assertWebhookRouting(
 );
 
 $fontAsset = 'TUZyzwprpvBS1izr_vOECuSf.woff2';
+foreach (['css/DatePicker1.css', 'css/fonts/Roboto.css'] as $stylesheetAsset) {
+    $stylesheetResponse = $harness->route('/hook/JSLive/js/' . $stylesheetAsset, '');
+    assertWebhookRouting(
+        $stylesheetResponse['statusCode'] === 200
+            && $stylesheetResponse['output'] === file_get_contents(dirname(__DIR__) . '/SymconJSLive/js/' . $stylesheetAsset),
+        'Active date picker and font stylesheets must remain available after the legacy asset cleanup.'
+    );
+}
+foreach (['mc-calendar/mc-calendar.min.js', 'css/DateTimePicker1.css', 'css/font-face.css'] as $removedAsset) {
+    $harness->resetCapturedData();
+    $removedAssetResponse = $harness->route('/hook/JSLive/js/' . $removedAsset, '');
+    assertWebhookRouting(
+        $harness->responseStatusCodes === [404] && $removedAssetResponse['output'] === '',
+        'Removed legacy asset must return HTTP 404 without a replacement body: ' . $removedAsset
+    );
+}
+$harness->resetCapturedData();
+
 $fontResponse = $harness->route('/hook/JSLive/js/fonts/' . $fontAsset, '');
 assertWebhookRouting(
     $fontResponse['output'] === file_get_contents(dirname(__DIR__) . '/SymconJSLive/js/fonts/' . $fontAsset),

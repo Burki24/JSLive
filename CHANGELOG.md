@@ -9,6 +9,11 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Changed
 
+- Der unbenutzte MCDatepicker und die alten Stylesheets `DateTimePicker1.css`
+  und `font-face.css` wurden entfernt. Mitgelieferte Ansichten verwenden
+  weiterhin ihre bisherigen aktiven Ressourcen. Für eigene Templates sind
+  die entfallenden URLs und Umstiegsschritte in
+  `docs/FRONTEND_ASSET_MIGRATION.md` dokumentiert.
 - Library und alle zehn Module nennen neben dem ursprünglichen Autor Swen
   Babenschneider nun auch den aktuellen Maintainer Burkhard Kneiseler. Die
   Library- und Modulmetadaten verlinken außerdem vollständig auf das

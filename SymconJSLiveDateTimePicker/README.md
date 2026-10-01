@@ -28,6 +28,11 @@ den verwendeten Wertetyp geeignet sein; bei einer Variablenaktion wird
 Vorlagen erhalten `{CONFIG}`, `{VALUE}` und `{FONTS}`. Eine eigene Vorlage
 muss aus einer vertrauenswürdigen Quelle stammen.
 
+DatePicker und DateTimePicker verwenden `css/DatePicker1.css`. Die früher nur
+auskommentiert eingebundene MCDatepicker-Bibliothek und das ungenutzte
+`css/DateTimePicker1.css` sind entfernt. Bei eigenen Vorlagen die
+[Asset-Migration](../docs/FRONTEND_ASSET_MIGRATION.md) vor dem Update beachten.
+
 ## Daten und Befehle
 
 Der bestehende Datenvertrag umfasst:

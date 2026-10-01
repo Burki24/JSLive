@@ -69,6 +69,9 @@ foreach ($templateDirectories as $templateDirectory) {
 }
 
 foreach ($references as $reference => $template) {
+    if (str_starts_with($reference, 'SymconJSLive/js/') && !is_file($root . '/' . $reference)) {
+        throw new RuntimeException('Missing local asset ' . $reference . ' referenced by ' . $template . '.');
+    }
     if (!str_contains($inventory, $reference)) {
         throw new RuntimeException(
             'Frontend inventory is missing reference ' . $reference . ' from ' . $template . '.'
