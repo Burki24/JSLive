@@ -65,6 +65,9 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Security
 
+- `Debug_LoadLogFile` gibt die Symcon-Logdatei weiterhin ueber den bestehenden
+  oeffentlichen Diagnosepfad aus, maskiert dabei aber bekannte Passwort- und
+  Zugangsdatenformen einschliesslich des JSLive-Parameters `pw`.
 - Die statische Webhook-Auslieferung akzeptiert nur noch regulaere Dateien,
   deren kanonischer Pfad innerhalb von `SymconJSLive/js` liegt. Relative
   Pfadausbrueche werden mit HTTP 404 abgewiesen; ein Regressionstest sichert

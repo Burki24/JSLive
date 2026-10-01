@@ -22,6 +22,7 @@ $tests = [
     __DIR__ . '/http-response-integration.php',
     __DIR__ . '/splitter-debug-helper.php',
     __DIR__ . '/jslive-module-debug-helper.php',
+    __DIR__ . '/debug-log-access.php',
     __DIR__ . '/gauge-progressbar-debug.php',
     __DIR__ . '/color-datetime-debug.php',
     __DIR__ . '/adv-debug.php',

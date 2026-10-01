@@ -58,6 +58,13 @@ The harness intentionally does not assert sensitive debug output, unrestricted
 asset paths or other known security risks. Those behaviors are not compatibility
 requirements and may be tightened without updating a characterization fixture.
 
+## Debug log masking harness
+
+`debug-log-access.php` ruft den bestehenden oeffentlichen Diagnosepfad mit
+einer synthetischen Symcon-Logdatei auf. Der Test belegt, dass harmlose
+Logeintraege und Queryparameter weiterhin ausgegeben werden, waehrend
+Passwortfelder sowie der JSLive-Parameter `pw` sichtbar maskiert bleiben.
+
 ## Configuration transfer harness
 
 `configuration-transfer.php` verifies complete and form-filtered exports,

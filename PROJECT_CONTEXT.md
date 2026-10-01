@@ -356,6 +356,11 @@ Bereits abgesicherte Sicherheitsgrenzen:
 
 Bereits behobene technische Schulden:
 
+- `Debug_LoadLogFile` behaelt seinen oeffentlichen Diagnosevertrag und gibt
+  die Symcon-Logdatei weiterhin aus. Jede Zeile wird dabei ueber den zentralen
+  `DebugHelper` gefiltert; der JSLive-spezifische Queryparameter `pw` wird
+  zusaetzlich maskiert. Ein Regressionstest sichert sichtbare harmlose Inhalte
+  und verdeckte Passwortwerte ab.
 - `SymconJSLiveDoughnutPie::GetData()` prueft konfigurierte Variablen seit
   Commit `7f666fe` gegen die korrekte Liste und liefert mehrfach konfigurierte
   Variablen nur noch einmal. Ein gezielter Regressionstest sichert den Pfad ab.
@@ -365,8 +370,7 @@ Prioritaet hoch:
 - Der Webhook transportiert das Kennwort als Query-Parameter. Bekannte
   Zugangsdatenfelder werden im Debug maskiert; die bewusst vollstaendige
   Diagnose kann jedoch unbekannte Geheimnisse aus freien Texten, Skripten
-  und Medien enthalten. Die oeffentliche Methode `Debug_LoadLogFile` gibt
-  ausserdem die komplette Symcon-Logdatei ungefiltert aus.
+  und Medien enthalten.
 - Konfigurationsimport und Custom-Funktionen koennen Skripte erzeugen,
   Variablen oder Medien schreiben, Skripte ausfuehren oder komplette
   Instanzkonfigurationen anwenden. ConfigStore und SyncModule wurden entfernt.

@@ -456,6 +456,12 @@ class JSLiveModule extends IPSModule
     {
         $file_arr = file(IPS_GetLogDir() . 'logfile.log');
 
+        if ($file_arr === false) return;
+
+        foreach ($file_arr as $key => $line) {
+            $file_arr[$key] = $this->FormatSafeLogLine($line);
+        }
+
         print_r($file_arr);
     }
     protected function BuildReceiveDataFilter(): string
@@ -798,6 +804,17 @@ class JSLiveModule extends IPSModule
             $temp = &$temp[$key];
         }
         return $temp;
+    }
+    private function FormatSafeLogLine(string $line): string
+    {
+        $safeLine = $this->FormatSafeDebugData($line, PHP_INT_MAX, ['pw']);
+        $safeLine = preg_replace(
+            '/(?i)(\bpw\b)(\s*[:=]\s*)(["\']?)[^,&#\s}"\']+\3/',
+            '$1$2$3***$3',
+            $safeLine
+        );
+
+        return is_string($safeLine) ? $safeLine : '[log line could not be sanitized]';
     }
     private function isAssoc(array $arr)
     {
