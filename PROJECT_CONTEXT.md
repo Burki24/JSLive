@@ -310,11 +310,13 @@ Lizenznachweise sowie unbenutzte und parallele Bestandsdateien sind in
 `docs/FRONTEND_DEPENDENCIES.md` inventarisiert. Ein Regressionstest gleicht die
 Ressourcenreferenzen der mitgelieferten Templates mit dieser Inventur ab.
 
-Aktiv eingesetzt werden unter anderem Chart.js 4.3.3 und 4.4.1,
+Aktiv eingesetzt werden in den Standardvorlagen unter anderem Chart.js 4.5.1,
 chartjs-plugin-datalabels 2.2.0, chartjs-plugin-streaming 3.1.0, Moment.js
 2.27.0, jQuery 3.6.0, Canvas Gauges 2.1.7 und Loading Bar. Die neun unbenutzten
-Chart.js-3.x-/Plugin-Dateien sind im lokalen Folgeschritt entfernt; die aktiven
-4.x-Versionen bleiben unveraendert. MCDatepicker und die beiden
+Chart.js-3.x-/Plugin-Dateien sind mit JSLive 0.71 entfernt und abgenommen.
+Die Altpfade fuer 4.3.3 und 4.4.1 bleiben fuer eigene Vorlagen unveraendert;
+die lokal umgesetzte Umstellung der Standardvorlagen auf 4.5.1 ist ein
+separater Versionsschritt. MCDatepicker und die beiden
 unbenutzten CSS-Dateien `DateTimePicker1.css` und `font-face.css` wurden im
 ersten Bereinigungsschritt entfernt. Migration, Referenzpruefung und Rueckfall
 sind in `docs/FRONTEND_ASSET_MIGRATION.md` dokumentiert.
@@ -669,13 +671,22 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
 2. Erledigt: Die festen externen CDN-/Font-Ressourcen der mitgelieferten
    Templates sind lokal, versioniert sowie mit Quellen, Hashes und
    Lizenztexten dokumentiert.
-3. Lokal umgesetzt: MCDatepicker, zwei unbenutzte CSS-Dateien und neun
+3. Erledigt: MCDatepicker, zwei unbenutzte CSS-Dateien und neun
    historische Chart.js-/Plugin-Dateien sind mit dokumentierter Migration und
    Webhook-Regressionstests entfernt. Die Referenzsuche auf MCP-CURRENT fand in
    drei Skripten keine Treffer. Die Browserabnahme von 0.70 nach Dienstneustart
-   ist erfolgt; die Chart.js-Bereinigung benoetigt noch CI, Modulupdate und
-   anschliessende Laufzeitabnahme. Danach Bibliotheken einzeln mit visuellen
-   Regressionstests aktualisieren. iro.js bleibt auf Wunsch unveraendert.
+   ist erfolgt; auch CI und gezielte Laufzeitabnahme der Chart.js-Bereinigung
+   auf 0.71 (Metadatencommit `787d24a`) sind bestanden.
+4. Lokal umgesetzt: Die drei Diagrammvorlagen verwenden gemeinsam Chart.js
+   4.5.1 aus einer integritaetsgeprueften, lokal versionierten Distribution.
+   Alte 4.x-Pfade, Moment und Plugins bleiben unveraendert. Der lokale
+   Browservergleich ist in der Laufzeitmatrix dokumentiert; CI und
+   Laufzeitabnahme nach Modulupdate stehen fuer diesen Versionsschritt noch aus.
+   Der Browservergleich hat einen bereits mit 4.4.1 vorhandenen Radar-Tooltip-
+   Fehler bestaetigt (alte Callback-Signatur); diesen anschliessend separat
+   mit Regressionstest korrigieren, bevor die Diagrammbedienung als bestanden gilt.
+   Anschliessend weitere Bibliotheken einzeln pruefen. iro.js bleibt auf
+   Wunsch unveraendert.
 
 ### Phase 5 - IPSView und Kacheldarstellung
 

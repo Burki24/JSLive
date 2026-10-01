@@ -294,6 +294,8 @@ foreach (['css/DatePicker1.css', 'css/fonts/Roboto.css'] as $stylesheetAsset) {
 foreach ([
     'chartjs/chart.js',
     'chartjs/chart.min.js',
+    'chartjs/4.5.1/chart.umd.min.js',
+    'chartjs/4.5.1/chart.umd.min.js.map',
     'chartjs/plugins/chartjs-adapter-moment.js',
     'chartjs/plugins/chartjs-plugin-datalabels.min.js',
     'chartjs/plugins/chartjs-plugin-streaming.min.js'

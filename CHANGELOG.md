@@ -9,9 +9,13 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Changed
 
+- Chart, Doughnut/Pie und RadarChart verwenden gemeinsam die lokal gebündelte
+  Chart.js-Version 4.5.1 mit Herkunfts-, Integritäts- und Lizenznachweisen.
+  Die bisherigen URLs mit 4.3.3 und 4.4.1 bleiben für eigene Templates
+  unverändert; Moment und die Plugins werden nicht mit aktualisiert.
 - Neun ungenutzte Chart.js-/Plugin-Dateien wurden entfernt: die ES-Module von
   Chart.js 3.9.1, Chart.js 3.6.0 samt Plugins und die zusätzliche Datalabels-Datei.
-  Aktive Chart.js-Versionen und Templates bleiben unverändert. Eigene Templates
+  Aktive Chart.js-Versionen und Templates blieben bei dieser Bereinigung unverändert. Eigene Templates
   müssen vor dem Update anhand von `docs/FRONTEND_ASSET_MIGRATION.md` auf die
   entfallenden URLs geprüft werden.
 - Der unbenutzte MCDatepicker und die alten Stylesheets `DateTimePicker1.css`

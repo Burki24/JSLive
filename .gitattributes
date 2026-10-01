@@ -1,2 +1,3 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+SymconJSLive/js/chartjs/4.5.1/* text eol=lf

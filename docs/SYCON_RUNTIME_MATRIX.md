@@ -239,8 +239,71 @@ kamen weiterhin aus MCP-CURRENT. Chart verwendete weiter Version 4.3.3,
 Doughnut/Pie und RadarChart weiter 4.4.1. Alle Diagramme renderten ohne
 JavaScript- oder Ressourcenfehler und ohne horizontalen Ueberlauf; die
 Screenshots wurden visuell kontrolliert. Die entfernten Dateien wurden nicht
-angefordert. Dieser Kandidatentest ersetzt nicht die CI und die gezielte
-Abnahme nach dem noch ausstehenden Modulupdate.
+angefordert. Dieser Kandidatentest wurde anschliessend durch die folgende
+Abnahme des installierten Stands ergaenzt.
+
+## Gezielte Frontend-Abnahme von 0.71 am 01.10.2026
+
+Die Chart.js-Altdateibereinigung ist auf MCP-CURRENT installiert:
+Quellcommit `9df72cb`, Metadatencommit `787d24a`, Library 0.71,
+Build 165638859. Tests, StylePHP und CodeQL sind fuer diesen Stand gruen.
+Alle elf JSLive-Instanzen sind aktiv; es wurden keine JSLive-Warnungen oder
+-Fehler gefunden. Die neun entfernten Asset-URLs liefern HTTP 404, die
+weiterhin aktiven Dateien stimmen per Hash mit dem Repository ueberein.
+
+Chart (29122), Doughnut/Pie (46757) und RadarChart (27990) wurden nach dem
+Modulupdate im Browser geprueft: HTTP 200, erwartete Diagramme, WebSocket 101,
+keine JavaScript- oder Ressourcenfehler beim initialen Laden. Chart verwendet
+4.3.3, die beiden anderen Vorlagen 4.4.1. Ergebnis: gezielte Abnahme der
+Asset-Bereinigung bestanden; kein neuer vollstaendiger Matrixdurchlauf.
+
+## Lokaler Kandidat: Chart.js 4.5.1 am 01.10.2026
+
+Ausgangsstand ist die abgenommene 0.71. Die offizielle npm-Distribution 4.5.1
+wurde mit Paketintegritaet, Einzeldateihashes, Source Map und MIT-Lizenzen
+lokal aufgenommen. Die drei Standardvorlagen verwenden den neuen versionierten
+Pfad; beide alten 4.x-Dateien und alle Plugins bleiben unveraendert.
+
+Testverfahren: Edge 155.0.4283.18, Headless, jeweils getrennte Browserkontexte
+fuer bisherigen und neuen Bundle. HTML und lesende Datenabfragen stammen aus
+den drei genannten MCP-CURRENT-Instanzen. Nur im Testbrowser werden statische
+Assets aus dem Arbeitsbaum geliefert und die bisherige Chart.js-URL fuer den
+Kandidaten auf 4.5.1 abgebildet. Datenantworten werden fuer beide Varianten
+identisch im Speicher wiederverwendet. Fixierte Browserzeit und gestoppte
+Animationen machen den Bildvergleich reproduzierbar. Konfigurationen, Werte
+und Assets auf Symcon werden dabei nicht geaendert; `setData` ist im
+Testbrowser gesperrt. Zugangsdaten und Serverantworten werden nicht als
+Testdateien gespeichert.
+
+| Pruefung | Ergebnis |
+| --- | --- |
+| Initiales Laden aller drei Diagramme, beide Versionen | HTTP 200, WebSocket 101, kein initialer JavaScript-/Ressourcenfehler |
+| Desktop 1024 x 768, bestehende Testdaten | Alle drei Canvas-Bilder pixelgleich |
+| Mobil 390 x 844 | Chart pixelgleich; Doughnut/Pie und Radar mit einem Pixel Hoehenrundungsunterschied; visuell kontrolliert, kein horizontaler Ueberlauf |
+| Clientseitige Zusatzdaten bei festem Canvas 700 x 500 | Linie/Balken mit unterschiedlichen Werten, Pie statt Doughnut und Radar mit zehn unterschiedlichen Werten einschliesslich Datalabels jeweils pixelgleich |
+| Legende ein-/ausblenden | Alle drei Module in beiden Versionen erfolgreich |
+| Tooltip | Chart und Doughnut/Pie erfolgreich; Radar scheitert bereits mit 4.4.1 und weiterhin mit 4.5.1, siehe Bestandsfehler unten |
+| Moment-Adapter / Streaming-Fork 3.1.0 | Realtime-Achse rendert; Refresh-Callback mehrfach ausgefuehrt, Zeitachse schreitet fort; clientseitiges `UpdateChart` aendert Daten unter 4.3.3 und 4.5.1 |
+| Clientseitiges Doughnut-Update | `UpdateChart` uebernimmt den Testwert in beiden Versionen |
+| Neuladen | Chart synchron und asynchron in beiden Versionen erfolgreich; Radar initial asynchron und erneutes synchrones Laden in beiden Versionen erfolgreich |
+| Pull-Pfad des Kandidaten | Je Modul vier lesende `getData`-Abrufe; Diagrammkoordinaten weiterhin endlich; keine Symcon-Property geaendert |
+| Lokale PHP-Pruefungen | Gesamtsuite, Webhook-Auslieferung einschliesslich neuem Bundle/Map, Referenzen und Hashes sowie Syntax unter PHP 8.5.10 bestanden |
+
+Bestaetigter Bestandsfehler: `RadarChart.html::UpdateTooltipLabel` erwartet
+noch ein zweites `data`-Argument und `tooltipItem.index`. Chart.js 4 liefert
+stattdessen den Tooltip-Kontext. Beim Zeigen auf einen Datenpunkt entsteht
+`Cannot read properties of undefined (reading 'datasets')`. Der Fehler ist
+mit der unveraenderten 4.4.1 ebenso reproduziert wie mit 4.5.1. Er wird als
+separate Template-Korrektur mit Regressionstest behandelt und nicht mit dem
+reinen Abhaengigkeitswechsel vermischt.
+
+Ergebnis: In den geprueften Szenarien keine funktionale Versionsregression
+gefunden; responsive Rundungsabweichung wie oben dokumentiert. **Kein
+uneingeschraenktes PASS**: Radar-Tooltip bleibt fehlerhaft. Ausserdem stehen
+CI und die gezielte Abnahme des neuen Pfads nach Commit/Push und Modulupdate
+noch aus. Fuer diesen Asset-Schritt ist kein weiterer Dienstneustart
+vorausgesetzt; bei aktivem HTML-Cache Ausgaben ueber das bestehende
+`ApplyChanges()` erneuern und danach im Browser neu laden.
 
 ## Ergebnisregeln
 

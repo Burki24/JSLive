@@ -25,6 +25,7 @@ foreach ([
     'jQuery 3.6.0',
     'Chart.js 4.3.3',
     'Chart.js 4.4.1',
+    'Chart.js 4.5.1',
     'Chart.js 3.9.1',
     'Chart.js 3.6.0',
     'chartjs-adapter-moment 1.0.0',
@@ -46,6 +47,38 @@ $templateDirectories = [
     $root . '/SymconJSLive/templates',
     $root . '/SymconJSLive/htmlbox'
 ];
+
+$sharedChartReference = '/hook/JSLive/js/chartjs/4.5.1/chart.umd.min.js';
+foreach (['Chart.html', 'Doughnut-PIE.html', 'RadarChart.html'] as $chartTemplate) {
+    $template = file_get_contents($root . '/SymconJSLive/templates/' . $chartTemplate);
+    preg_match_all('#<script\b[^>]*\bsrc="(/hook/JSLive/js/chartjs/(?!plugins/)[^"]+\.js)"#i', $template, $chartScripts);
+    if ($chartScripts[1] !== [$sharedChartReference]) {
+        throw new RuntimeException($chartTemplate . ' must load the shared Chart.js bundle exactly once.');
+    }
+}
+foreach (['4.5.1/chart.umd.min.js' => '4.5.1', 'chart.min.js' => '4.4.1', 'chart.js' => '4.3.3'] as $chartAsset => $version) {
+    $asset = file_get_contents($root . '/SymconJSLive/js/chartjs/' . $chartAsset);
+    if (!str_contains(substr($asset, 0, 512), 'Chart.js v' . $version)) {
+        throw new RuntimeException($chartAsset . ' must retain its pinned Chart.js version ' . $version . '.');
+    }
+}
+
+$chartSources = file_get_contents($root . '/SymconJSLive/js/chartjs/4.5.1/SOURCES.md');
+foreach ([
+    'chart.umd.min.js'     => '48444a82d4edcb5bec0f1965faacdde18d9c17db3063d042abada2f705c9f54a',
+    'chart.umd.min.js.map' => 'fecb66dd71acd07201280ad726d94a0e45f0c42762ac1d47fa1132f8af3bff25',
+    'LICENSE.md'           => '41a84aa2caba645f966a18d9c2056b73e6d3a81d80bc0046bc0011a2634d4cce',
+    'KURKLE-LICENSE.md'    => '2859c50313bad2ba77b081410c477beaf92b60ca13a77a248d89859a6dd6ac81'
+] as $chartAsset => $expectedHash) {
+    $assetPath = $root . '/SymconJSLive/js/chartjs/4.5.1/' . $chartAsset;
+    if (!is_file($assetPath) || hash_file('sha256', $assetPath) !== $expectedHash) {
+        throw new RuntimeException('Missing or modified Chart.js distribution file: ' . $chartAsset . '.');
+    }
+    if ($chartSources === false || !str_contains($chartSources, $chartAsset) || !str_contains($chartSources, $expectedHash)) {
+        throw new RuntimeException('Chart.js source inventory must record ' . $chartAsset . ' and its SHA-256.');
+    }
+}
+
 $references = [];
 $externalRuntimeReferences = [];
 foreach ($templateDirectories as $templateDirectory) {

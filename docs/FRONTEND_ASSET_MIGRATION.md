@@ -81,3 +81,40 @@ Die Update- und Wiederholungsregeln des ersten Schritts gelten auch hier.
 Bei eigenen aktiven Referenzen zuerst migrieren, bei Fehlern den vollstaendigen
 Stand 0.70 wiederherstellen; alle neun Dateien bleiben unter `2722afa` in der
 Git-Historie verfuegbar. Es werden keine Anwenderskripte automatisch veraendert.
+
+## Dritter Schritt: gemeinsame Chart.js-Version der Standardvorlagen
+
+Ausgangspunkt ist JSLive 0.71, Commit `787d24a`. Die mitgelieferten Vorlagen
+`Chart.html`, `Doughnut-PIE.html` und `RadarChart.html` wechseln von
+Chart.js 4.3.3 beziehungsweise 4.4.1 gemeinsam auf
+`chartjs/4.5.1/chart.umd.min.js`. Diese am 01.10.2026 gepruefte aktuelle stabile
+Version stammt aus der offiziellen npm-Distribution; Source Map, MIT-Lizenzen,
+Paketintegritaet und Dateihashes sind unter `chartjs/4.5.1/` mitgeliefert.
+Moment, Adapter, Datalabels und Streaming-Plugin bleiben
+auf ihren bisherigen Versionen; neue externe Laufzeitabhaengigkeiten entstehen
+nicht.
+
+Die historischen Pfade `chartjs/chart.js` und `chartjs/chart.min.js` bleiben
+mit ihrem bisherigen Inhalt (4.3.3 und 4.4.1) erreichbar.
+Eigene `TemplateScriptID`-Skripte behalten dadurch ihre
+bisherige Version. Eine automatische Anpassung oder ein pauschales
+`UpdateTemplates()` findet nicht statt. Eigene Vorlagen koennen nach einer
+separaten visuellen und funktionalen Pruefung auf
+`chartjs/4.5.1/chart.umd.min.js` umgestellt werden. Niemals mehrere
+Chart.js-Versionen gemeinsam in dieselbe Seite laden.
+
+Es aendern sich keine Properties, Instanz-IDs, Variablen, Datenformate oder
+PHP-Funktionen. Nach dem Modulupdate die drei Diagrammausgaben neu laden; bei aktivem
+HTML-Cache diesen ueber das bestehende `ApplyChanges()` neu aufbauen. Wiederholtes
+Anwenden oder Neustarts fuehren keine persistente Migration aus. Bei Problemen
+den vollstaendigen Stand 0.71 wiederherstellen und die Ausgabe neu laden.
+
+Der Referenztest sichert die einmalige gemeinsame Einbindung in allen drei
+Standardvorlagen, die neue Distribution und die Versionen der beiden
+weiterhin ausgelieferten Altpfade ab.
+Der lokale Browservergleich umfasst identische Daten, Desktop/Mobil, alle
+drei Diagrammtypen, Adapter, Datalabels, Streaming, Neuladen und Interaktionen.
+Die Ergebnisse und ein bereits mit 4.4.1 vorhandener Radar-Tooltip-Fehler sind
+in `SYCON_RUNTIME_MATRIX.md` festgehalten. Der Versionsschritt behebt diesen
+Bestandsfehler nicht. Ein lokaler Browsernachweis ersetzt nicht CI und die
+gezielte Abnahme nach dem noch ausstehenden Modulupdate.

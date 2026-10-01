@@ -31,6 +31,10 @@ JSLive. Projektspezifische Fakten und offene Entscheidungen stehen in
 - Vor Aenderungen sind mindestens `php tests/run.php` und ein PHP-Syntaxcheck
   auszufuehren. Fuer PHP 8.5 gilt der CI-Lauf als verbindliche Zusatzpruefung.
 - Commits, Pushes und Merges werden vom Repository-Eigentuemer ausgefuehrt.
+- Bei der Uebergabe commitbereiter Aenderungen immer einen Commit-Betreff und
+  eine zugehoerige Erlaeuterung (Commit-Body) in getrennten, kopierbaren
+  Textbloecken mitliefern. Beide sind immer auf Englisch zu verfassen,
+  auch wenn die Unterhaltung auf Deutsch gefuehrt wird.
 
 ## Branch-, Versions- und Release-Modell
 

@@ -43,7 +43,9 @@ ausgegeben. Zusätzlich werden vollständige Browser- und Konfigurationsdaten
 einschließlich frei eingegebener Texte protokolliert; bekannte Zugangsdatenfelder
 werden maskiert.
 
-Die Standardvorlage behält Chart.js 4.4.1. Für eigene Vorlagen mit historischen
+Die Standardvorlage verwendet die lokal versionierte Chart.js 4.5.1.
+Die alten URLs mit 4.3.3 und 4.4.1 bleiben für eigene Vorlagen unverändert.
+Für eigene Vorlagen mit historischen
 Chart.js-3.x-/Plugin-Pfaden gilt die
 [Asset-Migration](../docs/FRONTEND_ASSET_MIGRATION.md).
 
