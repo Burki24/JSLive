@@ -5,12 +5,10 @@ include_once __DIR__ . '/../SymconJSLive/libs/JSLiveModule.php';
 
 class SymconJSLiveProgressbar extends JSLiveModule
 {
-    public function Create()
+    public function Create(): void
     {
         //Never delete this line!
         parent::Create();
-
-        $this->ConnectParent('{9FFF3FC0-FD51-C289-FA36-BC1C370946CF}');
 
         $this->RegisterPropertyInteger('Variable', 0);
         $this->RegisterPropertyString('Type', 'stroke');
@@ -73,14 +71,14 @@ class SymconJSLiveProgressbar extends JSLiveModule
         $this->RegisterPropertyString('override_stroke', '');
         $this->RegisterPropertyString('override_fill', '');
     }
-    public function ApplyChanges()
+    public function ApplyChanges(): void
     {
         //Never delete this line!
         parent::ApplyChanges();
 
     }
 
-    public function ReceiveData($JSONString)
+    public function ReceiveData(string $JSONString): string
     {
         parent::ReceiveData($JSONString);
         $jsonData = json_decode($JSONString, true);
@@ -93,7 +91,7 @@ class SymconJSLiveProgressbar extends JSLiveModule
             case 'getContend':
                 return $this->GetOutput();
             case 'getData':
-                return json_encode($this->GetData());
+                return json_encode($this->GetData(), JSON_THROW_ON_ERROR);
             case 'getSVG':
                 return $this->GetSVG();
             case 'getFillImg':
@@ -103,8 +101,10 @@ class SymconJSLiveProgressbar extends JSLiveModule
                     $this->SendSafeDebug('ReceiveData', 'ACTION FOR THIS MODULE NOT DEFINED!');
                 break;
         }
+
+        return '';
     }
-    public function LoadOtherConfiguration(int $id)
+    public function LoadOtherConfiguration(int $id): mixed
     {
         if (!IPS_ObjectExists($id)) return 'Instance/Chart not found!';
 
@@ -124,9 +124,11 @@ class SymconJSLiveProgressbar extends JSLiveModule
             IPS_SetConfiguration($this->InstanceID, json_encode($confData));
             IPS_ApplyChanges($this->InstanceID);
         }else return 'A Instance must be selected!';
+
+        return null;
     }
 
-    public function LoadSvg(string $base64)
+    public function LoadSvg(string $base64): mixed
     {
         $string = base64_decode($base64);
 
@@ -145,6 +147,8 @@ class SymconJSLiveProgressbar extends JSLiveModule
 
         IPS_SetConfiguration($this->InstanceID, json_encode($confData));
         IPS_ApplyChanges($this->InstanceID);
+
+        return null;
     }
     protected function GetWebpage()
     {
@@ -210,7 +214,7 @@ class SymconJSLiveProgressbar extends JSLiveModule
         $output = $this->ReadPropertyString('fill_backgroundFile');
         $type = $this->ReadPropertyString('fill_backgroundFileType');
 
-        return json_encode(['Contend' => $output, 'Type' => $type]);
+        return json_encode(['Contend' => $output, 'Type' => $type], JSON_THROW_ON_ERROR);
     }
 
     private function ReplacePlaceholder(string $htmlData)

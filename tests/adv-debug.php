@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-if (!class_exists('IPSModule')) {
-    class IPSModule
+if (!class_exists('IPSModuleStrict')) {
+    class IPSModuleStrict
     {
         /** @var list<array{message: string, data: string, format: int}> */
         public array $debug = [];
@@ -56,7 +56,7 @@ if ($text->ReceiveData(debugRequest(['cmd' => 'setData', 'queryData' => []])) !=
 
 $text->debug = [];
 $result = $text->ReceiveData(debugRequest(['cmd' => 'unknown?password=synthetic-secret']));
-if ($result !== null || count($text->debug) !== 1) {
+if ($result !== '' || count($text->debug) !== 1) {
     throw new RuntimeException('AdvTextfield changed its unknown-command handling.');
 }
 if (str_contains($text->debug[0]['data'], 'synthetic-secret')) {

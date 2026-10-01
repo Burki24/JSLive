@@ -32,6 +32,10 @@ der Modernisierung kompatibel bleiben.
   die Freigabe als modernisierte stabile Version steht noch aus.
 - Die bestehende Ausgabe über `~HTMLBox` und IPSView bleibt vorerst erhalten.
   Eine native Kacheldarstellung wird später schrittweise ergänzt.
+- Splitter und Visualisierungsmodule sind im aktuellen Arbeitsstand koordiniert
+  auf `IPSModuleStrict`, automatische Parent-Kompatibilität und die native
+  Hook-API umgestellt. Die abschließende MCP-CURRENT-Laufzeitabnahme dieses
+  Migrationsstands steht noch aus.
 
 ## Module
 
@@ -76,8 +80,9 @@ erkannt werden. Debug daher nur in einer geschützten Testumgebung verwenden.
 
 ## Bekannte Einschränkungen
 
-- Die definierte Symcon-9-[Laufzeitmatrix](docs/SYCON_RUNTIME_MATRIX.md) ist auf
-  realen Testinstallationen noch nicht ausgeführt.
+- Die vor der Strict-Migration bestandene
+  [Symcon-9-Laufzeitmatrix](docs/SYCON_RUNTIME_MATRIX.md) muss nach Installation
+  des aktuellen Migrationsstands erneut vollständig ausgeführt werden.
 - Der nicht mehr erreichbare, vollständig von einem externen Dienst abhängige
   ConfigStore wurde entfernt. Vorhandene ConfigStore-Instanzen müssen vor einem
   Update auf diesen Stand gelöscht werden.
@@ -99,10 +104,10 @@ erkannt werden. Debug daher nur in einer geschützten Testumgebung verwenden.
   Lizenzinventur.
 
 Weitere technische Details, Risiken und der priorisierte Modernisierungsplan
-stehen in [`PROJECT_CONTEXT.md`](PROJECT_CONTEXT.md). Die vorbereitende
-[`IPSModuleStrict`-Migrationsinventur](docs/STRICT_MODULE_MIGRATION.md)
-dokumentiert die erforderlichen Signaturen und Kompatibilitätsgrenzen; der
-produktive Code verwendet derzeit weiterhin `IPSModule`.
+stehen in [`PROJECT_CONTEXT.md`](PROJECT_CONTEXT.md). Die
+[`IPSModuleStrict`-Migration](docs/STRICT_MODULE_MIGRATION.md) dokumentiert die
+implementierten Signaturen, Kompatibilitätsgrenzen und die noch ausstehende
+Laufzeitabnahme.
 
 ## Entwicklung und Prüfungen
 

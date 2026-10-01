@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 date_default_timezone_set('UTC');
 
-if (!class_exists('IPSModule')) {
-    class IPSModule
+if (!class_exists('IPSModuleStrict')) {
+    class IPSModuleStrict
     {
         /** @var list<array{message: string, data: string, format: int}> */
         public array $debug = [];
 
-        public function ReceiveData($JSONString)
+        public function ReceiveData(string $JSONString): string
         {
+            return '';
         }
 
         public function ReadPropertyBoolean(string $name): bool
@@ -121,7 +122,7 @@ if ($result !== 'VARIABLE NOT SET!' || $writes !== $writesBeforeDeniedRequests) 
 foreach ([$color, $dateTime] as $module) {
     $module->debug = [];
     $result = $module->ReceiveData(debugRequest(['cmd' => 'unknown?password=synthetic-secret']));
-    if ($result !== null || count($module->debug) !== 1) {
+    if ($result !== '' || count($module->debug) !== 1) {
         throw new RuntimeException($module::class . ' changed its unknown command handling.');
     }
     if (str_contains($module->debug[0]['data'], 'synthetic-secret')) {

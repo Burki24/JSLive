@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-if (!class_exists('IPSModule')) {
-    class IPSModule
+if (!class_exists('IPSModuleStrict')) {
+    class IPSModuleStrict
     {
         public int $InstanceID;
     }

@@ -109,6 +109,30 @@ function decodeContractString(string $expression): ?string
     return stripcslashes($value);
 }
 
+function decodeVariableProfile(string $expression): ?string
+{
+    $literalProfile = decodeContractString($expression);
+    if ($literalProfile !== null) {
+        return $literalProfile;
+    }
+
+    if (preg_match('/^\\[\\s*\\]$/', $expression) === 1) {
+        return '';
+    }
+
+    if (
+        preg_match(
+            '/[\'\"]PROFILE[\'\"]\\s*=>\\s*(?<profile>\'(?:\\\\.|[^\'])*\'|"(?:\\\\.|[^"])*")/s',
+            $expression,
+            $matches
+        ) !== 1
+    ) {
+        return null;
+    }
+
+    return decodeContractString($matches['profile']);
+}
+
 /**
  * Extracts stable, externally relevant declarations without loading a Symcon runtime.
  *
@@ -171,7 +195,7 @@ function extractSourceContracts(string $path): array
         if (preg_match('/^RegisterVariable(Boolean|Integer|Float|String)$/', $token[1], $matches) === 1) {
             $arguments = getCallArguments($tokens, $index);
             $name = isset($arguments[0]) ? decodeContractString($arguments[0]) : null;
-            $profile = isset($arguments[2]) ? decodeContractString($arguments[2]) : null;
+            $profile = isset($arguments[2]) ? decodeVariableProfile($arguments[2]) : null;
             assertPublicContract($name !== null, $path . ': variable registration without a literal ident.');
             assertPublicContract($profile !== null, $path . ': variable registration without a literal profile.');
             $variables[] = $name . ':' . strtolower($matches[1]) . ':' . $profile;

@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
-if (!class_exists('IPSModule')) {
-    class IPSModule
+if (!class_exists('IPSModuleStrict')) {
+    class IPSModuleStrict
     {
         public function ReadPropertyBoolean(string $name): bool
         {
             return false;
         }
 
-        public function ReceiveData($JSONString)
+        public function ReceiveData(string $JSONString): string
         {
+            return '';
         }
     }
 }
@@ -48,7 +49,7 @@ $request = json_encode([
 
 foreach ([new GaugeDebugHarness(), new ProgressbarDebugHarness()] as $module) {
     $result = $module->ReceiveData($request);
-    if ($result !== null) {
+    if ($result !== '') {
         throw new RuntimeException($module::class . ' changed its unknown-command response.');
     }
     if (count($module->debug) !== 1) {

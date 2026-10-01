@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-if (!class_exists('IPSModule')) {
-    class IPSModule
+if (!class_exists('IPSModuleStrict')) {
+    class IPSModuleStrict
     {
         /** @var list<array{message: string, data: string, format: int}> */
         public array $debug = [];
@@ -175,7 +175,7 @@ if ($module->debug !== []) {
 $module->debugEnabled = true;
 $module->debug = [];
 $result = $module->ReceiveData(debugRequest(['cmd' => 'unknown?password=synthetic-secret']));
-if ($result !== null || count($module->debug) !== 2
+if ($result !== '' || count($module->debug) !== 2
     || str_contains(json_encode($module->debug, JSON_THROW_ON_ERROR), 'synthetic-secret')) {
     throw new RuntimeException('Chart changed or exposed its unknown-command handling.');
 }

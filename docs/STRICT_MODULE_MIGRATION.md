@@ -1,16 +1,16 @@
-# Vorbereitung der IPSModuleStrict-Migration
+# IPSModuleStrict-Migration
 
-Dieses Dokument erfasst den technischen Ausgangszustand und die verbindlichen
-Grenzen für eine spätere Migration von JSLive auf `IPSModuleStrict`. In diesem
-Schritt wird noch keine Modulklasse umgestellt und kein Laufzeitverhalten
-geändert.
+Dieses Dokument erfasst die verbindlichen Grenzen und den Implementierungsstand
+der koordinierten Migration von JSLive auf `IPSModuleStrict`. Die
+Produktivklassen sind lokal umgestellt; vor Abschluss fehlt noch die erneute
+Abnahme auf der MCP-CURRENT-Testebene.
 
 Die maschinenlesbare Liste aller 74 öffentlichen Methodendeklarationen und
 ihrer vorgesehenen Zielsignaturen liegt unter
 [`tests/fixtures/strict-module-public-methods.json`](../tests/fixtures/strict-module-public-methods.json).
-Der Test `tests/strict-module-migration.php` verhindert, dass neue oder
-entfernte öffentliche Methoden unbemerkt an dieser Bestandsaufnahme
-vorbeilaufen.
+Der Test `tests/strict-module-migration.php` prüft die tatsächlich
+implementierten Zielsignaturen und verhindert, dass neue oder entfernte
+öffentliche Methoden unbemerkt an dieser Bestandsaufnahme vorbeilaufen.
 
 ## Offizielle Grundlage
 
@@ -49,12 +49,13 @@ IP-Symcon 8.1 verfügbaren `IPSModuleStrict`:
 | `SymconJSLiveProgressbar/module.php` | 5 | `JSLiveModule` | SVG-Import mit gemischtem Rückgabevertrag |
 | `SymconJSLiveRadarChart/module.php` | 6 | `JSLiveModule` | Actions und Archivdaten |
 
-Alle 74 Deklarationen benötigen mindestens eine Signaturanpassung: Die beiden
-Konstruktoren besitzen untypisierte Parameter; alle übrigen öffentlichen
-Methoden besitzen aktuell keinen Rückgabetyp. Die Zieldatei verwendet `mixed`
-nur dort, wo der bisherige öffentliche Vertrag tatsächlich unterschiedliche
-Rückgabetypen einschließlich `null` enthält. Eine spätere Vereinheitlichung
-dieser Rückgaben ist eine getrennte Vertragsänderung.
+Alle 74 Deklarationen sind auf die inventarisierten Signaturen umgestellt. Die
+beiden Konstruktoren verwenden entsprechend der auf MCP-CURRENT per Reflection
+geprüften Laufzeitsignatur `int $InstanceID`; alle übrigen öffentlichen Methoden
+besitzen vollständige Parameter- und Rückgabetypen. `mixed` bleibt auf die
+bisher tatsächlich unterschiedlichen Rückgaben einschließlich `null`
+beschränkt. Eine spätere Vereinheitlichung dieser Rückgaben ist eine getrennte
+Vertragsänderung.
 
 ## Verbindliche Kernsignaturen
 
@@ -76,10 +77,9 @@ dennoch gemäß Inventar typisiert. Die vollständigen individuellen Signaturen,
 einschließlich der öffentlich aufrufbaren JSLive-Hilfsfunktionen, stehen in der
 maschinenlesbaren Inventardatei.
 
-`ReceiveData()` fällt heute in mehreren Modulen ohne Rückgabewert aus dem
-`switch`. Für die Strict-Signatur muss jeder Pfad einen String liefern; der
-kompatible leere Rückgabewert ist vor der Umstellung durch die bestehenden
-Datenfluss- und Webhook-Tests zu charakterisieren.
+`ReceiveData()` lieferte zuvor in mehreren Modulen außerhalb des `switch` keinen
+Wert. Diese Pfade liefern nun den kompatiblen Leerstring; die bestehenden
+Datenfluss-, Routing- und Debugtests sichern ihn ab.
 
 `LoadConnectAddress()` liefert beim öffentlichen Formularaufruf die gefundene
 Connect-URL und gibt im Startpfad keinen Wert zurück. Die vorgesehene
@@ -137,12 +137,11 @@ ist unter `IPSModuleStrict` nicht verfügbar.
 - Splitter-Kindanforderung beziehungsweise Kind-Implementierung:
   `{79D59629-E9C5-44F1-0F34-0FBC5C88F307}`.
 
-Die erste Umsetzung entfernt daher die neun direkten `ConnectParent()`-Aufrufe
-und nutzt die automatische Kompatibilitätsauflösung. `GetCompatibleParents()`
-wird nur ergänzt, wenn die Fresh-Installation aus der Laufzeitmatrix belegt,
-dass die Standardheuristik den vorhandenen oder neu anzulegenden
-JSLive-Splitter nicht korrekt anbietet. Bestehende ConnectionIDs dürfen sich
-bei einem Upgrade nicht ändern.
+Die Umsetzung entfernt daher die neun direkten `ConnectParent()`-Aufrufe und
+nutzt die automatische Kompatibilitätsauflösung. `GetCompatibleParents()` wird
+nur ergänzt, wenn die Laufzeitabnahme belegt, dass die Standardheuristik den
+vorhandenen oder neu anzulegenden JSLive-Splitter nicht korrekt anbietet.
+Bestehende ConnectionIDs dürfen sich bei einem Upgrade nicht ändern.
 
 ## Datenfluss und Kodierung
 
@@ -152,20 +151,18 @@ Sendepfade: fünf vom Kind zum Splitter und zwei vom Splitter zu den Kindern.
 Die öffentlichen Verträge sind eine `ForwardData()`-Methode im Splitter sowie
 `ReceiveData()` in der gemeinsamen Basis und allen neun Kindmodulen.
 
-Die Strict-Umstellung muss Splitter, `JSLiveModule` und alle neun Kindmodule in
-einem koordinierten Schritt migrieren. Dabei bleiben beide Data-IDs und die
-Struktur des inneren JSON unverändert; nur der von Strict geforderte binäre
-Transport wird an einer zentralen Helper-Grenze mit `bin2hex` und `hex2bin`
-behandelt. Vor einer Änderung des zentral synchronisierten Helpers ist auf der
-echten, über den Symcon-MCP erreichbaren Testebene festzustellen, welche Schicht
-die HEX-Kodierung liefert. Eine parallele Mischung aus altem und neuem
-Transport ist nicht freigegeben.
+Splitter, `JSLiveModule` und alle neun Kindmodule sind koordiniert migriert.
+Beide Data-IDs und die Struktur des inneren JSON bleiben unverändert. Die
+offizielle HEX-Regel von `IPSModuleStrict` betrifft Binärwerte; JSLive
+transportiert in `Buffer` ausschließlich JSON-Text und benötigt deshalb weder
+`bin2hex` noch `hex2bin`. Der zentral synchronisierte `DataFlowHelper` bleibt
+unverändert. Eine spätere Einführung echter Binärfelder benötigt einen eigenen
+Transportvertrag und neue Negativtests.
 
 Abnahmekriterien:
 
 - alle sieben Sendepfade werden in beide Richtungen geprüft;
-- unbekannte Data-IDs und ungültige HEX-/JSON-Daten werden kontrolliert
-  abgewiesen;
+- unbekannte Data-IDs und ungültige JSON-Daten werden kontrolliert abgewiesen;
 - `getGlobalConfig`, Links, Konfigurationsexport, Cache-Aktualisierung und
   WebSocket-Aktualisierung liefern dieselben fachlichen Payloads;
 - keine `utf8_encode()`-/`utf8_decode()`-Kompatibilitätsschicht wird neu
@@ -173,21 +170,21 @@ Abnahmekriterien:
 
 ## Native Webhook-Grenze
 
-`WebHookModule` schreibt aktuell die `Hooks`-Property des WebHook Control
-direkt und registriert sich zusätzlich über eine Kernel-Ready-Nachricht. Unter
-`IPSModuleStrict` kollidiert dessen private Methode `RegisterHook()` mit der
-nativen API und muss entfernt werden.
+`WebHookModule` verwendet nun die native Hook-API von `IPSModuleStrict`. Die
+frühere direkte Änderung der `Hooks`-Property des WebHook Control, die private
+Namenskollision `RegisterHook()` und die zusätzliche Kernel-Ready-Nachricht
+sind entfernt.
 
 Die Migration erhält den externen Pfad `/hook/JSLive` einschließlich der
 Unterpfade `/WS` und `/js`. Intern registriert die native API den Bezeichner
-`JSLive`; `ProcessHookData(): void` bleibt die einzige Routinggrenze. Ein
-`Destroy(): void` gibt die Registrierung mit `UnregisterHook()` frei. Ob die
-zusätzliche Kernel-Ready-Nachricht entfallen kann, wird auf der
-`MCP-CURRENT`-Testebene geprüft und nicht allein aus dem Quelltext angenommen.
+`JSLive` in `Create()`; `ProcessHookData(): void` bleibt die einzige
+Routinggrenze. Ein zusätzlicher öffentlicher `Destroy()`-Einstieg wird nicht
+eingeführt. Registrierung, Neustart und Entfernen der Instanz werden in der
+MCP-CURRENT-Laufzeitabnahme geprüft.
 
 ## Weitere Signaturgrenzen
 
-Folgende Punkte benötigen vor dem Umschalten einen fokussierten Test:
+Folgende Punkte sind durch fokussierte Tests abgesichert:
 
 - `GetConfigurationForm()` muss bei jedem Pfad einen gültigen String liefern;
 - JSON-Encoding-Fehler dürfen keinen `false`-Wert in eine String-Signatur
@@ -205,16 +202,17 @@ Strict-Migration entfernt; ihre Upgrade-Folgen sind in
 [`adr/0003-remove-calendar-module.md`](adr/0003-remove-calendar-module.md)
 dokumentiert.
 
-1. Strict-Datenflusskodierung auf der isolierten `MCP-CURRENT`-Testebene
-   belegen und den zentralen `DataFlowHelper` nur bei nachgewiesenem Bedarf
-   erweitern.
-2. Falls benötigt, die Legacy-Profil-Darstellung zentral ergänzen und über den
-   bestehenden Helper-Sync beziehen.
-3. `JSLiveModule`, alle neun Kindmodule und den Splitter koordiniert migrieren.
-4. Den manuellen Hook-Workaround durch die native Hook-API ersetzen, ohne das
-   dokumentierte Sicherheits- und Routingmodell zu verändern.
-5. Die Abnahme aus `SYCON_RUNTIME_MATRIX.md` auf `MCP-CURRENT` vollständig
-   ausführen.
+1. Abgeschlossen: Der bestehende Datenfluss transportiert JSON-Text und bleibt
+   ohne HEX-Zusatzkodierung unverändert.
+2. Abgeschlossen: Bestehende Profile werden direkt als
+   `VARIABLE_PRESENTATION_LEGACY`-Arrays übergeben; ein neuer zentraler Helper
+   ist für diese wenigen festen Registrierungen nicht erforderlich.
+3. Abgeschlossen: `JSLiveModule`, alle neun Kindmodule und der Splitter sind
+   koordiniert migriert.
+4. Abgeschlossen: Der manuelle Hook-Workaround ist durch die native Hook-API
+   ersetzt, ohne das dokumentierte Sicherheits- und Routingmodell zu ändern.
+5. Offen: Die Abnahme aus `SYCON_RUNTIME_MATRIX.md` muss nach Installation des
+   Migrationsstands auf MCP-CURRENT vollständig ausgeführt werden.
 
 Der Rückfallpunkt ist der letzte gemeinsam grüne Commit vor der jeweiligen
 Strict-Gruppe. Es gibt keine automatische Rückmigration einer bereits
@@ -232,11 +230,12 @@ Eine Strict-Gruppe ist erst abgeschlossen, wenn:
   sind;
 - zweimaliges `ApplyChanges()` und ein Service-Neustart ohne neue Seiteneffekte
   bleiben;
-- Datenfluss und Hook-Routen auf IP-Symcon 9.0 und 9.1 nachgewiesen sind;
+- Datenfluss und Hook-Routen auf der vereinbarten MCP-CURRENT-Testebene
+  nachgewiesen sind;
 - lokale Tests, PHP-8.5-Syntax, StylePHP, JSON-Prüfung und CI grün sind.
 
-Die vorliegende Bestandsaufnahme ist noch keine Freigabe für
-`IPSModuleStrict`; sie definiert die Voraussetzungen dafür.
+Der lokale Implementierungsstand ist noch keine Laufzeitfreigabe für
+`IPSModuleStrict`; diese folgt erst nach der erneuten MCP-CURRENT-Abnahme.
 
 ## Bereits gehärtete Formular-Callbacks
 
@@ -245,4 +244,4 @@ Legacy-Modullader unterstützten skalaren Parametertypen. Dynamische
 Formularwerte werden als String übertragen und intern wieder in Boolean- oder
 Integerwerte überführt. Chart-Listenzeilen werden als JSON-String transportiert
 und vor der Verarbeitung defensiv dekodiert. Diese Transportkodierung bleibt
-auch bei der späteren Strict-Migration Teil des öffentlichen Callback-Vertrags.
+auch nach der Strict-Migration Teil des öffentlichen Callback-Vertrags.

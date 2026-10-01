@@ -15,9 +15,9 @@ abgeleitet.
 
 IP-Symcon 9.0 hat PHP 8.5 eingeführt und verwaltet Datenflussverbindungen über
 die Verwaltungskonsole. Seit IP-Symcon 8.1 steht außerdem `IPSModuleStrict`
-bereit; JSLive verwendet in dieser Baseline weiterhin `IPSModule` und seine
-lokalen Basisklassen. Die folgenden offiziellen Seiten sind die maßgeblichen
-externen Referenzen:
+bereit; der aktuelle JSLive-Migrationsstand verwendet diese Basisklasse, die
+automatische Parent-Kompatibilität und die native Hook-API. Die folgenden
+offiziellen Seiten sind die maßgeblichen externen Referenzen:
 
 - [Migration von 8.1 auf 9.0](https://www.symcon.de/de/service/dokumentation/installation/migrationen/v81-v90-q1-2026/)
 - [PHP-Modul-SDK und IPSModuleStrict](https://www.symcon.de/de/service/dokumentation/entwicklerbereich/sdk-tools/sdk-php/module/)
@@ -34,6 +34,11 @@ werden gegen die vorhandenen Instanzen geprüft; Änderungen an Anlage- oder
 Löschpfaden erfordern zusätzlich eine neu angelegte beziehungsweise entfernte
 Testinstanz des betroffenen Modultyps. ConfigStore, SyncModule und Calendar
 bleiben entfernt; ihre früheren Modul-IDs werden nicht wiederverwendet.
+
+Der dokumentierte PASS vom 01.10.2026 ist die Vorher-Baseline auf JSLive 0.61.
+Für den `IPSModuleStrict`-Migrationscommit ist nach Installation ein neuer
+vollständiger Durchlauf erforderlich; bis dahin ist dieser Kandidat nur lokal
+verifiziert.
 
 ## Nachweis je Durchlauf
 

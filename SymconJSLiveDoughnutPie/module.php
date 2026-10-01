@@ -5,12 +5,10 @@ include_once __DIR__ . '/../SymconJSLive/libs/JSLiveModule.php';
 
 class SymconJSLiveDoughnutPie extends JSLiveModule
 {
-    public function Create()
+    public function Create(): void
     {
         //Never delete this line!
         parent::Create();
-
-        $this->ConnectParent('{9FFF3FC0-FD51-C289-FA36-BC1C370946CF}');
 
         $this->RegisterPropertyString('type', 'doughnut');
 
@@ -77,18 +75,18 @@ class SymconJSLiveDoughnutPie extends JSLiveModule
         //dataset
         $this->RegisterPropertyString('Datasets', '[]');
     }
-    public function ApplyChanges()
+    public function ApplyChanges(): void
     {
         //Never delete this line!
         parent::ApplyChanges();
     }
 
-    public function ReceiveData($JSONString)
+    public function ReceiveData(string $JSONString): string
     {
         parent::ReceiveData($JSONString);
         $jsonData = json_decode($JSONString, true);
         $buffer = json_decode($jsonData['Buffer'], true);
-        if ($buffer['instance'] == 0) return;
+        if ($buffer['instance'] == 0) return '';
 
         switch ($buffer['cmd']) {
             case 'exportConfiguration':
@@ -105,18 +103,19 @@ class SymconJSLiveDoughnutPie extends JSLiveModule
                 break;
         }
 
+        return '';
     }
-    public function GetUpdate()
+    public function GetUpdate(): string
     {
         $updateData = [];
 
         $updateData['DATASETS'] = $this->GenerateDataSet();
         $updateData['CONFIG'] = $this->GetConfigurationData();
 
-        return json_encode($updateData);
+        return json_encode($updateData, JSON_THROW_ON_ERROR);
     }
 
-    public function LoadOtherConfiguration(int $id)
+    public function LoadOtherConfiguration(int $id): mixed
     {
         if (!IPS_ObjectExists($id)) return 'Instance/Chart not found!';
 
@@ -137,6 +136,8 @@ class SymconJSLiveDoughnutPie extends JSLiveModule
             IPS_SetConfiguration($this->InstanceID, json_encode($confData));
             IPS_ApplyChanges($this->InstanceID);
         }else return 'A Instance must be selected!';
+
+        return null;
     }
     protected function GetWebpage()
     {
@@ -204,7 +205,7 @@ class SymconJSLiveDoughnutPie extends JSLiveModule
             $output[] = $o_item;
         }
 
-        return json_encode($output);
+        return json_encode($output, JSON_THROW_ON_ERROR);
     }
 
     private function ReplacePlaceholder(string $htmlData)

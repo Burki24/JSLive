@@ -9,6 +9,14 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Changed
 
+- Splitter, gemeinsame Kindmodul-Basis und alle neun Visualisierungsmodule
+  verwenden `IPSModuleStrict`. Alle 74 öffentlichen Methodendeklarationen sind
+  vollständig typisiert, `ReceiveData()` liefert auf leeren Pfaden einen
+  kompatiblen Leerstring, bestehende Legacy-Profile werden als
+  Darstellungsarrays registriert und die Parent-Verbindung wird aus den
+  unveränderten Data-IDs automatisch aufgelöst. Der Splitter registriert
+  `/hook/JSLive` über die native Hook-API statt über direkte Änderungen am
+  WebHook Control.
 - Die Laufzeitabnahme verwendet die aktuelle, ueber den Symcon-MCP erreichbare
   IP-Symcon-9-Testebene statt separater 9.0-/9.1-Fresh- und Upgrade-Systeme.
   Die erste Baseline unter IP-Symcon 9.1 und PHP 8.5.8 ist mit allen zehn

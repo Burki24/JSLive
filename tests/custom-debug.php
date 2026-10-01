@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-if (!class_exists('IPSModule')) {
-    class IPSModule
+if (!class_exists('IPSModuleStrict')) {
+    class IPSModuleStrict
     {
         /** @var list<array{message: string, data: string, format: int}> */
         public array $debug = [];
@@ -208,7 +208,7 @@ assertNoCustomSecret($module, 'synthetic-private-read');
 
 $module->debug = [];
 $result = $module->ReceiveData(debugRequest(['cmd' => 'unknown?password=synthetic-secret']));
-if ($result !== null || count($module->debug) !== 1) {
+if ($result !== '' || count($module->debug) !== 1) {
     throw new RuntimeException('Custom changed its unknown-command handling.');
 }
 assertNoCustomSecret($module, 'synthetic-secret');

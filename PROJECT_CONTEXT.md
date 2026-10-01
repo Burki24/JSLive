@@ -267,11 +267,12 @@ Browserbibliotheken sowie einzelne Modulaktionen.
 - `SymconJSLiveCustom` normalisiert numerische Stringwerte fuer Alpha-Kanaele
   und Webhook-Objekt-IDs explizit. Der Test fuehrt dabei keine Variablen-,
   Skript- oder Medienschreiboperation aus.
-- Alle Module verwenden noch `IPSModule`; der Webhook basiert auf einer lokalen
-  `WebHookModule`-Basisklasse. Symcon 9 empfiehlt fuer neue Module
-  `IPSModuleStrict` und dessen native Hook-API. Eine Umstellung ist wegen der
-  zahlreichen untypisierten oeffentlichen Methoden ein eigenes, in Phase 2
-  ausdruecklich eingeplantes Migrationsprojekt.
+- Splitter, gemeinsame Kindmodul-Basis und alle neun Visualisierungsmodule sind
+  koordiniert auf `IPSModuleStrict` umgestellt. Die 74 inventarisierten
+  oeffentlichen Methoden besitzen vollstaendige Type Hints, die Kindmodule
+  verwenden die automatische Parent-Kompatibilitaet und der Splitter die native
+  Hook-API. Die lokale Test- und Syntaxpruefung ist bestanden; die erneute
+  MCP-CURRENT-Laufzeitabnahme des Migrationsstands steht noch aus.
 - `library.json` deklariert derzeit keine Symcon-Kompatibilitaet.
 - `Output` und `IPSView` werden als Stringvariablen mit dem Legacy-Profil
   `~HTMLBox` angelegt. Symcon 9 unterstuetzt dies weiter, fuer modernisierte
@@ -601,24 +602,27 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    festgelegten Kompatibilitaet innerhalb IP-Symcon 9 wird keine separate
    9.0-Testinstallation vorgehalten).
 2. Die Migration von `IPSModule` auf `IPSModuleStrict` als eigenes Vorhaben
-   vorbereiten (abgeschlossen: `docs/STRICT_MODULE_MIGRATION.md` und
+   vorbereiten und lokal umsetzen (abgeschlossen: `docs/STRICT_MODULE_MIGRATION.md` und
    `tests/fixtures/strict-module-public-methods.json` erfassen alle 74
    oeffentlichen Methodendeklarationen, Zielsignaturen, Variablenregistrierung/-
-   schreibzugriff, Parent-Automatik, Datenfluss, Hooks und Rueckfallgrenzen; die
-   produktive Migration ist noch nicht begonnen).
+   schreibzugriff, Parent-Automatik, Datenfluss, Hooks und Rueckfallgrenzen. Die
+   Produktivklassen und Test-Stubs sind umgestellt; die Laufzeitabnahme ist noch
+   offen).
 3. Das experimentelle `SyncModule` und das Calendar-Modul wurden vor der
    Strict-Migration entfernt; ihre Modul-IDs und Praefixe werden nicht
    wiederverwendet.
-4. Die gemeinsame Basisklasse `JSLiveModule` und ihre neun Kindmodule in einem
-   koordinierten, eigenen Schritt migrieren. Data-IDs, Parent-Verbindung,
-   Datenkodierung, Variablen-Idents, Actions und oeffentliche PHP-Aufrufe muessen
-   dabei kompatibel bleiben.
-5. Den Splitter erst nach den Webhook-Sicherheits- und Pfadtests von der lokalen
-   `WebHookModule`-Basisklasse auf die native Hook-API von `IPSModuleStrict`
-   umstellen. Hook-Pfad, Authentisierung und bestehende Browseraufrufe sind als
-   Migrationsvertraege zu erhalten.
-6. Type Hints, Arrayzugriffe, JSON-Fehler, Buffer und Netzwerkfehler schrittweise
-   haerten, ohne oeffentliche Signaturen unkontrolliert zu aendern.
+4. Abgeschlossen: Die gemeinsame Basisklasse `JSLiveModule` und ihre neun
+   Kindmodule sind koordiniert migriert. Data-IDs, JSON-Text-Datenfluss,
+   Variablen-Idents, Actions und oeffentliche PHP-Namen bleiben unveraendert;
+   `ConnectParent()` wurde durch die bereits deklarierten Datenflussvertraege
+   ersetzt.
+5. Abgeschlossen: Der Splitter verwendet nach den Webhook-Sicherheits- und
+   Pfadtests die native Hook-API von `IPSModuleStrict`. Hook-Pfad,
+   Authentisierung und bestehende Browseraufrufe bleiben Migrationsvertraege.
+6. Fortlaufend: Die oeffentlichen Type Hints sowie die in String-Rueckgaben
+   erreichbaren JSON-Fehlerpfade sind fuer die Strict-Migration gehaertet.
+   Weitergehende Array-, Buffer- und Netzwerkhaertung bleibt in getrennten
+   Schritten moeglich.
 7. Kompatibilitaetsangaben erst nach erfolgreicher Laufzeitmatrix setzen.
 8. Migrationen fuer jede unvermeidbare Vertragsaenderung vor der Aenderung
    spezifizieren und testen.

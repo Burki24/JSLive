@@ -5,12 +5,10 @@ include_once __DIR__ . '/../SymconJSLive/libs/JSLiveModule.php';
 
 class SymconJSLiveAdvTextfield extends JSLiveModule
 {
-    public function Create()
+    public function Create(): void
     {
         //Never delete this line!
         parent::Create();
-
-        $this->ConnectParent('{9FFF3FC0-FD51-C289-FA36-BC1C370946CF}');
 
         $this->RegisterPropertyString('Template', 'Textfield1');
 
@@ -51,16 +49,16 @@ class SymconJSLiveAdvTextfield extends JSLiveModule
         $this->RegisterPropertyInteger('style_borderWidth', 2);
         $this->RegisterPropertyInteger('style_borderColor', 0);
     }
-    public function ApplyChanges()
+    public function ApplyChanges(): void
     {
         //Never delete this line!
         parent::ApplyChanges();
 
-        $this->RegisterVariableString('Content', $this->Translate('Content'), '', 0);
+        $this->RegisterVariableString('Content', $this->Translate('Content'), [], 0);
 
     }
 
-    public function ReceiveData($JSONString)
+    public function ReceiveData(string $JSONString): string
     {
         parent::ReceiveData($JSONString);
         $jsonData = json_decode($JSONString, true);
@@ -80,9 +78,11 @@ class SymconJSLiveAdvTextfield extends JSLiveModule
                     $this->SendSafeDebug('ReceiveData', 'ACTION FOR THIS MODULE NOT DEFINED!');
                 break;
         }
+
+        return '';
     }
 
-    public function LoadOtherConfiguration(int $id)
+    public function LoadOtherConfiguration(int $id): mixed
     {
         if (!IPS_ObjectExists($id)) return 'Instance/Chart not found!';
 
@@ -99,6 +99,8 @@ class SymconJSLiveAdvTextfield extends JSLiveModule
             IPS_SetConfiguration($this->InstanceID, json_encode($confData));
             IPS_ApplyChanges($this->InstanceID);
         }else return 'A Instance must be selected!';
+
+        return null;
     }
     protected function GetWebpage()
     {
@@ -128,7 +130,7 @@ class SymconJSLiveAdvTextfield extends JSLiveModule
         $output = [];
         $output['Variable'] = IPS_GetObjectIDByIdent('Content', $this->InstanceID);
         $output['Value'] = $this->GetValue('Content');
-        return json_encode($output);
+        return json_encode($output, JSON_THROW_ON_ERROR);
     }
     private function SetData(array $querydata)
     {

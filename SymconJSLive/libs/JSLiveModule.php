@@ -5,13 +5,13 @@ declare(strict_types=1);
 require_once dirname(__DIR__, 2) . '/libs/helper/DataFlowHelper.php';
 require_once dirname(__DIR__, 2) . '/libs/helper/DebugHelper.php';
 
-class JSLiveModule extends IPSModule
+class JSLiveModule extends IPSModuleStrict
 {
     use \Burki24\SymconModuleHelper\DataFlowHelper;
     use \Burki24\SymconModuleHelper\DebugHelper;
 
     //confuguration and link
-    public function LoadOtherConfiguration(int $id)
+    public function LoadOtherConfiguration(int $id): mixed
     {
         if (!IPS_ObjectExists($id)) return 'Instance/Chart not found!';
 
@@ -29,8 +29,10 @@ class JSLiveModule extends IPSModule
             IPS_SetConfiguration($this->InstanceID, json_encode($confData));
             IPS_ApplyChanges($this->InstanceID);
         }else return 'A Instance must be selected!';
+
+        return null;
     }
-    public function GetLink()
+    public function GetLink(): string
     {
         $sendData = ['InstanceID' => $this->InstanceID, 'Type' => 'GetLink'];
         $pData = $this->SendDataToParent($this->EncodeDataFlowMessage(
@@ -38,9 +40,9 @@ class JSLiveModule extends IPSModule
             ['Buffer' => json_encode($sendData, JSON_THROW_ON_ERROR)]
         ));
 
-        return $pData;
+        return $pData === false ? '' : $pData;
     }
-    public function GetLocalLink()
+    public function GetLocalLink(): string
     {
         $sendData = ['InstanceID' => $this->InstanceID, 'Type' => 'GetLocalLink'];
         $pData = $this->SendDataToParent($this->EncodeDataFlowMessage(
@@ -48,9 +50,9 @@ class JSLiveModule extends IPSModule
             ['Buffer' => json_encode($sendData, JSON_THROW_ON_ERROR)]
         ));
 
-        return $pData;
+        return $pData === false ? '' : $pData;
     }
-    public function ExportConfiguration(bool $export_all = false, array $queryData = [])
+    public function ExportConfiguration(bool $export_all = false, array $queryData = []): string
     {
         $output = [];
         $withScript = false;
@@ -127,9 +129,9 @@ class JSLiveModule extends IPSModule
             $this->SendSafeDebug('ExportConfiguration', $output, PHP_INT_MAX, ['pw']);
         }
 
-        return json_encode($output, JSON_PRETTY_PRINT);
+        return json_encode($output, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR);
     }
-    public function GetAllowConfigurationExportList(array $arr, array $r_arr = [], string $column_name = '')
+    public function GetAllowConfigurationExportList(array $arr, array $r_arr = [], string $column_name = ''): array
     {
         foreach ($arr as $key => $item) {
             //items Recusive for Items
@@ -162,7 +164,7 @@ class JSLiveModule extends IPSModule
 
         return $r_arr;
     }
-    public function LoadConfigurationFile(string $filename, bool $overrideScript = false)
+    public function LoadConfigurationFile(string $filename, bool $overrideScript = false): mixed
     {
         if (empty($filename)) return 'File is Empty!';
 
@@ -266,8 +268,9 @@ class JSLiveModule extends IPSModule
         IPS_SetConfiguration($this->InstanceID, json_encode($output));
         IPS_ApplyChanges($this->InstanceID);
 
+        return null;
     }
-    public function GetConfigurationLink(bool $withScript)
+    public function GetConfigurationLink(bool $withScript): string
     {
         $sendData = ['InstanceID' => $this->InstanceID, 'Type' => 'GetConfigurationLink'];
         $pData = $this->SendDataToParent($this->EncodeDataFlowMessage(
@@ -275,11 +278,13 @@ class JSLiveModule extends IPSModule
             ['Buffer' => json_encode($sendData, JSON_THROW_ON_ERROR)]
         ));
 
+        if ($pData === false) return '';
+
         if ($withScript) $pData .= '&scripts=1';
 
         return $pData;
     }
-    public function GetGlobalConfiguration()
+    public function GetGlobalConfiguration(): ?array
     {
         $sendData = ['InstanceID' => $this->InstanceID, 'Type' => 'GetGlobalConfiguartion'];
         $pData = $this->SendDataToParent($this->EncodeDataFlowMessage(
@@ -287,21 +292,35 @@ class JSLiveModule extends IPSModule
             ['Buffer' => json_encode($sendData, JSON_THROW_ON_ERROR)]
         ));
 
-        return json_decode($pData, true);
+        if ($pData === false) return null;
+
+        $configuration = json_decode($pData, true, 512, JSON_THROW_ON_ERROR);
+
+        return is_array($configuration) ? $configuration : null;
     }
 
     //Dynamic Configuration form
-    public function GetConfigurationForm()
+    public function GetConfigurationForm(): string
     {
-        return json_encode($this->LoadConfigurationForm());
+        return json_encode($this->LoadConfigurationForm(), JSON_THROW_ON_ERROR);
     }
-    public function LoadConfigurationForm()
+    public function LoadConfigurationForm(): array
     {
         $formData = [];
         $jsonPath = realpath(__DIR__ . '/../../' . get_called_class() . '/form.json');
 
         if ($this->ReadPropertyBoolean('Debug')) $this->SendSafeDebug('GetConfigurationForm', $jsonPath);
-        $formData = json_decode(file_get_contents($jsonPath), true);
+        if ($jsonPath === false) {
+            throw new RuntimeException('Unable to resolve the configuration form path.');
+        }
+        $formContents = file_get_contents($jsonPath);
+        if ($formContents === false) {
+            throw new RuntimeException('Unable to read the configuration form.');
+        }
+        $formData = json_decode($formContents, true, 512, JSON_THROW_ON_ERROR);
+        if (!is_array($formData)) {
+            throw new UnexpectedValueException('The configuration form must be a JSON object.');
+        }
 
         //Remove Confoniguration for Basic => 0; Advance => 1; Expert => 2
 
@@ -330,7 +349,7 @@ class JSLiveModule extends IPSModule
         $this->RecursiveReloadForm($name, $value, $configData['elements']);
         $this->RecursiveReloadForm($name, $value, $configData['actions']);
     }
-    public function MessageSink($TimeStamp, $SenderID, $Message, $Data)
+    public function MessageSink(int $TimeStamp, int $SenderID, int $Message, array $Data): void
     {
         //Never delete this line!
         parent::MessageSink($TimeStamp, $SenderID, $Message, $Data);
@@ -396,7 +415,7 @@ class JSLiveModule extends IPSModule
     }
 
     //Cache and Htmlbox
-    public function ReceiveData($JSONString)
+    public function ReceiveData(string $JSONString): string
     {
         $jsonData = json_decode($JSONString, true);
         $buffer = json_decode($jsonData['Buffer'], true);
@@ -418,9 +437,11 @@ class JSLiveModule extends IPSModule
             $this->SendDataToSocketClient($this->InstanceID, 10506, []);
             $this->UpdateIframe();
         }
+
+        return '';
     }
 
-    public function Create()
+    public function Create(): void
     {
         //Never delete this line!
         parent::Create();
@@ -430,7 +451,7 @@ class JSLiveModule extends IPSModule
         $this->RegisterPropertyString('LastUploadedConfig', '');
     }
 
-    public function ApplyChanges()
+    public function ApplyChanges(): void
     {
         //Never delete this line!
         parent::ApplyChanges();
@@ -452,7 +473,7 @@ class JSLiveModule extends IPSModule
         //send refresh website to client
         $this->SendDataToSocketClient($this->InstanceID, 10506, []);
     }
-    public function Debug_LoadLogFile(int $intID)
+    public function Debug_LoadLogFile(int $intID): void
     {
         $file_arr = file(IPS_GetLogDir() . 'logfile.log');
 
@@ -695,7 +716,10 @@ class JSLiveModule extends IPSModule
         if ($this->ReadPropertyBoolean('CreateIPSView') && $pData['ipsview']) {
             //Überschreibe Iframe wenn nativMode aktive
             if (@IPS_GetObjectIDByIdent('IPSView', $this->InstanceID) === false) {
-                $this->RegisterVariableString('IPSView', $this->Translate('IPSView'), '~HTMLBox', 0);
+                $this->RegisterVariableString('IPSView', $this->Translate('IPSView'), [
+                    'PRESENTATION' => VARIABLE_PRESENTATION_LEGACY,
+                    'PROFILE'      => '~HTMLBox'
+                ], 0);
 
                 //An Symcon bitte nicht meckern, aber im webfront geht die native integration nicht, deshalb blende ich dieses element hier aus.
                 IPS_SetHidden(@IPS_GetObjectIDByIdent('IPSView', $this->InstanceID), true);
@@ -719,7 +743,10 @@ class JSLiveModule extends IPSModule
         $height = $this->ReadPropertyInteger('IFrameHeight');
 
         if ($this->ReadPropertyBoolean('CreateOutput')) {
-            $this->RegisterVariableString('Output', $this->Translate('Output'), '~HTMLBox', 0);
+            $this->RegisterVariableString('Output', $this->Translate('Output'), [
+                'PRESENTATION' => VARIABLE_PRESENTATION_LEGACY,
+                'PROFILE'      => '~HTMLBox'
+            ], 0);
 
             $link = $this->GetLocalLink();
             //$link = $this->GetLink();
@@ -763,9 +790,9 @@ class JSLiveModule extends IPSModule
 
             if ($this->ReadPropertyBoolean('Debug'))
                 $this->SendSafeDebug('GetOutput', 'Get Data form Cache!');
-            return json_encode(['Contend' => $this->GetBuffer('Output'), 'lastModify' => $this->GetBuffer('LastModifed'), 'EnableCache' => $EnableCache, 'EnableViewport' => $EnableViewport, 'InstanceID' => $this->InstanceID]);
+            return json_encode(['Contend' => $this->GetBuffer('Output'), 'lastModify' => $this->GetBuffer('LastModifed'), 'EnableCache' => $EnableCache, 'EnableViewport' => $EnableViewport, 'InstanceID' => $this->InstanceID], JSON_THROW_ON_ERROR);
         }else {
-            return json_encode(['Contend' => $this->GetWebpage(), 'lastModify' => $this->GetBuffer('LastModifed'), 'EnableCache' => $EnableCache, 'EnableViewport' => $EnableViewport, 'InstanceID' => $this->InstanceID]);
+            return json_encode(['Contend' => $this->GetWebpage(), 'lastModify' => $this->GetBuffer('LastModifed'), 'EnableCache' => $EnableCache, 'EnableViewport' => $EnableViewport, 'InstanceID' => $this->InstanceID], JSON_THROW_ON_ERROR);
         }
     }
 

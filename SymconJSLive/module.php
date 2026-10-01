@@ -10,11 +10,11 @@ class SymconJSLive extends WebHookModule
     use \Burki24\SymconModuleHelper\DebugHelper;
     use \Burki24\SymconModuleHelper\HttpResponseHelper;
 
-    public function __construct($InstanceID)
+    public function __construct(int $InstanceID)
     {
         parent::__construct($InstanceID, 'JSLive');
     }
-    public function Create()
+    public function Create(): void
     {
         //Never delete this line!
         parent::Create();
@@ -41,12 +41,12 @@ class SymconJSLive extends WebHookModule
         $this->LoadConnectAddress();
         $this->SetRandomPassword();
     }
-    public function ApplyChanges()
+    public function ApplyChanges(): void
     {
         //Never delete this line!
         parent::ApplyChanges();
 
-        $this->SetStatus('102');
+        $this->SetStatus(102);
 
         //update all submoduls
         $sendData = ['cmd' => 'UpdateCache', 'instance' => 0];
@@ -59,7 +59,7 @@ class SymconJSLive extends WebHookModule
         ));
     }
 
-    public function ForwardData($JSONString)
+    public function ForwardData(string $JSONString): string
     {
         $rData = json_decode($JSONString, true);
         $jsonData = json_decode($rData['Buffer'], true);
@@ -79,7 +79,7 @@ class SymconJSLive extends WebHookModule
 
                 $output = $this->ReplacePlaceholder($Html, $IntID, $ViewPort);
                 $ipsview = $this->ReadPropertyBoolean('CreateIPSView');
-                return json_encode(['output' => $output, 'ipsview' => $ipsview]);
+                return json_encode(['output' => $output, 'ipsview' => $ipsview], JSON_THROW_ON_ERROR);
             case 'GetLink':
                 $intId = $jsonData['InstanceID'];
 
@@ -137,11 +137,12 @@ class SymconJSLive extends WebHookModule
                     $this->SendSafeDebug('GetGlobalConfiguartion', json_decode($configuration, true), PHP_INT_MAX, ['pw']);
                 }
                 return $configuration;
-                break;
         }
+
+        return '';
     }
 
-    public function UpdateTemplates(int $category)
+    public function UpdateTemplates(int $category): void
     {
         $templates = glob(__DIR__ . '/templates/*.html');
         //$category = $this->ReadPropertyInteger("TemplateCategoryID");
@@ -171,13 +172,13 @@ class SymconJSLive extends WebHookModule
         }
 
     }
-    public function LoadConnectAddress(bool $start = false)
+    public function LoadConnectAddress(bool $start = false): ?string
     {
         if (!$start) return $this->GetConnectAddress();
-        if (!empty($this->ReadPropertyString('Address'))) return;
+        if (!empty($this->ReadPropertyString('Address'))) return null;
 
         $address = $this->GetConnectAddress();
-        if ($address === '') return;
+        if ($address === '') return null;
 
         $confData = json_decode(IPS_GetConfiguration($this->InstanceID), true);
 
@@ -186,8 +187,10 @@ class SymconJSLive extends WebHookModule
 
         IPS_SetConfiguration($this->InstanceID, json_encode($confData));
         IPS_ApplyChanges($this->InstanceID);
+
+        return null;
     }
-    public function SetRandomPassword(bool $start = false, bool $override = false)
+    public function SetRandomPassword(bool $start = false, bool $override = false): void
     {
         if (!$override && (!$start || !empty($this->ReadPropertyString('Password')))) return;
 
@@ -205,7 +208,7 @@ class SymconJSLive extends WebHookModule
     /**
      * This function will be called by the hook control. Visibility should be protected!
      */
-    protected function ProcessHookData()
+    protected function ProcessHookData(): void
     {
         $scriptName = (string) ($_SERVER['SCRIPT_NAME'] ?? '');
         $queryData = $this->ParseQueryString((string) ($_SERVER['QUERY_STRING'] ?? ''));

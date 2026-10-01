@@ -5,12 +5,10 @@ include_once __DIR__ . '/../SymconJSLive/libs/JSLiveModule.php';
 
 class SymconJSLiveRadarChart extends JSLiveModule
 {
-    public function Create()
+    public function Create(): void
     {
         //Never delete this line!
         parent::Create();
-
-        $this->ConnectParent('{9FFF3FC0-FD51-C289-FA36-BC1C370946CF}');
 
         //Expert
         $this->RegisterPropertyBoolean('Debug', false);
@@ -105,7 +103,7 @@ class SymconJSLiveRadarChart extends JSLiveModule
         //dataset
         $this->RegisterPropertyString('Datasets', '[]');
     }
-    public function ApplyChanges()
+    public function ApplyChanges(): void
     {
         //Never delete this line!
         parent::ApplyChanges();
@@ -121,8 +119,14 @@ class SymconJSLiveRadarChart extends JSLiveModule
             IPS_SetVariableProfileAssociation('JSLive_Periode2', 6, $this->Translate('Hour'), '', -1);
         }
 
-        $this->RegisterVariableInteger('Period', $this->Translate('Period'), 'JSLive_Periode2', 0);
-        $this->RegisterVariableBoolean('Relativ', $this->Translate('Relativ'), '~Switch', 1);
+        $this->RegisterVariableInteger('Period', $this->Translate('Period'), [
+            'PRESENTATION' => VARIABLE_PRESENTATION_LEGACY,
+            'PROFILE'      => 'JSLive_Periode2'
+        ], 0);
+        $this->RegisterVariableBoolean('Relativ', $this->Translate('Relativ'), [
+            'PRESENTATION' => VARIABLE_PRESENTATION_LEGACY,
+            'PROFILE'      => '~Switch'
+        ], 1);
 
         $this->EnableAction('Period');
         $this->EnableAction('Relativ');
@@ -132,12 +136,12 @@ class SymconJSLiveRadarChart extends JSLiveModule
         $identIdlist[] = IPS_GetObjectIDByIdent('Relativ', $this->InstanceID);
         $this->SetBuffer('IdentIDList', json_encode($identIdlist));
     }
-    public function RequestAction($Ident, $Value)
+    public function RequestAction(string $Ident, mixed $Value): void
     {
         $this->SetValue($Ident, $Value);
     }
 
-    public function ReceiveData($JSONString)
+    public function ReceiveData(string $JSONString): string
     {
         parent::ReceiveData($JSONString);
         $jsonData = json_decode($JSONString, true);
@@ -160,9 +164,10 @@ class SymconJSLiveRadarChart extends JSLiveModule
                 break;
         }
 
+        return '';
     }
 
-    public function GetUpdate(array $querydata)
+    public function GetUpdate(array $querydata): string
     {
         $updateData = [];
 
@@ -198,10 +203,10 @@ class SymconJSLiveRadarChart extends JSLiveModule
             $updateData['CONFIG'] = $this->GetConfigurationData();
         }
 
-        return json_encode($updateData);
+        return json_encode($updateData, JSON_THROW_ON_ERROR);
     }
 
-    public function LoadOtherConfiguration(int $id)
+    public function LoadOtherConfiguration(int $id): mixed
     {
         if (!IPS_ObjectExists($id)) return 'Instance/Chart not found!';
 
@@ -222,6 +227,8 @@ class SymconJSLiveRadarChart extends JSLiveModule
 
         IPS_SetConfiguration($this->InstanceID, json_encode($confData));
         IPS_ApplyChanges($this->InstanceID);
+
+        return null;
     }
     protected function GetWebpage()
     {
@@ -291,7 +298,7 @@ class SymconJSLiveRadarChart extends JSLiveModule
             $output[] = $s_output;
         }
 
-        return json_encode($output);
+        return json_encode($output, JSON_THROW_ON_ERROR);
     }
 
     private function ReplacePlaceholder($htmlData)

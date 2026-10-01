@@ -5,65 +5,49 @@ declare(strict_types=1);
 require_once dirname(__DIR__, 2) . '/libs/helper/DataFlowHelper.php';
 require_once dirname(__DIR__, 2) . '/libs/helper/DebugHelper.php';
 
-//Constants will be defined with IP-Symcon 5.0 and newer
-if (!defined('IPS_KERNELMESSAGE')) {
-    define('IPS_KERNELMESSAGE', 10100);
-}
-if (!defined('KR_READY')) {
-    define('KR_READY', 10103);
-}
-
-class WebHookModule extends IPSModule
+class WebHookModule extends IPSModuleStrict
 {
     use \Burki24\SymconModuleHelper\DataFlowHelper;
     use \Burki24\SymconModuleHelper\DebugHelper;
 
-    private $hook = '';
+    private string $hook = '';
 
-    public function __construct($InstanceID, $hook)
+    public function __construct(int $InstanceID, string $hook)
     {
         parent::__construct($InstanceID);
 
         $this->hook = $hook;
     }
 
-    public function Create()
+    public function Create(): void
     {
 
         //Never delete this line!
         parent::Create();
 
-        //We need to call the RegisterHook function on Kernel READY
-        $this->RegisterMessage(0, IPS_KERNELMESSAGE);
+        $this->RegisterHook($this->hook);
     }
 
-    public function MessageSink($TimeStamp, $SenderID, $Message, $Data)
+    public function MessageSink(int $TimeStamp, int $SenderID, int $Message, array $Data): void
     {
 
         //Never delete this line!
         parent::MessageSink($TimeStamp, $SenderID, $Message, $Data);
 
-        if ($Message == IPS_KERNELMESSAGE && $Data[0] == KR_READY) {
-            $this->RegisterHook('/hook/' . $this->hook);
-        }
     }
 
-    public function ApplyChanges()
+    public function ApplyChanges(): void
     {
 
         //Never delete this line!
         parent::ApplyChanges();
 
-        //Only call this in READY state. On startup the WebHook instance might not be available yet
-        if (IPS_GetKernelRunlevel() == KR_READY) {
-            $this->RegisterHook('/hook/' . $this->hook);
-        }
     }
 
     /**
      * This function will be called by the hook control. Visibility should be protected!
      */
-    protected function ProcessHookData()
+    protected function ProcessHookData(): void
     {
         if ($this->ReadPropertyBoolean('Debug')) {
             $this->SendSafeDebug('WebHook', ['post' => $_POST], PHP_INT_MAX, ['pw']);
@@ -154,28 +138,6 @@ class WebHookModule extends IPSModule
         return 'text/plain';
     }
 
-    private function RegisterHook($WebHook)
-    {
-        $ids = IPS_GetInstanceListByModuleID('{015A6EB8-D6E5-4B93-B496-0D3F77AE9FE1}');
-        if (count($ids) > 0) {
-            $hooks = json_decode(IPS_GetProperty($ids[0], 'Hooks'), true);
-            $found = false;
-            foreach ($hooks as $index => $hook) {
-                if ($hook['Hook'] == $WebHook) {
-                    if ($hook['TargetID'] == $this->InstanceID) {
-                        return;
-                    }
-                    $hooks[$index]['TargetID'] = $this->InstanceID;
-                    $found = true;
-                }
-            }
-            if (!$found) {
-                $hooks[] = ['Hook' => $WebHook, 'TargetID' => $this->InstanceID];
-            }
-            IPS_SetProperty($ids[0], 'Hooks', json_encode($hooks));
-            IPS_ApplyChanges($ids[0]);
-        }
-    }
     private function isAssoc(array $arr)
     {
         if ([] === $arr) return false;

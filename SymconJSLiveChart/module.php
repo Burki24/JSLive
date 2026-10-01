@@ -5,12 +5,10 @@ include_once __DIR__ . '/../SymconJSLive/libs/JSLiveModule.php';
 
 class SymconJSLiveChart extends JSLiveModule
 {
-    public function Create()
+    public function Create(): void
     {
         //Never delete this line!
         parent::Create();
-
-        $this->ConnectParent('{9FFF3FC0-FD51-C289-FA36-BC1C370946CF}');
 
         //Expert
         $this->RegisterPropertyBoolean('Debug', false);
@@ -112,7 +110,7 @@ class SymconJSLiveChart extends JSLiveModule
         $this->RegisterPropertyString('Axes', '[]');
         $this->RegisterPropertyString('Datasets', '[]');
     }
-    public function ApplyChanges()
+    public function ApplyChanges(): void
     {
         //Never delete this line!
         parent::ApplyChanges();
@@ -137,12 +135,24 @@ class SymconJSLiveChart extends JSLiveModule
             IPS_SetVariableProfileAssociation('JSLive_Now', false, ' ', '', -1);
         }
 
-        $this->RegisterVariableInteger('Period', $this->Translate('Period'), 'JSLive_Periode', 5);
-        $this->RegisterVariableBoolean('Now', $this->Translate('Now'), 'JSLive_Now', 96);
-        $this->RegisterVariableBoolean('Relativ', $this->Translate('Relativ'), '~Switch', 97);
+        $this->RegisterVariableInteger('Period', $this->Translate('Period'), [
+            'PRESENTATION' => VARIABLE_PRESENTATION_LEGACY,
+            'PROFILE'      => 'JSLive_Periode'
+        ], 5);
+        $this->RegisterVariableBoolean('Now', $this->Translate('Now'), [
+            'PRESENTATION' => VARIABLE_PRESENTATION_LEGACY,
+            'PROFILE'      => 'JSLive_Now'
+        ], 96);
+        $this->RegisterVariableBoolean('Relativ', $this->Translate('Relativ'), [
+            'PRESENTATION' => VARIABLE_PRESENTATION_LEGACY,
+            'PROFILE'      => '~Switch'
+        ], 97);
 
-        $this->RegisterVariableInteger('Offset', $this->Translate('Offset'), '', 98);
-        $this->RegisterVariableInteger('StartDate', $this->Translate('Start Date'), '~UnixTimestamp', 99);
+        $this->RegisterVariableInteger('Offset', $this->Translate('Offset'), [], 98);
+        $this->RegisterVariableInteger('StartDate', $this->Translate('Start Date'), [
+            'PRESENTATION' => VARIABLE_PRESENTATION_LEGACY,
+            'PROFILE'      => '~UnixTimestamp'
+        ], 99);
 
         $this->EnableAction('Period');
         $this->EnableAction('Offset');
@@ -163,7 +173,7 @@ class SymconJSLiveChart extends JSLiveModule
             $this->SetValue('Relativ', true);
         }
     }
-    public function RequestAction($Ident, $Value)
+    public function RequestAction(string $Ident, mixed $Value): void
     {
 
         switch ($Ident) {
@@ -209,7 +219,7 @@ class SymconJSLiveChart extends JSLiveModule
                 $this->SetValue($Ident, $Value);
         }
     }
-    public function GetConfigurationForm()
+    public function GetConfigurationForm(): string
     {
         //update Items for InstanceSelectList!
         $formData = $this->LoadConfigurationForm();
@@ -343,7 +353,7 @@ class SymconJSLiveChart extends JSLiveModule
         }
         $this->SET_By_KEYPATH($path, $formData['elements'], $data);
 
-        return json_encode($formData);
+        return json_encode($formData, JSON_THROW_ON_ERROR);
     }
 
     /**
@@ -514,7 +524,7 @@ class SymconJSLiveChart extends JSLiveModule
         $this->SetBuffer('DatasetsBuffer', json_encode($datasets));
     }
 
-    public function ReceiveData($JSONString)
+    public function ReceiveData(string $JSONString): string
     {
         parent::ReceiveData($JSONString);
         $jsonData = json_decode($JSONString, true);
@@ -527,9 +537,9 @@ class SymconJSLiveChart extends JSLiveModule
             case 'getLanguage':
                 $conf = json_decode(IPS_GetConfiguration($this->InstanceID), true);
                 $mid = IPS_GetInstance($this->InstanceID)['ModuleInfo']['ModuleID'];
-                return json_encode(['Config' => $conf, 'ModuleID' => $mid]);
+                return json_encode(['Config' => $conf, 'ModuleID' => $mid], JSON_THROW_ON_ERROR);
             case 'getFonts':
-                return json_encode($this->GetFonts());
+                return json_encode($this->GetFonts(), JSON_THROW_ON_ERROR);
             case 'exportConfiguration':
                 return $this->ExportConfiguration();
             case 'getContend':
@@ -543,8 +553,10 @@ class SymconJSLiveChart extends JSLiveModule
                     $this->SendSafeDebug('ReceiveData', 'ACTION FOR THIS MODULE NOT DEFINED!');
                 break;
         }
+
+        return '';
     }
-    public function GetUpdate(array $querydata)
+    public function GetUpdate(array $querydata): string
     {
         $updateData = [];
 
@@ -565,10 +577,10 @@ class SymconJSLiveChart extends JSLiveModule
             $updateData['XAXES'] = $this->GenerateXAxesData();
         }
 
-        return json_encode($updateData);
+        return json_encode($updateData, JSON_THROW_ON_ERROR);
     }
 
-    public function LoadOtherConfiguration(int $id)
+    public function LoadOtherConfiguration(int $id): mixed
     {
         if (!IPS_ObjectExists($id)) return 'Instance/Chart not found!';
 
@@ -650,6 +662,8 @@ class SymconJSLiveChart extends JSLiveModule
                 echo 'Exception abgefangen: ',  $e->getMessage(), "\n";
             }
         }else return 'A Instance/Chart must be selected!';
+
+        return null;
     }
     protected function GetWebpage()
     {
@@ -799,7 +813,7 @@ class SymconJSLiveChart extends JSLiveModule
             }
             $output[] = $o_item;
         }
-        return json_encode($output);
+        return json_encode($output, JSON_THROW_ON_ERROR);
     }
 
     private function ReplacePlaceholder(string $htmlData)

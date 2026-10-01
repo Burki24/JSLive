@@ -2,7 +2,7 @@
     "schema": 1,
     "sources": {
         "SymconJSLive/module.php": {
-            "__construct": "public function __construct(string $InstanceID)",
+            "__construct": "public function __construct(int $InstanceID)",
             "Create": "public function Create(): void",
             "ApplyChanges": "public function ApplyChanges(): void",
             "ForwardData": "public function ForwardData(string $JSONString): string",
@@ -11,7 +11,7 @@
             "SetRandomPassword": "public function SetRandomPassword(bool $start = false, bool $override = false): void"
         },
         "SymconJSLive/libs/WebHookModule.php": {
-            "__construct": "public function __construct(string $InstanceID, string $hook)",
+            "__construct": "public function __construct(int $InstanceID, string $hook)",
             "Create": "public function Create(): void",
             "MessageSink": "public function MessageSink(int $TimeStamp, int $SenderID, int $Message, array $Data): void",
             "ApplyChanges": "public function ApplyChanges(): void"

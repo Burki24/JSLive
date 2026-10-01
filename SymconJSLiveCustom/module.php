@@ -5,12 +5,11 @@ include_once __DIR__ . '/../SymconJSLive/libs/JSLiveModule.php';
 
 class SymconJSLiveCustom extends JSLiveModule
 {
-    public function Create()
+    public function Create(): void
     {
         //Never delete this line!
         parent::Create();
 
-        $this->ConnectParent('{9FFF3FC0-FD51-C289-FA36-BC1C370946CF}');
         $this->RegisterPropertyInteger('TemplateScriptID', 0);
 
         //Expert
@@ -52,14 +51,14 @@ class SymconJSLiveCustom extends JSLiveModule
         $this->RegisterPropertyString('Datasets', '[]');
         $this->RegisterPropertyString('Libraries', '[]');
     }
-    public function ApplyChanges()
+    public function ApplyChanges(): void
     {
         //Never delete this line!
         parent::ApplyChanges();
 
     }
 
-    public function ReceiveData($JSONString)
+    public function ReceiveData(string $JSONString): string
     {
         parent::ReceiveData($JSONString);
         $jsonData = json_decode($JSONString, true);
@@ -77,15 +76,17 @@ class SymconJSLiveCustom extends JSLiveModule
             case 'setData':
                 return $this->SetData($buffer['queryData']);
             case 'loadFile':
-                return json_encode($this->LoadFile($buffer['queryData']));
+                return json_encode($this->LoadFile($buffer['queryData']), JSON_THROW_ON_ERROR);
             default:
                 if ($buffer['cmd'] != 'UpdateCache')
                     $this->SendSafeDebug('ReceiveData', 'ACTION FOR THIS MODULE NOT DEFINED!');
                 break;
         }
+
+        return '';
     }
 
-    public function LoadOtherConfiguration(int $id)
+    public function LoadOtherConfiguration(int $id): mixed
     {
         if (!IPS_ObjectExists($id)) return 'Instance/Chart not found!';
 
@@ -102,8 +103,10 @@ class SymconJSLiveCustom extends JSLiveModule
             IPS_SetConfiguration($this->InstanceID, json_encode($confData));
             IPS_ApplyChanges($this->InstanceID);
         }else return 'A Instance must be selected!';
+
+        return null;
     }
-    public function GenerateDefaultScript()
+    public function GenerateDefaultScript(): mixed
     {
         $templateID = $this->ReadPropertyInteger('TemplateScriptID');
 
@@ -121,6 +124,8 @@ class SymconJSLiveCustom extends JSLiveModule
         $confData['TemplateScriptID'] = $templateID;
         IPS_SetConfiguration($this->InstanceID, json_encode($confData));
         IPS_ApplyChanges($this->InstanceID);
+
+        return null;
     }
     protected function GetWebpage()
     {
@@ -167,7 +172,7 @@ class SymconJSLiveCustom extends JSLiveModule
                     foreach ($obj_data['ChildrenIDs'] as $item) {
                         if ($item == $var) {
                             //wenn variable in Childids dann ausgabe
-                            return json_encode([$this->GetSingelData($item, true)]);
+                            return json_encode([$this->GetSingelData($item, true)], JSON_THROW_ON_ERROR);
                         }
                     }
                 }
@@ -191,7 +196,7 @@ class SymconJSLiveCustom extends JSLiveModule
                 }
             }
         }
-        return json_encode($output);
+        return json_encode($output, JSON_THROW_ON_ERROR);
     }
     private function LoadFile($querydata)
     {
@@ -291,7 +296,7 @@ class SymconJSLiveCustom extends JSLiveModule
             $output[] = $s_output;
         }
 
-        return json_encode($output);
+        return json_encode($output, JSON_THROW_ON_ERROR);
     }
     private function LoadDataFromObject(int $obj_id, bool $onStart = false)
     {

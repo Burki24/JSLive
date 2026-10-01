@@ -47,6 +47,14 @@ The snapshot records declarations, not their runtime behavior. It therefore
 does not replace Symcon runtime, webhook, rendering, import/export or migration
 tests.
 
+## IPSModuleStrict migration contract
+
+`strict-module-migration.php` vergleicht alle 74 öffentlichen Methoden mit den
+vollständig typisierten Zielsignaturen. Zusätzlich sichert der Test die beiden
+Strict-Basisklassen, automatische Parent-Kompatibilität, native
+Hook-Registrierung, Legacy-Darstellungsarrays und den unveränderten
+JSON-Text-Datenfluss ab.
+
 ## Webhook routing harness
 
 `webhook-routing.php` loads the real splitter with a minimal synthetic Symcon
