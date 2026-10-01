@@ -58,6 +58,14 @@ The harness intentionally does not assert sensitive debug output, unrestricted
 asset paths or other known security risks. Those behaviors are not compatibility
 requirements and may be tightened without updating a characterization fixture.
 
+## Connect address harness
+
+`connect-address.php` prueft den oeffentlichen Formularcallback und den
+optionalen Startpfad des Splitters. Der Test sichert die korrekte
+Connect-Control-GUID und Instanz-ID, die unveraenderte Ausgabe der gefundenen
+URL, den Schutz bereits konfigurierter Adressen sowie das Verhalten ohne
+Connect-Control-Instanz ab.
+
 ## Debug log masking harness
 
 `debug-log-access.php` ruft den bestehenden oeffentlichen Diagnosepfad mit

@@ -173,12 +173,16 @@ class SymconJSLive extends WebHookModule
     }
     public function LoadConnectAddress(bool $start = false)
     {
-        if (!$start || !empty($this->ReadPropertyString('Address'))) return;
+        if (!$start) return $this->GetConnectAddress();
+        if (!empty($this->ReadPropertyString('Address'))) return;
+
+        $address = $this->GetConnectAddress();
+        if ($address === '') return;
 
         $confData = json_decode(IPS_GetConfiguration($this->InstanceID), true);
 
         //bestimmte aktuelle einstellungen beibehalten
-        $confData['Address'] = $this->GetConnectAddress();
+        $confData['Address'] = $address;
 
         IPS_SetConfiguration($this->InstanceID, json_encode($confData));
         IPS_ApplyChanges($this->InstanceID);
@@ -640,9 +644,9 @@ class SymconJSLive extends WebHookModule
     }
     private function GetConnectAddress()
     {
-        $connectID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}');
-        if (count($connectID) == 0) {
-        } return '';
-        return CC_GetUrl($connectID);
+        $connectIDs = IPS_GetInstanceListByModuleID('{9486D575-BE8C-4ED8-B5B5-20930E26DE6F}');
+        if ($connectIDs === []) return '';
+
+        return (string) CC_GetUrl($connectIDs[0]);
     }
 }

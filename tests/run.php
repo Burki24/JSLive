@@ -5,6 +5,7 @@ declare(strict_types=1);
 $tests = [
     __DIR__ . '/validate_structure.php',
     __DIR__ . '/public-contracts.php',
+    __DIR__ . '/connect-address.php',
     __DIR__ . '/webhook-routing.php',
     __DIR__ . '/webhook-security-model.php',
     __DIR__ . '/runtime-matrix.php',

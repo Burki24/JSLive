@@ -81,6 +81,11 @@ maschinenlesbaren Inventardatei.
 kompatible leere Rückgabewert ist vor der Umstellung durch die bestehenden
 Datenfluss- und Webhook-Tests zu charakterisieren.
 
+`LoadConnectAddress()` liefert beim öffentlichen Formularaufruf die gefundene
+Connect-URL und gibt im Startpfad keinen Wert zurück. Die vorgesehene
+Strict-Signatur ist deshalb `?string`; Discovery, fehlende Connect-Instanz und
+das bedingte Speichern sind durch `tests/connect-address.php` charakterisiert.
+
 ## Variablenregistrierung und Schreibzugriff
 
 JSLive registriert zehn eigene Variablen:

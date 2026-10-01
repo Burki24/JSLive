@@ -356,6 +356,11 @@ Bereits abgesicherte Sicherheitsgrenzen:
 
 Bereits behobene technische Schulden:
 
+- `LoadConnectAddress` verwendet die offizielle Connect-Control-Modul-ID,
+  liefert die gefundene URL an den bestehenden Formularcallback und befuellt
+  im Startpfad nur eine leere Adresse. Fehlt die Connect-Instanz oder ihre URL,
+  bleibt die Konfiguration unveraendert. Ein Regressionstest deckt alle drei
+  Pfade ab.
 - `Debug_LoadLogFile` behaelt seinen oeffentlichen Diagnosevertrag und gibt
   die Symcon-Logdatei weiterhin aus. Jede Zeile wird dabei ueber den zentralen
   `DebugHelper` gefiltert; der JSLive-spezifische Queryparameter `pw` wird
@@ -381,8 +386,6 @@ Prioritaet mittel:
   Server-Arrayzugriffe und `rand()` fuer Kennwoerter;
 - serialisierte PHP-Daten in Buffern und `unserialize` ohne erlaubte Klassen;
 - grosse Basisklasse, duplizierte Hilfsfunktionen und sehr grosse Moduldateien;
-- `LoadConnectAddress` enthaelt einen bedingungslosen fruehen Rueckgabepfad und
-  kann die ermittelte Connect-URL derzeit nicht zurueckgeben;
 - die MessageSink-Verwaltung registriert bereits bekannte Variablen erneut,
   weil sie vor der Mitgliedschaftspruefung aus der Altliste entfernt werden;
 - `SymconJSLiveDateTimePicker::LoadOtherConfiguration()` liest die nicht

@@ -63,6 +63,13 @@ Patchstelle, beispielsweise `v0.10.0`.
 - Doughnut-/Pie-Aktualisierungen liefern dieselbe konfigurierte Variable aus
   mehreren Datensatzzeilen nur noch einmal.
 
+### Fixed
+
+- `LoadConnectAddress` findet wieder das Connect Control statt des Archive
+  Control, uebergibt dessen Instanz-ID an `CC_GetUrl` und liefert die URL an
+  den bestehenden Formularcallback zurueck. Der optionale Startpfad schreibt
+  nur eine gefundene URL in eine zuvor leere Adresse.
+
 ### Security
 
 - `Debug_LoadLogFile` gibt die Symcon-Logdatei weiterhin ueber den bestehenden

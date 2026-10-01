@@ -7,7 +7,7 @@
             "ApplyChanges": "public function ApplyChanges(): void",
             "ForwardData": "public function ForwardData(string $JSONString): string",
             "UpdateTemplates": "public function UpdateTemplates(int $category): void",
-            "LoadConnectAddress": "public function LoadConnectAddress(bool $start = false): void",
+            "LoadConnectAddress": "public function LoadConnectAddress(bool $start = false): ?string",
             "SetRandomPassword": "public function SetRandomPassword(bool $start = false, bool $override = false): void"
         },
         "SymconJSLive/libs/WebHookModule.php": {
