@@ -356,6 +356,11 @@ Bereits abgesicherte Sicherheitsgrenzen:
 
 Bereits behobene technische Schulden:
 
+- `SymconJSLiveDateTimePicker::LoadOtherConfiguration()` uebernimmt weiterhin
+  die Darstellungswerte einer anderen DateTimePicker-Instanz, bewahrt aber die
+  lokale Integer-Property `Variable`. Die nicht registrierte String-Property
+  `Variables` wird weder gelesen noch in die Zielkonfiguration geschrieben.
+  Ein Regressionstest prueft den vollstaendigen Kopierpfad.
 - Die MessageSink-Verwaltung prueft die bisherige Variablenliste jetzt vor dem
   Entfernen bereits bekannter Sender. Unveraenderte Variablen werden dadurch
   nicht erneut registriert; neue und entfernte Sender behalten ihre bisherigen
@@ -391,9 +396,6 @@ Prioritaet mittel:
   Server-Arrayzugriffe und `rand()` fuer Kennwoerter;
 - serialisierte PHP-Daten in Buffern und `unserialize` ohne erlaubte Klassen;
 - grosse Basisklasse, duplizierte Hilfsfunktionen und sehr grosse Moduldateien;
-- `SymconJSLiveDateTimePicker::LoadOtherConfiguration()` liest die nicht
-  registrierte Property `Variables`; eine Korrektur benoetigt einen getrennten
-  Verhaltens- und Regressionstest;
 - `SymconJSLiveRadarChart::GetCorrectStartDate()` und
   `SymconJSLiveChart::GetCorrectStartDate()` verwenden in mehreren absoluten
   Perioden das Jahr eines neu erzeugten `DateTime`-Objekts statt durchgaengig das

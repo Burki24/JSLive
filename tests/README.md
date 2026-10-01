@@ -108,6 +108,13 @@ current-value escaping and the cache-disabled, cache-hit and cache-rebuild
 responses. The test asserts stable rendering contracts instead of storing the
 complete generated HTML as a snapshot.
 
+## DateTimePicker configuration-copy harness
+
+`datetime-configuration-copy.php` prueft das Laden einer Konfiguration aus
+einer zweiten DateTimePicker-Instanz. Darstellungswerte werden uebernommen,
+waehrend die lokale `Variable`-Bindung erhalten bleibt und kein nicht
+registrierter `Variables`-Schluessel erzeugt wird.
+
 ## Progressbar rendering harness
 
 `progressbar-rendering.js` fuehrt die reale `LoadBarConfig()`-Funktion aus der

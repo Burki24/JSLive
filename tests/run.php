@@ -15,6 +15,7 @@ $tests = [
     __DIR__ . '/public-form-callbacks.php',
     __DIR__ . '/adv-textfield-rendering.php',
     __DIR__ . '/datetime-rendering.php',
+    __DIR__ . '/datetime-configuration-copy.php',
     __DIR__ . '/radar-chart-dates.php',
     __DIR__ . '/chart-dates.php',
     __DIR__ . '/custom-data.php',

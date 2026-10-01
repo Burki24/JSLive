@@ -72,6 +72,9 @@ Patchstelle, beispielsweise `v0.10.0`.
 - Die MessageSink-Verwaltung registriert unveraenderte Variablen nicht mehr
   erneut. Neue Sender werden weiterhin fuer beide Variablenmeldungen
   registriert und entfernte Sender von beiden abgemeldet.
+- `SymconJSLiveDateTimePicker::LoadOtherConfiguration()` bewahrt beim Kopieren
+  die lokale Integer-Property `Variable`, statt die nicht registrierte
+  String-Property `Variables` zu lesen und in die Konfiguration zu schreiben.
 
 ### Security
 

@@ -97,7 +97,7 @@ class SymconJSLiveDateTimePicker extends JSLiveModule
             }
 
             //bestimmte aktuelle einstellungen beibehalten
-            $confData['Variables'] = $this->ReadPropertyString('Variables');
+            $confData['Variable'] = $this->ReadPropertyInteger('Variable');
 
             IPS_SetConfiguration($this->InstanceID, json_encode($confData));
             IPS_ApplyChanges($this->InstanceID);
