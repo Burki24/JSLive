@@ -171,7 +171,7 @@ class SymconJSLiveDoughnutPie extends JSLiveModule
         //load all variables
         foreach ($datasets as $item) {
             foreach ($item['Variables'] as $vars) {
-                if (!in_array($vars['Variable'], $load_vars)) {
+                if (!in_array($vars['Variable'], $registered_vars)) {
                     $registered_vars[] = $vars['Variable'];
                 }
             }
@@ -191,7 +191,6 @@ class SymconJSLiveDoughnutPie extends JSLiveModule
                 continue;
             }
 
-            $key = array_search($var, array_column($registered_vars, 'Variable'));
             if (!in_array($var, $registered_vars)) {
                 $this->SendSafeDebug('GetData', 'VARIABLE NOT IN INSTANCE!');
                 continue;

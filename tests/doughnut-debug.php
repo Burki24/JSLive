@@ -11,7 +11,7 @@ if (!class_exists('IPSModule')) {
         public function ReadPropertyString(string $name): string
         {
             if ($name === 'Datasets') {
-                return '[{"Variables":[{"Variable":42}]}]';
+                return '[{"Variables":[{"Variable":42},{"Variable":42}]}]';
             }
 
             return '';
@@ -52,6 +52,15 @@ function debugRequest(array $buffer): string
 }
 
 $module = new SymconJSLiveDoughnutPie();
+$allResult = $module->ReceiveData(debugRequest([
+    'instance'  => 1,
+    'cmd'       => 'getData',
+    'queryData' => []
+]));
+if (json_decode($allResult, true, 512, JSON_THROW_ON_ERROR) !== [['Variable' => 42, 'Value' => 5]]) {
+    throw new RuntimeException('DoughnutPie must return a configured variable only once.');
+}
+
 $result = $module->ReceiveData(debugRequest([
     'instance'  => 1,
     'cmd'       => 'getData',

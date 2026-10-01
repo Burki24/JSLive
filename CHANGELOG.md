@@ -60,6 +60,8 @@ Patchstelle, beispielsweise `v0.10.0`.
 - Dynamische Webhook-Antworten behandeln Clients ohne `Accept-Encoding`-Header
   als nicht gzip-faehig, statt unter PHP 8.5 eine Warnung in den Response-Body
   zu schreiben.
+- Doughnut-/Pie-Aktualisierungen liefern dieselbe konfigurierte Variable aus
+  mehreren Datensatzzeilen nur noch einmal.
 
 ### Security
 
