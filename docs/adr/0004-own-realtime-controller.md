@@ -1,8 +1,13 @@
 # ADR 0004: Eigene Echtzeitsteuerung fuer JSLive Chart
 
-- Status: Angenommen fuer Entwicklung und Prototyp; produktive Umstellung gesperrt
+- Status: Abgeloest durch [ADR 0005](0005-maintained-streaming-fork.md); historischer Prototyp bleibt erhalten
 - Datum: 02.10.2026
 - Ausgangsstand: JSLive 0.78, Chart.js 4.5.1, Streaming-Fork 3.1.0
+
+Die folgende Entscheidung dokumentiert den urspruenglichen Versuch. Nach dem
+nicht bestandenen Performancegate hat der Eigentuemer den Wartungsfork als
+weiteren Entwicklungsweg gewaehlt. Es gibt keinen Auftrag zur Weiterentwicklung
+des Prototyps oder zum Render-Cache; die produktive Einbindung bleibt unveraendert.
 
 ## Kontext
 

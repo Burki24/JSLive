@@ -733,7 +733,7 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
     Assetpfad unveraendert; CI und gezielte installierte Abnahme von 0.78 sind
     am 02.10.2026 bestanden (`cde5520` / `cf42e48`), einschliesslich Pull,
     WebSocket, Reload und beider Update-Modi. Kein neuer Vollmatrixdurchlauf.
-11. Beschlossen: eigene Echtzeitsteuerung statt Wartungsfork, gemaess ADR 0004.
+11. Historischer Versuch: eigene Echtzeitsteuerung gemaess ADR 0004.
     Ein isolierter Prototyp mit oeffentlichen Chart.js-APIs und Tests liegt unter
     `tests/prototypes/`. Grundfunktionen im Browservergleich bestanden, aber
     deutliche Mehrlast bei vielen Punkten: keine produktive Umstellung.
@@ -743,9 +743,9 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
     weiterhin; das Performancegate ist nicht bestanden. Oeffentliche Parser-/
     Labeloptionen wurden in drei wiederholten Hochlastvergleichen geprueft:
     selbst die Kombination erreicht nur rund 23 Zeichnungen/s bei fast voller
-    Hauptthreadlast. Kein automatischer Schnellpfad uebernommen. Naechster
-    Entscheidungspunkt ist ein isolierter Render-Cache mit abgesichertem
-    Vollupdate-Rueckfall; noch keine Architekturfreigabe/Templateintegration.
+    Hauptthreadlast. Kein automatischer Schnellpfad uebernommen. Der damals
+    vorgeschlagene Render-Cache wird nicht weiterverfolgt; ADR 0005 loest die
+    Entwicklungsentscheidung ab. Prototyp und Messungen bleiben erhalten.
     Als begrenzter Folgeschritt
     ist der veraltete formatierte Tooltipwert nach Auswahl/Bereinigung lokal
     behoben: chart-lokaler oeffentlicher Update-Hook, kein zusaetzlicher Render.
@@ -754,7 +754,23 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
     Messwerte unveraendert. CI dieser Korrekturen ist fuer `d990f9a`/`984a3ce`
     (0.81) gruen; CI des neuen Optionsvergleichs folgt nach Commit/Push.
     Ergebnisse und Einzelmessungen in `docs/REALTIME_PROTOTYPE.md`.
-    Weitere Bibliotheken folgen einzeln; iro.js bleibt auf Wunsch unveraendert.
+12. Beschlossen: eigener Wartungsfork unter
+    `Burki24/chartjs-plugin-streaming`, gemaess ADR 0005. Stand 3.4.0
+    (`fc0dd2e`) besitzt reproduzierbare Builds, Versionsautomatik und abgesicherte
+    Timer-, Quiet-Update-, Hover- und Tooltipkorrekturen; CI ist bestanden.
+    Die isolierte JSLive-Matrix prueft zusaetzlich zum Luxon-Bestand Chart.js
+    4.5.1 mit Moment 2.31.0, Moment-Adapter 1.0.1 und Datalabels 2.2.0.
+    Vier lokale Browserfaelle (UTC/Berlin, beide UMD-Bundles) sind bestanden.
+    Der begrenzte Langlauf gegen Bundle 3.1.0 ist mit zwei Wiederholungen je
+    Variante a 120 Sekunden bestanden: pixelgleicher Ausgangszustand,
+    begrenzter Datenbestand und keine beobachtete Leistungsverschlechterung.
+    Kein Langzeit-, Transport- oder installierter Symcon-Nachweis. Ein direkter
+    In-place-Achsentausch bleibt als separater Fork-Befund offen; JSLive nutzt
+    den bestandenen Destroy-/Recreate-Pfad. CI der neuen Tests steht noch aus.
+    Nachweise stehen im Fork unter `docs/JSLIVE_COMPATIBILITY.md`.
+    Produktive Uebernahme, versionierter Assetpfad und installierte Abnahme
+    sind nachgelagerte, getrennte Schritte. Moment bleibt vorerst erhalten;
+    weitere Bibliotheken folgen einzeln, iro.js bleibt unveraendert.
 
 ### Phase 5 - IPSView und Kacheldarstellung
 

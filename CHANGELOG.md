@@ -9,6 +9,11 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Development
 
+- ADR 0005 dokumentiert den beschlossenen eigenen Streaming-Wartungsfork als
+  weiteren Entwicklungsweg. ADR 0004, Prototyp und Performanceversuche bleiben
+  historisch erhalten; Plan und Freigabegrenzen sind nachgezogen. Keine
+  produktive Plugin-/Templateaenderung und kein Wechsel von Moment zu Luxon.
+
 - Reproduzierbarer Hochlastvergleich oeffentlicher Chart.js-Parser-/Labeloptionen
   mit drei Wiederholungen, Daten-/Bildratenmessung und pixelgleichen Test-Fixtures.
   Keine untersuchte Variante erreicht die Performancefreigabe; der Controller

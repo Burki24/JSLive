@@ -1,5 +1,10 @@
 # Eigene Echtzeitsteuerung: Prototyp und Profiling
 
+Historischer Versuch, nicht der aktive Entwicklungsweg: Die Entscheidung wurde
+durch [ADR 0005](adr/0005-maintained-streaming-fork.md) zugunsten des eigenen
+Wartungsforks abgeloest. Prototyp, Tests und Messwerte bleiben erhalten; die unten
+beschriebenen Render-Cache-Vorschlaege werden nicht weiterverfolgt.
+
 Stand: 02.10.2026, Ausgangsbasis 0.78 (`cf42e48`). Entscheidung und
 Freigabekriterien: [ADR 0004](adr/0004-own-realtime-controller.md).
 

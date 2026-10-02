@@ -139,20 +139,20 @@ Frontend-Abhaengigkeiten.
    `preservation`-Objekts bei Realtime-Achsen. Andere Zeitachsen verwenden den
    Standardmodus. Plugin und Pfad bleiben unveraendert. Automatisierte
    Regressionen und lokaler Browsertest bestanden; CI und gezielte installierte
-   Abnahme von 0.78 sind ebenfalls bestanden. Die Pflegeentscheidung ist mit
-   ADR 0004 zugunsten einer eigenen Echtzeitsteuerung getroffen. Der isolierte
-   Prototyp ersetzt das Plugin noch nicht; Performance-Abnahme steht aus.
+   Abnahme von 0.78 sind ebenfalls bestanden. Der Prototyp nach ADR 0004 bestand
+   das Performancegate nicht. ADR 0005 legt jetzt den eigenen Wartungsfork als
+   Entwicklungsweg fest; dessen produktive Uebernahme steht noch aus.
    jQuery und die Einzelwert-Bibliotheken folgen getrennt; iro.js bleibt auf
    Wunsch unveraendert.
 
 ## Streaming: Herkunft und Pflegeentscheidung
 
-Die folgende Fork-Abwaegung beschreibt den Ausgangspunkt. Am 02.10.2026 hat
-der Eigentuemer stattdessen die Entwicklung einer eigenen Echtzeitsteuerung
-beschlossen: [ADR 0004](adr/0004-own-realtime-controller.md).
-[Prototyp und Messungen](REALTIME_PROTOTYPE.md) sind getrennt von der
-produktiven Einbindung; ein Pluginwechsel oder eine Entfernung ist noch nicht
-freigegeben.
+Die folgende Fork-Abwaegung beschreibt den Ausgangspunkt. Der zwischenzeitliche
+Versuch einer eigenen Echtzeitsteuerung nach [ADR 0004](adr/0004-own-realtime-controller.md)
+wurde durch [ADR 0005](adr/0005-maintained-streaming-fork.md) abgeloest.
+[Prototyp und Messungen](REALTIME_PROTOTYPE.md) bleiben historisch erhalten.
+Die Entwicklung erfolgt im eigenen Wartungsfork; ein produktiver Pluginwechsel
+oder eine Entfernung ist noch nicht freigegeben.
 
 Pruefstand 02.10.2026: Der lokale Bundle ist bytegleich mit
 `dist/@qultoltd/chartjs-plugin-streaming.min.js` aus
@@ -182,4 +182,11 @@ Zugriffe auf Chart.js-Interna. Eine Eigenimplementierung ueber Zeitachse,
 `min`/`max` und oeffentliche Update-APIs koennte diese Kopplung reduzieren,
 muesste aber Verhalten und Animation neu absichern. Sie ist erst nach einer
 expliziten Anforderungsliste und einem getrennten Vergleichsprototyp sinnvoll.
+
+Fortschreibung nach dem Prototyp: Der Eigentuemer hat den eigenen Wartungsfork
+`Burki24/chartjs-plugin-streaming` als weiteren Weg gewaehlt, siehe
+[ADR 0005](adr/0005-maintained-streaming-fork.md). Die eigene Steuerung bleibt
+ein historischer Versuch. Der Fork wird isoliert mit dem aktuellen JSLive-Mix
+und gegen dieses 3.1.0-Bundle geprueft; die produktiven Assets und Vorlagen
+werden dadurch noch nicht umgestellt. Ein Luxon-Wechsel ist nicht beschlossen.
 
