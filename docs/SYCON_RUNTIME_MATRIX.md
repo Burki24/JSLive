@@ -585,6 +585,27 @@ CI und gezielte installierte Fix-Abnahme nach dem Modulupdate stehen aus.
 Danach Seite neu laden; bei aktivem HTML-Cache vorher ueber `ApplyChanges()`
 erneuern. Ein Dienstneustart ist fuer diesen Template-Schritt nicht erforderlich.
 
+## Installierte Abnahme 0.78: Streaming-Einbindung am 02.10.2026
+
+Quellcommit `cde5520`, Metadatencommit `cf42e48`, Library 0.78,
+Build 215897376: lokal, GitHub und MCP-CURRENT synchron; Tests, Check Style
+und CodeQL gruen. Symcon 9.1 / PHP 8.5.8, alle elf Instanzen Status 102.
+Die Kernel-Startzeit blieb unveraendert.
+
+Installierte Vorlage in Edge 155.0.4283.18 ohne Codeersetzung geladen:
+`frameRate: 30`, Realtime-Achse schreitet fort, browserlokale Wertzufuhr
+verwendet `'quiet'`. Nach ausschliesslich browserlokalem Wechsel zur normalen
+Zeitachse erfolgt der Standardmodus. Reload stellt die installierte Realtime-
+Ansicht wieder her; genau eine Chart-Instanz und zwei Datensaetze, WebSocket
+jeweils HTTP 101. Zusaetzlicher lesender Pull-Abruf erreicht den Quiet-Modus.
+Keine Browser-/HTTP-Fehler oder JSLive-Logwarnungen/-fehler im geprueften
+Zeitraum seit den Metadaten. Gezielt bestanden, kein neuer Vollmatrixdurchlauf.
+
+`ApplyChanges()` wurde durch das Modulupdate automatisch ausgefuehrt;
+ein zusaetzlicher Aufruf ist nicht erforderlich. Der nachfolgende eigene
+Realtime-Prototyp ist nicht in Symcon eingebunden und gehoert nicht zu dieser
+Abnahme. Sein lokaler Vergleich steht in `docs/REALTIME_PROTOTYPE.md`.
+
 ## Ergebnisregeln
 
 - `PASS`: alle verpflichtenden Punkte sind mit frischem Laufzeitnachweis grün.

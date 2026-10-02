@@ -36,8 +36,9 @@ erhalten. Leere Antworten werden ausgelassen. Bei fehlgeschlagenen Abrufen
 werden die übrigen Datensätze dargestellt und der Fehler mit Datensatzindex
 ohne Anfrage-URL in der Browserkonsole gemeldet.
 
-Nach einem Modulupdate die Ansicht neu laden; bei aktivem HTML-Cache diesen
-über das bestehende `ApplyChanges()` erneuern. Ein Dienstneustart ist für
+Nach einem Modulupdate die Ansicht neu laden. `ApplyChanges()` wird beim
+Modulupdate automatisch ausgeführt und erneuert dabei den HTML-Cache;
+ein zusätzlicher Aufruf ist nicht erforderlich. Ein Dienstneustart ist für
 diese Template-Korrektur nicht erforderlich. Eigene `TemplateScriptID`-Vorlagen
 werden nicht automatisch geändert.
 
@@ -69,6 +70,9 @@ Der Streaming-Fork 3.1.0 und sein Assetpfad bleiben unverändert. Die
 Standardvorlage setzt `frameRate: 30` und aktualisiert eingehende Livewerte
 bei Realtime-Achsen mit `update('quiet')`, damit die laufende Animation nicht
 unterbrochen wird. Gewöhnliche Zeitachsen verwenden den Standardmodus.
+Eine eigene Echtzeitsteuerung wird gemäß [ADR 0004](../docs/adr/0004-own-realtime-controller.md)
+zunächst als isolierter Test-Prototyp entwickelt. Sie ist nicht produktiv
+eingebunden; insbesondere ist die Performance-Abnahme noch offen.
 Die alten URLs mit 4.3.3 und 4.4.1 bleiben für eigene Vorlagen unverändert.
 Historische Chart.js-3.x-Dateien und
 ungenutzte Plugin-Kopien sind entfernt; eigene Vorlagen vor dem Update anhand

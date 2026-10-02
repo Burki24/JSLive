@@ -138,12 +138,21 @@ Frontend-Abhaengigkeiten.
    `frameRate` statt `framerate`, `update('quiet')` statt des alten
    `preservation`-Objekts bei Realtime-Achsen. Andere Zeitachsen verwenden den
    Standardmodus. Plugin und Pfad bleiben unveraendert. Automatisierte
-   Regressionen und lokaler Browsertest bestanden; CI und installierte
-   Fix-Abnahme stehen aus. Danach Pflegeentscheidung gemaess folgendem Abschnitt.
+   Regressionen und lokaler Browsertest bestanden; CI und gezielte installierte
+   Abnahme von 0.78 sind ebenfalls bestanden. Die Pflegeentscheidung ist mit
+   ADR 0004 zugunsten einer eigenen Echtzeitsteuerung getroffen. Der isolierte
+   Prototyp ersetzt das Plugin noch nicht; Performance-Abnahme steht aus.
    jQuery und die Einzelwert-Bibliotheken folgen getrennt; iro.js bleibt auf
    Wunsch unveraendert.
 
-## Streaming: Herkunft und offene Pflegeentscheidung
+## Streaming: Herkunft und Pflegeentscheidung
+
+Die folgende Fork-Abwaegung beschreibt den Ausgangspunkt. Am 02.10.2026 hat
+der Eigentuemer stattdessen die Entwicklung einer eigenen Echtzeitsteuerung
+beschlossen: [ADR 0004](adr/0004-own-realtime-controller.md).
+[Prototyp und Messungen](REALTIME_PROTOTYPE.md) sind getrennt von der
+produktiven Einbindung; ein Pluginwechsel oder eine Entfernung ist noch nicht
+freigegeben.
 
 Pruefstand 02.10.2026: Der lokale Bundle ist bytegleich mit
 `dist/@qultoltd/chartjs-plugin-streaming.min.js` aus
@@ -158,7 +167,7 @@ verwendet `update('quiet')`; die Option heisst `frameRate`. Der bisherige
 Schreibfehler blieb durch den gleich hohen Defaultwert von 30 verdeckt.
 Die beiden Korrekturen betreffen ausschliesslich die JSLive-Standardvorlage.
 
-Empfehlung, noch keine Architekturentscheidung: eigener, eng begrenzter
+Urspruengliche Empfehlung vor ADR 0004: eigener, eng begrenzter
 Wartungsfork vor einer vollstaendigen Eigenimplementierung. Ausgangspunkt
 waere der bereits nachgewiesene Quellstand; vor Festlegung der Basis ist der
 [modernisierte aziham-Fork](https://github.com/aziham/chartjs-plugin-streaming)

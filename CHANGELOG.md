@@ -7,6 +7,14 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ## Unreleased
 
+### Development
+
+- Isolierter Prototyp einer eigenen Echtzeitsteuerung über öffentliche
+  Chart.js-Schnittstellen mit deterministischen Tests und optionalem
+  Browservergleich. ADR 0004 beschreibt die Zielarchitektur und Freigabekriterien.
+  Das Streaming-Plugin bleibt produktiv unverändert; die erste Lastmessung
+  verlangt weitere Optimierung vor einer Umstellung.
+
 ### Changed
 
 - Die drei Diagrammvorlagen laden Datalabels 2.2.0 jetzt aus der unveränderten

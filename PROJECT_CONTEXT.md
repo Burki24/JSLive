@@ -730,11 +730,16 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
     Lokal korrigiert sind `frameRate` und `update('quiet')` fuer Realtime-Achsen;
     gewoehnliche Zeitachsen verwenden den Standardmodus. Regressionstests und
     lokaler Browsernachweis mit echten Bibliotheken bestanden. Plugin und
-    Assetpfad unveraendert; CI und installierte Fix-Abnahme stehen noch aus.
-    Danach eigene Fork-Pflege gegen Eigenimplementierung entscheiden; Empfehlung
-    und Quellen stehen in `docs/FRONTEND_DEPENDENCIES.md`. Noch kein Fork oder
-    Ersatz beschlossen/angelegt. Weitere Bibliotheken folgen einzeln;
-    iro.js bleibt auf Wunsch unveraendert.
+    Assetpfad unveraendert; CI und gezielte installierte Abnahme von 0.78 sind
+    am 02.10.2026 bestanden (`cde5520` / `cf42e48`), einschliesslich Pull,
+    WebSocket, Reload und beider Update-Modi. Kein neuer Vollmatrixdurchlauf.
+11. Beschlossen: eigene Echtzeitsteuerung statt Wartungsfork, gemaess ADR 0004.
+    Ein isolierter Prototyp mit oeffentlichen Chart.js-APIs und Tests liegt unter
+    `tests/prototypes/`. Grundfunktionen im Browservergleich bestanden, aber
+    deutliche Mehrlast bei vielen Punkten: keine produktive Umstellung.
+    Naechster Schritt: Profiling und Optimierung, dann fehlende Daten-/Template-
+    faelle absichern. Ergebnisse in `docs/REALTIME_PROTOTYPE.md`.
+    Weitere Bibliotheken folgen einzeln; iro.js bleibt auf Wunsch unveraendert.
 
 ### Phase 5 - IPSView und Kacheldarstellung
 

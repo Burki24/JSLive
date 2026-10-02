@@ -9,6 +9,13 @@ php tests/run.php
 Der Runner verwendet neben PHP auch Python 3 fuer die Metadaten- und
 Helper-Pruefungen sowie Node.js fuer die JavaScript-Renderingvertraege.
 
+Der isolierte Echtzeit-Prototyp wird mit `node tests/realtime-window.js`
+deterministisch geprueft; dieser Test ist im Runner enthalten. Ein optionaler
+Browser-/Lastvergleich mit bereits vorhandenem Playwright steht in
+`tests/realtime-window-browser.js`. Er installiert keine Abhaengigkeiten und
+ist noch nicht Teil der CI. Umfang und Wiederholung stehen im
+[Prototypnachweis](../docs/REALTIME_PROTOTYPE.md).
+
 The official Symcon style configuration is available through the `.style`
 submodule. Its local read-only check is:
 
