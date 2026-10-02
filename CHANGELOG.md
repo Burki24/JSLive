@@ -9,6 +9,11 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Development
 
+- Profiling des isolierten Echtzeit-Prototyps mit Bildabstaenden, Datenbestand,
+  CPU-Sampling und reproduzierbaren Alt-/Neu-Vergleichen. Die Bereichsbereinigung
+  vermeidet unnoetige Punkt-Maps; ein monotoner Zeichentakt verhindert Drift.
+  Referenztests und pixelgleiche Vergleichszustaende sichern die Optimierung ab.
+  Der Hochlast-Renderengpass bleibt offen; keine produktive Plugin-Abloesung.
 - Isolierter Prototyp einer eigenen Echtzeitsteuerung über öffentliche
   Chart.js-Schnittstellen mit deterministischen Tests und optionalem
   Browservergleich. ADR 0004 beschreibt die Zielarchitektur und Freigabekriterien.

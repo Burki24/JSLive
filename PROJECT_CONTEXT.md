@@ -737,8 +737,14 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
     Ein isolierter Prototyp mit oeffentlichen Chart.js-APIs und Tests liegt unter
     `tests/prototypes/`. Grundfunktionen im Browservergleich bestanden, aber
     deutliche Mehrlast bei vielen Punkten: keine produktive Umstellung.
-    Naechster Schritt: Profiling und Optimierung, dann fehlende Daten-/Template-
-    faelle absichern. Ergebnisse in `docs/REALTIME_PROTOTYPE.md`.
+    Profiling und erste Optimierung sind lokal abgeschlossen: schnellere
+    Bereichsbereinigung und driftfreier Zeichentakt, neue Messungen erfassen
+    Bildabstaende und Datenbestand. Der volle Chart.js-Balkenupdate dominiert
+    weiterhin; das Performancegate ist nicht bestanden. Naechster Schritt:
+    verbleibenden Renderengpass innerhalb der oeffentlichen APIs bewerten,
+    danach fehlende Daten-/Templatefaelle absichern. Ein bestehender veralteter
+    formatierter Tooltipwert nach Auswahl/Bereinigung ist separat offen.
+    Ergebnisse und Einzelmessungen in `docs/REALTIME_PROTOTYPE.md`.
     Weitere Bibliotheken folgen einzeln; iro.js bleibt auf Wunsch unveraendert.
 
 ### Phase 5 - IPSView und Kacheldarstellung

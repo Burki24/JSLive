@@ -13,7 +13,11 @@ Der isolierte Echtzeit-Prototyp wird mit `node tests/realtime-window.js`
 deterministisch geprueft; dieser Test ist im Runner enthalten. Ein optionaler
 Browser-/Lastvergleich mit bereits vorhandenem Playwright steht in
 `tests/realtime-window-browser.js`. Er installiert keine Abhaengigkeiten und
-ist noch nicht Teil der CI. Umfang und Wiederholung stehen im
+ist noch nicht Teil der CI. `--profile` fuehrt getrenntes CPU-Sampling aus.
+`node tests/realtime-window-maintenance.js` misst nur die Bereichsbereinigung.
+Beide Skripte akzeptieren mit `JSLIVE_BASELINE_CONTROLLER` eine vertrauenswuerdige
+lokale Baseline-Datei fuer einen Alt-/Neu-Vergleich. Der Browservergleich erfasst
+auch Zeichenabstaende, Datenbestaende und Canvas-Pixelgleichheit. Umfang und Wiederholung stehen im
 [Prototypnachweis](../docs/REALTIME_PROTOTYPE.md).
 
 The official Symcon style configuration is available through the `.style`

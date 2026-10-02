@@ -4,6 +4,18 @@
 
     const owners = new WeakMap();
 
+    // Lower/upper bound on the validated, sorted point array; duplicate x is allowed.
+    function bound(data, value, upper = false) {
+        let low = 0;
+        let high = data.length;
+        while (low < high) {
+            const mid = low + Math.floor((high - low) / 2);
+            if (data[mid].x < value || (upper && data[mid].x === value)) low = mid + 1;
+            else high = mid;
+        }
+        return low;
+    }
+
     class RealtimeWindow {
         constructor(chart, options, environment) {
             const settings = Object.assign({ frameRate: 30, maintenanceInterval: 1000, axisId: 'x' }, options);
@@ -16,7 +28,7 @@
             this.chart = chart;
             this.settings = settings;
             this.env = environment || {
-                now: () => Date.now(), document: root.document,
+                now: () => Date.now(), frameNow: () => root.performance.now(), document: root.document,
                 requestFrame: fn => root.requestAnimationFrame(fn), cancelFrame: id => root.cancelAnimationFrame(id),
                 setInterval: (fn, ms) => root.setInterval(fn, ms), clearInterval: id => root.clearInterval(id)
             };
@@ -25,7 +37,8 @@
             this.pausedAt = null;
             this.frame = null;
             this.timer = null;
-            this.lastDraw = -Infinity;
+            this.nextDraw = -Infinity;
+            this.lastFrame = -Infinity;
             this.visibility = () => this.guard(() => {
                 if (this.env.document.hidden) this.cancelFrame();
                 else if (this.pausedAt === null) {
@@ -86,32 +99,34 @@
             const mappings = new Map();
             datasets.forEach((dataset, datasetIndex) => {
                 const data = dataset.data;
-                let liveStart = data.findIndex(point => point.x >= liveMin);
-                if (liveStart < 0) liveStart = data.length;
-                liveStart = Math.max(0, liveStart - 2); // Preserve curve boundary points.
-                let frozenStart = data.length;
+                const liveStart = Math.max(0, bound(data, liveMin) - 2);
+                let start = liveStart;
+                let gapStart = liveStart;
                 if (this.pausedAt !== null) {
-                    frozenStart = data.findIndex(point => point.x >= this.pausedAt - this.settings.duration);
-                    if (frozenStart < 0) frozenStart = data.length;
-                    frozenStart = Math.max(0, frozenStart - 2);
+                    const frozenStart = Math.max(0, bound(data, this.pausedAt - this.settings.duration) - 2);
+                    const frozenEnd = bound(data, this.pausedAt, true);
+                    if (frozenStart < frozenEnd) {
+                        start = Math.min(liveStart, frozenStart);
+                        gapStart = Math.min(liveStart, frozenEnd);
+                    }
                 }
-                const mapping = new Map();
-                const retained = data.filter((point, index) => {
-                    const keep = index >= liveStart ||
-                        (this.pausedAt !== null && index >= frozenStart && point.x <= this.pausedAt);
-                    if (keep) mapping.set(index, mapping.size);
-                    return keep;
-                });
-                if (retained.length !== data.length) {
-                    dataset.data = retained;
-                    mappings.set(datasetIndex, mapping);
+                const gap = liveStart - gapStart;
+                if (start || gap) {
+                    // Allocate only when something expires. Keep Chart.js's existing
+                    // replacement/update lifecycle: splicing can shift element objects
+                    // before public selection remapping has been reconciled by update().
+                    dataset.data = gap ? data.slice(start, gapStart).concat(data.slice(liveStart)) : data.slice(start);
+                    mappings.set(datasetIndex, { start, gapStart, liveStart, gap, length: data.length });
                 }
             });
             if (mappings.size) {
                 const remap = elements => elements.flatMap(element => {
                     const map = mappings.get(element.datasetIndex);
                     if (!map) return [{ datasetIndex: element.datasetIndex, index: element.index }];
-                    return map.has(element.index) ? [{ datasetIndex: element.datasetIndex, index: map.get(element.index) }] : [];
+                    const index = element.index;
+                    if (index < map.start || index >= map.length || (index >= map.gapStart && index < map.liveStart)) return [];
+                    return [{ datasetIndex: element.datasetIndex,
+                        index: index - map.start - (index >= map.liveStart ? map.gap : 0) }];
                 });
                 this.chart.setActiveElements(remap(this.chart.getActiveElements()));
                 const tooltip = this.chart.tooltip;
@@ -120,12 +135,18 @@
         }
 
         draw() {
+            const frameTime = this.frameTime();
             const now = this.env.now();
             const axis = this.chart.options.scales[this.settings.axisId];
             axis.min = now - this.settings.duration;
             axis.max = now;
             this.chart.update('none');
-            this.lastDraw = now;
+            this.lastFrame = frameTime;
+            this.nextDraw = frameTime + 1000 / this.settings.frameRate;
+        }
+
+        frameTime() {
+            return this.env.frameNow ? this.env.frameNow() : this.env.now();
         }
 
         schedule() {
@@ -134,8 +155,18 @@
                 this.frame = null;
                 this.guard(() => {
                     if (this.pausedAt === null && !this.env.document.hidden) {
-                        const elapsed = this.env.now() - this.lastDraw;
-                        if (elapsed < 0 || elapsed >= 1000 / this.settings.frameRate) this.draw();
+                        const now = this.frameTime();
+                        const deadline = this.nextDraw;
+                        if (now < this.lastFrame || now >= deadline) {
+                            this.draw();
+                            // Carry fractional frame time forward without rendering a
+                            // catch-up burst. Wall-clock jumps do not affect browser cadence.
+                            if (now >= deadline) {
+                                const interval = 1000 / this.settings.frameRate;
+                                this.nextDraw = deadline + (Math.floor((now - deadline) / interval) + 1) * interval;
+                            }
+                        }
+                        this.lastFrame = now;
                     }
                     this.schedule();
                 });

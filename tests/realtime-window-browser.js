@@ -25,10 +25,10 @@ async function openChart(browser, mode, options = {}) {
     }
     await page.setContent('<!doctype html><html><body style="margin:16px;background:white"><canvas id="chart" width="900" height="500"></canvas></body></html>');
     for (const content of scripts) await page.addScriptTag({ content });
-    await page.addScriptTag({ content: read(mode === 'own' ? 'tests/prototypes/realtime-window.js' : 'SymconJSLive/js/chartjs/plugins/chartjs-plugin-streaming.min.js') });
+    await page.addScriptTag({ content: options.controllerSource || read(mode === 'own' ? 'tests/prototypes/realtime-window.js' : 'SymconJSLive/js/chartjs/plugins/chartjs-plugin-streaming.min.js') });
     await page.addScriptTag({ content: read('SymconJSLive/js/chartjs/plugins/datalabels/2.2.0/chartjs-plugin-datalabels.min.js') });
     await page.evaluate(({ mode, options }) => {
-        window.probe = { updates: 0, draws: 0, labels: 0 };
+        window.probe = { updates: 0, draws: 0, labels: 0, frames: [], updateMs: [] };
         const fill = CanvasRenderingContext2D.prototype.fillText;
         CanvasRenderingContext2D.prototype.fillText = function (text, ...args) {
             if (String(text).startsWith('Value:')) probe.labels++;
@@ -36,13 +36,14 @@ async function openChart(browser, mode, options = {}) {
         };
         const duration = options.duration || 60000;
         const count = options.points || 20;
+        const initialTime = Date.now();
         const datasets = Array.from({ length: options.datasets || 2 }, (_, datasetIndex) => ({
             type: datasetIndex % 2 ? 'bar' : 'line', label: `Series ${datasetIndex + 1}`,
             borderColor: datasetIndex % 2 ? '#dc2626' : '#2563eb',
             backgroundColor: datasetIndex % 2 ? '#dc262680' : '#2563eb80',
             pointRadius: options.points ? 0 : 3,
             data: Array.from({ length: count }, (_, i) => ({
-                x: Date.now() - duration + (i + 1) * duration / count,
+                x: initialTime - duration + (i + 1) * duration / count,
                 y: (Math.sin(i / 5) + 2) * (datasetIndex + 1)
             }))
         }));
@@ -61,7 +62,11 @@ async function openChart(browser, mode, options = {}) {
                     y: { type: 'linear' }
                 }
             },
-            plugins: [{ id: 'probe', beforeUpdate: () => probe.updates++, afterDraw: () => probe.draws++ }]
+            plugins: [{ id: 'probe',
+                beforeUpdate: () => { probe.updates++; probe.updateStart = performance.now(); },
+                afterUpdate: () => probe.updateMs.push(performance.now() - probe.updateStart),
+                afterDraw: () => { probe.draws++; probe.frames.push(performance.now()); }
+            }]
         });
         if (mode === 'own') {
             window.live = new JSLiveRealtimeWindow(testChart, { duration });
@@ -76,7 +81,119 @@ async function openChart(browser, mode, options = {}) {
     return { context, page, errors };
 }
 
-async function run(browser, { benchmark = false, capture = false } = {}) {
+async function measure(browser, mode, options = {}) {
+    const h = await openChart(browser, mode, { points: 1000, datasets: 4, ...options });
+    try {
+        const cdp = await h.context.newCDPSession(h.page);
+        await cdp.send('Performance.enable');
+        await h.page.waitForTimeout(options.warmupMs || 1000);
+        const initial = await h.page.evaluate(measureMs => {
+            probe.frames = []; probe.updateMs = []; probe.updates = 0;
+            window.received = 0;
+            // A fixed number of scheduled arrivals avoids an extra boundary sample
+            // in a faster/slower variant. All modes receive exactly the same count.
+            window.feed = [];
+            for (let ms = 500; ms < measureMs; ms += 1000) {
+                feed.push(setTimeout(() => { pushSample(); received++; }, ms));
+            }
+            return { time: performance.now(), points: testChart.data.datasets.map(d => d.data.length), received };
+        }, options.measureMs || 3000);
+        const before = await cdp.send('Performance.getMetrics');
+        await h.page.waitForTimeout(options.measureMs || 3000);
+        const after = await cdp.send('Performance.getMetrics');
+        const final = await h.page.evaluate(() => {
+            const time = performance.now();
+            feed.forEach(clearTimeout);
+            if (window.live) live.pause();
+            return { time, frames: probe.frames, updateMs: probe.updateMs, updates: probe.updates,
+                points: testChart.data.datasets.map(d => d.data.length), received,
+                values: testChart.data.datasets.map(d => d.data.at(-1).y) };
+        });
+        const elapsedMs = final.time - initial.time;
+        const taskMs = (after.metrics.find(m => m.name === 'TaskDuration').value -
+            before.metrics.find(m => m.name === 'TaskDuration').value) * 1000;
+        const intervals = final.frames.slice(1).map((time, i) => time - final.frames[i]).sort((a, b) => a - b);
+        const round = value => Math.round(value * 10) / 10;
+        const percentile = (values, p) => values.length ? round(values[Math.min(values.length - 1, Math.floor(values.length * p))]) : null;
+        assert.ok(final.frames.length > 1, 'The workload must actually render.');
+        assert.equal(final.received, Math.max(0, Math.ceil(((options.measureMs || 3000) - 500) / 1000)), 'Identical incoming workload.');
+        assert.deepEqual(final.values, Array.from({ length: options.datasets || 4 }, (_, i) => 4 + i));
+        await h.page.evaluate(() => { if (window.live) live.destroy(); testChart.destroy(); });
+        assert.deepEqual(h.errors, []);
+        return { mode, pointsPerDataset: options.points || 1000, datasets: options.datasets || 4,
+            requestedFps: 30, elapsedMs: round(elapsedMs), taskMs: round(taskMs),
+            mainThreadPercent: round(taskMs / elapsedMs * 100), frames: final.frames.length,
+            achievedFps: round(final.frames.length * 1000 / elapsedMs), taskMsPerFrame: round(taskMs / final.frames.length),
+            frameIntervalMedianMs: percentile(intervals, 0.5), frameIntervalP95Ms: percentile(intervals, 0.95),
+            updates: final.updates, updateMedianMs: percentile(final.updateMs.sort((a, b) => a - b), 0.5),
+            initialPoints: initial.points, finalPoints: final.points, receivedPerDataset: final.received - initial.received };
+    } finally { await h.context.close(); }
+}
+
+// Run separately from timing benchmarks: sampling itself changes execution cost.
+async function profile(browser, options = {}) {
+    const h = await openChart(browser, 'own', { points: 5000, datasets: 4, ...options });
+    try {
+        await h.page.waitForTimeout(1000);
+        const cdp = await h.context.newCDPSession(h.page);
+        await cdp.send('Profiler.enable');
+        await cdp.send('Profiler.start');
+        await h.page.waitForTimeout(options.measureMs || 3000);
+        const { profile: sample } = await cdp.send('Profiler.stop');
+        const nodes = new Map(sample.nodes.map(node => [node.id, node]));
+        const totals = new Map();
+        sample.samples.forEach((id, index) => {
+            const frame = nodes.get(id).callFrame;
+            const key = `${frame.functionName || '(anonymous)'}:${frame.lineNumber + 1}:${frame.columnNumber + 1}`;
+            totals.set(key, (totals.get(key) || 0) + sample.timeDeltas[index]);
+        });
+        assert.deepEqual(h.errors, []);
+        return { sampledMs: (sample.endTime - sample.startTime) / 1000,
+            topSelfTime: Array.from(totals, ([location, microseconds]) => ({ location, ms: Math.round(microseconds / 1000) }))
+                .sort((a, b) => b.ms - a.ms).slice(0, 20) };
+    } finally { await h.context.close(); }
+}
+
+async function compareRendering(browser, controllerSource) {
+    const pages = [];
+    try {
+        for (const source of [controllerSource, undefined]) {
+            pages.push(await openChart(browser, 'own', { clock: true, controllerSource: source }));
+        }
+        const stages = [];
+        for (const stage of ['initial', 'append', 'prune', 'paused-gap', 'resume']) {
+            const images = [];
+            for (const h of pages) {
+                await h.page.evaluate(stage => {
+                    live.pause();
+                    if (stage === 'append') pushSample();
+                    if (stage === 'prune') {
+                        testChart.data.datasets.forEach(d => {
+                            d.data = [-90000, -80000, -70000, -1000, 0].map((age, i) => ({ x: Date.now() + age, y: i }));
+                        });
+                        testChart.update('none');
+                        testChart.setActiveElements([{ datasetIndex: 0, index: 4 }]);
+                        testChart.tooltip.setActiveElements([{ datasetIndex: 0, index: 4 }], { x: 850, y: 100 });
+                        live.maintain();
+                    }
+                }, stage);
+                if (stage === 'paused-gap') {
+                    await h.page.clock.runFor(180000);
+                    await h.page.evaluate(() => { pushSample(); live.maintain(); });
+                }
+                if (stage === 'resume') await h.page.evaluate(() => { live.resume(); live.pause(); });
+                await h.page.evaluate(() => testChart.update('none'));
+                images.push(await h.page.locator('canvas').screenshot());
+                assert.deepEqual(h.errors, []);
+            }
+            assert.ok(images[0].equals(images[1]), `Baseline/optimized canvas differs at ${stage}.`);
+            stages.push(stage);
+        }
+        return { result: 'PASS', stages, scope: 'pixel-identical baseline/optimized canvas at fixed times, labels and tooltip enabled' };
+    } finally { for (const h of pages) await h.context.close(); }
+}
+
+async function run(browser, { benchmark = false, capture = false, baselineSource } = {}) {
     const results = { browser: browser.version(), behavior: [], benchmarks: [] };
     for (const mode of ['plugin', 'own']) {
         const h = await openChart(browser, mode, { clock: true });
@@ -137,42 +254,39 @@ async function run(browser, { benchmark = false, capture = false } = {}) {
         } finally { await h.context.close(); }
     }
     if (benchmark) {
-        // Same workloads, real clock, visible headless page, two independent trials.
-        // TaskDuration is browser main-thread time, not system-wide CPU usage.
+        // Alternate ordering, real clock, warm-up, two independent trials.
+        // TaskDuration is main-thread time, not system-wide CPU usage.
         for (const points of [1000, 5000]) {
             for (let trial = 1; trial <= 2; trial++) {
-                for (const mode of ['plugin', 'own']) {
-                    const h = await openChart(browser, mode, { points, datasets: 4 });
-                    try {
-                        const cdp = await h.context.newCDPSession(h.page);
-                        await cdp.send('Performance.enable');
-                        await h.page.evaluate(() => { window.feed = setInterval(pushSample, 1000); });
-                        const before = await cdp.send('Performance.getMetrics');
-                        const start = Date.now();
-                        await h.page.waitForTimeout(2000);
-                        const after = await cdp.send('Performance.getMetrics');
-                        const elapsed = Date.now() - start;
-                        const metric = data => data.metrics.find(m => m.name === 'TaskDuration').value;
-                        const taskMs = (metric(after) - metric(before)) * 1000;
-                        results.benchmarks.push({ mode, pointsPerDataset: points, datasets: 4, trial,
-                            elapsedMs: elapsed, taskMs: Math.round(taskMs), mainThreadPercent: Math.round(taskMs / elapsed * 1000) / 10 });
-                        await h.page.evaluate(mode => { clearInterval(feed); if (mode === 'own') live.destroy(); testChart.destroy(); }, mode);
-                        assert.deepEqual(h.errors, []);
-                    } finally { await h.context.close(); }
+                const modes = baselineSource ? ['plugin', 'baseline', 'own'] : ['plugin', 'own'];
+                if (trial % 2 === 0) modes.reverse();
+                for (const mode of modes) {
+                    results.benchmarks.push({ ...await measure(browser, mode === 'baseline' ? 'own' : mode,
+                        { points, controllerSource: mode === 'baseline' ? baselineSource : undefined }), mode, trial });
                 }
             }
         }
     }
+    if (baselineSource) results.rendering = await compareRendering(browser, baselineSource);
     return results;
 }
 
 module.exports = run;
+module.exports.openChart = openChart;
+module.exports.measure = measure;
+module.exports.profile = profile;
+module.exports.compareRendering = compareRendering;
 if (require.main === module) {
     (async () => {
         const { chromium } = require('playwright');
         const browser = await chromium.launch({ headless: true,
             ...(process.env.JSLIVE_BROWSER_EXECUTABLE ? { executablePath: process.env.JSLIVE_BROWSER_EXECUTABLE } : {}) });
-        try { console.log(JSON.stringify(await run(browser, { benchmark: true }), null, 2)); }
+        try {
+            if (process.argv.includes('--profile')) console.log(JSON.stringify(await profile(browser), null, 2));
+            else console.log(JSON.stringify(await run(browser, { benchmark: true,
+                baselineSource: process.env.JSLIVE_BASELINE_CONTROLLER ? fs.readFileSync(process.env.JSLIVE_BASELINE_CONTROLLER, 'utf8') : undefined
+            }), null, 2));
+        }
         finally { await browser.close(); }
     })().catch(error => { console.error(error); process.exitCode = 1; });
 }

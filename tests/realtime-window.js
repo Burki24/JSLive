@@ -145,7 +145,7 @@ assert.throws(() => secondOwner.start(), /already has/);
 duplicate.live.destroy();
 
 const selection = harness();
-let active = [{ datasetIndex: 0, index: 0 }, { datasetIndex: 0, index: 4 }];
+let active = [{ datasetIndex: 0, index: 0 }, { datasetIndex: 0, index: 4 }, { datasetIndex: 0, index: 8 }];
 selection.chart.getActiveElements = () => active;
 selection.chart.setActiveElements = elements => { active = elements; };
 selection.chart.data.datasets[0].data = [1000, 2000, 3000, 90000, 120000].map(x => ({ x, y: 1 }));
@@ -168,6 +168,59 @@ assert.equal(hiddenStart.updates.length, 0, 'Visibility must not override an exp
 hiddenStart.live.resume();
 assert.equal(hiddenStart.chart.options.scales.x.max, hiddenStart.now());
 hiddenStart.live.destroy();
+
+const cadence = harness();
+cadence.live.start();
+cadence.updates.length = 0;
+for (let i = 0; i < 60; i++) cadence.frame(i % 2 ? 17 : 16);
+assert.ok(cadence.updates.length >= 29 && cadence.updates.length <= 30,
+    `A roughly 60 Hz clock with rounded milliseconds must not drift: ${cadence.updates.length}`);
+const beforeGap = cadence.updates.length;
+cadence.frame(10000);
+assert.equal(cadence.updates.length, beforeGap + 1, 'No catch-up burst after a long scheduling gap.');
+cadence.setNow(1);
+cadence.frame();
+assert.equal(cadence.updates.length, beforeGap + 2, 'Recover from a backwards fallback clock.');
+cadence.live.destroy();
+
+const wallJump = harness();
+let monotonicTime = 0;
+wallJump.live.env.frameNow = () => monotonicTime;
+wallJump.live.start();
+wallJump.updates.length = 0;
+wallJump.setNow(-100000);
+monotonicTime = 16;
+wallJump.frame(0);
+assert.equal(wallJump.updates.length, 0, 'A wall-clock jump must not force an early browser frame.');
+monotonicTime = 34;
+wallJump.frame(0);
+assert.equal(wallJump.updates.length, 1);
+assert.equal(wallJump.chart.options.scales.x.max, -100000, 'The axis still follows wall time.');
+wallJump.live.destroy();
+
+// Independent filter oracle for overlapping/disjoint frozen/live windows,
+// duplicate timestamps, empty arrays and future points. Every selected index is checked.
+for (let seed = 0; seed < 60; seed++) {
+    const h = harness();
+    const data = Array.from({ length: seed }, (_, i) => ({ x: 1000 * Math.floor(i / 2) * (seed + 1), y: i, c: 2 }));
+    h.chart.data.datasets[0].data = data;
+    h.live.pausedAt = seed % 3 ? 30000 + seed * 1000 : null;
+    const first = min => {
+        const index = data.findIndex(p => p.x >= min);
+        return Math.max(0, (index < 0 ? data.length : index) - 2);
+    };
+    const liveStart = first(h.now() - 60000);
+    const frozenStart = h.live.pausedAt === null ? data.length : first(h.live.pausedAt - 60000);
+    const expected = data.filter((p, i) => i >= liveStart ||
+        (h.live.pausedAt !== null && i >= frozenStart && p.x <= h.live.pausedAt));
+    let selected = data.map((_, index) => ({ datasetIndex: 0, index }));
+    h.chart.getActiveElements = () => selected;
+    h.chart.setActiveElements = elements => { selected = elements; };
+    h.live.maintain();
+    assert.deepEqual(h.chart.data.datasets[0].data, expected, `Retention oracle seed ${seed}`);
+    assert.deepEqual(selected, expected.map((_, index) => ({ datasetIndex: 0, index })), `Selection oracle seed ${seed}`);
+    h.live.destroy();
+}
 
 for (const h of [batch, prune, background, paused]) h.live.destroy();
 const template = fs.readFileSync(path.join(__dirname, '..', 'SymconJSLive', 'templates', 'Chart.html'), 'utf8');
