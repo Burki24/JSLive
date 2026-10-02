@@ -695,12 +695,19 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    formatierten Wert. Sieben Regressionstestfaelle und der Browser-Kandidatentest
    sind bestanden. CI und gezielte Abnahme von 0.73 nach Neustart sind bestanden
    (Quellcommit `e30de93`, Metadatencommit `73351d1`).
-6. Lokal umgesetzt: Moment.js 2.31.0 in den drei Standardvorlagen, mit
+6. Erledigt: Moment.js 2.31.0 in den drei Standardvorlagen, mit
    unveraendertem Altpfad, Chart.js und Plugins. Herkunft, Integritaet und Lizenz
    sind dokumentiert. Adaptertests in UTC/Berlin sowie Browservergleich mit
    pixelgleichen Bildern, Tooltips, WebSocket und Realtime-Achse sind bestanden.
-   CI und gezielte Abnahme nach Modulupdate stehen noch aus. Anschliessend
-   weitere Bibliotheken einzeln pruefen. iro.js bleibt auf Wunsch unveraendert.
+   CI und gezielte Abnahme nach Modulupdate auf 0.74 ohne Neustart sind bestanden
+   (Quellcommit `0589839`, Metadatencommit `540e1de`).
+7. Lokal umgesetzt: chartjs-adapter-moment 1.0.1 in den drei Standardvorlagen.
+   Der alte 1.0.0-Pfad bleibt erhalten; Chart.js, Moment, Datalabels und Streaming
+   bleiben unveraendert. Integritaet, MIT-Lizenz, Adaptertests und Migration sind
+   dokumentiert. Browservergleich: pixelgleiche Diagramme, gleiche Tooltips,
+   WebSocket und fortschreitende Echtzeitachse. CI und installierte Abnahme
+   stehen noch aus. Danach weitere Bibliotheken einzeln pruefen;
+   iro.js bleibt auf Wunsch unveraendert.
 
 ### Phase 5 - IPSView und Kacheldarstellung
 

@@ -45,7 +45,8 @@ werden maskiert.
 
 Die Standardvorlage verwendet die lokal versionierte Chart.js 4.5.1.
 Moment.js wird lokal als 2.31.0 geladen; der alte 2.27.0-Pfad bleibt für eigene
-Vorlagen erhalten. Adapter und Plugins sind unverändert.
+Vorlagen erhalten. Der Moment-Adapter wird als 1.0.1 lokal versioniert geladen;
+sein alter 1.0.0-Pfad bleibt ebenfalls erhalten. Die übrigen Plugins sind unverändert.
 Tooltips zeigen den Datensatznamen und den von Chart.js formatierten Wert,
 auch für Nullwerte und negative Zahlen. Die Standardvorlage verwendet dafür
 den Chart.js-4-Tooltip-Kontext. Eigene `TemplateScriptID`-Vorlagen werden nicht

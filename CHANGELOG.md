@@ -9,6 +9,10 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Changed
 
+- Die drei Diagrammvorlagen verwenden jetzt den lokal versionierten
+  chartjs-adapter-moment 1.0.1 mit offiziell deklarierter Chart.js-4-Unterstützung.
+  Der bisherige Adapterpfad mit 1.0.0 bleibt für eigene Templates unverändert;
+  Chart.js, Moment, Datalabels und Streaming werden dabei nicht aktualisiert.
 - Chart, Doughnut/Pie und RadarChart verwenden jetzt Moment.js 2.31.0 aus
   einer lokal versionierten Distribution mit Lizenz- und Integritätsnachweisen.
   Der alte 2.27.0-Pfad bleibt für eigene Templates unverändert. Adaptertests

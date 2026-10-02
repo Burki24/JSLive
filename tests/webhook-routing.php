@@ -300,6 +300,7 @@ foreach ([
     'moment/2.31.0/moment.min.js',
     'moment/2.31.0/moment.min.js.map',
     'chartjs/plugins/chartjs-adapter-moment.js',
+    'chartjs/plugins/moment/1.0.1/chartjs-adapter-moment.min.js',
     'chartjs/plugins/chartjs-plugin-datalabels.min.js',
     'chartjs/plugins/chartjs-plugin-streaming.min.js'
 ] as $chartAsset) {

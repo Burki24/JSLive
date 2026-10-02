@@ -18,12 +18,14 @@ if (process.argv[2] !== '--timezone-case') {
     console.log('JSLive Moment adapter contracts verified in UTC and Europe/Berlin.');
 } else {
     const root = path.join(__dirname, '..', 'SymconJSLive');
-    for (const [asset, version] of [
-        ['moment/2.27.0/Moment.js', '2.27.0'],
-        ['moment/2.31.0/moment.min.js', '2.31.0']
+    for (const [asset, version, adapterAsset, adapterVersion] of [
+        ['moment/2.27.0/Moment.js', '2.27.0', 'chartjs/plugins/chartjs-adapter-moment.js', '1.0.0'],
+        ['moment/2.31.0/moment.min.js', '2.31.0', 'chartjs/plugins/chartjs-adapter-moment.js', '1.0.0'],
+        ['moment/2.31.0/moment.min.js', '2.31.0', 'chartjs/plugins/moment/1.0.1/chartjs-adapter-moment.min.js', '1.0.1']
     ]) {
         const context = vm.createContext({ Date, console });
-        for (const file of ['chartjs/4.5.1/chart.umd.min.js', asset, 'chartjs/plugins/chartjs-adapter-moment.js']) {
+        assert.ok(fs.readFileSync(path.join(root, 'js', adapterAsset), 'utf8').includes(`chartjs-adapter-moment v${adapterVersion}`));
+        for (const file of ['chartjs/4.5.1/chart.umd.min.js', asset, adapterAsset]) {
             vm.runInContext(fs.readFileSync(path.join(root, 'js', file), 'utf8'), context, { filename: file });
         }
         assert.equal(context.moment.version, version);
@@ -52,12 +54,15 @@ if (process.argv[2] !== '--timezone-case') {
             assert.equal(next, new Date(2024, month, day + 1).getTime(), 'Calendar days must retain local midnight.');
             assert.equal((next - start) / 3600000, process.env.TZ === 'Europe/Berlin' ? berlinHours : 24);
         }
-        console.log(`Moment ${version}: adapter behavior passed in ${process.env.TZ}.`);
+        console.log(`Moment ${version}, adapter ${adapterVersion}: behavior passed in ${process.env.TZ}.`);
     }
     for (const template of ['Chart.html', 'Doughnut-PIE.html', 'RadarChart.html']) {
         const html = fs.readFileSync(path.join(root, 'templates', template), 'utf8');
         const refs = Array.from(html.matchAll(/<script\b[^>]*\bsrc="(\/hook\/JSLive\/js\/moment\/[^\"]+)"/gi), m => m[1]);
         assert.deepEqual(refs, ['/hook/JSLive/js/moment/2.31.0/moment.min.js'], `${template} must load Moment 2.31.0 exactly once.`);
-        assert.ok(html.indexOf(refs[0]) < html.indexOf('/hook/JSLive/js/chartjs/plugins/chartjs-adapter-moment.js'), 'Moment must load before its adapter.');
+        const adapterRefs = Array.from(html.matchAll(/<script\b[^>]*\bsrc="([^"]*chartjs-adapter-moment[^"\s]*)"/gi), m => m[1]);
+        assert.deepEqual(adapterRefs, ['/hook/JSLive/js/chartjs/plugins/moment/1.0.1/chartjs-adapter-moment.min.js'], `${template} must load adapter 1.0.1 exactly once.`);
+        assert.ok(html.indexOf(refs[0]) < html.indexOf(adapterRefs[0]), 'Moment must load before its adapter.');
+        assert.ok(html.indexOf('/hook/JSLive/js/chartjs/4.5.1/chart.umd.min.js') < html.indexOf(adapterRefs[0]), 'Chart.js must load before its adapter.');
     }
 }

@@ -146,3 +146,29 @@ einschliesslich Parsing, Formatierung, Schaltjahr und Zeitumstellung. Referenz-,
 Hash- und Webhook-Tests sichern den neuen sowie den beibehaltenen Ladepfad ab.
 Der isolierte Browservergleich ist in `SYCON_RUNTIME_MATRIX.md` dokumentiert;
 CI und die gezielte Abnahme nach dem Modulupdate stehen noch aus.
+
+## Fuenfter Schritt: Moment-Adapter 1.0.1
+
+Ausgangspunkt ist die abgenommene JSLive 0.74, Commit `540e1de`.
+Die drei Standardvorlagen wechseln von `chartjs/plugins/chartjs-adapter-moment.js`
+auf `chartjs/plugins/moment/1.0.1/chartjs-adapter-moment.min.js`. Version 1.0.1
+ist am 01.10.2026 gegen npm und den offiziellen Release geprueft und deklariert
+Chart.js-4-Unterstuetzung. Chart.js 4.5.1, Moment 2.31.0 und die anderen Plugins
+bleiben unveraendert. Paketintegritaet, Dateihashes und MIT-Lizenz liegen im neuen
+Verzeichnis; eine Source Map ist in dieser Upstream-Distribution nicht enthalten.
+
+Der alte Adapterpfad bleibt mit 1.0.0 bytegleich erhalten. Eigene Vorlagen werden
+nicht automatisch umgestellt. Bei manueller Umstellung Chart.js und Moment vor
+genau einem Adapter laden und Datumsachsen, Tooltips und Streaming pruefen.
+Keine Properties, Datenformate oder gespeicherten Konfigurationen aendern sich.
+
+Nach dem Modulupdate Ausgaben neu laden; bei aktivem HTML-Cache diesen ueber
+das bestehende `ApplyChanges()` erneuern. Ein Dienstneustart ist fuer diesen
+Asset-Schritt nicht erforderlich. Wiederholung fuehrt keine persistente
+Migration aus. Bei Problemen den vollstaendigen Stand 0.74 wiederherstellen;
+eigene Vorlagen vorher separat sichern und gegebenenfalls zurueckspielen.
+
+Die vorhandenen Adaptertests vergleichen alte und neue Kombination in UTC und
+Berlin. Referenz-, Integritaets- und Webhook-Tests sichern neue und alte Pfade.
+Der isolierte Browservergleich ersetzt nicht die noch ausstehende CI und
+gezielte Abnahme nach dem Modulupdate.

@@ -29,6 +29,7 @@ foreach ([
     'Chart.js 3.9.1',
     'Chart.js 3.6.0',
     'chartjs-adapter-moment 1.0.0',
+    'chartjs-adapter-moment 1.0.1',
     'chartjs-plugin-datalabels 2.2.0',
     'chartjs-plugin-streaming 3.1.0',
     'Moment.js 2.27.0',
@@ -92,6 +93,20 @@ foreach ([
     }
     if ($momentSources === false || !str_contains($momentSources, $momentAsset) || !str_contains($momentSources, $expectedHash)) {
         throw new RuntimeException('Moment.js source inventory must record ' . $momentAsset . ' and its SHA-256.');
+    }
+}
+
+$adapterSources = file_get_contents($root . '/SymconJSLive/js/chartjs/plugins/moment/1.0.1/SOURCES.md');
+foreach ([
+    'chartjs-adapter-moment.min.js' => '4ca6ddbc16c438c7decc60f16fbee9639d37277af609390f7794eb2729addb55',
+    'LICENSE.md'                    => 'b4b8355c2cd2b18354980a0c6422181d7bd6e895d94ae88b3570e97c60eea03d'
+] as $adapterAsset => $expectedHash) {
+    $assetPath = $root . '/SymconJSLive/js/chartjs/plugins/moment/1.0.1/' . $adapterAsset;
+    if (!is_file($assetPath) || hash_file('sha256', $assetPath) !== $expectedHash) {
+        throw new RuntimeException('Missing or modified Moment adapter distribution file: ' . $adapterAsset . '.');
+    }
+    if ($adapterSources === false || !str_contains($adapterSources, $adapterAsset) || !str_contains($adapterSources, $expectedHash)) {
+        throw new RuntimeException('Moment adapter source inventory must record ' . $adapterAsset . ' and its SHA-256.');
     }
 }
 

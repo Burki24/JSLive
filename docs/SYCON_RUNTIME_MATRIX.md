@@ -390,6 +390,46 @@ sind geschlossen. CI und die gezielte Abnahme des neuen Pfads nach Commit/Push
 und Modulupdate stehen noch aus; der Kandidatentest ist keine installierte
 Symcon-Abnahme und kein neuer vollstaendiger Matrixdurchlauf.
 
+## Gezielte Moment-Abnahme von 0.74 am 01.10.2026
+
+Quellcommit `0589839`, Metadatencommit `540e1de`, Library 0.74,
+Build 5806137: Tests, Check Style und CodeQL sind erfolgreich. Lokal und
+GitHub stimmen ueberein. Symcon 9.1 / PHP 8.5.8 meldet alle elf Instanzen aktiv;
+die Kernel-Startzeit bleibt unveraendert. Fuer diesen Asset-Schritt war kein
+Neustart erforderlich.
+
+Alle drei Diagramme laden den neuen Moment-Pfad mit Version 2.31.0,
+HTTP 200 und WebSocket 101. Bundle und Source Map sind SHA-256-identisch zum
+Repository. Der alte 2.27.0-Pfad ist erreichbar und bis auf lokale CRLF-/Server-
+LF-Zeilenenden identisch. Native Tooltips einschliesslich Datum im Chart und
+die fortschreitende Realtime-Achse funktionieren; keine Browserfehler.
+Die gezielte Logsuche ab dem Metadatenzeitpunkt ergab keine JSLive-Warnungen
+oder -Fehler. Adapter-, Referenz- und Webhook-Tests sind frisch bestanden.
+Ergebnis: gezielte Abnahme bestanden, kein neuer vollstaendiger Matrixdurchlauf.
+
+## Lokaler Kandidat: Moment-Adapter 1.0.1 am 01.10.2026
+
+Ausgangsstand ist 0.74. Im isolierten Edge-Testbrowser (155.0.4283.18,
+1024 x 768, Europe/Berlin) wird ausschliesslich die Adapterantwort fuer den
+Kandidaten durch die lokale Version 1.0.1 ersetzt. Original-HTML und lesende
+Datenabfragen stammen aus MCP-CURRENT; identische Datenantworten werden fuer
+beide Varianten im Speicher wiederverwendet. Fixierte Browserzeit und
+angehaltene Animationen sichern den Bildvergleich ab. `setData` ist gesperrt;
+keine Symcon-Konfiguration, Werte oder Serverdateien werden geaendert.
+
+| Pruefung | Ergebnis |
+| --- | --- |
+| Alle drei Diagramme mit beiden Adaptern | HTTP 200, WebSocket 101, keine JavaScript-/HTTP-Ressourcenfehler, endliche Achsengrenzen, kein horizontaler Ueberlauf |
+| Canvas-Bilder | Alle drei pixelgleich bei identischen Daten; Chart-Screenshot visuell kontrolliert |
+| Native Tooltips | Gleiche Werte und Titel in allen drei Diagrammen, einschliesslich Chart-Datumsformat |
+| Realtime-Achse | Beide Varianten schreiten um 500 ms fort; Refresh-Callback des Kandidaten ausgefuehrt |
+| Automatisierte Adaptertests | Alter/neuer Adapter mit Moment 2.31.0 sowie die alte 2.27.0/1.0.0-Kombination bestehen die Kalender-, Format- und DST-Pruefungen in UTC/Berlin |
+| Negativnachweis | Neuer Pfadtest scheitert zuerst an der noch alten Einbindung und besteht nach Umstellung aller drei Vorlagen |
+
+Browserkontexte sind geschlossen, Zugangsdaten und Datenantworten nicht als
+Testdateien gespeichert. Keine Regression in den geprueften Szenarien gefunden.
+CI und gezielte Abnahme des neuen Pfads nach dem Modulupdate stehen noch aus.
+
 ## Ergebnisregeln
 
 - `PASS`: alle verpflichtenden Punkte sind mit frischem Laufzeitnachweis grün.
