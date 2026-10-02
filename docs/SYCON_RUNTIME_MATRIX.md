@@ -537,6 +537,54 @@ fuer diesen Asset-Schritt nicht erforderlich; bei aktivem HTML-Cache diesen
 ueber das bestehende `ApplyChanges()` erneuern. Private Browserantworten und
 Zugangsdaten werden nicht als Testdateien gespeichert.
 
+## Installierte Abnahme 0.77: Datalabels am 02.10.2026
+
+Quellcommit `2b3034d`, Metadatencommit `30b652a`, Library 0.77,
+Build 45286221: lokal, GitHub und MCP-CURRENT synchron; Tests, Check Style und
+CodeQL gruen. Symcon 9.1 / PHP 8.5.8, alle elf Instanzen Status 102;
+Kernel-Startzeit unveraendert. Neuer Datalabels-Pfad HTTP 200 und bytegleich,
+Kompatibilitaetspfad nach Zeilenendennormalisierung unveraendert.
+
+Die drei installierten Chart-Vorlagen wurden in Edge 155.0.4283.18 ohne
+HTML-Ersetzung geprueft: neuer Pluginpfad jeweils einmal geladen, Registrierung,
+native Tooltips und browserlokal eingeblendete Labels bestanden. Chart-Zeitachse
+schreitet fort; nach Reload jeweils genau eine Chart-Instanz. WebSocket 101 in
+allen drei Vorlagen vor/nach Reload; keine Dialoge, JavaScript-/HTTP-Fehler oder
+JSLive-Logwarnungen/-fehler seit dem Metadatenzeitpunkt. Gezielt bestanden,
+kein neuer vollstaendiger Matrixdurchlauf.
+
+## Lokaler Kandidat: Streaming-Einbindung am 02.10.2026
+
+Ausgangsstand 0.77. Die vorherige installierte Pruefung bestaetigte den
+qultoltd-Streaming-Fork 3.1.0 und eine fortschreitende Realtime-Achse, aber
+`framerate` statt `frameRate` sowie ein Update-Objekt `{preservation: true}`
+statt des vorgesehenen Modus `'quiet'`. Beide Fehler wurden einzeln durch
+zunaechst rote Regressionstests reproduziert und in `Chart.html` korrigiert.
+Normale Zeitachsen verwenden weiterhin den Standardmodus; Plugin, Pfad,
+Datenverarbeitung und Aktualisierungssperren bleiben unveraendert.
+
+Lokaler, isolierter Edge 155.0.4283.18, 1024 x 768, Europe/Berlin: originale
+Templatefunktionen mit synthetischen Daten und den echten lokalen Dateien
+Chart.js 4.5.1, Moment 2.31.0, Adapter 1.0.1, Streaming 3.1.0 und Datalabels
+2.2.0 ausgefuehrt. Der effektive `frameRate` ist 30 auch bei testweise auf 17
+gesetztem Plugin-Default. `UpdateChart` erreicht den echten Chart mit `'quiet'`,
+Messwert 42.259 wird wie bisher zu 42.25; die Zeitachse schreitet weiter fort.
+Nach browserlokalem Wechsel auf `time` erfolgt ein Standardupdate mit Messwert
+43.5. Keine Browserfehler/Dialoge; nach `destroy()` keine Chart-Instanz uebrig.
+Dieser Kandidatenlauf verwendet keine Symcon-Verbindung und schreibt nichts
+in die Installation. Er ersetzt weder eine installierte noch eine WebSocket-
+oder Pull-Modus-Abnahme.
+
+`tests/chart-streaming.js` fuehrt die Originalfunktionen fuer alle Perioden,
+relative/absolute Ansichten, Realtime-/Time-Updates, wiederholte Datenzufuhr,
+historische Ansichten, laufenden Reload, unbekannte Variablen und alte Werte
+aus. Der Test ist in `php tests/run.php` eingebunden. Gesamtsuite und PHP-
+Syntaxcheck aller 57 Dateien unter PHP CLI 8.5.10 bestanden; JavaScript-
+Syntaxchecks der betroffenen Tests und `git diff --check` ebenfalls gruen.
+CI und gezielte installierte Fix-Abnahme nach dem Modulupdate stehen aus.
+Danach Seite neu laden; bei aktivem HTML-Cache vorher ueber `ApplyChanges()`
+erneuern. Ein Dienstneustart ist fuer diesen Template-Schritt nicht erforderlich.
+
 ## Ergebnisregeln
 
 - `PASS`: alle verpflichtenden Punkte sind mit frischem Laufzeitnachweis grün.

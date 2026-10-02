@@ -124,6 +124,11 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Fixed
 
+- Chart übergibt dem Streaming-Plugin die korrekt geschriebene Option
+  `frameRate`. Eingehende Livewerte aktualisieren Realtime-Achsen mit
+  `update('quiet')` statt der veralteten `preservation`-Option; gewöhnliche
+  Zeitachsen verwenden weiterhin den Standardmodus. Plugin und Assetpfad
+  bleiben unverändert.
 - Chart sammelt beim asynchronen Laden die Datensatzantworten vor dem Rendern
   in konfigurierter Reihenfolge. Kommt ein späterer Datensatz zuerst an,
   gehen Zeitachse, Titel und Tooltip-Konfiguration nicht mehr verloren.

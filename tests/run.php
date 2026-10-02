@@ -41,6 +41,7 @@ $commands = [
     ['Test Progressbar rendering', 'node tests/progressbar-rendering.js'],
     ['Test Radar tooltip', 'node tests/radar-tooltip.js'],
     ['Test Chart asynchronous loading', 'node tests/chart-async-loading.js'],
+    ['Test Chart Streaming integration', 'node tests/chart-streaming.js'],
     ['Test Moment adapter', 'node tests/moment-adapter.js'],
     ['Verify vendored helper integrity', 'python3 tests/helper_integrity.py'],
     ['Test library metadata updater', 'python3 tests/test_update_library_metadata.py']

@@ -125,7 +125,7 @@ Frontend-Abhaengigkeiten.
    Chart-Ladefehler trat mit beiden Adapterversionen auf. Er ist separat in 0.76
    korrigiert und einschliesslich beider Antwortreihenfolgen, Tooltips,
    Echtzeitachse, Vollreload und WebSocket abgenommen; Tests/Style/CodeQL gruen.
-6. Lokal umgesetzt: Datalabels bleibt auf 2.2.0, der am 02.10.2026 gegen npm und
+6. Erledigt: Datalabels bleibt auf 2.2.0, der am 02.10.2026 gegen npm und
    den offiziellen Release geprueften aktuellen stabilen Version. Der historische
    Bundle ist trotz `.min.js` unminifiziert und enthaelt drei lokale
    `constructor.name`-Pruefungen statt der originalen `instanceof`-Pruefungen.
@@ -133,11 +133,44 @@ Frontend-Abhaengigkeiten.
    Distribution im versionierten Pfad; der Altpfad bleibt erhalten. Lizenz,
    Paketintegritaet, Hashes und Unterschiede sind dokumentiert. Referenz- und
    Webhook-Tests sowie Browservergleich mit sichtbaren Labels sind bestanden;
-   CI und installierte Abnahme stehen noch aus.
-7. Danach Streaming-Fork separat auf Herkunft, Verfuegbarkeit und Aktualitaet
-   pruefen: Die npm-Abfrage fuer `@qultoltd/chartjs-plugin-streaming` lieferte
-   am 02.10.2026 HTTP 404. Daraus folgt noch keine Aussage ueber die Ursache
-   oder einen geeigneten Ersatz. Keine automatische Umstellung auf das anders
-   versionierte Ursprungsprojekt. jQuery und die Einzelwert-Bibliotheken folgen
-   getrennt; iro.js bleibt auf Wunsch unveraendert.
+   CI und gezielte installierte Abnahme von 0.77 sind ebenfalls bestanden.
+7. Streaming-Audit abgeschlossen, zwei Einbindungsfehler lokal korrigiert:
+   `frameRate` statt `framerate`, `update('quiet')` statt des alten
+   `preservation`-Objekts bei Realtime-Achsen. Andere Zeitachsen verwenden den
+   Standardmodus. Plugin und Pfad bleiben unveraendert. Automatisierte
+   Regressionen und lokaler Browsertest bestanden; CI und installierte
+   Fix-Abnahme stehen aus. Danach Pflegeentscheidung gemaess folgendem Abschnitt.
+   jQuery und die Einzelwert-Bibliotheken folgen getrennt; iro.js bleibt auf
+   Wunsch unveraendert.
+
+## Streaming: Herkunft und offene Pflegeentscheidung
+
+Pruefstand 02.10.2026: Der lokale Bundle ist bytegleich mit
+`dist/@qultoltd/chartjs-plugin-streaming.min.js` aus
+[qultoltd-Commit aa653d8](https://github.com/qultoltd/chartjs-plugin-streaming/commit/aa653d89c224390c15ca39c22b9a28263a3ea981)
+vom 03.08.2023 (Version 3.1.0, MIT). SHA-256:
+`2e0ac91691bc76ff2c618c7d600a36cc3a10784ef34cd30ac968d72d6d15d839`.
+Der bisherige npm-Name lieferte HTTP 404; daraus folgt keine gesicherte Aussage
+ueber die Ursache. Das GitHub-Repository ist weiterhin verfuegbar.
+
+Die dokumentierte [Push-/Async-Einbindung](https://nagix.github.io/chartjs-plugin-streaming/latest/guide/data-feed-models.html)
+verwendet `update('quiet')`; die Option heisst `frameRate`. Der bisherige
+Schreibfehler blieb durch den gleich hohen Defaultwert von 30 verdeckt.
+Die beiden Korrekturen betreffen ausschliesslich die JSLive-Standardvorlage.
+
+Empfehlung, noch keine Architekturentscheidung: eigener, eng begrenzter
+Wartungsfork vor einer vollstaendigen Eigenimplementierung. Ausgangspunkt
+waere der bereits nachgewiesene Quellstand; vor Festlegung der Basis ist der
+[modernisierte aziham-Fork](https://github.com/aziham/chartjs-plugin-streaming)
+als Alternative zu vergleichen. Er nennt Chart.js ab 4.5.1, TypeScript und
+Vite; dies ist noch kein Nachweis fuer JSLive-Kompatibilitaet oder langfristige
+Pflege. Kein Fork wurde angelegt und kein fremder Ersatz eingebunden.
+
+Ein eigener Fork muss reproduzierbare Builds, Lizenznachweise und Tests fuer
+Scrolling, Aufbewahrung alter Punkte, Tooltips, Mischdiagramme, Pause/Resume
+und Timerabbau erhalten. Er uebernimmt auch die Wartung der bestehenden
+Zugriffe auf Chart.js-Interna. Eine Eigenimplementierung ueber Zeitachse,
+`min`/`max` und oeffentliche Update-APIs koennte diese Kopplung reduzieren,
+muesste aber Verhalten und Animation neu absichern. Sie ist erst nach einer
+expliziten Anforderungsliste und einem getrennten Vergleichsprototyp sinnvoll.
 

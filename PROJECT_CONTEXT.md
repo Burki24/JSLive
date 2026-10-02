@@ -718,16 +718,23 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    einschliesslich Tooltips, Zeitachse und Vollreload sind bestanden.
    CI und gezielte installierte Abnahme von 0.76 sind am 02.10.2026 bestanden
    (`c48f76a` / `124cf6c`), ohne Dienstneustart. Kein neuer Vollmatrixdurchlauf.
-9. Lokal umgesetzt: Datalabels 2.2.0 bleibt die aktuelle stabile Version,
+9. Erledigt: Datalabels 2.2.0 bleibt die aktuelle stabile Version,
    die drei Standardvorlagen wechseln aber vom historisch modifizierten Bundle
    auf die offizielle Distribution im neuen versionierten Pfad. Der Altpfad
    bleibt fuer eigene Vorlagen erhalten. Quellen, MIT-Lizenz, Hashes,
    Pfad-/Webhook-Tests und Browservergleich mit sichtbaren Labels sind ergaenzt.
-   CI und installierte Abnahme stehen noch aus.
-10. Als Naechstes den Streaming-Fork separat pruefen; sein bisheriger npm-Name
-    lieferte am 02.10.2026 HTTP 404. Herkunft und Ersatzkompatibilitaet muessen
-    vor einer Aenderung geklaert werden. Danach weitere Bibliotheken einzeln
-    pruefen; iro.js bleibt auf Wunsch unveraendert.
+   CI und gezielte installierte Abnahme von 0.77 sind am 02.10.2026 bestanden
+   (`2b3034d` / `30b652a`), ohne Dienstneustart. Kein neuer Vollmatrixdurchlauf.
+10. Streaming-Audit abgeschlossen: Bestand entspricht dem qultoltd-Fork 3.1.0,
+    dessen letzter Commit vom 03.08.2023 stammt; npm-Abfrage HTTP 404.
+    Lokal korrigiert sind `frameRate` und `update('quiet')` fuer Realtime-Achsen;
+    gewoehnliche Zeitachsen verwenden den Standardmodus. Regressionstests und
+    lokaler Browsernachweis mit echten Bibliotheken bestanden. Plugin und
+    Assetpfad unveraendert; CI und installierte Fix-Abnahme stehen noch aus.
+    Danach eigene Fork-Pflege gegen Eigenimplementierung entscheiden; Empfehlung
+    und Quellen stehen in `docs/FRONTEND_DEPENDENCIES.md`. Noch kein Fork oder
+    Ersatz beschlossen/angelegt. Weitere Bibliotheken folgen einzeln;
+    iro.js bleibt auf Wunsch unveraendert.
 
 ### Phase 5 - IPSView und Kacheldarstellung
 

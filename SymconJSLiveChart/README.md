@@ -65,7 +65,10 @@ Vorlagen erhalten. Der Moment-Adapter wird als 1.0.1 lokal versioniert geladen;
 sein alter 1.0.0-Pfad bleibt ebenfalls erhalten. Datalabels 2.2.0 wird aus der
 unveränderten offiziellen Distribution im versionierten Pfad geladen; der
 historisch modifizierte Datalabels-Pfad bleibt für eigene Vorlagen erhalten.
-Streaming bleibt unverändert.
+Der Streaming-Fork 3.1.0 und sein Assetpfad bleiben unverändert. Die
+Standardvorlage setzt `frameRate: 30` und aktualisiert eingehende Livewerte
+bei Realtime-Achsen mit `update('quiet')`, damit die laufende Animation nicht
+unterbrochen wird. Gewöhnliche Zeitachsen verwenden den Standardmodus.
 Die alten URLs mit 4.3.3 und 4.4.1 bleiben für eigene Vorlagen unverändert.
 Historische Chart.js-3.x-Dateien und
 ungenutzte Plugin-Kopien sind entfernt; eigene Vorlagen vor dem Update anhand

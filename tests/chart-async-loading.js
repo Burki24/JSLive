@@ -39,7 +39,7 @@ function harness(count, asynchronous = true) {
         configuration, Chart, ChartDataLabels: {}, Date,
         document: { getElementById: () => ({ style: {} }) },
         Get_WindowWidth: () => 800, Get_WindowHeight: () => 600,
-        checkIsStreaming: () => ({ framerate: 30 }),
+        checkIsStreaming: () => ({ frameRate: 30 }),
         UpdateTooltipLabel: () => 'value',
         checkOffsetisSet: () => false, UpdateConfiguration() {}, PullNewData() {},
         console: { log() {}, error: message => errors.push(message) },
