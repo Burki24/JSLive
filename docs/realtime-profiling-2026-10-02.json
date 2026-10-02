@@ -1,639 +1,639 @@
 {
-  "date": "2026-10-02",
-  "baselineCommit": "c8f5481",
-  "browser": "155.0.4283.18",
-  "nodeVersion": "v24.21.0",
-  "measuredControllerSha256": "f09cf9719f7fdeecb15fb091de4852c1758c852f10e77ad5625f9d9ee21a7707",
-  "postMeasurementChange": "Added an original-array length bound to discard stale active indices after external data replacement; browser behavior and pixel parity rechecked afterwards.",
-  "method": {
-    "warmupMs": 1000,
-    "measureMs": 3000,
-    "browserTrials": 2,
-    "maintenanceIterations": 200,
-    "maintenanceTrials": 3,
-    "network": "blocked",
-    "requestedFps": 30
-  },
-  "browserBenchmarks": [
-    {
-      "mode": "plugin",
-      "pointsPerDataset": 1000,
-      "datasets": 4,
-      "requestedFps": 30,
-      "elapsedMs": 3009.7,
-      "taskMs": 868,
-      "mainThreadPercent": 28.8,
-      "frames": 97,
-      "achievedFps": 32.2,
-      "taskMsPerFrame": 8.9,
-      "frameIntervalMedianMs": 31.2,
-      "frameIntervalP95Ms": 38.6,
-      "updates": 6,
-      "updateMedianMs": 19.7,
-      "initialPoints": [
-        982,
-        982,
-        982,
-        982
-      ],
-      "finalPoints": [
-        935,
-        935,
-        935,
-        935
-      ],
-      "receivedPerDataset": 3,
-      "trial": 1
+    "date": "2026-10-02",
+    "baselineCommit": "c8f5481",
+    "browser": "155.0.4283.18",
+    "nodeVersion": "v24.21.0",
+    "measuredControllerSha256": "f09cf9719f7fdeecb15fb091de4852c1758c852f10e77ad5625f9d9ee21a7707",
+    "postMeasurementChange": "Added an original-array length bound to discard stale active indices after external data replacement; browser behavior and pixel parity rechecked afterwards.",
+    "method": {
+        "warmupMs": 1000,
+        "measureMs": 3000,
+        "browserTrials": 2,
+        "maintenanceIterations": 200,
+        "maintenanceTrials": 3,
+        "network": "blocked",
+        "requestedFps": 30
     },
-    {
-      "mode": "baseline",
-      "pointsPerDataset": 1000,
-      "datasets": 4,
-      "requestedFps": 30,
-      "elapsedMs": 3013.3,
-      "taskMs": 1636.7,
-      "mainThreadPercent": 54.3,
-      "frames": 83,
-      "achievedFps": 27.5,
-      "taskMsPerFrame": 19.7,
-      "frameIntervalMedianMs": 36.3,
-      "frameIntervalP95Ms": 39.5,
-      "updates": 83,
-      "updateMedianMs": 11.8,
-      "initialPoints": [
-        984,
-        984,
-        984,
-        984
-      ],
-      "finalPoints": [
-        937,
-        937,
-        937,
-        937
-      ],
-      "receivedPerDataset": 3,
-      "trial": 1
-    },
-    {
-      "mode": "own",
-      "pointsPerDataset": 1000,
-      "datasets": 4,
-      "requestedFps": 30,
-      "elapsedMs": 3037.1,
-      "taskMs": 1831.5,
-      "mainThreadPercent": 60.3,
-      "frames": 91,
-      "achievedFps": 30,
-      "taskMsPerFrame": 20.1,
-      "frameIntervalMedianMs": 33.5,
-      "frameIntervalP95Ms": 38.9,
-      "updates": 91,
-      "updateMedianMs": 12.2,
-      "initialPoints": [
-        984,
-        984,
-        984,
-        984
-      ],
-      "finalPoints": [
-        937,
-        937,
-        937,
-        937
-      ],
-      "receivedPerDataset": 3,
-      "trial": 1
-    },
-    {
-      "mode": "own",
-      "pointsPerDataset": 1000,
-      "datasets": 4,
-      "requestedFps": 30,
-      "elapsedMs": 3019.9,
-      "taskMs": 1811.3,
-      "mainThreadPercent": 60,
-      "frames": 91,
-      "achievedFps": 30.1,
-      "taskMsPerFrame": 19.9,
-      "frameIntervalMedianMs": 33.1,
-      "frameIntervalP95Ms": 39.1,
-      "updates": 91,
-      "updateMedianMs": 12,
-      "initialPoints": [
-        984,
-        984,
-        984,
-        984
-      ],
-      "finalPoints": [
-        937,
-        937,
-        937,
-        937
-      ],
-      "receivedPerDataset": 3,
-      "trial": 2
-    },
-    {
-      "mode": "baseline",
-      "pointsPerDataset": 1000,
-      "datasets": 4,
-      "requestedFps": 30,
-      "elapsedMs": 3018,
-      "taskMs": 1691.6,
-      "mainThreadPercent": 56.1,
-      "frames": 83,
-      "achievedFps": 27.5,
-      "taskMsPerFrame": 20.4,
-      "frameIntervalMedianMs": 36.2,
-      "frameIntervalP95Ms": 39,
-      "updates": 83,
-      "updateMedianMs": 12.5,
-      "initialPoints": [
-        984,
-        984,
-        984,
-        984
-      ],
-      "finalPoints": [
-        937,
-        937,
-        937,
-        937
-      ],
-      "receivedPerDataset": 3,
-      "trial": 2
-    },
-    {
-      "mode": "plugin",
-      "pointsPerDataset": 1000,
-      "datasets": 4,
-      "requestedFps": 30,
-      "elapsedMs": 3013.8,
-      "taskMs": 902.5,
-      "mainThreadPercent": 29.9,
-      "frames": 97,
-      "achievedFps": 32.2,
-      "taskMsPerFrame": 9.3,
-      "frameIntervalMedianMs": 32,
-      "frameIntervalP95Ms": 38.2,
-      "updates": 6,
-      "updateMedianMs": 17.8,
-      "initialPoints": [
-        983,
-        983,
-        983,
-        983
-      ],
-      "finalPoints": [
-        936,
-        936,
-        936,
-        936
-      ],
-      "receivedPerDataset": 3,
-      "trial": 2
-    },
-    {
-      "mode": "plugin",
-      "pointsPerDataset": 5000,
-      "datasets": 4,
-      "requestedFps": 30,
-      "elapsedMs": 3008,
-      "taskMs": 2188.8,
-      "mainThreadPercent": 72.8,
-      "frames": 63,
-      "achievedFps": 20.9,
-      "taskMsPerFrame": 34.7,
-      "frameIntervalMedianMs": 37.2,
-      "frameIntervalP95Ms": 103.8,
-      "updates": 6,
-      "updateMedianMs": 79.1,
-      "initialPoints": [
-        4886,
-        4886,
-        4886,
-        4886
-      ],
-      "finalPoints": [
-        4638,
-        4638,
-        4638,
-        4638
-      ],
-      "receivedPerDataset": 3,
-      "trial": 1
-    },
-    {
-      "mode": "baseline",
-      "pointsPerDataset": 5000,
-      "datasets": 4,
-      "requestedFps": 30,
-      "elapsedMs": 3060.2,
-      "taskMs": 3013.7,
-      "mainThreadPercent": 98.5,
-      "frames": 58,
-      "achievedFps": 19,
-      "taskMsPerFrame": 52,
-      "frameIntervalMedianMs": 51,
-      "frameIntervalP95Ms": 64.2,
-      "updates": 58,
-      "updateMedianMs": 33.5,
-      "initialPoints": [
-        4903,
-        4903,
-        4903,
-        4903
-      ],
-      "finalPoints": [
-        4653,
-        4653,
-        4653,
-        4653
-      ],
-      "receivedPerDataset": 3,
-      "trial": 1
-    },
-    {
-      "mode": "own",
-      "pointsPerDataset": 5000,
-      "datasets": 4,
-      "requestedFps": 30,
-      "elapsedMs": 3066.2,
-      "taskMs": 3012.1,
-      "mainThreadPercent": 98.2,
-      "frames": 57,
-      "achievedFps": 18.6,
-      "taskMsPerFrame": 52.8,
-      "frameIntervalMedianMs": 52,
-      "frameIntervalP95Ms": 65.3,
-      "updates": 57,
-      "updateMedianMs": 33.9,
-      "initialPoints": [
-        4900,
-        4900,
-        4900,
-        4900
-      ],
-      "finalPoints": [
-        4656,
-        4656,
-        4656,
-        4656
-      ],
-      "receivedPerDataset": 3,
-      "trial": 1
-    },
-    {
-      "mode": "own",
-      "pointsPerDataset": 5000,
-      "datasets": 4,
-      "requestedFps": 30,
-      "elapsedMs": 3025.4,
-      "taskMs": 3009.2,
-      "mainThreadPercent": 99.5,
-      "frames": 58,
-      "achievedFps": 19.2,
-      "taskMsPerFrame": 51.9,
-      "frameIntervalMedianMs": 50.6,
-      "frameIntervalP95Ms": 62.1,
-      "updates": 58,
-      "updateMedianMs": 32.7,
-      "initialPoints": [
-        4902,
-        4902,
-        4902,
-        4902
-      ],
-      "finalPoints": [
-        4656,
-        4656,
-        4656,
-        4656
-      ],
-      "receivedPerDataset": 3,
-      "trial": 2
-    },
-    {
-      "mode": "baseline",
-      "pointsPerDataset": 5000,
-      "datasets": 4,
-      "requestedFps": 30,
-      "elapsedMs": 3020.4,
-      "taskMs": 3006.1,
-      "mainThreadPercent": 99.5,
-      "frames": 57,
-      "achievedFps": 18.9,
-      "taskMsPerFrame": 52.7,
-      "frameIntervalMedianMs": 52.3,
-      "frameIntervalP95Ms": 65.1,
-      "updates": 57,
-      "updateMedianMs": 33.3,
-      "initialPoints": [
-        4901,
-        4901,
-        4901,
-        4901
-      ],
-      "finalPoints": [
-        4655,
-        4655,
-        4655,
-        4655
-      ],
-      "receivedPerDataset": 3,
-      "trial": 2
-    },
-    {
-      "mode": "plugin",
-      "pointsPerDataset": 5000,
-      "datasets": 4,
-      "requestedFps": 30,
-      "elapsedMs": 3068.2,
-      "taskMs": 2030.2,
-      "mainThreadPercent": 66.2,
-      "frames": 79,
-      "achievedFps": 25.7,
-      "taskMsPerFrame": 25.7,
-      "frameIntervalMedianMs": 34.1,
-      "frameIntervalP95Ms": 81.3,
-      "updates": 7,
-      "updateMedianMs": 44,
-      "initialPoints": [
-        4988,
-        4988,
-        4988,
-        4988
-      ],
-      "finalPoints": [
-        4650,
-        4650,
-        4650,
-        4650
-      ],
-      "receivedPerDataset": 3,
-      "trial": 2
-    }
-  ],
-  "maintenanceBenchmarks": [
-    {
-      "scenario": "unchanged",
-      "mode": "own",
-      "trial": 1,
-      "inputPoints": 20000,
-      "retainedPoints": 20000,
-      "iterations": 200,
-      "msPerCall": 0.105
-    },
-    {
-      "scenario": "unchanged",
-      "mode": "baseline",
-      "trial": 1,
-      "inputPoints": 20000,
-      "retainedPoints": 20000,
-      "iterations": 200,
-      "msPerCall": 2.404
-    },
-    {
-      "scenario": "unchanged",
-      "mode": "baseline",
-      "trial": 2,
-      "inputPoints": 20000,
-      "retainedPoints": 20000,
-      "iterations": 200,
-      "msPerCall": 1.826
-    },
-    {
-      "scenario": "unchanged",
-      "mode": "own",
-      "trial": 2,
-      "inputPoints": 20000,
-      "retainedPoints": 20000,
-      "iterations": 200,
-      "msPerCall": 0.099
-    },
-    {
-      "scenario": "unchanged",
-      "mode": "own",
-      "trial": 3,
-      "inputPoints": 20000,
-      "retainedPoints": 20000,
-      "iterations": 200,
-      "msPerCall": 0.098
-    },
-    {
-      "scenario": "unchanged",
-      "mode": "baseline",
-      "trial": 3,
-      "inputPoints": 20000,
-      "retainedPoints": 20000,
-      "iterations": 200,
-      "msPerCall": 1.838
-    },
-    {
-      "scenario": "expired-prefix",
-      "mode": "own",
-      "trial": 1,
-      "inputPoints": 20000,
-      "retainedPoints": 6668,
-      "iterations": 200,
-      "msPerCall": 0.148
-    },
-    {
-      "scenario": "expired-prefix",
-      "mode": "baseline",
-      "trial": 1,
-      "inputPoints": 20000,
-      "retainedPoints": 6668,
-      "iterations": 200,
-      "msPerCall": 1.255
-    },
-    {
-      "scenario": "expired-prefix",
-      "mode": "baseline",
-      "trial": 2,
-      "inputPoints": 20000,
-      "retainedPoints": 6668,
-      "iterations": 200,
-      "msPerCall": 0.685
-    },
-    {
-      "scenario": "expired-prefix",
-      "mode": "own",
-      "trial": 2,
-      "inputPoints": 20000,
-      "retainedPoints": 6668,
-      "iterations": 200,
-      "msPerCall": 0.118
-    },
-    {
-      "scenario": "expired-prefix",
-      "mode": "own",
-      "trial": 3,
-      "inputPoints": 20000,
-      "retainedPoints": 6668,
-      "iterations": 200,
-      "msPerCall": 0.116
-    },
-    {
-      "scenario": "expired-prefix",
-      "mode": "baseline",
-      "trial": 3,
-      "inputPoints": 20000,
-      "retainedPoints": 6668,
-      "iterations": 200,
-      "msPerCall": 0.545
-    },
-    {
-      "scenario": "paused-gap",
-      "mode": "own",
-      "trial": 1,
-      "inputPoints": 20000,
-      "retainedPoints": 13337,
-      "iterations": 200,
-      "msPerCall": 0.21
-    },
-    {
-      "scenario": "paused-gap",
-      "mode": "baseline",
-      "trial": 1,
-      "inputPoints": 20000,
-      "retainedPoints": 13337,
-      "iterations": 200,
-      "msPerCall": 1.069
-    },
-    {
-      "scenario": "paused-gap",
-      "mode": "baseline",
-      "trial": 2,
-      "inputPoints": 20000,
-      "retainedPoints": 13337,
-      "iterations": 200,
-      "msPerCall": 1.009
-    },
-    {
-      "scenario": "paused-gap",
-      "mode": "own",
-      "trial": 2,
-      "inputPoints": 20000,
-      "retainedPoints": 13337,
-      "iterations": 200,
-      "msPerCall": 0.155
-    },
-    {
-      "scenario": "paused-gap",
-      "mode": "own",
-      "trial": 3,
-      "inputPoints": 20000,
-      "retainedPoints": 13337,
-      "iterations": 200,
-      "msPerCall": 0.126
-    },
-    {
-      "scenario": "paused-gap",
-      "mode": "baseline",
-      "trial": 3,
-      "inputPoints": 20000,
-      "retainedPoints": 13337,
-      "iterations": 200,
-      "msPerCall": 1.052
-    }
-  ],
-  "optimizedProfile": {
-    "sampledMs": 3114.553,
-    "topSelfTime": [
-      {
-        "location": "_calculateBarIndexPixels:13:118252",
-        "ms": 366
-      },
-      {
-        "location": "(program):0:0",
-        "ms": 329
-      },
-      {
-        "location": "get:13:21167",
-        "ms": 307
-      },
-      {
-        "location": "(garbage collector):0:0",
-        "ms": 261
-      },
-      {
-        "location": "_calculateBarValuePixels:13:117372",
-        "ms": 256
-      },
-      {
-        "location": "_getAxis:13:116704",
-        "ms": 206
-      },
-      {
-        "location": "fill:0:0",
-        "ms": 170
-      },
-      {
-        "location": "save:0:0",
-        "ms": 166
-      },
-      {
-        "location": "vi:13:27817",
-        "ms": 96
-      },
-      {
-        "location": "updateElement:13:58772",
-        "ms": 90
-      },
-      {
-        "location": "updateElements:13:115227",
-        "ms": 81
-      },
-      {
-        "location": "ho:13:134197",
-        "ms": 75
-      },
-      {
-        "location": "prepare:7:8419",
-        "ms": 64
-      },
-      {
-        "location": "_notify:13:83999",
-        "ms": 42
-      },
-      {
-        "location": "zn:13:104189",
-        "ms": 39
-      },
-      {
-        "location": "get:13:20523",
-        "ms": 38
-      },
-      {
-        "location": "afterDatasetUpdate:7:11028",
-        "ms": 31
-      },
-      {
-        "location": "draw:13:137956",
-        "ms": 31
-      },
-      {
-        "location": "updateElements:13:122357",
-        "ms": 30
-      },
-      {
-        "location": "restore:0:0",
-        "ms": 25
-      }
-    ]
-  },
-  "rendering": {
-    "result": "PASS",
-    "stages": [
-      "initial",
-      "append",
-      "prune",
-      "paused-gap",
-      "resume"
+    "browserBenchmarks": [
+        {
+            "mode": "plugin",
+            "pointsPerDataset": 1000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3009.7,
+            "taskMs": 868,
+            "mainThreadPercent": 28.8,
+            "frames": 97,
+            "achievedFps": 32.2,
+            "taskMsPerFrame": 8.9,
+            "frameIntervalMedianMs": 31.2,
+            "frameIntervalP95Ms": 38.6,
+            "updates": 6,
+            "updateMedianMs": 19.7,
+            "initialPoints": [
+                982,
+                982,
+                982,
+                982
+            ],
+            "finalPoints": [
+                935,
+                935,
+                935,
+                935
+            ],
+            "receivedPerDataset": 3,
+            "trial": 1
+        },
+        {
+            "mode": "baseline",
+            "pointsPerDataset": 1000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3013.3,
+            "taskMs": 1636.7,
+            "mainThreadPercent": 54.3,
+            "frames": 83,
+            "achievedFps": 27.5,
+            "taskMsPerFrame": 19.7,
+            "frameIntervalMedianMs": 36.3,
+            "frameIntervalP95Ms": 39.5,
+            "updates": 83,
+            "updateMedianMs": 11.8,
+            "initialPoints": [
+                984,
+                984,
+                984,
+                984
+            ],
+            "finalPoints": [
+                937,
+                937,
+                937,
+                937
+            ],
+            "receivedPerDataset": 3,
+            "trial": 1
+        },
+        {
+            "mode": "own",
+            "pointsPerDataset": 1000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3037.1,
+            "taskMs": 1831.5,
+            "mainThreadPercent": 60.3,
+            "frames": 91,
+            "achievedFps": 30,
+            "taskMsPerFrame": 20.1,
+            "frameIntervalMedianMs": 33.5,
+            "frameIntervalP95Ms": 38.9,
+            "updates": 91,
+            "updateMedianMs": 12.2,
+            "initialPoints": [
+                984,
+                984,
+                984,
+                984
+            ],
+            "finalPoints": [
+                937,
+                937,
+                937,
+                937
+            ],
+            "receivedPerDataset": 3,
+            "trial": 1
+        },
+        {
+            "mode": "own",
+            "pointsPerDataset": 1000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3019.9,
+            "taskMs": 1811.3,
+            "mainThreadPercent": 60,
+            "frames": 91,
+            "achievedFps": 30.1,
+            "taskMsPerFrame": 19.9,
+            "frameIntervalMedianMs": 33.1,
+            "frameIntervalP95Ms": 39.1,
+            "updates": 91,
+            "updateMedianMs": 12,
+            "initialPoints": [
+                984,
+                984,
+                984,
+                984
+            ],
+            "finalPoints": [
+                937,
+                937,
+                937,
+                937
+            ],
+            "receivedPerDataset": 3,
+            "trial": 2
+        },
+        {
+            "mode": "baseline",
+            "pointsPerDataset": 1000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3018,
+            "taskMs": 1691.6,
+            "mainThreadPercent": 56.1,
+            "frames": 83,
+            "achievedFps": 27.5,
+            "taskMsPerFrame": 20.4,
+            "frameIntervalMedianMs": 36.2,
+            "frameIntervalP95Ms": 39,
+            "updates": 83,
+            "updateMedianMs": 12.5,
+            "initialPoints": [
+                984,
+                984,
+                984,
+                984
+            ],
+            "finalPoints": [
+                937,
+                937,
+                937,
+                937
+            ],
+            "receivedPerDataset": 3,
+            "trial": 2
+        },
+        {
+            "mode": "plugin",
+            "pointsPerDataset": 1000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3013.8,
+            "taskMs": 902.5,
+            "mainThreadPercent": 29.9,
+            "frames": 97,
+            "achievedFps": 32.2,
+            "taskMsPerFrame": 9.3,
+            "frameIntervalMedianMs": 32,
+            "frameIntervalP95Ms": 38.2,
+            "updates": 6,
+            "updateMedianMs": 17.8,
+            "initialPoints": [
+                983,
+                983,
+                983,
+                983
+            ],
+            "finalPoints": [
+                936,
+                936,
+                936,
+                936
+            ],
+            "receivedPerDataset": 3,
+            "trial": 2
+        },
+        {
+            "mode": "plugin",
+            "pointsPerDataset": 5000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3008,
+            "taskMs": 2188.8,
+            "mainThreadPercent": 72.8,
+            "frames": 63,
+            "achievedFps": 20.9,
+            "taskMsPerFrame": 34.7,
+            "frameIntervalMedianMs": 37.2,
+            "frameIntervalP95Ms": 103.8,
+            "updates": 6,
+            "updateMedianMs": 79.1,
+            "initialPoints": [
+                4886,
+                4886,
+                4886,
+                4886
+            ],
+            "finalPoints": [
+                4638,
+                4638,
+                4638,
+                4638
+            ],
+            "receivedPerDataset": 3,
+            "trial": 1
+        },
+        {
+            "mode": "baseline",
+            "pointsPerDataset": 5000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3060.2,
+            "taskMs": 3013.7,
+            "mainThreadPercent": 98.5,
+            "frames": 58,
+            "achievedFps": 19,
+            "taskMsPerFrame": 52,
+            "frameIntervalMedianMs": 51,
+            "frameIntervalP95Ms": 64.2,
+            "updates": 58,
+            "updateMedianMs": 33.5,
+            "initialPoints": [
+                4903,
+                4903,
+                4903,
+                4903
+            ],
+            "finalPoints": [
+                4653,
+                4653,
+                4653,
+                4653
+            ],
+            "receivedPerDataset": 3,
+            "trial": 1
+        },
+        {
+            "mode": "own",
+            "pointsPerDataset": 5000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3066.2,
+            "taskMs": 3012.1,
+            "mainThreadPercent": 98.2,
+            "frames": 57,
+            "achievedFps": 18.6,
+            "taskMsPerFrame": 52.8,
+            "frameIntervalMedianMs": 52,
+            "frameIntervalP95Ms": 65.3,
+            "updates": 57,
+            "updateMedianMs": 33.9,
+            "initialPoints": [
+                4900,
+                4900,
+                4900,
+                4900
+            ],
+            "finalPoints": [
+                4656,
+                4656,
+                4656,
+                4656
+            ],
+            "receivedPerDataset": 3,
+            "trial": 1
+        },
+        {
+            "mode": "own",
+            "pointsPerDataset": 5000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3025.4,
+            "taskMs": 3009.2,
+            "mainThreadPercent": 99.5,
+            "frames": 58,
+            "achievedFps": 19.2,
+            "taskMsPerFrame": 51.9,
+            "frameIntervalMedianMs": 50.6,
+            "frameIntervalP95Ms": 62.1,
+            "updates": 58,
+            "updateMedianMs": 32.7,
+            "initialPoints": [
+                4902,
+                4902,
+                4902,
+                4902
+            ],
+            "finalPoints": [
+                4656,
+                4656,
+                4656,
+                4656
+            ],
+            "receivedPerDataset": 3,
+            "trial": 2
+        },
+        {
+            "mode": "baseline",
+            "pointsPerDataset": 5000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3020.4,
+            "taskMs": 3006.1,
+            "mainThreadPercent": 99.5,
+            "frames": 57,
+            "achievedFps": 18.9,
+            "taskMsPerFrame": 52.7,
+            "frameIntervalMedianMs": 52.3,
+            "frameIntervalP95Ms": 65.1,
+            "updates": 57,
+            "updateMedianMs": 33.3,
+            "initialPoints": [
+                4901,
+                4901,
+                4901,
+                4901
+            ],
+            "finalPoints": [
+                4655,
+                4655,
+                4655,
+                4655
+            ],
+            "receivedPerDataset": 3,
+            "trial": 2
+        },
+        {
+            "mode": "plugin",
+            "pointsPerDataset": 5000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3068.2,
+            "taskMs": 2030.2,
+            "mainThreadPercent": 66.2,
+            "frames": 79,
+            "achievedFps": 25.7,
+            "taskMsPerFrame": 25.7,
+            "frameIntervalMedianMs": 34.1,
+            "frameIntervalP95Ms": 81.3,
+            "updates": 7,
+            "updateMedianMs": 44,
+            "initialPoints": [
+                4988,
+                4988,
+                4988,
+                4988
+            ],
+            "finalPoints": [
+                4650,
+                4650,
+                4650,
+                4650
+            ],
+            "receivedPerDataset": 3,
+            "trial": 2
+        }
     ],
-    "scope": "pixel-identical baseline/optimized canvas at fixed times, labels and tooltip enabled"
-  }
+    "maintenanceBenchmarks": [
+        {
+            "scenario": "unchanged",
+            "mode": "own",
+            "trial": 1,
+            "inputPoints": 20000,
+            "retainedPoints": 20000,
+            "iterations": 200,
+            "msPerCall": 0.105
+        },
+        {
+            "scenario": "unchanged",
+            "mode": "baseline",
+            "trial": 1,
+            "inputPoints": 20000,
+            "retainedPoints": 20000,
+            "iterations": 200,
+            "msPerCall": 2.404
+        },
+        {
+            "scenario": "unchanged",
+            "mode": "baseline",
+            "trial": 2,
+            "inputPoints": 20000,
+            "retainedPoints": 20000,
+            "iterations": 200,
+            "msPerCall": 1.826
+        },
+        {
+            "scenario": "unchanged",
+            "mode": "own",
+            "trial": 2,
+            "inputPoints": 20000,
+            "retainedPoints": 20000,
+            "iterations": 200,
+            "msPerCall": 0.099
+        },
+        {
+            "scenario": "unchanged",
+            "mode": "own",
+            "trial": 3,
+            "inputPoints": 20000,
+            "retainedPoints": 20000,
+            "iterations": 200,
+            "msPerCall": 0.098
+        },
+        {
+            "scenario": "unchanged",
+            "mode": "baseline",
+            "trial": 3,
+            "inputPoints": 20000,
+            "retainedPoints": 20000,
+            "iterations": 200,
+            "msPerCall": 1.838
+        },
+        {
+            "scenario": "expired-prefix",
+            "mode": "own",
+            "trial": 1,
+            "inputPoints": 20000,
+            "retainedPoints": 6668,
+            "iterations": 200,
+            "msPerCall": 0.148
+        },
+        {
+            "scenario": "expired-prefix",
+            "mode": "baseline",
+            "trial": 1,
+            "inputPoints": 20000,
+            "retainedPoints": 6668,
+            "iterations": 200,
+            "msPerCall": 1.255
+        },
+        {
+            "scenario": "expired-prefix",
+            "mode": "baseline",
+            "trial": 2,
+            "inputPoints": 20000,
+            "retainedPoints": 6668,
+            "iterations": 200,
+            "msPerCall": 0.685
+        },
+        {
+            "scenario": "expired-prefix",
+            "mode": "own",
+            "trial": 2,
+            "inputPoints": 20000,
+            "retainedPoints": 6668,
+            "iterations": 200,
+            "msPerCall": 0.118
+        },
+        {
+            "scenario": "expired-prefix",
+            "mode": "own",
+            "trial": 3,
+            "inputPoints": 20000,
+            "retainedPoints": 6668,
+            "iterations": 200,
+            "msPerCall": 0.116
+        },
+        {
+            "scenario": "expired-prefix",
+            "mode": "baseline",
+            "trial": 3,
+            "inputPoints": 20000,
+            "retainedPoints": 6668,
+            "iterations": 200,
+            "msPerCall": 0.545
+        },
+        {
+            "scenario": "paused-gap",
+            "mode": "own",
+            "trial": 1,
+            "inputPoints": 20000,
+            "retainedPoints": 13337,
+            "iterations": 200,
+            "msPerCall": 0.21
+        },
+        {
+            "scenario": "paused-gap",
+            "mode": "baseline",
+            "trial": 1,
+            "inputPoints": 20000,
+            "retainedPoints": 13337,
+            "iterations": 200,
+            "msPerCall": 1.069
+        },
+        {
+            "scenario": "paused-gap",
+            "mode": "baseline",
+            "trial": 2,
+            "inputPoints": 20000,
+            "retainedPoints": 13337,
+            "iterations": 200,
+            "msPerCall": 1.009
+        },
+        {
+            "scenario": "paused-gap",
+            "mode": "own",
+            "trial": 2,
+            "inputPoints": 20000,
+            "retainedPoints": 13337,
+            "iterations": 200,
+            "msPerCall": 0.155
+        },
+        {
+            "scenario": "paused-gap",
+            "mode": "own",
+            "trial": 3,
+            "inputPoints": 20000,
+            "retainedPoints": 13337,
+            "iterations": 200,
+            "msPerCall": 0.126
+        },
+        {
+            "scenario": "paused-gap",
+            "mode": "baseline",
+            "trial": 3,
+            "inputPoints": 20000,
+            "retainedPoints": 13337,
+            "iterations": 200,
+            "msPerCall": 1.052
+        }
+    ],
+    "optimizedProfile": {
+        "sampledMs": 3114.553,
+        "topSelfTime": [
+            {
+                "location": "_calculateBarIndexPixels:13:118252",
+                "ms": 366
+            },
+            {
+                "location": "(program):0:0",
+                "ms": 329
+            },
+            {
+                "location": "get:13:21167",
+                "ms": 307
+            },
+            {
+                "location": "(garbage collector):0:0",
+                "ms": 261
+            },
+            {
+                "location": "_calculateBarValuePixels:13:117372",
+                "ms": 256
+            },
+            {
+                "location": "_getAxis:13:116704",
+                "ms": 206
+            },
+            {
+                "location": "fill:0:0",
+                "ms": 170
+            },
+            {
+                "location": "save:0:0",
+                "ms": 166
+            },
+            {
+                "location": "vi:13:27817",
+                "ms": 96
+            },
+            {
+                "location": "updateElement:13:58772",
+                "ms": 90
+            },
+            {
+                "location": "updateElements:13:115227",
+                "ms": 81
+            },
+            {
+                "location": "ho:13:134197",
+                "ms": 75
+            },
+            {
+                "location": "prepare:7:8419",
+                "ms": 64
+            },
+            {
+                "location": "_notify:13:83999",
+                "ms": 42
+            },
+            {
+                "location": "zn:13:104189",
+                "ms": 39
+            },
+            {
+                "location": "get:13:20523",
+                "ms": 38
+            },
+            {
+                "location": "afterDatasetUpdate:7:11028",
+                "ms": 31
+            },
+            {
+                "location": "draw:13:137956",
+                "ms": 31
+            },
+            {
+                "location": "updateElements:13:122357",
+                "ms": 30
+            },
+            {
+                "location": "restore:0:0",
+                "ms": 25
+            }
+        ]
+    },
+    "rendering": {
+        "result": "PASS",
+        "stages": [
+            "initial",
+            "append",
+            "prune",
+            "paused-gap",
+            "resume"
+        ],
+        "scope": "pixel-identical baseline/optimized canvas at fixed times, labels and tooltip enabled"
+    }
 }

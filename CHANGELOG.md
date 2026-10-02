@@ -9,6 +9,11 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Development
 
+- Der isolierte Echtzeit-Prototyp erneuert Tooltips nach Datenbereinigung erst
+  nach dem Chart-Datenupdate. Rohwert und sichtbarer Anzeigewert bleiben dadurch
+  konsistent, ohne zusaetzlichen Renderdurchlauf. Auswahl- und Lebenszyklustests
+  sind ergaenzt; die Profiling-JSON ist ohne Wertveraenderungen StylePHP-konform
+  formatiert. Die produktive Plugin-Einbindung bleibt unveraendert.
 - Profiling des isolierten Echtzeit-Prototyps mit Bildabstaenden, Datenbestand,
   CPU-Sampling und reproduzierbaren Alt-/Neu-Vergleichen. Die Bereichsbereinigung
   vermeidet unnoetige Punkt-Maps; ein monotoner Zeichentakt verhindert Drift.

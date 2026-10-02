@@ -17,7 +17,11 @@ ist noch nicht Teil der CI. `--profile` fuehrt getrenntes CPU-Sampling aus.
 `node tests/realtime-window-maintenance.js` misst nur die Bereichsbereinigung.
 Beide Skripte akzeptieren mit `JSLIVE_BASELINE_CONTROLLER` eine vertrauenswuerdige
 lokale Baseline-Datei fuer einen Alt-/Neu-Vergleich. Der Browservergleich erfasst
-auch Zeichenabstaende, Datenbestaende und Canvas-Pixelgleichheit. Umfang und Wiederholung stehen im
+auch Zeichenabstaende und Datenbestaende. Die Auswahlregression prueft Rohwert,
+eingelesenen Wert und sichtbaren Tooltiptext nach Bereinigung, ohne zusaetzliche
+Updates/Zeichnungen. Der Pixelvergleich verwendet fuer den bekannten alten
+Tooltipfehler eine explizit korrigierte Referenz; die restliche Darstellung
+bleibt unveraendert. Umfang und Wiederholung stehen im
 [Prototypnachweis](../docs/REALTIME_PROTOTYPE.md).
 
 The official Symcon style configuration is available through the `.style`

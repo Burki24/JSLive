@@ -18,9 +18,13 @@ function harness(duration = 60000) {
         removeEventListener: (name, fn) => { if (listeners.get(name) === fn) listeners.delete(name); }
     };
     const chart = {
+        config: { plugins: [] },
         options: { scales: { x: { type: 'time' } } },
         data: { datasets: [{ data: [], label: 'Synthetic', borderColor: 'blue' }] },
-        update: mode => updates.push(mode),
+        update: mode => {
+            updates.push(mode);
+            chart.config.plugins.forEach(plugin => { if (plugin.afterUpdate) plugin.afterUpdate(chart); });
+        },
         getActiveElements: () => [], setActiveElements() {}
     };
     const env = {
@@ -116,10 +120,12 @@ lifecycle.live.start();
 assert.equal(lifecycle.frames.size, 1);
 assert.equal(lifecycle.timers.size, 1);
 assert.equal(lifecycle.listeners.size, 1);
+assert.equal(lifecycle.chart.config.plugins.length, 1, 'One chart-local hook, never a global registration.');
 const staleCallback = Array.from(lifecycle.frames.values())[0];
 lifecycle.live.destroy();
 lifecycle.live.destroy();
 assert.equal(lifecycle.frames.size + lifecycle.timers.size + lifecycle.listeners.size, 0);
+assert.equal(lifecycle.chart.config.plugins.length, 0, 'Remove the chart-local hook on destruction.');
 const afterDestroy = lifecycle.updates.length;
 staleCallback();
 lifecycle.live.invalidate();
@@ -137,6 +143,7 @@ failure.live.start();
 failure.chart.update = () => { throw new Error('Synthetic render failure'); };
 assert.throws(() => failure.frame(), /Synthetic render failure/);
 assert.equal(failure.frames.size + failure.timers.size + failure.listeners.size, 0, 'Stop all work after a render error.');
+assert.equal(failure.chart.config.plugins.length, 0, 'Remove the hook after a render error.');
 
 const duplicate = harness();
 duplicate.live.start();
@@ -168,6 +175,39 @@ assert.equal(hiddenStart.updates.length, 0, 'Visibility must not override an exp
 hiddenStart.live.resume();
 assert.equal(hiddenStart.chart.options.scales.x.max, hiddenStart.now());
 hiddenStart.live.destroy();
+
+const pendingTooltip = harness();
+pendingTooltip.live.start();
+pendingTooltip.visibility(true);
+pendingTooltip.chart.data.datasets[0].data = [1000, 2000, 3000, 59000, 60000, 90000, 120000].map(x => ({ x, y: x }));
+let tooltipActive = [{ datasetIndex: 0, index: 6 }];
+let tooltipCalls = 0;
+pendingTooltip.chart.tooltip = {
+    getActiveElements: () => tooltipActive,
+    setActiveElements: elements => { tooltipActive = elements; tooltipCalls++; },
+    caretX: 10, caretY: 20
+};
+const hiddenDrawCount = pendingTooltip.updates.length;
+pendingTooltip.maintenance(0);
+pendingTooltip.maintenance(60000);
+assert.equal(pendingTooltip.updates.length, hiddenDrawCount, 'Repeated hidden pruning does not render.');
+assert.deepEqual(tooltipActive, [{ datasetIndex: 0, index: 2 }], 'Compose repeated index remapping before a render.');
+const callsBeforeDraw = tooltipCalls;
+pendingTooltip.visibility(false);
+assert.equal(tooltipCalls, callsBeforeDraw + 2, 'Refresh the current tooltip once, after parsing at the first visible update.');
+pendingTooltip.frame();
+assert.equal(tooltipCalls, callsBeforeDraw + 2, 'Do not refresh the tooltip cache again on unchanged frames.');
+pendingTooltip.live.destroy();
+
+const tooltipFailure = harness();
+tooltipFailure.live.start();
+tooltipFailure.chart.data.datasets[0].data = [1000, 2000, 3000, 90000, 120000].map(x => ({ x, y: 1 }));
+tooltipFailure.chart.tooltip = { getActiveElements: () => [{ datasetIndex: 0, index: 3 }], setActiveElements() {} };
+tooltipFailure.maintenance(0);
+tooltipFailure.chart.tooltip.setActiveElements = () => { throw new Error('Synthetic tooltip failure'); };
+assert.throws(() => tooltipFailure.frame(), /Synthetic tooltip failure/);
+assert.equal(tooltipFailure.frames.size + tooltipFailure.timers.size + tooltipFailure.listeners.size + tooltipFailure.chart.config.plugins.length, 0,
+    'A tooltip hook failure releases all resources.');
 
 const cadence = harness();
 cadence.live.start();

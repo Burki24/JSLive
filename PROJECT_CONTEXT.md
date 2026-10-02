@@ -742,8 +742,12 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
     Bildabstaende und Datenbestand. Der volle Chart.js-Balkenupdate dominiert
     weiterhin; das Performancegate ist nicht bestanden. Naechster Schritt:
     verbleibenden Renderengpass innerhalb der oeffentlichen APIs bewerten,
-    danach fehlende Daten-/Templatefaelle absichern. Ein bestehender veralteter
-    formatierter Tooltipwert nach Auswahl/Bereinigung ist separat offen.
+    danach fehlende Daten-/Templatefaelle absichern. Als begrenzter Folgeschritt
+    ist der veraltete formatierte Tooltipwert nach Auswahl/Bereinigung lokal
+    behoben: chart-lokaler oeffentlicher Update-Hook, kein zusaetzlicher Render.
+    Auswahlwechsel, Pause, Hintergrund und Hook-Abbau sind abgesichert.
+    Die Formatierung der Profiling-JSON ist nach dem CI-Stylefehler korrigiert;
+    Messwerte unveraendert. CI dieser Korrekturen folgt nach Commit/Push.
     Ergebnisse und Einzelmessungen in `docs/REALTIME_PROTOTYPE.md`.
     Weitere Bibliotheken folgen einzeln; iro.js bleibt auf Wunsch unveraendert.
 

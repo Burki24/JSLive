@@ -183,14 +183,92 @@ async function compareRendering(browser, controllerSource) {
                 }
                 if (stage === 'resume') await h.page.evaluate(() => { live.resume(); live.pause(); });
                 await h.page.evaluate(() => testChart.update('none'));
+                if (h === pages[0]) {
+                    // The old controller's stale tooltip is a known defect, not the
+                    // expected image. Build a corrected reference using public APIs.
+                    await h.page.evaluate(() => {
+                        const active = testChart.tooltip.getActiveElements();
+                        if (!active.length) return;
+                        const position = { x: testChart.tooltip.caretX, y: testChart.tooltip.caretY };
+                        testChart.tooltip.setActiveElements([], position);
+                        testChart.tooltip.setActiveElements(active, position);
+                        testChart.draw();
+                    });
+                }
                 images.push(await h.page.locator('canvas').screenshot());
                 assert.deepEqual(h.errors, []);
             }
             assert.ok(images[0].equals(images[1]), `Baseline/optimized canvas differs at ${stage}.`);
             stages.push(stage);
         }
-        return { result: 'PASS', stages, scope: 'pixel-identical baseline/optimized canvas at fixed times, labels and tooltip enabled' };
+        return { result: 'PASS', stages, scope: 'pixel-identical to baseline with explicitly refreshed reference tooltip; fixed times and labels enabled' };
     } finally { for (const h of pages) await h.context.close(); }
+}
+
+async function selectionRegression(browser) {
+    const h = await openChart(browser, 'own', { clock: true });
+    try {
+        const cases = await h.page.evaluate(() => {
+            const results = [];
+            const check = (condition, message) => { if (!condition) throw new Error(message); };
+            live.pause();
+            for (const scenario of ['retained', 'reselected', 'cleared', 'expired', 'no-tooltip']) {
+                testChart.setActiveElements([]);
+                if (testChart.tooltip) testChart.tooltip.setActiveElements([], { x: 0, y: 0 });
+                testChart.data.datasets.forEach(d => {
+                    d.data = [-90000, -80000, -70000, -1000, 0].map((age, i) => ({ x: Date.now() + age, y: i }));
+                });
+                if (scenario === 'no-tooltip') testChart.options.plugins.tooltip = false;
+                testChart.update('none');
+                const index = scenario === 'expired' ? 0 : 4;
+                const selected = [0, 1].map(datasetIndex => ({ datasetIndex, index }));
+                testChart.setActiveElements(selected);
+                if (testChart.tooltip) testChart.tooltip.setActiveElements(selected, { x: 850, y: 100 });
+                const originalTooltip = testChart.tooltip;
+                const before = { updates: probe.updates, draws: probe.draws };
+                live.maintain();
+                check(probe.updates === before.updates && probe.draws === before.draws, 'Maintenance must not render, including during pause.');
+                if (scenario === 'reselected') testChart.tooltip.setActiveElements([{ datasetIndex: 1, index: 2 }], { x: 700, y: 100 });
+                if (scenario === 'cleared') testChart.tooltip.setActiveElements([], { x: 0, y: 0 });
+                testChart.update('none'); // Also cover an explicit caller update while paused.
+                check(probe.updates === before.updates + 1 && probe.draws === before.draws + 1, 'Reconciliation must not add another update or draw.');
+                if (scenario === 'no-tooltip') {
+                    check(testChart.tooltip === originalTooltip && testChart.options.plugins.tooltip === false, 'Do not recreate or enable a disabled tooltip.');
+                    testChart.options.plugins.tooltip = {};
+                    testChart.update('none');
+                    check(testChart.tooltip.dataPoints.every(point => point.raw.y === 4 && point.parsed.y === 4 && point.formattedValue === '4'),
+                        'A re-enabled tooltip must not keep the stale cache.');
+                } else if (scenario === 'cleared' || scenario === 'expired') {
+                    check(testChart.tooltip.getActiveElements().length === 0, 'Do not resurrect a cleared/expired selection.');
+                    check(testChart.tooltip.opacity === 0, 'Hide an empty tooltip.');
+                } else {
+                    const expected = scenario === 'reselected' ? [3] : [4, 4];
+                    check(testChart.tooltip.dataPoints.length === expected.length, 'Preserve the latest selection count.');
+                    testChart.tooltip.dataPoints.forEach((point, i) => {
+                        check(point.raw.y === expected[i] && point.parsed.y === expected[i] && point.formattedValue === String(expected[i]), 'Raw, parsed and formatted values must agree.');
+                        check(testChart.tooltip.body[i].lines[0] === `Series ${point.datasetIndex + 1}: ${expected[i]}`, 'The visible tooltip text must match.');
+                    });
+                }
+                testChart.getActiveElements().forEach(element => {
+                    check(element.element === testChart.getDatasetMeta(element.datasetIndex).data[element.index], 'Hover selection must reference the remapped element.');
+                });
+                results.push(scenario);
+            }
+            const foreignPlugins = testChart.config.plugins.filter(plugin => plugin.id !== 'jslive-realtime-selection');
+            live.destroy();
+            check(testChart.config.plugins.length === foreignPlugins.length, 'Remove only the owned local hook.');
+            const replacement = new JSLiveRealtimeWindow(testChart, { duration: 60000 });
+            replacement.start();
+            replacement.start();
+            check(testChart.config.plugins.length === foreignPlugins.length + 1, 'Restart has exactly one local hook.');
+            replacement.destroy();
+            check(testChart.config.plugins.every((plugin, i) => plugin === foreignPlugins[i]), 'Preserve unrelated local plugins.');
+            testChart.destroy();
+            return results;
+        });
+        assert.deepEqual(h.errors, []);
+        return { result: 'PASS', cases, scope: 'line/bar tooltip text, public update while paused, no extra render, selection changes, disabled tooltip, hook cleanup/restart' };
+    } finally { await h.context.close(); }
 }
 
 async function run(browser, { benchmark = false, capture = false, baselineSource } = {}) {
@@ -242,6 +320,9 @@ async function run(browser, { benchmark = false, capture = false, baselineSource
             if (mode === 'own') {
                 assert.deepEqual(await h.page.evaluate(() => testChart.getActiveElements().map(e => e.index)), [3]);
                 assert.equal(await h.page.evaluate(() => testChart.tooltip.dataPoints[0].raw.y), 4);
+                assert.equal(await h.page.evaluate(() => testChart.tooltip.dataPoints[0].parsed.y), 4);
+                assert.equal(await h.page.evaluate(() => testChart.tooltip.dataPoints[0].formattedValue), '4');
+                assert.deepEqual(await h.page.evaluate(() => testChart.tooltip.body[0].lines), ['Series 1: 4']);
             }
             if (capture && mode === 'own') results.screenshot = await h.page.locator('canvas').screenshot();
             await h.page.evaluate(mode => { if (mode === 'own') live.destroy(); testChart.destroy(); }, mode);
@@ -267,6 +348,7 @@ async function run(browser, { benchmark = false, capture = false, baselineSource
             }
         }
     }
+    results.selection = await selectionRegression(browser);
     if (baselineSource) results.rendering = await compareRendering(browser, baselineSource);
     return results;
 }
@@ -276,6 +358,7 @@ module.exports.openChart = openChart;
 module.exports.measure = measure;
 module.exports.profile = profile;
 module.exports.compareRendering = compareRendering;
+module.exports.selectionRegression = selectionRegression;
 if (require.main === module) {
     (async () => {
         const { chromium } = require('playwright');

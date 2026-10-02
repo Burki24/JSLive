@@ -186,7 +186,7 @@ Bereinigung, lange Pause und Resume, mit aktivierten Labels/Tooltip. Pixelgleich
 belegt keine Fehlerfreiheit der Baseline: Bei programmatischer Auswahl direkt
 vor Bereinigung zeigte die Diagnose in beiden Staenden einen veralteten
 formatierten Tooltipwert trotz korrektem `raw`-Punkt. Dieser bestehende Fall
-bleibt vor einer Integration separat zu korrigieren und abzusichern.
+wird im unten beschriebenen Folgeschritt korrigiert und abgesichert.
 
 Finale lokale Pruefung: `php tests/run.php` vollstaendig bestanden (PHP 8.5.10),
 Syntax aller 57 PHP-Dateien und aller vier betroffenen JavaScript-Dateien sowie
@@ -197,6 +197,59 @@ Naechster Schritt ist die Entscheidung ueber den verbleibenden Renderengpass
 innerhalb der oeffentlichen Chart.js-APIs; keine Template-Umstellung allein
 aufgrund dieser lokalen Optimierung. Vollstaendige Daten-/Darstellungsfaelle,
 Langlauf und installierte Abnahme bleiben anschliessende Gates.
+
+## Folgeschritt: Tooltip-Konsistenz und Style-Korrektur
+
+Ausgangsstand ist `c34e9c4` (Library 0.80), Implementierungscommit `4896125`.
+Dessen Tests und CodeQL waren in der CI gruen; der Style-Check scheiterte
+ausschliesslich an der Einrueckung mit zwei statt vier Leerzeichen in der
+Profiling-JSON. Diese Datei ist jetzt mit dem vorhandenen StylePHP-Formatter
+formatiert; alle dekodierten Messwerte sind gegen den Commitstand unveraendert.
+
+Die naechste begrenzte Implementierung schliesst zuerst den bestaetigten
+Tooltipfehler. Nach dem Ersetzen eines bereinigten Datenarrays waren die
+aktiven Indizes zwar korrekt verschoben, Chart.js hatte seine eingelesenen
+Werte aber noch nicht aktualisiert. Ein neuer Browser-Regressionsfall zeigte
+`raw.y = 4`, jedoch `parsed.y = 3` und entsprechend einen falschen Anzeigewert.
+
+Ein chart-lokaler `afterUpdate`-Hook erneuert jetzt bei ausstehender Bereinigung
+den aktuellen Tooltip ueber dessen oeffentliche Aktivierungsfunktionen, nachdem
+Chart.js die Daten neu eingelesen hat und bevor gezeichnet wird. Keine privaten
+Felder oder ueberschriebenen Chart-Methoden; keine neue Bibliotheksabhaengigkeit.
+Der Hook erzeugt weder einen weiteren Update-Aufruf noch eine zweite Zeichnung.
+Er wird beim Abbau und nach Fehlern zusammen mit Timern und Listenern entfernt.
+Normale Frames ohne vorausgegangene Bereinigung erneuern den Tooltipcache nicht.
+Schnittstellen: [Plugin-Lebenszyklus](https://www.chartjs.org/docs/latest/api/interfaces/Plugin.html#afterupdate)
+und [oeffentliche Chart-API](https://www.chartjs.org/docs/latest/developers/api.html).
+
+Frische Nachweise unter Edge 155.0.4283.18 mit den bereits versionierten Assets:
+
+- Vor der Korrektur scheitert der neue Test reproduzierbar mit `3 !== 4`.
+- Danach stimmen Rohwert, eingelesener Wert, formatierter Wert und tatsaechlicher
+  Tooltiptext fuer Linie und Balken ueberein.
+- Beibehaltene, zwischenzeitlich geaenderte, geloeschte und abgelaufene Auswahl,
+  deaktivierter/wieder aktivierter Tooltip sowie explizites Chart-Update waehrend Pause bestanden.
+- Kein Rendern durch Bereinigung; genau ein Update und eine Zeichnung bei der
+  anschliessenden Darstellung. Fremde lokale Plugins bleiben bei Abbau/Neustart
+  erhalten; wiederholtes Starten registriert den eigenen Hook nur einmal.
+- Deterministische Tests decken mehrfache Bereinigung ohne Zwischenzeichnung,
+  Hintergrund/Vordergrund, ausbleibende Wiederholung des Cache-Refreshs und
+  vollstaendigen Ressourcenabbau nach einem Tooltipfehler ab.
+- Fuenf Canvas-Zustaende stimmen mit einer **korrigierten Referenz** ueberein:
+  Im alten Controller wird nur der bekannte Tooltipfehler im Test explizit
+  nachgezogen. Dies ist absichtlich kein Pixelgleichheitsnachweis mit dessen
+  falschem Tooltiptext. Die historische Profiling-Datei bleibt unveraendert
+  bis auf ihre Formatierung.
+
+Dieser Schritt ist eine Korrektheitsverbesserung, keine neue Hochlastoptimierung.
+Die bisherigen Lastmessungen bleiben historischer Befund; eine schnellere
+Gesamtdarstellung wird nicht behauptet. Das Render-Performancegate bleibt offen.
+Produktive Vorlagen, Plugin-Dateien und Library-Metadaten bleiben unveraendert.
+Keine installierte Symcon-Abnahme fuer den isolierten Prototyp; CI folgt nach Push.
+Lokal bestanden: `php tests/run.php`, PHP-Syntax aller 57 Dateien, Syntax der
+drei geaenderten JavaScript-Dateien, `php .style/json-check.php`, PHP-CS-Fixer
+im Dry-Run (0 von 45 Dateien beanstandet) und `git diff --check`. Der vorhandene
+Hinweis auf die fehlende `composer.json` ist keine fehlgeschlagene Pruefung.
 
 ## Noch offen
 

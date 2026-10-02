@@ -39,6 +39,13 @@
             this.timer = null;
             this.nextDraw = -Infinity;
             this.lastFrame = -Infinity;
+            this.refreshTooltip = false;
+            this.selectionPlugin = {
+                id: 'jslive-realtime-selection',
+                // Active indices are remapped during maintenance, but Chart.js
+                // parses the replacement array only during the next update.
+                afterUpdate: () => this.guard(() => this.reconcileTooltip())
+            };
             this.visibility = () => this.guard(() => {
                 if (this.env.document.hidden) this.cancelFrame();
                 else if (this.pausedAt === null) {
@@ -57,6 +64,7 @@
             this.running = true;
             owners.set(this.chart, this);
             this.guard(() => {
+                this.chart.config.plugins.push(this.selectionPlugin);
                 this.env.document.addEventListener('visibilitychange', this.visibility);
                 this.timer = this.env.setInterval(() => this.guard(() => this.maintain()), this.settings.maintenanceInterval);
                 if (!this.env.document.hidden) this.draw();
@@ -131,7 +139,24 @@
                 this.chart.setActiveElements(remap(this.chart.getActiveElements()));
                 const tooltip = this.chart.tooltip;
                 if (tooltip) tooltip.setActiveElements(remap(tooltip.getActiveElements()), { x: tooltip.caretX || 0, y: tooltip.caretY || 0 });
+                this.refreshTooltip = true;
             }
+        }
+
+        reconcileTooltip() {
+            if (!this.refreshTooltip) return;
+            const tooltip = this.chart.tooltip;
+            if (!tooltip || (this.chart.options.plugins && this.chart.options.plugins.tooltip === false)) return;
+            this.refreshTooltip = false;
+            // Read the current selection, not a saved one: a mouse event or a
+            // caller may have selected another point since maintenance.
+            const active = tooltip.getActiveElements().map(({ datasetIndex, index }) => ({ datasetIndex, index }));
+            if (!active.length) return;
+            const position = { x: tooltip.caretX || 0, y: tooltip.caretY || 0 };
+            // Chart.js otherwise caches the same active indices, including the
+            // old parsed/formatted values. Public APIs refresh that cache after parsing.
+            tooltip.setActiveElements([], position);
+            tooltip.setActiveElements(active, position);
         }
 
         draw() {
@@ -202,6 +227,10 @@
             if (this.timer !== null) this.env.clearInterval(this.timer);
             this.timer = null;
             this.env.document.removeEventListener('visibilitychange', this.visibility);
+            const plugins = this.chart.config && this.chart.config.plugins;
+            const pluginIndex = plugins ? plugins.indexOf(this.selectionPlugin) : -1;
+            if (pluginIndex >= 0) plugins.splice(pluginIndex, 1);
+            this.refreshTooltip = false;
             if (owners.get(this.chart) === this) owners.delete(this.chart);
         }
     }
