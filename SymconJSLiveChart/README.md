@@ -66,13 +66,16 @@ Vorlagen erhalten. Der Moment-Adapter wird als 1.0.1 lokal versioniert geladen;
 sein alter 1.0.0-Pfad bleibt ebenfalls erhalten. Datalabels 2.2.0 wird aus der
 unveränderten offiziellen Distribution im versionierten Pfad geladen; der
 historisch modifizierte Datalabels-Pfad bleibt für eigene Vorlagen erhalten.
-Der Streaming-Fork 3.1.0 und sein Assetpfad bleiben unverändert. Die
+Die Standardvorlage lädt den eigenen Streaming-Wartungsfork 3.6.0 über
+`chartjs/plugins/streaming/3.6.0/chartjs-plugin-streaming.min.js`. Der alte
+unversionierte 3.1.0-Pfad bleibt für eigene Vorlagen unverändert. Die
 Standardvorlage setzt `frameRate: 30` und aktualisiert eingehende Livewerte
 bei Realtime-Achsen mit `update('quiet')`, damit die laufende Animation nicht
 unterbrochen wird. Gewöhnliche Zeitachsen verwenden den Standardmodus.
-Eine eigene Echtzeitsteuerung wird gemäß [ADR 0004](../docs/adr/0004-own-realtime-controller.md)
-zunächst als isolierter Test-Prototyp entwickelt. Sie ist nicht produktiv
-eingebunden; insbesondere ist die Performance-Abnahme noch offen.
+Der Wartungsfork folgt [ADR 0005](../docs/adr/0005-maintained-streaming-fork.md).
+Der eigene Echtzeit-Prototyp bleibt als historischer Versuch erhalten und ist
+nicht produktiv eingebunden. Herkunft, lokale Tests und noch offene installierte
+Abnahme stehen im [Integrationsnachweis](../docs/STREAMING_INTEGRATION.md).
 Die alten URLs mit 4.3.3 und 4.4.1 bleiben für eigene Vorlagen unverändert.
 Historische Chart.js-3.x-Dateien und
 ungenutzte Plugin-Kopien sind entfernt; eigene Vorlagen vor dem Update anhand

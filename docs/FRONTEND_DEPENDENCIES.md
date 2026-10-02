@@ -18,7 +18,7 @@ Lieferumfang der Library.
 | --- | --- | --- |
 | `SymconJSLive` | `htmlbox/HtmlBox-Chart.html` | jQuery 3.6.0, `util.js`, `init.js`; danach indirekt `loader.js`, `jslive/Chart.js` und die ausgewaehlten lokalen Font-CSS-/WOFF2-Dateien |
 | `SymconJSLiveAdvTextfield` | `Textfield1.html`, `Textfield2.html`, `FormExample.html` | jQuery 3.6.0, `util.js`, `css/TextField.css` oder `css/FormExample.css` |
-| `SymconJSLiveChart` | `Chart.html` | jQuery 3.6.0, Chart.js 4.5.1, Moment.js 2.31.0, chartjs-adapter-moment 1.0.1, chartjs-plugin-streaming 3.1.0, chartjs-plugin-datalabels 2.2.0, `util.js` |
+| `SymconJSLiveChart` | `Chart.html` | jQuery 3.6.0, Chart.js 4.5.1, Moment.js 2.31.0, chartjs-adapter-moment 1.0.1, chartjs-plugin-streaming 3.6.0, chartjs-plugin-datalabels 2.2.0, `util.js` |
 | `SymconJSLiveColorPicker` | `ColorPicker.html` | jQuery 3.6.0, `util.js`, lokale iro.js 5.5.0 |
 | `SymconJSLiveCustom` | `Default.html` oder benutzerdefiniertes Template | Das mitgelieferte Default-Template nutzt jQuery 3.6.0 und `util.js`; benutzerdefinierte Skripte liegen ausserhalb dieser Inventur |
 | `SymconJSLiveDateTimePicker` | `TimePicker1.html`, `TimePicker2.html`, `TimePicker3.html`, `DatePicker1.html`, `DateTimePicker1.html` | jQuery 3.6.0, `util.js` und die jeweilige Template-CSS-Datei; DatePicker und DateTimePicker verwenden beide `css/DatePicker1.css` |
@@ -45,7 +45,8 @@ im historischen HTMLBox-Lader auf eine der Dateien unter
 | chartjs-adapter-moment 1.0.0 | `SymconJSLive/js/chartjs/plugins/chartjs-adapter-moment.js` | unveraenderter Kompatibilitaetspfad fuer eigene Vorlagen | MIT-Hinweis im Dateikopf |
 | chartjs-plugin-datalabels 2.2.0 | `SymconJSLive/js/chartjs/plugins/datalabels/2.2.0/chartjs-plugin-datalabels.min.js` | offizielle Distribution, aktiv in den drei Chart-Modulen | MIT-Lizenz, Quellen und Hashes in `SymconJSLive/js/chartjs/plugins/datalabels/2.2.0/SOURCES.md` |
 | chartjs-plugin-datalabels 2.2.0 (lokal modifiziert) | `SymconJSLive/js/chartjs/plugins/chartjs-plugin-datalabels.min.js` | unveraenderter Kompatibilitaetspfad fuer eigene Vorlagen; drei lokale Aenderungen der Elementerkennung | MIT-Hinweis im Dateikopf; Abweichungen und vollstaendige Upstream-Lizenz unter `datalabels/2.2.0/` dokumentiert |
-| chartjs-plugin-streaming 3.1.0 | `SymconJSLive/js/chartjs/plugins/chartjs-plugin-streaming.min.js` | aktiv nur in `SymconJSLiveChart` | MIT-Hinweis im Dateikopf |
+| chartjs-plugin-streaming 3.6.0 | `SymconJSLive/js/chartjs/plugins/streaming/3.6.0/chartjs-plugin-streaming.min.js` | eigener Wartungsfork, aktiv nur in `SymconJSLiveChart` | MIT-Lizenz, Commit-Herkunft und SHA-256 in `SymconJSLive/js/chartjs/plugins/streaming/3.6.0/SOURCES.md` |
+| chartjs-plugin-streaming 3.1.0 | `SymconJSLive/js/chartjs/plugins/chartjs-plugin-streaming.min.js` | unveraenderter Kompatibilitaetspfad fuer eigene Vorlagen | MIT-Hinweis im Dateikopf |
 | Moment.js 2.31.0 | `SymconJSLive/js/moment/2.31.0/moment.min.js`, zugehoerige `.map` | aktiv in den drei Chart-Modulen; offizielle npm-Distribution | MIT-Lizenz, Quellen, Paketintegritaet und SHA-256 in `SymconJSLive/js/moment/2.31.0/SOURCES.md` |
 | Moment.js 2.27.0 | `SymconJSLive/js/moment/2.27.0/Moment.js` | unveraenderter Kompatibilitaetspfad fuer eigene Vorlagen | MIT-Hinweis im Dateikopf |
 | Canvas Gauges 2.1.7 | `SymconJSLive/js/canvas-gauges/gauge.min.js` | aktiv in `SymconJSLiveGauge` | vollstaendiger MIT-Text im Dateikopf |
@@ -58,9 +59,10 @@ Chart.js 4.5.1 wurde am 01.10.2026 als aktuelle stabile Version gegen den
 offiziellen GitHub-Release und npm `latest` geprueft. Die drei Standardvorlagen
 laden ausschliesslich den versionierten neuen Bundle. Die beiden unversionierten
 Dateien werden nicht ersetzt: Eigene Vorlagen erhalten keinen stillen
-Versionswechsel. Der bestehende Streaming-Bestand ist der Fork
-`@qultoltd/chartjs-plugin-streaming` 3.1.0; er und alle uebrigen Plugins bleiben
-unveraendert. Laufzeitnachweise und Grenzen stehen in
+Versionswechsel. Der historische Streaming-Bestand
+`@qultoltd/chartjs-plugin-streaming` 3.1.0 bleibt unveraendert; nur die
+Standard-Chartvorlage verwendet jetzt den eigenen Wartungsfork 3.6.0.
+Laufzeitnachweise und Grenzen stehen in `docs/STREAMING_INTEGRATION.md` und
 `docs/SYCON_RUNTIME_MATRIX.md`.
 
 MCDatepicker (`SymconJSLive/js/mc-calendar/mc-calendar.min.js`) sowie
@@ -141,7 +143,8 @@ Frontend-Abhaengigkeiten.
    Regressionen und lokaler Browsertest bestanden; CI und gezielte installierte
    Abnahme von 0.78 sind ebenfalls bestanden. Der Prototyp nach ADR 0004 bestand
    das Performancegate nicht. ADR 0005 legt jetzt den eigenen Wartungsfork als
-   Entwicklungsweg fest; dessen produktive Uebernahme steht noch aus.
+   Entwicklungsweg fest. Dessen Bundle 3.6.0 ist jetzt getrennt ueber einen
+   versionierten Pfad integriert; JSLive-CI und installierte Abnahme stehen aus.
    jQuery und die Einzelwert-Bibliotheken folgen getrennt; iro.js bleibt auf
    Wunsch unveraendert.
 
@@ -151,10 +154,10 @@ Die folgende Fork-Abwaegung beschreibt den Ausgangspunkt. Der zwischenzeitliche
 Versuch einer eigenen Echtzeitsteuerung nach [ADR 0004](adr/0004-own-realtime-controller.md)
 wurde durch [ADR 0005](adr/0005-maintained-streaming-fork.md) abgeloest.
 [Prototyp und Messungen](REALTIME_PROTOTYPE.md) bleiben historisch erhalten.
-Die Entwicklung erfolgt im eigenen Wartungsfork; ein produktiver Pluginwechsel
-oder eine Entfernung ist noch nicht freigegeben.
+Die Entwicklung erfolgt im eigenen Wartungsfork. Die getrennte lokale
+Integration von 3.6.0 ist umgesetzt; dies ist noch keine installierte Abnahme.
 
-Pruefstand 02.10.2026: Der lokale Bundle ist bytegleich mit
+Pruefstand 02.10.2026: Der historische unversionierte Bundle ist bytegleich mit
 `dist/@qultoltd/chartjs-plugin-streaming.min.js` aus
 [qultoltd-Commit aa653d8](https://github.com/qultoltd/chartjs-plugin-streaming/commit/aa653d89c224390c15ca39c22b9a28263a3ea981)
 vom 03.08.2023 (Version 3.1.0, MIT). SHA-256:
@@ -186,7 +189,9 @@ expliziten Anforderungsliste und einem getrennten Vergleichsprototyp sinnvoll.
 Fortschreibung nach dem Prototyp: Der Eigentuemer hat den eigenen Wartungsfork
 `Burki24/chartjs-plugin-streaming` als weiteren Weg gewaehlt, siehe
 [ADR 0005](adr/0005-maintained-streaming-fork.md). Die eigene Steuerung bleibt
-ein historischer Versuch. Der Fork wird isoliert mit dem aktuellen JSLive-Mix
-und gegen dieses 3.1.0-Bundle geprueft; die produktiven Assets und Vorlagen
-werden dadurch noch nicht umgestellt. Ein Luxon-Wechsel ist nicht beschlossen.
+ein historischer Versuch. Nach isolierter Matrix, begrenztem Langlauf und
+Lebenszykluskorrekturen im Fork folgt die Integration von 3.6.0 in die
+Standard-Chartvorlage. Herkunft, Vergleiche und Freigabegrenzen stehen im
+[Integrationsnachweis](STREAMING_INTEGRATION.md). Der Altpfad bleibt erhalten;
+ein Luxon-Wechsel ist nicht beschlossen.
 

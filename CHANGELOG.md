@@ -37,6 +37,11 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Changed
 
+- Die Standard-Chartvorlage verwendet den eigenen Streaming-Wartungsfork 3.6.0
+  mit versioniertem Assetpfad, MIT-Lizenz und Commit-/Hash-Nachweisen. Der alte
+  3.1.0-Pfad bleibt fuer eigene Vorlagen unveraendert. Chart.js, Moment, Adapter,
+  Datalabels und PHP-/Datenvertraege bleiben gleich. Lokale Integrations- und
+  Browsertests sichern den Wechsel ab; installierte Abnahme folgt nach Update.
 - Die drei Diagrammvorlagen laden Datalabels 2.2.0 jetzt aus der unveränderten
   offiziellen Distribution mit versioniertem Pfad, vollständiger MIT-Lizenz und
   Integritätsnachweisen. Der historisch modifizierte Bundle bleibt unter seiner

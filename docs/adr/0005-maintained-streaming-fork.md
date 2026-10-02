@@ -1,6 +1,6 @@
 # ADR 0005: Eigener Wartungsfork fuer Chart.js Streaming
 
-- Status: Angenommen fuer Entwicklung und isolierte Pruefung; produktive Uebernahme offen
+- Status: Angenommen; versionierte Integration 3.6.0 lokal umgesetzt, JSLive-CI und installierte Abnahme offen
 - Datum: 02.10.2026
 - Ersetzt: [ADR 0004](0004-own-realtime-controller.md)
 - Ausgangsstand: JSLive 0.82 mit Streaming 3.1.0; Wartungsfork 3.4.0
@@ -28,7 +28,7 @@ ist kein aktiver Arbeitsschritt. Ein Wechsel zu Luxon ist nicht beschlossen.
   Tests gegen unterstuetzte Chart.js-Versionen bleiben erforderlich.
 - PHP-Ausgaben, `type: realtime`, Properties, gespeicherte Konfigurationen,
   Archivdaten, WebSocket-/Pull-Vertraege und eigene Vorlagen bleiben erhalten.
-- JSLive bezieht spaeter ein festes, nachvollziehbares Bundle mit Lizenz,
+- JSLive bezieht ein festes, nachvollziehbares Bundle mit Lizenz,
   Herkunft und Hash. Der bisherige Assetpfad bleibt als Kompatibilitaetspfad.
 - Der Fork verwendet `dev`/`main` und sein eigenes `major.minor.0`-Schema.
   Versionsautomatik ist keine Produktfreigabe. Commit, Push, Tag und Release
@@ -53,6 +53,7 @@ eine vollstaendige Freigabe aller Konfigurationen oder ein mehrtaegiger Dauertes
 
 ## Nachweise
 
+- [Integration 3.6.0, Herkunft und offene Abnahme](../STREAMING_INTEGRATION.md)
 - [Historischer Prototyp und Performancevergleich](../REALTIME_PROTOTYPE.md)
 - [Frontend-Inventar](../FRONTEND_DEPENDENCIES.md)
 - Fork: `docs/JSLIVE_COMPATIBILITY.md` mit Testbefehlen und Vergleichsergebnissen.

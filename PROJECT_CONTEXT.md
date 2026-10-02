@@ -765,11 +765,15 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
     Variante a 120 Sekunden bestanden: pixelgleicher Ausgangszustand,
     begrenzter Datenbestand und keine beobachtete Leistungsverschlechterung.
     Kein Langzeit-, Transport- oder installierter Symcon-Nachweis. Ein direkter
-    In-place-Achsentausch bleibt als separater Fork-Befund offen; JSLive nutzt
-    den bestandenen Destroy-/Recreate-Pfad. CI der neuen Tests steht noch aus.
+    In-place-Achsentausch wurde anschliessend im Fork korrigiert; Stand 3.6.0
+    (`054f9fd`, Quellstand `ab87b77`) und seine erweiterten Tests sind CI-gruen.
+    JSLive nutzt weiterhin den Destroy-/Recreate-Pfad.
     Nachweise stehen im Fork unter `docs/JSLIVE_COMPATIBILITY.md`.
-    Produktive Uebernahme, versionierter Assetpfad und installierte Abnahme
-    sind nachgelagerte, getrennte Schritte. Moment bleibt vorerst erhalten;
+    Die getrennte Integration von 3.6.0 in die Standard-Chartvorlage ist lokal
+    umgesetzt: neuer versionierter Assetpfad, MIT-Lizenz, Herkunft und Hashes;
+    der alte 3.1.0-Pfad bleibt unveraendert. Lokale Nachweise und offene
+    JSLive-CI/installierte Abnahme: `docs/STREAMING_INTEGRATION.md`.
+    Moment bleibt vorerst erhalten;
     weitere Bibliotheken folgen einzeln, iro.js bleibt unveraendert.
 
 ### Phase 5 - IPSView und Kacheldarstellung

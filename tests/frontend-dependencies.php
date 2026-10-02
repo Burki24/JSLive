@@ -32,6 +32,7 @@ foreach ([
     'chartjs-adapter-moment 1.0.1',
     'chartjs-plugin-datalabels 2.2.0',
     'chartjs-plugin-streaming 3.1.0',
+    'chartjs-plugin-streaming 3.6.0',
     'Moment.js 2.27.0',
     'Moment.js 2.31.0',
     'Canvas Gauges 2.1.7',
@@ -140,6 +141,38 @@ $legacyDatalabels = file_get_contents($root . '/SymconJSLive/js/chartjs/plugins/
 if ($legacyDatalabels === false
     || hash('sha256', str_replace("\r\n", "\n", $legacyDatalabels)) !== 'b990332d6a689719ce37714c499f51523c4ffa830b426948a60ebe9b020a25cc') {
     throw new RuntimeException('The historical Datalabels compatibility asset must remain unchanged.');
+}
+
+$streamingReference = '/hook/JSLive/js/chartjs/plugins/streaming/3.6.0/chartjs-plugin-streaming.min.js';
+$chartTemplate = file_get_contents($root . '/SymconJSLive/templates/Chart.html');
+preg_match_all('#<script\b[^>]*\bsrc="([^"]*chartjs-plugin-streaming[^"\s]*)"#i', $chartTemplate, $streamingScripts);
+if ($streamingScripts[1] !== [$streamingReference]) {
+    throw new RuntimeException('Chart.html must load the maintained streaming bundle exactly once.');
+}
+if (strpos($chartTemplate, $sharedChartReference) >= strpos($chartTemplate, $streamingReference)
+    || strpos($chartTemplate, '/hook/JSLive/js/chartjs/plugins/moment/1.0.1/chartjs-adapter-moment.min.js') >= strpos($chartTemplate, $streamingReference)) {
+    throw new RuntimeException('Chart.js and the Moment adapter must load before streaming.');
+}
+$streamingDirectory = $root . '/SymconJSLive/js/chartjs/plugins/streaming/3.6.0/';
+$streamingSources = is_file($streamingDirectory . 'SOURCES.md')
+    ? file_get_contents($streamingDirectory . 'SOURCES.md') : false;
+foreach ([
+    'chartjs-plugin-streaming.min.js'  => 'ae787d33e000a9b0abc21eb95bd5d86613587e3ad7d6dcdb8e07dd271c46d058',
+    'LICENSE.md'                       => 'f73f043ba331cd7327bfb1cbb186820651d878ce7802c82928d65cd9e3a1ecf5'
+] as $streamingAsset => $expectedHash) {
+    $assetPath = $streamingDirectory . $streamingAsset;
+    if (!is_file($assetPath) || hash_file('sha256', $assetPath) !== $expectedHash) {
+        throw new RuntimeException('Missing or modified streaming distribution file: ' . $streamingAsset . '.');
+    }
+    if ($streamingSources === false || !str_contains($streamingSources, $streamingAsset)
+        || !str_contains($streamingSources, $expectedHash)) {
+        throw new RuntimeException('Streaming source inventory must record ' . $streamingAsset . ' and its SHA-256.');
+    }
+}
+$legacyStreaming = file_get_contents($root . '/SymconJSLive/js/chartjs/plugins/chartjs-plugin-streaming.min.js');
+if ($legacyStreaming === false
+    || hash('sha256', str_replace("\r\n", "\n", $legacyStreaming)) !== '2e0ac91691bc76ff2c618c7d600a36cc3a10784ef34cd30ac968d72d6d15d839') {
+    throw new RuntimeException('The historical streaming compatibility asset must remain unchanged.');
 }
 
 $references = [];

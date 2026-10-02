@@ -203,3 +203,38 @@ Referenz-, Hash- und Webhook-Tests sichern beide Pfade. Der isolierte
 Browservergleich umfasst sichtbare Datenbeschriftungen in allen drei
 Diagrammvorlagen. CI und die gezielte Abnahme nach dem Modulupdate bleiben
 erforderlich; Details stehen in `SYCON_RUNTIME_MATRIX.md`.
+
+## Siebter Schritt: eigener Streaming-Wartungsfork 3.6.0
+
+Ausgangspunkt ist JSLive 0.83, Commit `ff22ac2`. Ausschliesslich die
+Standardvorlage `Chart.html` wechselt auf
+`chartjs/plugins/streaming/3.6.0/chartjs-plugin-streaming.min.js`.
+Der Bundle stammt bytegleich aus dem CI-geprueften Fork-Commit `054f9fd`
+(Quellstand `ab87b77`). Es handelt sich um einen fest gepinnten Entwicklungsstand,
+nicht um einen npm- oder Tag-Release. MIT-Lizenz, Herkunft und SHA-256 stehen
+im neuen Verzeichnis. Chart.js 4.5.1, Moment 2.31.0, Adapter 1.0.1 und
+Datalabels 2.2.0 bleiben unveraendert.
+
+Der unversionierte Pfad `chartjs/plugins/chartjs-plugin-streaming.min.js`
+bleibt mit 3.1.0 bytegleich erhalten. Eigene `TemplateScriptID`-Vorlagen werden
+nicht automatisch angepasst und erhalten daher auch nicht die neuen
+Lebenszyklus-/Tooltipkorrekturen. Vor einer bewussten Umstellung den eigenen
+Bibliotheksmix, Livewerte, Tooltips, Periodenwechsel und Abbau pruefen.
+Nur ein Streaming-Plugin laden, nach Chart.js und dem Moment-Adapter.
+
+Properties, IDs, PHP-Funktionen, gespeicherte JSON-Daten, Archivdaten und
+Transportvertraege aendern sich nicht. Das Modulupdate fuehrt `ApplyChanges()`
+automatisch aus und erneuert den HTML-Cache. Danach die Chart-Ausgaben neu
+laden; ein zusaetzlicher Aufruf oder Dienstneustart ist nicht erforderlich.
+Wiederholtes Update fuehrt keine persistente Migration aus.
+
+Bei Problemen den vollstaendigen vorherigen Stand `ff22ac2` (0.83)
+wiederherstellen, Modulupdate ausfuehren und die Ausgaben neu laden. Eigene
+Vorlagen vor einer manuellen Anpassung separat sichern und gegebenenfalls
+zurueckspielen. Keine neuen und alten Plugin-Skripte gleichzeitig laden.
+
+Referenz-/Integritaetstests sichern die neue Einbindung und beide Dateien;
+Webhook-Tests pruefen die unveraenderte Auslieferung beider URLs. Der optionale
+lokale Browservergleich nutzt echte Assets und Templatefunktionen, jedoch
+synthetische Datenantworten. [Nachweise und Grenzen](STREAMING_INTEGRATION.md):
+JSLive-CI sowie WebSocket-/Pull-/IPSView-Abnahme nach dem Modulupdate stehen aus.

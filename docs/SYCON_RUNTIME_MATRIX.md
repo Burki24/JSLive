@@ -606,6 +606,18 @@ ein zusaetzlicher Aufruf ist nicht erforderlich. Der nachfolgende eigene
 Realtime-Prototyp ist nicht in Symcon eingebunden und gehoert nicht zu dieser
 Abnahme. Sein lokaler Vergleich steht in `docs/REALTIME_PROTOTYPE.md`.
 
+## Lokaler Kandidat: Wartungsfork 3.6.0 am 02.10.2026
+
+Die Standard-Chartvorlage verwendet lokal den versionierten eigenen
+Streaming-Wartungsfork 3.6.0; der alte 3.1.0-Pfad bleibt erhalten.
+Acht isolierte Browserdurchlaeufe mit echten Assets und Templatefunktionen
+sind bestanden (UTC/Berlin, Desktop/schmale Ansicht, Alt-/Neuvergleich).
+Die Datenantworten sind synthetisch; es fand kein Zugriff auf Symcon statt.
+Details, Testbefehl, Grenzen und noch offene Abnahme stehen in
+[STREAMING_INTEGRATION.md](STREAMING_INTEGRATION.md).
+JSLive-CI und gezielte installierte WebSocket-/Pull-/IPSView-Abnahme nach
+Modulupdate stehen aus. Kein neuer installierter PASS durch diesen lokalen Test.
+
 ## Ergebnisregeln
 
 - `PASS`: alle verpflichtenden Punkte sind mit frischem Laufzeitnachweis grün.
