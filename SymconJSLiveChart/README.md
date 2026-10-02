@@ -29,6 +29,18 @@ Die historischen Werte werden abhängig vom Zeitraum über die Archiv-
 Aggregation geladen. Für Echtzeitansichten kann der relative Zeitraum aktiviert
 werden.
 
+Beim asynchronen Laden werden die Datensatzabrufe parallel ausgeführt. Die
+Ansicht wird erst übernommen, wenn alle Datensatzabrufe abgeschlossen sind;
+die konfigurierte Reihenfolge bleibt unabhängig von der Antwortreihenfolge
+erhalten. Leere Antworten werden ausgelassen. Bei fehlgeschlagenen Abrufen
+werden die übrigen Datensätze dargestellt und der Fehler mit Datensatzindex
+ohne Anfrage-URL in der Browserkonsole gemeldet.
+
+Nach einem Modulupdate die Ansicht neu laden; bei aktivem HTML-Cache diesen
+über das bestehende `ApplyChanges()` erneuern. Ein Dienstneustart ist für
+diese Template-Korrektur nicht erforderlich. Eigene `TemplateScriptID`-Vorlagen
+werden nicht automatisch geändert.
+
 ## Daten- und Webhook-Befehle
 
 Der bestehende JSLive-Vertrag umfasst `getContend`, `getData` und

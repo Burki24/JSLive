@@ -391,9 +391,32 @@
                         pullModeStopping = true;
                     }
 
-                    //load VariablesData Async
-                    var first = true;
-                    var counter_var = 0;
+                    // Collect this batch before rendering: response order is not dataset order.
+                    var loadedDatasets = [];
+                    var remainingDatasets = configuration.Var_List.length;
+                    function renderLoadedDatasets() {
+                        // Empty/failed responses must not leave holes in Chart.js datasets.
+                        config_dataset = loadedDatasets.filter(function (dataset) {
+                            return dataset !== undefined;
+                        });
+                        if (fullReload || typeof myChart === "undefined") {
+                            console.log("RELOAD CHART Full!");
+                            if(typeof myChart !== "undefined") myChart.destroy();
+                            var ctx = document.getElementById('myChart');
+                            myChart = new Chart(ctx, updateChartconfig());
+
+                            last_update = Date.now();
+                            offset_isSet = checkOffsetisSet();
+                            UpdateConfiguration();
+                        }else{
+                            myChart.data.datasets = config_dataset;
+                            myChart.update();
+                        }
+                        isReloading = false;
+                    }
+                    if (remainingDatasets === 0) {
+                        renderLoadedDatasets();
+                    }
                     configuration.Var_List.forEach(function (Variable, index) {
                         $.getJSON("/hook/JSLive/getUpdate?Instance={INSTANCE}&pw={PASSWORD}&id=" + index, function (data) {
                             //console.log("update Offset: ", data);
@@ -402,42 +425,15 @@
                                 return;
                             }
 
-                            //config_dataset.push(data.DATASETS[0]);
-                            config_dataset[index] = data.DATASETS[0];
-                            //Object.assign(config_axes, data.AXES);
-
+                            loadedDatasets[index] = data.DATASETS[0];
                             console.log("Async Dataset " + Variable + " loaded");
-                            //console.log("Dataset: ", JSON.stringify(data));
-
-                            if(first){
-                                first = false
-                                //fullReload = true;
-                                if (fullReload || typeof myChart === "undefined") {
-                                    console.log("RELOAD CHART Full!");
-                                    if(typeof myChart !== "undefined") myChart.destroy();
-                                    var ctx = document.getElementById('myChart');
-                                    myChart = new Chart(ctx, updateChartconfig());
-
-
-                                    last_update = Date.now();
-                                    offset_isSet = checkOffsetisSet();
-                                    UpdateConfiguration();
-                                }else{
-                                    myChart.data.datasets = config_dataset;
-                                    myChart.update();
-                                }
-
-                            }else{
-                                if(typeof myChart !== "undefined") {
-                                    myChart.data.datasets = config_dataset;
-                                    //myChart.options.scales = config_axes;
-
-                                    console.log("Update Chart!");
-                                    myChart.update();
-                                }
+                        }).fail(function () {
+                            console.error("Async dataset request failed at index " + index);
+                        }).always(function () {
+                            remainingDatasets--;
+                            if (remainingDatasets === 0) {
+                                renderLoadedDatasets();
                             }
-
-                            isReloading = false;
                         });
                     });
                 });

@@ -119,6 +119,11 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Fixed
 
+- Chart sammelt beim asynchronen Laden die Datensatzantworten vor dem Rendern
+  in konfigurierter Reihenfolge. Kommt ein späterer Datensatz zuerst an,
+  gehen Zeitachse, Titel und Tooltip-Konfiguration nicht mehr verloren.
+  Leere oder fehlgeschlagene Datensatzantworten hinterlassen keine Array-Lücken;
+  fehlgeschlagene Abrufe werden ohne Anfrage-URL in der Browserkonsole gemeldet.
 - Radar-Tooltips verwenden den Chart.js-4-Kontext statt der alten
   Zwei-Argument-Signatur und zeigen Datensatzname sowie formatierten Wert
   ohne JavaScript-Fehler an. Sie setzen keine kartesischen `.y`-Daten mehr

@@ -430,6 +430,61 @@ Browserkontexte sind geschlossen, Zugangsdaten und Datenantworten nicht als
 Testdateien gespeichert. Keine Regression in den geprueften Szenarien gefunden.
 CI und gezielte Abnahme des neuen Pfads nach dem Modulupdate stehen noch aus.
 
+## Adapter-Abnahme 0.75 und Chart-Ladereihenfolge am 02.10.2026
+
+0.75, Build 193520967, Quellcommit `b88e547`, Metadatencommit `453f95d`:
+lokal und GitHub synchron, Tests/Style/CodeQL gruen. Symcon 9.1 / PHP 8.5.8,
+alle elf Instanzen mit Status 102, ohne erneuten Dienstneustart.
+Alle drei Diagramme laden den neuen Adapter mit HTTP 200 und WebSocket 101.
+Der 1.0.1-Bundle ist bytegleich zum Repository; der Altpfad mit 1.0.0 bleibt
+bis auf CRLF-/LF-Zeilenenden unveraendert. Keine passenden JSLive-Warnungen
+oder -Fehler ab dem Metadatenzeitpunkt im Log gefunden.
+
+Die erste Chart-Ansicht fiel auf eine Kategorienachse zurueck, stand still und
+zeigte 60 Tooltip-Eintraege mit Titel `0`. Nach Neuladen blieb sie stabil.
+Die gezielte Diagnose reproduzierte die Ursache mit Adapter 1.0.0 und 1.0.1:
+Wird die Antwort fuer Datensatzindex 0 im Testbrowser zurueckgehalten, erzeugt
+die zuerst eintreffende Antwort fuer Index 1 ein Array mit leerem ersten Slot.
+`updateChartconfig()` greift auf dessen `.type` zu, faengt den TypeError per
+`alert()` ab und liefert keine Konfiguration. Der Chart wird trotzdem erzeugt;
+spaeter eintreffende Daten erhalten die fehlerhaften Standardoptionen.
+Dialoge muessen mitgeprueft werden: Der abgefangene Fehler erscheint nicht
+als ungefangener JavaScript-Fehler. Ergebnis: Adapter-Auslieferung bestanden,
+Gesamtabnahme wegen reproduziertem Bestandsfehler weiterhin eingeschraenkt.
+
+### Lokaler Fix der asynchronen Initialisierung
+
+Die Standardvorlage sammelt nun alle Datensatzantworten eines Ladevorgangs,
+bevor sie einmalig in konfigurierter Reihenfolge gerendert werden. Leere oder
+fehlgeschlagene Antworten erzeugen keine Array-Luecken. Ein fehlgeschlagener
+Datensatzabruf wird ohne URL in der Konsole gemeldet; vorhandene Datensaetze
+bleiben darstellbar. Properties, HTTP-Vertraege, Bibliotheken und synchrone
+Ladelogik bleiben unveraendert. Ueberlappende Ladevorgaenge und Fehler der
+vorgelagerten Konfigurations-/Achsenabfragen sind nicht Gegenstand dieses Fixes.
+
+- `node tests/chart-async-loading.js` reproduzierte zuerst denselben TypeError.
+  Nach dem Fix bestehen 13 Szenarien: beide Zweier-Reihenfolgen, alle sechs
+  Dreier-Permutationen jeweils mit Teil-/Vollreload, leere/fehlgeschlagene erste
+  Antwort, leere Variablenliste, komplett leere Daten und synchrones Laden.
+  Der Test fuehrt originale Template-Funktionen mit kontrollierter HTTP-Grenze
+  und einem Chart-Konfigurationsempfaenger aus; er ersetzt keinen Renderer.
+- Edge 155.0.4283.18, 1024 x 768, Europe/Berlin: Der installierte Originalcode
+  reproduziert bei verzoegertem Index 0 den Fehler. Fuer den Kandidaten wird
+  ausschliesslich die lokale `ReloadChart`-Funktion vor dem Start browserlokal
+  eingesetzt, mit den vom Server gerenderten Anfragepfaden. HTML, Assets und
+  lesende Daten stammen weiterhin aus MCP-CURRENT; `setData` ist gesperrt.
+- Bei verzoegertem Index 0 ebenso wie Index 1 wartet der Kandidat auf beide
+  Antworten. Danach genau ein Linienchart mit korrektem Titel, geordneter Linie
+  und Balken, zwei Tooltip-Eintraegen mit Datum, fortschreitender Realtime-Achse
+  und WebSocket 101. Keine Dialoge oder JavaScript-Fehler. Erneutes vollstaendiges
+  Laden besteht ebenfalls in beiden Kontexten; Screenshot visuell kontrolliert.
+
+Keine Symcon-Dateien, Properties oder Variablen wurden geaendert. Browserkontexte
+sind geschlossen; Zugangsdaten und Serverantworten wurden nicht als Testdateien
+gespeichert. CI und gezielte installierte Abnahme des Fixes stehen noch aus.
+Nach Modulupdate Ausgabe neu laden, gegebenenfalls aktiven HTML-Cache mit dem
+bestehenden `ApplyChanges()` erneuern; kein Dienstneustart erforderlich.
+
 ## Ergebnisregeln
 
 - `PASS`: alle verpflichtenden Punkte sind mit frischem Laufzeitnachweis grün.

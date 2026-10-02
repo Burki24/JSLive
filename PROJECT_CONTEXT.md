@@ -188,6 +188,9 @@ Vorhandene lokale Pruefungen:
 - `tests/chart-dates.php`: Datumsbereiche und Offset-Berechnung des Chart fuer
   alle acht Perioden in beiden Zeitmodi sowie numerische Webhook-Querywerte fuer
   Dataset- und Variablen-IDs;
+- `tests/chart-async-loading.js`: originale Template-Funktionen mit kontrollierter
+  HTTP-Antwortreihenfolge, zwei/drei Datensaetzen, Teil-/Vollreload, leeren und
+  fehlgeschlagenen Datensatzantworten sowie unveraendertem synchronen Ladepfad;
 - `tests/custom-data.php`: RGBA-Aufbereitung numerischer Stringwerte und sichere
   Ablehnung eines unbekannten numerischen Webhook-Objektparameters im
   Custom-Modul, ohne schreibende Aktionen auszufuehren;
@@ -701,13 +704,20 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    pixelgleichen Bildern, Tooltips, WebSocket und Realtime-Achse sind bestanden.
    CI und gezielte Abnahme nach Modulupdate auf 0.74 ohne Neustart sind bestanden
    (Quellcommit `0589839`, Metadatencommit `540e1de`).
-7. Lokal umgesetzt: chartjs-adapter-moment 1.0.1 in den drei Standardvorlagen.
+7. Installiert: chartjs-adapter-moment 1.0.1 in den drei Standardvorlagen.
    Der alte 1.0.0-Pfad bleibt erhalten; Chart.js, Moment, Datalabels und Streaming
    bleiben unveraendert. Integritaet, MIT-Lizenz, Adaptertests und Migration sind
    dokumentiert. Browservergleich: pixelgleiche Diagramme, gleiche Tooltips,
-   WebSocket und fortschreitende Echtzeitachse. CI und installierte Abnahme
-   stehen noch aus. Danach weitere Bibliotheken einzeln pruefen;
-   iro.js bleibt auf Wunsch unveraendert.
+   WebSocket und fortschreitende Echtzeitachse. CI und Auslieferung von 0.75
+   sind bestaetigt (`b88e547` / `453f95d`). Die Abnahme fand einen bestehenden
+   Fehler bei vertauschter asynchroner Datensatzreihenfolge, reproduzierbar
+   mit beiden Adapterversionen. Daher noch kein uneingeschraenktes Gesamt-PASS.
+8. Lokal korrigiert: Chart rendert asynchrone Datensaetze erst nach Abschluss
+   der Datensatzabrufe und in konfigurierter Reihenfolge ohne Array-Luecken.
+   13 Regressionstest-Szenarien und Browserpruefungen beider Antwortreihenfolgen
+   einschliesslich Tooltips, Zeitachse und Vollreload sind bestanden.
+   CI und installierte Abnahme des Fixes stehen noch aus. Anschliessend weitere
+   Bibliotheken einzeln pruefen; iro.js bleibt auf Wunsch unveraendert.
 
 ### Phase 5 - IPSView und Kacheldarstellung
 

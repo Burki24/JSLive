@@ -113,13 +113,14 @@ Frontend-Abhaengigkeiten.
    bleibt erhalten, erhaelt aber nicht die Upstream-Korrekturen der neuen Version.
    Adaptertests in UTC/Berlin und der gezielte Browservergleich sind bestanden;
    CI und gezielte Abnahme von 0.74 ohne Neustart sind bestanden.
-5. Lokal umgesetzt: chartjs-adapter-moment 1.0.1 ersetzt 1.0.0 in den drei
+5. Installiert: chartjs-adapter-moment 1.0.1 ersetzt 1.0.0 in den drei
    Standardvorlagen. npm und offizieller Release bestaetigen am 01.10.2026 die
    aktuelle Version mit deklarierter Chart.js-4-Unterstuetzung. Der minifizierte
    Laufzeitcode ist nach Entfernen von Versionsbanner und altem Source-Map-Kommentar
    identisch zum bisherigen Bundle; der Schritt aendert keine Datumslogik.
    Die neue Distribution hat keine Source Map und keinen verwaisten Map-Verweis.
    Alter Pfad, Chart.js, Moment, Datalabels und Streaming bleiben unveraendert.
-   Adaptertests und Browservergleich sind bestanden; CI und installierte Abnahme
-   stehen noch aus.
+   Adaptertests, CI und Auslieferung auf 0.75 sind bestaetigt. Ein dabei gefundener
+   Chart-Ladefehler tritt mit beiden Adapterversionen auf und wird separat
+   korrigiert; die gezielte Abnahme bleibt bis zum installierten Fix eingeschraenkt.
 
