@@ -704,20 +704,30 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
    pixelgleichen Bildern, Tooltips, WebSocket und Realtime-Achse sind bestanden.
    CI und gezielte Abnahme nach Modulupdate auf 0.74 ohne Neustart sind bestanden
    (Quellcommit `0589839`, Metadatencommit `540e1de`).
-7. Installiert: chartjs-adapter-moment 1.0.1 in den drei Standardvorlagen.
+7. Erledigt: chartjs-adapter-moment 1.0.1 in den drei Standardvorlagen.
    Der alte 1.0.0-Pfad bleibt erhalten; Chart.js, Moment, Datalabels und Streaming
    bleiben unveraendert. Integritaet, MIT-Lizenz, Adaptertests und Migration sind
    dokumentiert. Browservergleich: pixelgleiche Diagramme, gleiche Tooltips,
    WebSocket und fortschreitende Echtzeitachse. CI und Auslieferung von 0.75
    sind bestaetigt (`b88e547` / `453f95d`). Die Abnahme fand einen bestehenden
    Fehler bei vertauschter asynchroner Datensatzreihenfolge, reproduzierbar
-   mit beiden Adapterversionen. Daher noch kein uneingeschraenktes Gesamt-PASS.
-8. Lokal korrigiert: Chart rendert asynchrone Datensaetze erst nach Abschluss
+   mit beiden Adapterversionen. Dieser ist im folgenden Schritt separat behoben.
+8. Erledigt: Chart rendert asynchrone Datensaetze erst nach Abschluss
    der Datensatzabrufe und in konfigurierter Reihenfolge ohne Array-Luecken.
    13 Regressionstest-Szenarien und Browserpruefungen beider Antwortreihenfolgen
    einschliesslich Tooltips, Zeitachse und Vollreload sind bestanden.
-   CI und installierte Abnahme des Fixes stehen noch aus. Anschliessend weitere
-   Bibliotheken einzeln pruefen; iro.js bleibt auf Wunsch unveraendert.
+   CI und gezielte installierte Abnahme von 0.76 sind am 02.10.2026 bestanden
+   (`c48f76a` / `124cf6c`), ohne Dienstneustart. Kein neuer Vollmatrixdurchlauf.
+9. Lokal umgesetzt: Datalabels 2.2.0 bleibt die aktuelle stabile Version,
+   die drei Standardvorlagen wechseln aber vom historisch modifizierten Bundle
+   auf die offizielle Distribution im neuen versionierten Pfad. Der Altpfad
+   bleibt fuer eigene Vorlagen erhalten. Quellen, MIT-Lizenz, Hashes,
+   Pfad-/Webhook-Tests und Browservergleich mit sichtbaren Labels sind ergaenzt.
+   CI und installierte Abnahme stehen noch aus.
+10. Als Naechstes den Streaming-Fork separat pruefen; sein bisheriger npm-Name
+    lieferte am 02.10.2026 HTTP 404. Herkunft und Ersatzkompatibilitaet muessen
+    vor einer Aenderung geklaert werden. Danach weitere Bibliotheken einzeln
+    pruefen; iro.js bleibt auf Wunsch unveraendert.
 
 ### Phase 5 - IPSView und Kacheldarstellung
 

@@ -1,6 +1,6 @@
 # Frontend-Abhaengigkeiten
 
-Stand: 01.10.2026. Diese Inventur bildet die mitgelieferten Templates und die
+Stand: 02.10.2026. Diese Inventur bildet die mitgelieferten Templates und die
 vom Splitter unter `/hook/JSLive/js/` ausgelieferten Dateien ab. Die zuvor
 extern geladenen Ressourcen sind lokalisiert; Bibliotheksversionen wurden dabei
 nicht aktualisiert. MCDatepicker, zwei unbenutzte CSS-Dateien sowie die
@@ -43,7 +43,8 @@ im historischen HTMLBox-Lader auf eine der Dateien unter
 | Chart.js 4.4.1 | `SymconJSLive/js/chartjs/chart.min.js` | unveraenderter Kompatibilitaetspfad fuer eigene Vorlagen | MIT-Hinweis im Dateikopf |
 | chartjs-adapter-moment 1.0.1 | `SymconJSLive/js/chartjs/plugins/moment/1.0.1/chartjs-adapter-moment.min.js` | aktiv in den drei Chart-Modulen | MIT-Lizenz, Quellen und Hashes in `SymconJSLive/js/chartjs/plugins/moment/1.0.1/SOURCES.md` |
 | chartjs-adapter-moment 1.0.0 | `SymconJSLive/js/chartjs/plugins/chartjs-adapter-moment.js` | unveraenderter Kompatibilitaetspfad fuer eigene Vorlagen | MIT-Hinweis im Dateikopf |
-| chartjs-plugin-datalabels 2.2.0 | `SymconJSLive/js/chartjs/plugins/chartjs-plugin-datalabels.min.js` | aktiv in den drei Chart-Modulen | MIT-Hinweis im Dateikopf |
+| chartjs-plugin-datalabels 2.2.0 | `SymconJSLive/js/chartjs/plugins/datalabels/2.2.0/chartjs-plugin-datalabels.min.js` | offizielle Distribution, aktiv in den drei Chart-Modulen | MIT-Lizenz, Quellen und Hashes in `SymconJSLive/js/chartjs/plugins/datalabels/2.2.0/SOURCES.md` |
+| chartjs-plugin-datalabels 2.2.0 (lokal modifiziert) | `SymconJSLive/js/chartjs/plugins/chartjs-plugin-datalabels.min.js` | unveraenderter Kompatibilitaetspfad fuer eigene Vorlagen; drei lokale Aenderungen der Elementerkennung | MIT-Hinweis im Dateikopf; Abweichungen und vollstaendige Upstream-Lizenz unter `datalabels/2.2.0/` dokumentiert |
 | chartjs-plugin-streaming 3.1.0 | `SymconJSLive/js/chartjs/plugins/chartjs-plugin-streaming.min.js` | aktiv nur in `SymconJSLiveChart` | MIT-Hinweis im Dateikopf |
 | Moment.js 2.31.0 | `SymconJSLive/js/moment/2.31.0/moment.min.js`, zugehoerige `.map` | aktiv in den drei Chart-Modulen; offizielle npm-Distribution | MIT-Lizenz, Quellen, Paketintegritaet und SHA-256 in `SymconJSLive/js/moment/2.31.0/SOURCES.md` |
 | Moment.js 2.27.0 | `SymconJSLive/js/moment/2.27.0/Moment.js` | unveraenderter Kompatibilitaetspfad fuer eigene Vorlagen | MIT-Hinweis im Dateikopf |
@@ -113,7 +114,7 @@ Frontend-Abhaengigkeiten.
    bleibt erhalten, erhaelt aber nicht die Upstream-Korrekturen der neuen Version.
    Adaptertests in UTC/Berlin und der gezielte Browservergleich sind bestanden;
    CI und gezielte Abnahme von 0.74 ohne Neustart sind bestanden.
-5. Installiert: chartjs-adapter-moment 1.0.1 ersetzt 1.0.0 in den drei
+5. Erledigt: chartjs-adapter-moment 1.0.1 ersetzt 1.0.0 in den drei
    Standardvorlagen. npm und offizieller Release bestaetigen am 01.10.2026 die
    aktuelle Version mit deklarierter Chart.js-4-Unterstuetzung. Der minifizierte
    Laufzeitcode ist nach Entfernen von Versionsbanner und altem Source-Map-Kommentar
@@ -121,6 +122,22 @@ Frontend-Abhaengigkeiten.
    Die neue Distribution hat keine Source Map und keinen verwaisten Map-Verweis.
    Alter Pfad, Chart.js, Moment, Datalabels und Streaming bleiben unveraendert.
    Adaptertests, CI und Auslieferung auf 0.75 sind bestaetigt. Ein dabei gefundener
-   Chart-Ladefehler tritt mit beiden Adapterversionen auf und wird separat
-   korrigiert; die gezielte Abnahme bleibt bis zum installierten Fix eingeschraenkt.
+   Chart-Ladefehler trat mit beiden Adapterversionen auf. Er ist separat in 0.76
+   korrigiert und einschliesslich beider Antwortreihenfolgen, Tooltips,
+   Echtzeitachse, Vollreload und WebSocket abgenommen; Tests/Style/CodeQL gruen.
+6. Lokal umgesetzt: Datalabels bleibt auf 2.2.0, der am 02.10.2026 gegen npm und
+   den offiziellen Release geprueften aktuellen stabilen Version. Der historische
+   Bundle ist trotz `.min.js` unminifiziert und enthaelt drei lokale
+   `constructor.name`-Pruefungen statt der originalen `instanceof`-Pruefungen.
+   Die Standardvorlagen wechseln deshalb auf die unveraenderte offizielle
+   Distribution im versionierten Pfad; der Altpfad bleibt erhalten. Lizenz,
+   Paketintegritaet, Hashes und Unterschiede sind dokumentiert. Referenz- und
+   Webhook-Tests sowie Browservergleich mit sichtbaren Labels sind bestanden;
+   CI und installierte Abnahme stehen noch aus.
+7. Danach Streaming-Fork separat auf Herkunft, Verfuegbarkeit und Aktualitaet
+   pruefen: Die npm-Abfrage fuer `@qultoltd/chartjs-plugin-streaming` lieferte
+   am 02.10.2026 HTTP 404. Daraus folgt noch keine Aussage ueber die Ursache
+   oder einen geeigneten Ersatz. Keine automatische Umstellung auf das anders
+   versionierte Ursprungsprojekt. jQuery und die Einzelwert-Bibliotheken folgen
+   getrennt; iro.js bleibt auf Wunsch unveraendert.
 

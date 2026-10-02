@@ -57,6 +57,14 @@ foreach (['Chart.html', 'Doughnut-PIE.html', 'RadarChart.html'] as $chartTemplat
     if ($chartScripts[1] !== [$sharedChartReference]) {
         throw new RuntimeException($chartTemplate . ' must load the shared Chart.js bundle exactly once.');
     }
+    $datalabelsReference = '/hook/JSLive/js/chartjs/plugins/datalabels/2.2.0/chartjs-plugin-datalabels.min.js';
+    preg_match_all('#<script\b[^>]*\bsrc="([^"]*chartjs-plugin-datalabels[^"\s]*)"#i', $template, $datalabelsScripts);
+    if ($datalabelsScripts[1] !== [$datalabelsReference]) {
+        throw new RuntimeException($chartTemplate . ' must load the official Datalabels bundle exactly once.');
+    }
+    if (strpos($template, $sharedChartReference) >= strpos($template, $datalabelsReference)) {
+        throw new RuntimeException($chartTemplate . ' must load Chart.js before Datalabels.');
+    }
 }
 foreach (['4.5.1/chart.umd.min.js' => '4.5.1', 'chart.min.js' => '4.4.1', 'chart.js' => '4.3.3'] as $chartAsset => $version) {
     $asset = file_get_contents($root . '/SymconJSLive/js/chartjs/' . $chartAsset);
@@ -108,6 +116,30 @@ foreach ([
     if ($adapterSources === false || !str_contains($adapterSources, $adapterAsset) || !str_contains($adapterSources, $expectedHash)) {
         throw new RuntimeException('Moment adapter source inventory must record ' . $adapterAsset . ' and its SHA-256.');
     }
+}
+
+$datalabelsDirectory = $root . '/SymconJSLive/js/chartjs/plugins/datalabels/2.2.0/';
+$datalabelsSources = is_file($datalabelsDirectory . 'SOURCES.md')
+    ? file_get_contents($datalabelsDirectory . 'SOURCES.md') : false;
+foreach ([
+    'chartjs-plugin-datalabels.min.js' => '20c08f3d9c6d2ef76df6d6a6f1127c0013339fe32add24222276c398c6308c38',
+    'LICENSE.md'                       => '075bb10eabebc9356311ffca1b18fdd470fca8e5c2ce0f6e098430c81c59a624'
+] as $datalabelsAsset => $expectedHash) {
+    $assetPath = $datalabelsDirectory . $datalabelsAsset;
+    if (!is_file($assetPath) || hash_file('sha256', $assetPath) !== $expectedHash) {
+        throw new RuntimeException('Missing or modified Datalabels distribution file: ' . $datalabelsAsset . '.');
+    }
+    if ($datalabelsSources === false || !str_contains($datalabelsSources, $datalabelsAsset)
+        || !str_contains($datalabelsSources, $expectedHash)) {
+        throw new RuntimeException('Datalabels source inventory must record ' . $datalabelsAsset . ' and its SHA-256.');
+    }
+}
+// The historical URL has three local element-detection patches. Do not replace
+// it silently for custom templates; tolerate checkout-only CRLF conversion.
+$legacyDatalabels = file_get_contents($root . '/SymconJSLive/js/chartjs/plugins/chartjs-plugin-datalabels.min.js');
+if ($legacyDatalabels === false
+    || hash('sha256', str_replace("\r\n", "\n", $legacyDatalabels)) !== 'b990332d6a689719ce37714c499f51523c4ffa830b426948a60ebe9b020a25cc') {
+    throw new RuntimeException('The historical Datalabels compatibility asset must remain unchanged.');
 }
 
 $references = [];

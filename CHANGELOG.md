@@ -9,6 +9,11 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Changed
 
+- Die drei Diagrammvorlagen laden Datalabels 2.2.0 jetzt aus der unveränderten
+  offiziellen Distribution mit versioniertem Pfad, vollständiger MIT-Lizenz und
+  Integritätsnachweisen. Der historisch modifizierte Bundle bleibt unter seiner
+  bisherigen URL für eigene Templates erhalten. Die Plugin-Version bleibt
+  2.2.0; Chart.js, Moment, Adapter und Streaming sind unverändert.
 - Die drei Diagrammvorlagen verwenden jetzt den lokal versionierten
   chartjs-adapter-moment 1.0.1 mit offiziell deklarierter Chart.js-4-Unterstützung.
   Der bisherige Adapterpfad mit 1.0.0 bleibt für eigene Templates unverändert;

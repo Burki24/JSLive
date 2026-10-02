@@ -172,3 +172,34 @@ Die vorhandenen Adaptertests vergleichen alte und neue Kombination in UTC und
 Berlin. Referenz-, Integritaets- und Webhook-Tests sichern neue und alte Pfade.
 Der isolierte Browservergleich ersetzt nicht die noch ausstehende CI und
 gezielte Abnahme nach dem Modulupdate.
+
+## Sechster Schritt: offizielle Datalabels-Distribution 2.2.0
+
+Ausgangspunkt ist die abgenommene JSLive 0.76, Commit `124cf6c`.
+Die drei Standardvorlagen wechseln von
+`chartjs/plugins/chartjs-plugin-datalabels.min.js` auf
+`chartjs/plugins/datalabels/2.2.0/chartjs-plugin-datalabels.min.js`.
+Die Plugin-Version bleibt 2.2.0 (am 02.10.2026 weiterhin npm `latest` und
+aktueller offizieller Release). Chart.js, Moment, Adapter und Streaming
+bleiben unveraendert. Der neue Bundle und die MIT-Lizenz sind unveraendert aus
+dem integritaetsgeprueften npm-Paket uebernommen; keine Source Map enthalten.
+
+Der historische Bundle ist trotz seines Dateinamens unminifiziert und ersetzt
+an drei Stellen die originale `instanceof`-Elementerkennung durch
+`constructor.name`. Dieser lokal modifizierte Altpfad bleibt unveraendert;
+eigene `TemplateScriptID`-Vorlagen werden nicht automatisch angepasst. Die
+Original-Erkennung funktioniert mit dem gemeinsamen Chart.js-4.5.1-Bundle;
+eigene Kombinationen vor einer manuellen Umstellung gesondert pruefen.
+Nur ein Datalabels-Plugin und dieses nach Chart.js laden.
+
+Formatierer, Styles, Properties, Datenformate und gespeicherte Konfigurationen
+bleiben gleich. Nach dem Modulupdate die Diagramme neu laden; bei aktivem
+HTML-Cache diesen ueber das bestehende `ApplyChanges()` erneuern. Kein
+Dienstneustart und keine persistente Migration erforderlich. Bei Problemen
+den vollstaendigen Stand 0.76 wiederherstellen und die Ausgaben neu laden;
+eigene Vorlagen vor einer Anpassung separat sichern.
+
+Referenz-, Hash- und Webhook-Tests sichern beide Pfade. Der isolierte
+Browservergleich umfasst sichtbare Datenbeschriftungen in allen drei
+Diagrammvorlagen. CI und die gezielte Abnahme nach dem Modulupdate bleiben
+erforderlich; Details stehen in `SYCON_RUNTIME_MATRIX.md`.

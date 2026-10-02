@@ -485,6 +485,58 @@ gespeichert. CI und gezielte installierte Abnahme des Fixes stehen noch aus.
 Nach Modulupdate Ausgabe neu laden, gegebenenfalls aktiven HTML-Cache mit dem
 bestehenden `ApplyChanges()` erneuern; kein Dienstneustart erforderlich.
 
+## Gezielte Chart-Fix-Abnahme von 0.76 am 02.10.2026
+
+Quellcommit `c48f76a`, Metadatencommit `124cf6c`, Library 0.76,
+Build 206108522: lokal und GitHub synchron; Tests, Check Style und CodeQL gruen.
+MCP-CURRENT bestaetigt Symcon 9.1 / PHP 8.5.8 und alle elf Instanzen mit Status
+102. Die Kernel-Startzeit blieb unveraendert; kein Dienstneustart erforderlich.
+
+Die installierte Vorlage wurde ohne Codeersetzung in Edge 155.0.4283.18,
+1024 x 768, Europe/Berlin geprueft. Je ein isolierter Browserkontext hielt die
+Antwort fuer Index 0 beziehungsweise Index 1 zurueck: Bis beide Antworten
+eingetroffen sind, bleibt der Ladevorgang aktiv und es entsteht noch kein Chart.
+Danach korrekter Titel, konfigurierte Datensatzreihenfolge, zwei Tooltip-Eintraege
+mit Datum, fortschreitende Realtime-Achse und genau eine Chart-Instanz.
+Vollreload besteht in beiden Faellen; WebSocket 101, keine Dialoge,
+JavaScript- oder HTTP-Ressourcenfehler. Die gezielte Logsuche ab dem
+Metadatenzeitpunkt fand keine JSLive-Warnungen oder -Fehler. Gesamtsuite frisch
+bestanden. Ergebnis: gezielter Fix-PASS; kein neuer vollstaendiger Matrixdurchlauf.
+
+## Lokaler Kandidat: offizielle Datalabels 2.2.0 am 02.10.2026
+
+Ausgangsstand ist 0.76. npm `latest` und der offizielle Release bestaetigen
+weiterhin 2.2.0. Der historische `.min.js`-Bestand ist jedoch der unminifizierte
+Bundle mit geaendertem Copyright-Jahr und drei `constructor.name`-Pruefungen
+anstelle der originalen `instanceof`-Pruefungen fuer Arc, Point und Bar.
+Der neue versionierte Bundle stammt unveraendert aus dem SHA-512-geprueften
+npm-Paket; Dateihashes und MIT-Lizenz sind dokumentiert. Nur die drei
+Standardvorlagen wechseln den Pfad, der modifizierte Altpfad bleibt erhalten.
+
+Isolierter Edge 155.0.4283.18, 1024 x 768, Europe/Berlin: Fuer den
+Alt-/Neu-Vergleich wurden lesende HTML-/Datenantworten von MCP-CURRENT im
+Speicher wiederverwendet. Browserzeit fixiert, Animationsdauer in den
+Testantworten auf null gesetzt und Datalabels ausschliesslich browserlokal
+eingeblendet. Nur die Plugin-Antwort unterschied die beiden Varianten;
+`setData` war gesperrt, Serverdateien, Properties und Werte blieben unveraendert.
+
+| Pruefung | Ergebnis |
+| --- | --- |
+| Chart, Doughnut/Pie, Radar | Pixelgleiche Canvas-Bilder und gleiche Labeltexte; sichtbare Doughnut-Labels visuell kontrolliert |
+| Elementerkennung | Zusaetzliche synthetische Browserfaelle fuer Linie, positive/negative/Null-Balken, Doughnut, Pie und Radar pixelgleich; erwartete Labeltexte tatsaechlich an `fillText` uebergeben |
+| Native Tooltips und Realtime | Bei normal laufender Browserzeit Tooltips in allen drei Vorlagen, Chart mit zwei Eintraegen und Datum sowie fortschreitender Zeitachse; keine Dialoge, JavaScript- oder HTTP-Ressourcenfehler |
+| Neuer Pfad / Neuladen | Browserlokal ersetzte HTML-Referenz laedt den lokalen Kandidaten, registriert das Plugin und besteht erneutes Laden mit genau einer Chart-Instanz |
+| WebSocket | Chart-Kandidat bei unveraendert vom Server geladener HTML-Antwort mit HTTP 101; die HTML-Interception-Laeufe erbrachten keinen WebSocket-Nachweis |
+| Automatisierte Grenzen | Neue Pfadpruefung zuerst rot an der alten Einbindung; danach Referenz-, Hash-, Kompatibilitaetspfad- und Webhook-Pruefungen gruen |
+
+Die Browserpruefungen sind gezielte lokale Kandidatennachweise, keine dauerhaft
+in CI ausgefuehrte visuelle Testsuite. CI und installierte Abnahme nach dem
+Modulupdate stehen noch aus. Dabei alle drei neuen Assetpfade, sichtbare Labels,
+native Tooltips, WebSocket und Realtime erneut pruefen. Ein Dienstneustart ist
+fuer diesen Asset-Schritt nicht erforderlich; bei aktivem HTML-Cache diesen
+ueber das bestehende `ApplyChanges()` erneuern. Private Browserantworten und
+Zugangsdaten werden nicht als Testdateien gespeichert.
+
 ## Ergebnisregeln
 
 - `PASS`: alle verpflichtenden Punkte sind mit frischem Laufzeitnachweis grün.

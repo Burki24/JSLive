@@ -302,6 +302,7 @@ foreach ([
     'chartjs/plugins/chartjs-adapter-moment.js',
     'chartjs/plugins/moment/1.0.1/chartjs-adapter-moment.min.js',
     'chartjs/plugins/chartjs-plugin-datalabels.min.js',
+    'chartjs/plugins/datalabels/2.2.0/chartjs-plugin-datalabels.min.js',
     'chartjs/plugins/chartjs-plugin-streaming.min.js'
 ] as $chartAsset) {
     $chartResponse = $harness->route('/hook/JSLive/js/' . $chartAsset, '');

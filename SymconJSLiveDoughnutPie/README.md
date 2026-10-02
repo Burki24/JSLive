@@ -43,7 +43,9 @@ maskiert.
 Die Standardvorlage verwendet die lokal versionierte Chart.js 4.5.1.
 Moment.js wird lokal als 2.31.0 geladen; der alte 2.27.0-Pfad bleibt für eigene
 Vorlagen erhalten. Der Moment-Adapter wird als 1.0.1 lokal versioniert geladen;
-sein alter 1.0.0-Pfad bleibt ebenfalls erhalten. Die übrigen Plugins sind unverändert.
+sein alter 1.0.0-Pfad bleibt ebenfalls erhalten. Datalabels 2.2.0 wird aus der
+unveränderten offiziellen Distribution im versionierten Pfad geladen; der
+historisch modifizierte Datalabels-Pfad bleibt für eigene Vorlagen erhalten.
 Die alten URLs mit 4.3.3 und 4.4.1 bleiben für eigene Vorlagen unverändert.
 Für eigene Vorlagen mit historischen
 Chart.js-3.x-/Plugin-Pfaden gilt die
