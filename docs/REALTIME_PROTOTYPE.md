@@ -251,6 +251,100 @@ drei geaenderten JavaScript-Dateien, `php .style/json-check.php`, PHP-CS-Fixer
 im Dry-Run (0 von 45 Dateien beanstandet) und `git diff --check`. Der vorhandene
 Hinweis auf die fehlende `composer.json` ist keine fehlgeschlagene Pruefung.
 
+## Hochlast-Fortsetzung: oeffentliche Renderoptionen
+
+Ausgangsstand: `984a3ce`, Library 0.81. Die vorherige Tooltip-/Style-Korrektur
+ist mit Tests, Style und CodeQL in der CI bestanden. Der Controller bleibt in
+diesem Untersuchungsschritt unveraendert; hinzu kommt ein reproduzierbarer
+Optionsvergleich im vorhandenen Browser-Harness:
+
+```text
+node tests/realtime-window-browser.js --render-options
+```
+
+Wie bisher sind vorhandenes Playwright und ein Chromium-Browser erforderlich;
+`JSLIVE_BROWSER_EXECUTABLE` waehlt dessen Pfad. Der Aufruf dauert lokal rund drei
+Minuten. Er installiert nichts, sperrt Netzwerkzugriffe der Testseiten und
+schreibt Ergebnisse nur nach stdout. Programmgesteuert stehen
+`compareRenderOptions(browser)` und `renderOptionsTrial(browser, points, trial)`
+zur Verfuegung. Die Einzelmessungen liegen in
+[realtime-render-options-2026-10-02.json](realtime-render-options-2026-10-02.json).
+
+Untersucht werden der vorhandene Streaming-Fork und vier Varianten desselben
+Controllers: unveraendert, `parsing: false`, vollstaendig deaktiviertes
+Datalabels-Plugin bei **ohnehin nicht angezeigten** Labels sowie die Kombination.
+Nur die synthetische Fixture garantiert hier sortierte numerische x/y-Daten
+auf Zeit-/Linearachsen. `normalized: true` wird nicht gesetzt; dessen zusaetzliche
+Anforderungen an einheitliche und eindeutige Indizes sollen nicht stillschweigend
+zum Datenvertrag werden. Quellen: [Chart.js Performance](https://www.chartjs.org/docs/latest/general/performance.html)
+und [Plugin-Konfiguration](https://www.chartjs.org/docs/latest/developers/plugins.html).
+
+Je 4 x 1.000 und 4 x 5.000 Ausgangspunkte, drei Durchlaeufe mit rotierter
+Variantenreihenfolge, zwei Sekunden Aufwaermen und rund drei Sekunden Messzeit.
+Exakt drei neue Punkte pro Datensatz in jedem Messfenster. Alle Varianten
+fordern 30 Zeichnungen/s an; keine Animation und keine sichtbaren Datalabels
+im Lastvergleich. Der separate Darstellungstest prueft zusaetzlich sichtbare
+Labels beim Parservergleich. Keine parallelen Lasttests und kein CPU-Sampling
+waehrend der Zeitmessung. Zahlen anderer Sitzungen sind nicht als direkte
+Vorher-/Nachher-Beschleunigung zu verstehen.
+
+### Ergebnis bei 4 x 5.000 Ausgangspunkten
+
+| Variante | Hauptthreadzeit | Zeichnungen/s | Hauptthread-ms/Zeichnung |
+| --- | --- | --- | --- |
+| Streaming-Plugin | 61,4-66,5 % | 24,2-26,8 | 23,8-27,0 |
+| Eigener Controller unveraendert | 99,0-99,3 % | 19,5-20,1 | 49,3-50,9 |
+| Nur vorbereitete Daten | 98,4-98,6 % | 20,7-21,3 | 46,3-47,6 |
+| Inaktives Label-Plugin aus | 98,9-99,8 % | 21,4-22,6 | 44,2-46,2 |
+| Kombination | 99,0-99,6 % | 22,8-23,2 | 42,9-43,5 |
+
+Bei 4 x 1.000 Punkten erreichen die eigenen Varianten 29,8-30,2 Zeichnungen/s.
+Die Kombination braucht 32,6-34,0 % Hauptthreadzeit gegenueber 36,8-37,6 % fuer
+den unveraenderten Controller; das Plugin liegt bei 18,8-23,3 %.
+
+Hauptthreadzeit ist weiter CDP `TaskDuration`, Zeichnungen sind Aufrufe des
+oeffentlichen `afterDraw`-Hooks einschliesslich zusaetzlicher Plugin-Updates,
+nicht garantierte Monitorbilder. Datenbestaende und Bildabstaende sind ebenfalls
+protokolliert; durch Aufwaerm-/Bereinigungstakte bleiben leicht unterschiedliche
+Punktzahlen uebrig. Die Messung ist kurz und lokal, kein Langzeitnachweis.
+
+Die zehn Darstellungskombinationen bei 20, 1.000 und 5.000 Punkten bestanden:
+pixelgleiche Canvas-Ausgabe, identische Daten, Achsengrenzen und Tooltiptexte.
+Sichtbare Labels bleiben beim Parservergleich erhalten; der Versuch, sie ueber
+die Performanceoption abzuschalten, wird bereits vor dem Oeffnen einer Testseite
+abgewiesen. Dieser Nachweis gilt fuer die Fixture, nicht fuer alle Modulkonfigurationen.
+
+### Entscheidung aus diesen Messungen
+
+**Keine der getesteten Optionen besteht das Hochlast-Performancegate.** Die
+Kombination reduziert die mediane Rechenzeit pro Zeichnung von 49,4 auf 43,0 ms,
+loest aber weder die Hauptthreadsaettigung noch den Abstand zum Plugin. Deshalb
+wird kein automatischer Parser-/Label-Schnellpfad in den Controller eingebaut.
+Das wuerde neue Vertraege fuer Kategorien, Bool, Nullwerte, Parsing-Mappings und
+datensatzabhaengige oder dynamische Labeloptionen erzeugen, ohne das Ziel zu erreichen.
+Es wird nicht behauptet, dass damit jede denkbare oeffentliche Optimierung ausgeschlossen sei.
+
+**Vorschlag fuer den naechsten Schritt, noch nicht beschlossen:** einen
+isolierten Render-Cache untersuchen, der die Geometrie unveraenderter Datensaetze
+zwischen Datenereignissen wiederverwendet und die Zeitverschiebung getrennt
+zeichnet. Daten-, Konfigurations-, Achsen- und Groessenaenderungen sowie
+Interaktionen brauchen einen korrekt abgesicherten Vollupdate-/Rueckfallpfad.
+Labels, Tooltips, Clipping und mehrere Achsen sind dabei Abnahmekriterien,
+keine spaeter stillschweigend wegzulassenden Funktionen. Nur dokumentierte
+Erweiterungspunkte, kein Zugriff auf Chart.js-Interna oder Methoden-Monkeypatching.
+
+Diese Entkopplung geht ueber das bisherige vollstaendige `update('none')` pro
+Zeichentakt hinaus und wird vor einer Architekturfortschreibung abgestimmt.
+Ein Worker waere eine andere Architekturvariante, wuerde die Rechenarbeit aber
+zunaechst nur verlagern; er ist daher hier weder implementiert noch als Loesung
+fuer die erreichte Bildrate belegt. Produktive Vorlagen bleiben unveraendert.
+
+Frische lokale Verifikation: Gesamtsuite, bestehende Browser-/Auswahlregressionen,
+zehn Options-Darstellungsvergleiche und drei negative Optionspruefungen bestanden.
+PHP-Syntax aller 57 Dateien vor der Arbeit, JavaScript-Syntax des geaenderten
+Harnesses, JSON-Style, PHP-CS-Fixer im Pruefmodus (0/45) und `git diff --check`
+bestanden. CI des neuen Testwerkzeugs steht nach Commit/Push noch aus.
+
 ## Noch offen
 
 - Performancegleichwertigkeit und Langzeit-Speicherlast; Bildabstaende werden

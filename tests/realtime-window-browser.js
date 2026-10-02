@@ -12,6 +12,12 @@ const scripts = [
 ].map(read);
 
 async function openChart(browser, mode, options = {}) {
+    const variants = ['default', 'prepared', 'inactive-labels', 'prepared-inactive-labels'];
+    if (options.renderVariant && !variants.includes(options.renderVariant)) throw new Error('Unknown render experiment.');
+    if (options.renderVariant && mode !== 'own') throw new Error('Render experiments require the isolated controller.');
+    if (options.renderVariant && options.renderVariant.includes('inactive-labels') && !options.points) {
+        throw new Error('Do not disable visible labels in a performance experiment.');
+    }
     const context = await browser.newContext({ viewport: { width: 1024, height: 768 }, timezoneId: 'Europe/Berlin' });
     await context.route('**/*', route => route.abort()); // No Symcon or external requests.
     const page = await context.newPage();
@@ -52,9 +58,13 @@ async function openChart(browser, mode, options = {}) {
             type: 'line', data: { datasets },
             options: {
                 responsive: false, animation: false,
+                // Experiments only: this fixture already provides sorted numeric
+                // x/y on time/linear axes. Never infer this for production data.
+                parsing: options.renderVariant && options.renderVariant.includes('prepared') ? false : true,
                 plugins: {
                     streaming: mode === 'plugin' ? { frameRate: 30 } : false,
-                    datalabels: { display: !options.points, formatter: point => `Value:${point.y.toFixed(1)}` }
+                    datalabels: options.renderVariant && options.renderVariant.includes('inactive-labels') ? false :
+                        { display: !options.points, formatter: point => `Value:${point.y.toFixed(1)}` }
                 },
                 scales: {
                     x: mode === 'plugin' ? { type: 'realtime', realtime: { duration } } :
@@ -120,7 +130,7 @@ async function measure(browser, mode, options = {}) {
         assert.deepEqual(final.values, Array.from({ length: options.datasets || 4 }, (_, i) => 4 + i));
         await h.page.evaluate(() => { if (window.live) live.destroy(); testChart.destroy(); });
         assert.deepEqual(h.errors, []);
-        return { mode, pointsPerDataset: options.points || 1000, datasets: options.datasets || 4,
+        return { mode, renderVariant: options.renderVariant || 'default', pointsPerDataset: options.points || 1000, datasets: options.datasets || 4,
             requestedFps: 30, elapsedMs: round(elapsedMs), taskMs: round(taskMs),
             mainThreadPercent: round(taskMs / elapsedMs * 100), frames: final.frames.length,
             achievedFps: round(final.frames.length * 1000 / elapsedMs), taskMsPerFrame: round(taskMs / final.frames.length),
@@ -128,6 +138,65 @@ async function measure(browser, mode, options = {}) {
             updates: final.updates, updateMedianMs: percentile(final.updateMs.sort((a, b) => a - b), 0.5),
             initialPoints: initial.points, finalPoints: final.points, receivedPerDataset: final.received - initial.received };
     } finally { await h.context.close(); }
+}
+
+// Keep exploratory configuration changes out of the controller and real templates.
+async function renderOptionsTrial(browser, points, trial) {
+    const variants = ['plugin', 'default', 'prepared', 'inactive-labels', 'prepared-inactive-labels'];
+    // Rotate order to avoid always giving one variant the first cold browser run.
+    const order = variants.slice(trial - 1).concat(variants.slice(0, trial - 1));
+    const results = [];
+    for (const variant of order) {
+        results.push({ ...await measure(browser, variant === 'plugin' ? 'plugin' : 'own', {
+            points, warmupMs: 2000, measureMs: 3000,
+            ...(variant === 'plugin' ? {} : { renderVariant: variant })
+        }), trial });
+    }
+    return results;
+}
+
+async function compareRenderOptions(browser) {
+    await assert.rejects(openChart(browser, 'own', { renderVariant: 'inactive-labels' }), /Do not disable visible labels/);
+    await assert.rejects(openChart(browser, 'own', { renderVariant: 'unknown' }), /Unknown render experiment/);
+    await assert.rejects(openChart(browser, 'plugin', { renderVariant: 'prepared' }), /isolated controller/);
+    const results = [];
+    // Exact same synthetic time, data and tooltip selection; compare pixels,
+    // data, axis limits and tooltip text, not only a faster timing number.
+    for (const points of [20, 1000, 5000]) {
+        const variants = points === 20 ? ['default', 'prepared'] :
+            ['default', 'prepared', 'inactive-labels', 'prepared-inactive-labels'];
+        let reference;
+        for (const renderVariant of variants) {
+            const h = await openChart(browser, 'own', { clock: true, datasets: 4,
+                ...(points === 20 ? {} : { points }), renderVariant });
+            try {
+                await h.page.evaluate(() => {
+                    live.pause();
+                    pushSample();
+                    testChart.update('none');
+                    const index = testChart.data.datasets[0].data.length - 1;
+                    testChart.tooltip.setActiveElements([{ datasetIndex: 0, index }], { x: 850, y: 100 });
+                    testChart.update('none');
+                });
+                const state = await h.page.evaluate(() => ({
+                    data: testChart.data.datasets.map(dataset => dataset.data),
+                    limits: [testChart.scales.x.min, testChart.scales.x.max, testChart.scales.y.min, testChart.scales.y.max],
+                    tooltip: testChart.tooltip.body.map(item => item.lines),
+                    labelsDrawn: probe.labels > 0
+                }));
+                const canvas = await h.page.locator('canvas').screenshot();
+                assert.equal(state.labelsDrawn, points === 20);
+                assert.deepEqual(state.tooltip, [['Series 1: 4']]);
+                if (reference) {
+                    assert.deepEqual(state, reference.state);
+                    assert.ok(canvas.equals(reference.canvas), `Render option ${renderVariant} differs at ${points} points.`);
+                } else reference = { state, canvas };
+                assert.deepEqual(h.errors, []);
+                results.push({ pointsPerDataset: points, renderVariant, result: 'PASS' });
+            } finally { await h.context.close(); }
+        }
+    }
+    return results;
 }
 
 // Run separately from timing benchmarks: sampling itself changes execution cost.
@@ -359,13 +428,21 @@ module.exports.measure = measure;
 module.exports.profile = profile;
 module.exports.compareRendering = compareRendering;
 module.exports.selectionRegression = selectionRegression;
+module.exports.renderOptionsTrial = renderOptionsTrial;
+module.exports.compareRenderOptions = compareRenderOptions;
 if (require.main === module) {
     (async () => {
         const { chromium } = require('playwright');
         const browser = await chromium.launch({ headless: true,
             ...(process.env.JSLIVE_BROWSER_EXECUTABLE ? { executablePath: process.env.JSLIVE_BROWSER_EXECUTABLE } : {}) });
         try {
-            if (process.argv.includes('--profile')) console.log(JSON.stringify(await profile(browser), null, 2));
+            if (process.argv.includes('--render-options')) {
+                const result = { browser: browser.version(), rendering: await compareRenderOptions(browser), benchmarks: [] };
+                for (const points of [1000, 5000]) {
+                    for (let trial = 1; trial <= 3; trial++) result.benchmarks.push(...await renderOptionsTrial(browser, points, trial));
+                }
+                console.log(JSON.stringify(result, null, 4));
+            } else if (process.argv.includes('--profile')) console.log(JSON.stringify(await profile(browser), null, 2));
             else console.log(JSON.stringify(await run(browser, { benchmark: true,
                 baselineSource: process.env.JSLIVE_BASELINE_CONTROLLER ? fs.readFileSync(process.env.JSLIVE_BASELINE_CONTROLLER, 'utf8') : undefined
             }), null, 2));

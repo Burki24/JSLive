@@ -740,14 +740,19 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
     Profiling und erste Optimierung sind lokal abgeschlossen: schnellere
     Bereichsbereinigung und driftfreier Zeichentakt, neue Messungen erfassen
     Bildabstaende und Datenbestand. Der volle Chart.js-Balkenupdate dominiert
-    weiterhin; das Performancegate ist nicht bestanden. Naechster Schritt:
-    verbleibenden Renderengpass innerhalb der oeffentlichen APIs bewerten,
-    danach fehlende Daten-/Templatefaelle absichern. Als begrenzter Folgeschritt
+    weiterhin; das Performancegate ist nicht bestanden. Oeffentliche Parser-/
+    Labeloptionen wurden in drei wiederholten Hochlastvergleichen geprueft:
+    selbst die Kombination erreicht nur rund 23 Zeichnungen/s bei fast voller
+    Hauptthreadlast. Kein automatischer Schnellpfad uebernommen. Naechster
+    Entscheidungspunkt ist ein isolierter Render-Cache mit abgesichertem
+    Vollupdate-Rueckfall; noch keine Architekturfreigabe/Templateintegration.
+    Als begrenzter Folgeschritt
     ist der veraltete formatierte Tooltipwert nach Auswahl/Bereinigung lokal
     behoben: chart-lokaler oeffentlicher Update-Hook, kein zusaetzlicher Render.
     Auswahlwechsel, Pause, Hintergrund und Hook-Abbau sind abgesichert.
     Die Formatierung der Profiling-JSON ist nach dem CI-Stylefehler korrigiert;
-    Messwerte unveraendert. CI dieser Korrekturen folgt nach Commit/Push.
+    Messwerte unveraendert. CI dieser Korrekturen ist fuer `d990f9a`/`984a3ce`
+    (0.81) gruen; CI des neuen Optionsvergleichs folgt nach Commit/Push.
     Ergebnisse und Einzelmessungen in `docs/REALTIME_PROTOTYPE.md`.
     Weitere Bibliotheken folgen einzeln; iro.js bleibt auf Wunsch unveraendert.
 

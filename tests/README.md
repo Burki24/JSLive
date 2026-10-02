@@ -14,6 +14,13 @@ deterministisch geprueft; dieser Test ist im Runner enthalten. Ein optionaler
 Browser-/Lastvergleich mit bereits vorhandenem Playwright steht in
 `tests/realtime-window-browser.js`. Er installiert keine Abhaengigkeiten und
 ist noch nicht Teil der CI. `--profile` fuehrt getrenntes CPU-Sampling aus.
+`--render-options` vergleicht in rund drei Minuten oeffentliche Parser-/
+Labeloptionen gegen den unveraenderten Controller und das Streaming-Plugin
+mit drei Wiederholungen je Last. Pixel-/Daten-/Tooltipvergleiche laufen davor;
+sichtbare Labels duerfen durch die Lastoption nicht abgeschaltet werden.
+Die Optionen wirken ausschliesslich auf synthetische Test-Fixtures, nicht auf
+den Controller oder produktive Vorlagen. Die Ausgabe verwendet vier Leerzeichen
+fuer JSON; die Messung selbst schreibt keine Dateien.
 `node tests/realtime-window-maintenance.js` misst nur die Bereichsbereinigung.
 Beide Skripte akzeptieren mit `JSLIVE_BASELINE_CONTROLLER` eine vertrauenswuerdige
 lokale Baseline-Datei fuer einen Alt-/Neu-Vergleich. Der Browservergleich erfasst

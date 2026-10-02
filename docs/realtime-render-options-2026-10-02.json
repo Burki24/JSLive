@@ -1,0 +1,1004 @@
+{
+    "date": "2026-10-02",
+    "baselineCommit": "984a3ceb573493e1045afbf9f89cc7c4a662d4b0",
+    "browser": "155.0.4283.18",
+    "controllerSha256": "bac7216e35f6bf13da682b233f45bf546b17092cd3a1e72806e17ef0bb1c4626",
+    "method": {
+        "warmupMs": 2000,
+        "measureMs": 3000,
+        "trials": 3,
+        "order": "rotated per trial",
+        "datasets": 4,
+        "incomingPointsPerDataset": 3,
+        "requestedFps": 30,
+        "network": "blocked",
+        "animation": false,
+        "benchmarkLabels": "not displayed in all variants",
+        "normalization": "not enabled",
+        "profileSampler": false
+    },
+    "rendering": [
+        {
+            "pointsPerDataset": 20,
+            "renderVariant": "default",
+            "result": "PASS"
+        },
+        {
+            "pointsPerDataset": 20,
+            "renderVariant": "prepared",
+            "result": "PASS"
+        },
+        {
+            "pointsPerDataset": 1000,
+            "renderVariant": "default",
+            "result": "PASS"
+        },
+        {
+            "pointsPerDataset": 1000,
+            "renderVariant": "prepared",
+            "result": "PASS"
+        },
+        {
+            "pointsPerDataset": 1000,
+            "renderVariant": "inactive-labels",
+            "result": "PASS"
+        },
+        {
+            "pointsPerDataset": 1000,
+            "renderVariant": "prepared-inactive-labels",
+            "result": "PASS"
+        },
+        {
+            "pointsPerDataset": 5000,
+            "renderVariant": "default",
+            "result": "PASS"
+        },
+        {
+            "pointsPerDataset": 5000,
+            "renderVariant": "prepared",
+            "result": "PASS"
+        },
+        {
+            "pointsPerDataset": 5000,
+            "renderVariant": "inactive-labels",
+            "result": "PASS"
+        },
+        {
+            "pointsPerDataset": 5000,
+            "renderVariant": "prepared-inactive-labels",
+            "result": "PASS"
+        }
+    ],
+    "benchmarks": [
+        {
+            "mode": "plugin",
+            "renderVariant": "default",
+            "pointsPerDataset": 1000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3004.9,
+            "taskMs": 700.3,
+            "mainThreadPercent": 23.3,
+            "frames": 96,
+            "achievedFps": 31.9,
+            "taskMsPerFrame": 7.3,
+            "frameIntervalMedianMs": 31.1,
+            "frameIntervalP95Ms": 37.7,
+            "updates": 6,
+            "updateMedianMs": 15.9,
+            "initialPoints": [
+                967,
+                967,
+                967,
+                967
+            ],
+            "finalPoints": [
+                920,
+                920,
+                920,
+                920
+            ],
+            "receivedPerDataset": 3,
+            "trial": 1
+        },
+        {
+            "mode": "own",
+            "renderVariant": "default",
+            "pointsPerDataset": 1000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3011.8,
+            "taskMs": 1127,
+            "mainThreadPercent": 37.4,
+            "frames": 90,
+            "achievedFps": 29.9,
+            "taskMsPerFrame": 12.5,
+            "frameIntervalMedianMs": 33.5,
+            "frameIntervalP95Ms": 37.9,
+            "updates": 90,
+            "updateMedianMs": 7,
+            "initialPoints": [
+                968,
+                968,
+                968,
+                968
+            ],
+            "finalPoints": [
+                921,
+                921,
+                921,
+                921
+            ],
+            "receivedPerDataset": 3,
+            "trial": 1
+        },
+        {
+            "mode": "own",
+            "renderVariant": "prepared",
+            "pointsPerDataset": 1000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3019.5,
+            "taskMs": 1068.4,
+            "mainThreadPercent": 35.4,
+            "frames": 91,
+            "achievedFps": 30.1,
+            "taskMsPerFrame": 11.7,
+            "frameIntervalMedianMs": 33.8,
+            "frameIntervalP95Ms": 37.6,
+            "updates": 91,
+            "updateMedianMs": 6.6,
+            "initialPoints": [
+                968,
+                968,
+                968,
+                968
+            ],
+            "finalPoints": [
+                921,
+                921,
+                921,
+                921
+            ],
+            "receivedPerDataset": 3,
+            "trial": 1
+        },
+        {
+            "mode": "own",
+            "renderVariant": "inactive-labels",
+            "pointsPerDataset": 1000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3011.6,
+            "taskMs": 1012.2,
+            "mainThreadPercent": 33.6,
+            "frames": 90,
+            "achievedFps": 29.9,
+            "taskMsPerFrame": 11.2,
+            "frameIntervalMedianMs": 32.9,
+            "frameIntervalP95Ms": 37.5,
+            "updates": 90,
+            "updateMedianMs": 6.3,
+            "initialPoints": [
+                968,
+                968,
+                968,
+                968
+            ],
+            "finalPoints": [
+                921,
+                921,
+                921,
+                921
+            ],
+            "receivedPerDataset": 3,
+            "trial": 1
+        },
+        {
+            "mode": "own",
+            "renderVariant": "prepared-inactive-labels",
+            "pointsPerDataset": 1000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3016.2,
+            "taskMs": 1025.4,
+            "mainThreadPercent": 34,
+            "frames": 90,
+            "achievedFps": 29.8,
+            "taskMsPerFrame": 11.4,
+            "frameIntervalMedianMs": 33.1,
+            "frameIntervalP95Ms": 37.4,
+            "updates": 90,
+            "updateMedianMs": 6.2,
+            "initialPoints": [
+                968,
+                968,
+                968,
+                968
+            ],
+            "finalPoints": [
+                921,
+                921,
+                921,
+                921
+            ],
+            "receivedPerDataset": 3,
+            "trial": 1
+        },
+        {
+            "mode": "own",
+            "renderVariant": "default",
+            "pointsPerDataset": 1000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3010.2,
+            "taskMs": 1106.3,
+            "mainThreadPercent": 36.8,
+            "frames": 91,
+            "achievedFps": 30.2,
+            "taskMsPerFrame": 12.2,
+            "frameIntervalMedianMs": 33.2,
+            "frameIntervalP95Ms": 37.6,
+            "updates": 91,
+            "updateMedianMs": 6.9,
+            "initialPoints": [
+                968,
+                968,
+                968,
+                968
+            ],
+            "finalPoints": [
+                921,
+                921,
+                921,
+                921
+            ],
+            "receivedPerDataset": 3,
+            "trial": 2
+        },
+        {
+            "mode": "own",
+            "renderVariant": "prepared",
+            "pointsPerDataset": 1000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3018.6,
+            "taskMs": 1112.4,
+            "mainThreadPercent": 36.9,
+            "frames": 91,
+            "achievedFps": 30.1,
+            "taskMsPerFrame": 12.2,
+            "frameIntervalMedianMs": 33.8,
+            "frameIntervalP95Ms": 38.8,
+            "updates": 91,
+            "updateMedianMs": 6.8,
+            "initialPoints": [
+                968,
+                968,
+                968,
+                968
+            ],
+            "finalPoints": [
+                921,
+                921,
+                921,
+                921
+            ],
+            "receivedPerDataset": 3,
+            "trial": 2
+        },
+        {
+            "mode": "own",
+            "renderVariant": "inactive-labels",
+            "pointsPerDataset": 1000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3011.3,
+            "taskMs": 1000.8,
+            "mainThreadPercent": 33.2,
+            "frames": 91,
+            "achievedFps": 30.2,
+            "taskMsPerFrame": 11,
+            "frameIntervalMedianMs": 33,
+            "frameIntervalP95Ms": 37.2,
+            "updates": 91,
+            "updateMedianMs": 5.9,
+            "initialPoints": [
+                968,
+                968,
+                968,
+                968
+            ],
+            "finalPoints": [
+                921,
+                921,
+                921,
+                921
+            ],
+            "receivedPerDataset": 3,
+            "trial": 2
+        },
+        {
+            "mode": "own",
+            "renderVariant": "prepared-inactive-labels",
+            "pointsPerDataset": 1000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3004.7,
+            "taskMs": 979.2,
+            "mainThreadPercent": 32.6,
+            "frames": 90,
+            "achievedFps": 30,
+            "taskMsPerFrame": 10.9,
+            "frameIntervalMedianMs": 32.6,
+            "frameIntervalP95Ms": 37.7,
+            "updates": 90,
+            "updateMedianMs": 5.7,
+            "initialPoints": [
+                968,
+                968,
+                968,
+                968
+            ],
+            "finalPoints": [
+                921,
+                921,
+                921,
+                921
+            ],
+            "receivedPerDataset": 3,
+            "trial": 2
+        },
+        {
+            "mode": "plugin",
+            "renderVariant": "default",
+            "pointsPerDataset": 1000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3007.7,
+            "taskMs": 578.6,
+            "mainThreadPercent": 19.2,
+            "frames": 96,
+            "achievedFps": 31.9,
+            "taskMsPerFrame": 6,
+            "frameIntervalMedianMs": 31,
+            "frameIntervalP95Ms": 37.5,
+            "updates": 6,
+            "updateMedianMs": 10.8,
+            "initialPoints": [
+                968,
+                968,
+                968,
+                968
+            ],
+            "finalPoints": [
+                921,
+                921,
+                921,
+                921
+            ],
+            "receivedPerDataset": 3,
+            "trial": 2
+        },
+        {
+            "mode": "own",
+            "renderVariant": "prepared",
+            "pointsPerDataset": 1000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3006.5,
+            "taskMs": 1060,
+            "mainThreadPercent": 35.3,
+            "frames": 90,
+            "achievedFps": 29.9,
+            "taskMsPerFrame": 11.8,
+            "frameIntervalMedianMs": 34,
+            "frameIntervalP95Ms": 37.7,
+            "updates": 90,
+            "updateMedianMs": 6.8,
+            "initialPoints": [
+                968,
+                968,
+                968,
+                968
+            ],
+            "finalPoints": [
+                921,
+                921,
+                921,
+                921
+            ],
+            "receivedPerDataset": 3,
+            "trial": 3
+        },
+        {
+            "mode": "own",
+            "renderVariant": "inactive-labels",
+            "pointsPerDataset": 1000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3004.1,
+            "taskMs": 1042.7,
+            "mainThreadPercent": 34.7,
+            "frames": 90,
+            "achievedFps": 30,
+            "taskMsPerFrame": 11.6,
+            "frameIntervalMedianMs": 31.9,
+            "frameIntervalP95Ms": 38.4,
+            "updates": 90,
+            "updateMedianMs": 6.4,
+            "initialPoints": [
+                968,
+                968,
+                968,
+                968
+            ],
+            "finalPoints": [
+                921,
+                921,
+                921,
+                921
+            ],
+            "receivedPerDataset": 3,
+            "trial": 3
+        },
+        {
+            "mode": "own",
+            "renderVariant": "prepared-inactive-labels",
+            "pointsPerDataset": 1000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3014.7,
+            "taskMs": 987.4,
+            "mainThreadPercent": 32.8,
+            "frames": 91,
+            "achievedFps": 30.2,
+            "taskMsPerFrame": 10.9,
+            "frameIntervalMedianMs": 33.9,
+            "frameIntervalP95Ms": 38.1,
+            "updates": 91,
+            "updateMedianMs": 5.7,
+            "initialPoints": [
+                968,
+                968,
+                968,
+                968
+            ],
+            "finalPoints": [
+                921,
+                921,
+                921,
+                921
+            ],
+            "receivedPerDataset": 3,
+            "trial": 3
+        },
+        {
+            "mode": "plugin",
+            "renderVariant": "default",
+            "pointsPerDataset": 1000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3022.5,
+            "taskMs": 567.2,
+            "mainThreadPercent": 18.8,
+            "frames": 97,
+            "achievedFps": 32.1,
+            "taskMsPerFrame": 5.8,
+            "frameIntervalMedianMs": 31.1,
+            "frameIntervalP95Ms": 38,
+            "updates": 6,
+            "updateMedianMs": 11.1,
+            "initialPoints": [
+                967,
+                967,
+                967,
+                967
+            ],
+            "finalPoints": [
+                920,
+                920,
+                920,
+                920
+            ],
+            "receivedPerDataset": 3,
+            "trial": 3
+        },
+        {
+            "mode": "own",
+            "renderVariant": "default",
+            "pointsPerDataset": 1000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3018.7,
+            "taskMs": 1136.1,
+            "mainThreadPercent": 37.6,
+            "frames": 91,
+            "achievedFps": 30.1,
+            "taskMsPerFrame": 12.5,
+            "frameIntervalMedianMs": 33.5,
+            "frameIntervalP95Ms": 38.5,
+            "updates": 91,
+            "updateMedianMs": 7.2,
+            "initialPoints": [
+                968,
+                968,
+                968,
+                968
+            ],
+            "finalPoints": [
+                921,
+                921,
+                921,
+                921
+            ],
+            "receivedPerDataset": 3,
+            "trial": 3
+        },
+        {
+            "mode": "plugin",
+            "renderVariant": "default",
+            "pointsPerDataset": 5000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3062.9,
+            "taskMs": 2036.3,
+            "mainThreadPercent": 66.5,
+            "frames": 82,
+            "achievedFps": 26.8,
+            "taskMsPerFrame": 24.8,
+            "frameIntervalMedianMs": 31.8,
+            "frameIntervalP95Ms": 74.2,
+            "updates": 7,
+            "updateMedianMs": 42.9,
+            "initialPoints": [
+                4899,
+                4899,
+                4899,
+                4899
+            ],
+            "finalPoints": [
+                4569,
+                4569,
+                4569,
+                4569
+            ],
+            "receivedPerDataset": 3,
+            "trial": 1
+        },
+        {
+            "mode": "own",
+            "renderVariant": "default",
+            "pointsPerDataset": 5000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3045.1,
+            "taskMs": 3014.7,
+            "mainThreadPercent": 99,
+            "frames": 61,
+            "achievedFps": 20,
+            "taskMsPerFrame": 49.4,
+            "frameIntervalMedianMs": 48.7,
+            "frameIntervalP95Ms": 59.5,
+            "updates": 61,
+            "updateMedianMs": 32.2,
+            "initialPoints": [
+                4817,
+                4817,
+                4817,
+                4817
+            ],
+            "finalPoints": [
+                4571,
+                4571,
+                4571,
+                4571
+            ],
+            "receivedPerDataset": 3,
+            "trial": 1
+        },
+        {
+            "mode": "own",
+            "renderVariant": "prepared",
+            "pointsPerDataset": 5000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3058,
+            "taskMs": 3011.2,
+            "mainThreadPercent": 98.5,
+            "frames": 64,
+            "achievedFps": 20.9,
+            "taskMsPerFrame": 47.1,
+            "frameIntervalMedianMs": 46.6,
+            "frameIntervalP95Ms": 57,
+            "updates": 64,
+            "updateMedianMs": 30,
+            "initialPoints": [
+                4821,
+                4821,
+                4821,
+                4821
+            ],
+            "finalPoints": [
+                4574,
+                4574,
+                4574,
+                4574
+            ],
+            "receivedPerDataset": 3,
+            "trial": 1
+        },
+        {
+            "mode": "own",
+            "renderVariant": "inactive-labels",
+            "pointsPerDataset": 5000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3015.4,
+            "taskMs": 3006.4,
+            "mainThreadPercent": 99.7,
+            "frames": 68,
+            "achievedFps": 22.6,
+            "taskMsPerFrame": 44.2,
+            "frameIntervalMedianMs": 42.9,
+            "frameIntervalP95Ms": 55.1,
+            "updates": 68,
+            "updateMedianMs": 26.8,
+            "initialPoints": [
+                4820,
+                4820,
+                4820,
+                4820
+            ],
+            "finalPoints": [
+                4574,
+                4574,
+                4574,
+                4574
+            ],
+            "receivedPerDataset": 3,
+            "trial": 1
+        },
+        {
+            "mode": "own",
+            "renderVariant": "prepared-inactive-labels",
+            "pointsPerDataset": 5000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3019.4,
+            "taskMs": 3007.3,
+            "mainThreadPercent": 99.6,
+            "frames": 70,
+            "achievedFps": 23.2,
+            "taskMsPerFrame": 43,
+            "frameIntervalMedianMs": 42.6,
+            "frameIntervalP95Ms": 53.9,
+            "updates": 70,
+            "updateMedianMs": 25.6,
+            "initialPoints": [
+                4822,
+                4822,
+                4822,
+                4822
+            ],
+            "finalPoints": [
+                4574,
+                4574,
+                4574,
+                4574
+            ],
+            "receivedPerDataset": 3,
+            "trial": 1
+        },
+        {
+            "mode": "own",
+            "renderVariant": "default",
+            "pointsPerDataset": 5000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3027.5,
+            "taskMs": 3007.8,
+            "mainThreadPercent": 99.3,
+            "frames": 61,
+            "achievedFps": 20.1,
+            "taskMsPerFrame": 49.3,
+            "frameIntervalMedianMs": 48.2,
+            "frameIntervalP95Ms": 60.8,
+            "updates": 61,
+            "updateMedianMs": 31.4,
+            "initialPoints": [
+                4821,
+                4821,
+                4821,
+                4821
+            ],
+            "finalPoints": [
+                4571,
+                4571,
+                4571,
+                4571
+            ],
+            "receivedPerDataset": 3,
+            "trial": 2
+        },
+        {
+            "mode": "own",
+            "renderVariant": "prepared",
+            "pointsPerDataset": 5000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3048.1,
+            "taskMs": 3000.8,
+            "mainThreadPercent": 98.4,
+            "frames": 63,
+            "achievedFps": 20.7,
+            "taskMsPerFrame": 47.6,
+            "frameIntervalMedianMs": 47.5,
+            "frameIntervalP95Ms": 60.6,
+            "updates": 63,
+            "updateMedianMs": 30,
+            "initialPoints": [
+                4823,
+                4823,
+                4823,
+                4823
+            ],
+            "finalPoints": [
+                4571,
+                4571,
+                4571,
+                4571
+            ],
+            "receivedPerDataset": 3,
+            "trial": 2
+        },
+        {
+            "mode": "own",
+            "renderVariant": "inactive-labels",
+            "pointsPerDataset": 5000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3011.9,
+            "taskMs": 3004.6,
+            "mainThreadPercent": 99.8,
+            "frames": 65,
+            "achievedFps": 21.6,
+            "taskMsPerFrame": 46.2,
+            "frameIntervalMedianMs": 44.7,
+            "frameIntervalP95Ms": 58.6,
+            "updates": 65,
+            "updateMedianMs": 28.3,
+            "initialPoints": [
+                4819,
+                4819,
+                4819,
+                4819
+            ],
+            "finalPoints": [
+                4575,
+                4575,
+                4575,
+                4575
+            ],
+            "receivedPerDataset": 3,
+            "trial": 2
+        },
+        {
+            "mode": "own",
+            "renderVariant": "prepared-inactive-labels",
+            "pointsPerDataset": 5000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3029.5,
+            "taskMs": 3005.6,
+            "mainThreadPercent": 99.2,
+            "frames": 70,
+            "achievedFps": 23.1,
+            "taskMsPerFrame": 42.9,
+            "frameIntervalMedianMs": 42.2,
+            "frameIntervalP95Ms": 54.6,
+            "updates": 70,
+            "updateMedianMs": 25.6,
+            "initialPoints": [
+                4822,
+                4822,
+                4822,
+                4822
+            ],
+            "finalPoints": [
+                4573,
+                4573,
+                4573,
+                4573
+            ],
+            "receivedPerDataset": 3,
+            "trial": 2
+        },
+        {
+            "mode": "plugin",
+            "renderVariant": "default",
+            "pointsPerDataset": 5000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3017.1,
+            "taskMs": 1969.4,
+            "mainThreadPercent": 65.3,
+            "frames": 73,
+            "achievedFps": 24.2,
+            "taskMsPerFrame": 27,
+            "frameIntervalMedianMs": 32.5,
+            "frameIntervalP95Ms": 82.2,
+            "updates": 6,
+            "updateMedianMs": 42.3,
+            "initialPoints": [
+                4805,
+                4805,
+                4805,
+                4805
+            ],
+            "finalPoints": [
+                4560,
+                4560,
+                4560,
+                4560
+            ],
+            "receivedPerDataset": 3,
+            "trial": 2
+        },
+        {
+            "mode": "own",
+            "renderVariant": "prepared",
+            "pointsPerDataset": 5000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3055.1,
+            "taskMs": 3011.3,
+            "mainThreadPercent": 98.6,
+            "frames": 65,
+            "achievedFps": 21.3,
+            "taskMsPerFrame": 46.3,
+            "frameIntervalMedianMs": 45.6,
+            "frameIntervalP95Ms": 56.8,
+            "updates": 65,
+            "updateMedianMs": 29.2,
+            "initialPoints": [
+                4821,
+                4821,
+                4821,
+                4821
+            ],
+            "finalPoints": [
+                4574,
+                4574,
+                4574,
+                4574
+            ],
+            "receivedPerDataset": 3,
+            "trial": 3
+        },
+        {
+            "mode": "own",
+            "renderVariant": "inactive-labels",
+            "pointsPerDataset": 5000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3033.8,
+            "taskMs": 2999,
+            "mainThreadPercent": 98.9,
+            "frames": 65,
+            "achievedFps": 21.4,
+            "taskMsPerFrame": 46.1,
+            "frameIntervalMedianMs": 46.2,
+            "frameIntervalP95Ms": 55.8,
+            "updates": 65,
+            "updateMedianMs": 28.4,
+            "initialPoints": [
+                4820,
+                4820,
+                4820,
+                4820
+            ],
+            "finalPoints": [
+                4574,
+                4574,
+                4574,
+                4574
+            ],
+            "receivedPerDataset": 3,
+            "trial": 3
+        },
+        {
+            "mode": "own",
+            "renderVariant": "prepared-inactive-labels",
+            "pointsPerDataset": 5000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3031.1,
+            "taskMs": 3001.7,
+            "mainThreadPercent": 99,
+            "frames": 69,
+            "achievedFps": 22.8,
+            "taskMsPerFrame": 43.5,
+            "frameIntervalMedianMs": 43.4,
+            "frameIntervalP95Ms": 51.9,
+            "updates": 69,
+            "updateMedianMs": 26.3,
+            "initialPoints": [
+                4822,
+                4822,
+                4822,
+                4822
+            ],
+            "finalPoints": [
+                4578,
+                4578,
+                4578,
+                4578
+            ],
+            "receivedPerDataset": 3,
+            "trial": 3
+        },
+        {
+            "mode": "plugin",
+            "renderVariant": "default",
+            "pointsPerDataset": 5000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3020.6,
+            "taskMs": 1853.2,
+            "mainThreadPercent": 61.4,
+            "frames": 78,
+            "achievedFps": 25.8,
+            "taskMsPerFrame": 23.8,
+            "frameIntervalMedianMs": 33.9,
+            "frameIntervalP95Ms": 82.8,
+            "updates": 6,
+            "updateMedianMs": 42.2,
+            "initialPoints": [
+                4816,
+                4816,
+                4816,
+                4816
+            ],
+            "finalPoints": [
+                4568,
+                4568,
+                4568,
+                4568
+            ],
+            "receivedPerDataset": 3,
+            "trial": 3
+        },
+        {
+            "mode": "own",
+            "renderVariant": "default",
+            "pointsPerDataset": 5000,
+            "datasets": 4,
+            "requestedFps": 30,
+            "elapsedMs": 3031.7,
+            "taskMs": 3002.6,
+            "mainThreadPercent": 99,
+            "frames": 59,
+            "achievedFps": 19.5,
+            "taskMsPerFrame": 50.9,
+            "frameIntervalMedianMs": 50.5,
+            "frameIntervalP95Ms": 63.6,
+            "updates": 59,
+            "updateMedianMs": 33,
+            "initialPoints": [
+                4818,
+                4818,
+                4818,
+                4818
+            ],
+            "finalPoints": [
+                4573,
+                4573,
+                4573,
+                4573
+            ],
+            "receivedPerDataset": 3,
+            "trial": 3
+        }
+    ]
+}

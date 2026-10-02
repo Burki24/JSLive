@@ -9,6 +9,11 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Development
 
+- Reproduzierbarer Hochlastvergleich oeffentlicher Chart.js-Parser-/Labeloptionen
+  mit drei Wiederholungen, Daten-/Bildratenmessung und pixelgleichen Test-Fixtures.
+  Keine untersuchte Variante erreicht die Performancefreigabe; der Controller
+  und die produktive Integration bleiben unveraendert. Ein Render-Cache ist als
+  naechster, noch abzustimmender Architekturversuch dokumentiert.
 - Der isolierte Echtzeit-Prototyp erneuert Tooltips nach Datenbereinigung erst
   nach dem Chart-Datenupdate. Rohwert und sichtbarer Anzeigewert bleiben dadurch
   konsistent, ohne zusaetzlichen Renderdurchlauf. Auswahl- und Lebenszyklustests
