@@ -928,7 +928,9 @@ mit eigener CI-Abnahme. Versionsmetadaten wurden nicht manuell geaendert.
   automatischen Blocker und 45 Review-Signale. Das sind Pruefhinweise, weder
   45 bestaetigte Fehler noch eine Sicherheits-/Store-Freigabe.
 - Endgueltiger Release-Commit, passende Changelog-Version und Pflichtchecks
-  nach dem letzten Metadatenlauf sowie nach Uebernahme nach `main`.
+  nach dem letzten Metadatenlauf auf `dev` fuer die Beta. Pflichtchecks auf
+  `main` folgen erst bei der spaeteren Stable-Uebernahme nach Community-Test
+  und ausdruecklicher Freigabe; sie sind kein vorgeschaltetes Beta-Gate.
 - Zugriff auf den bisherigen Store-Eintrag und Vollstaendigkeit seiner
   Einreichungsfelder. Dieser Dokumentationsschritt prueft oder aendert den
   Store nicht und erklaert ihn nicht fuer einreichungsreif.

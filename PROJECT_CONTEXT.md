@@ -93,7 +93,10 @@ nicht ausgewiesen. Details und weitere Grenzen stehen im Beta-Nachtrag der
 Laufzeitmatrix. Changelog und kopierbare Beta-Versionshinweise sind vorbereitet.
 Naechster Schritt: Dokumentation committen/pushen, letzten Metadatenlauf
 abwarten, endgueltige Version/Changelog und Pflichtchecks abgleichen; danach
-kontrollierte Uebernahme nach `main` gemaess Release-Prozess. Store-Zugriff und
+offizielle Beta aus exakt diesem `dev`-Commit gemaess Release-Prozess.
+Entscheidung des Eigentuemers vom 03.10.2026: `main` folgt erst nach der
+Community-Testphase ohne offene Fehlermeldungen und ausdruecklicher Freigabe.
+Die Beta erfordert keinen vorherigen Merge nach `main`. Store-Zugriff und
 Einreichungsfelder sind noch offen. Kein Stable-PASS, keine Veroeffentlichung
 und keine ECharts-Migration durch diesen Dokumentationsschritt.
 

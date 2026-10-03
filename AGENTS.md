@@ -54,7 +54,11 @@ JSLive. Projektspezifische Fakten und offene Entscheidungen stehen in
 ## Branch-, Versions- und Release-Modell
 
 - `dev` ist der dauerhafte Entwicklungs- und Integrationsbranch. `main`
-  enthaelt ausschliesslich kontrolliert freigegebene Produktstaende.
+  enthaelt ausschliesslich kontrolliert freigegebene stabile Produktstaende.
+- Offizielle Betas werden aus einem exakt geprueften `dev`-Commit nach dem
+  Metadatenlauf veroeffentlicht. Eine vorherige Uebernahme nach `main` ist
+  nicht erforderlich. `main` folgt erst nach der Community-Testphase ohne
+  offene Fehlermeldungen und ausdruecklicher Freigabe des Eigentuemers.
 - Die Library verwendet eine gemeinsame Version im Format
   `Hauptversion.Nebenstand` fuer alle enthaltenen Module. Git-Tags ergaenzen die
   Patchstelle als `v<Library-Version>.0`.
@@ -63,8 +67,9 @@ JSLive. Projektspezifische Fakten und offene Entscheidungen stehen in
   `date`; manuelle Aenderungen dieser Felder sind allein Teil einer
   ausdruecklichen Metadaten- oder Migrationsaufgabe.
 - Wesentliche Aenderungen werden im Abschnitt `Unreleased` von `CHANGELOG.md`
-  gepflegt. Der verbindliche Ablauf fuer `dev` nach `main`, Tag, GitHub Release
-  und Ruecksynchronisierung steht in `docs/RELEASE_PROCESS.md`.
+  gepflegt. Der verbindliche Ablauf fuer Beta aus `dev`, spaetere Stable-
+  Freigabe nach `main`, Tags und Ruecksynchronisierung steht in
+  `docs/RELEASE_PROCESS.md`.
 - Tags und Releases werden nie verschoben oder ueberschrieben. Die
   Metadatenautomatik veroeffentlicht selbst keinen Release.
 

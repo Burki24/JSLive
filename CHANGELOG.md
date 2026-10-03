@@ -5,14 +5,25 @@ Die Library-Version folgt dem Format `Hauptversion.Nebenstand` aus
 `library.json`; der dazugehoerige Git-Tag ergaenzt fuer SemVer eine
 Patchstelle, beispielsweise `v0.10.0`.
 
+## Unreleased
+
+### Development
+
+- Release-Regeln praezisiert: offizielle Beta aus einem geprueften `dev`-
+  Commit; `main` erst nach der Community-Testphase ohne offene Fehlermeldungen
+  und ausdruecklicher Stable-Freigabe. Den fuer die Strukturpruefung benoetigten
+  Abschnitt `Unreleased` auch bei vorbereiteten Release-Eintraegen erhalten.
+
 ## 0.104 - 2026-10-03 (Beta-Kandidat)
 
 ### Beta-Versionshinweise
 
 Geplanter Beta-Stand fuer den 03.10.2026, noch nicht veroeffentlicht.
-Ausgangsbasis ist 0.103 (`a22cbbb`); genau ein abschliessender
-Dokumentationscommit auf `dev` fuehrt durch die Metadatenautomatik zu 0.104.
-Der erwartete Tag ist `v0.104.0`. Vor Merge und Veroeffentlichung muessen
+Der Metadatenlauf fuer `ee6f450` scheiterte am fehlenden `Unreleased`-Abschnitt;
+die Library blieb auf 0.103. Ein einzelner Korrekturcommit im naechsten Push
+auf `dev` erwartet daher weiterhin 0.104. Der erwartete Tag ist `v0.104.0`.
+Die offizielle Beta wird direkt aus `dev` eingereicht, ohne vorherigen
+Merge nach `main`. Vor Veroeffentlichung muessen
 `library.json`, diese Versionsueberschrift und die Pflichtchecks auf dem
 resultierenden Commit uebereinstimmen. Bei weiteren Commits ist die
 Zuordnung erneut zu pruefen; keine manuelle Aenderung der Metadaten.
