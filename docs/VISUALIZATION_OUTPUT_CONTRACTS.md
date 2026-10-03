@@ -112,7 +112,16 @@ kein Nachweis aller modulindividuellen Darstellungen.
 Eine echte IPSView-Abnahme bleibt mangels Testlizenz offen. Es wurden keine
 Variablen in einer Installation angelegt, umgestellt oder entfernt.
 
-Naechster Schritt: ein einfaches Pilotmodul fuer eine separat freizugebende
-native WebContent-/HTML-SDK-Kachel auswaehlen. Bestehende Idents, Legacy-
-Ausgaben, Linkmethoden und eigene Templates bleiben dabei erhalten; dieser
-Schritt waehlt noch keinen Piloten und implementiert keine neue Kachel.
+Nachtrag 03.10.2026: Push, gruene CI und Modulupdate dieses Vertragsschritts
+sind vom Eigentuemer bestaetigt (0.90, `2aaf0ae` / `3770085`); keine neue
+unabhaengige Symcon-/IPSView-Abnahme.
+
+Die bisher als Folgeschritt geplante native WebContent-/HTML-SDK-Kachel ist
+gemaess [ADR 0006](adr/0006-maintenance-scope.md) kein aktiver JSLive-Auftrag
+mehr. Gauge ist die bevorzugte Wahl des Eigentuemers, im Wartungsumfang jedoch
+nur fuer Bestandspruefung und Fehlerkorrekturen. Bestehende Idents, Legacy-
+Ausgaben, Linkmethoden und eigene Templates bleiben erhalten. Fuer das neue
+ECharts-Modul ist eine anwenderfreundliche Uebernahme bestehender JSLive-Charts
+ausdruecklich eingeplant. Der Migrationsweg soll die Originale erhalten und
+nicht automatisch uebertragbare Anpassungen offen ausweisen; er ist noch
+nicht implementiert. Ein Austausch der Engine in JSLive ist davon getrennt.

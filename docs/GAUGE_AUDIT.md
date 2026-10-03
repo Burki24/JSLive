@@ -83,9 +83,18 @@ nach Commit/Push. Danach steht die getrennte Herkunfts-, Versions- und
 Pflegepruefung von Loading Bar/ldBar an; iro.js bleibt vereinbarungsgemaess
 unveraendert.
 
-Als spaeteres Update ist auf Wunsch des Eigentuemers die Suche nach einer
-moderneren bzw. besseren Gauge-Alternative oder gepflegten Weiterentwicklung
-vorgemerkt. Vergleichskriterien und Entscheidungsschritte stehen im
+Historisch war auf Wunsch des Eigentuemers die Suche nach einer moderneren
+Gauge-Alternative vorgemerkt. Vergleichskriterien bleiben im
 [Projektplan](../PROJECT_CONTEXT.md#vorgemerkt-fuer-ein-spaeteres-update-moderne-gauges).
-Dies ist ein offener ToDo-Punkt, keine bereits erfolgte Auswahl oder Freigabe
-eines Bibliothekswechsels.
+Seit der Wartungsentscheidung vom 03.10.2026 ist dies kein aktiver JSLive-ToDo
+mehr: [ADR 0006](adr/0006-maintenance-scope.md). Gauge ist die bevorzugte Wahl
+des Eigentuemers fuer weitere Bestandspruefung; ein Bibliothekswechsel oder
+eine native Kachel ist nicht freigegeben. Das separat geplante ECharts-Modul
+wird durch dieses Audit weder implementiert noch fachlich festgelegt.
+
+Nachtrag 03.10.2026: Der Eigentuemer hat ein Test-Gauge angelegt und bestaetigt
+die ordentliche Darstellung in der Kachel; ein Screenshot zeigt die vorhandene
+Gauge-Ausgabe. Dies ist ein erfolgreicher anwenderseitiger Sichttest einer
+Konfiguration. Verwendete Transportart, Browser und genaue Laufzeitversion
+sind damit nicht separat belegt; kein HTML-SDK- oder IPSView-Gesamtnachweis.
+Ein Neubau der Kachelausgabe wird daraus nicht erforderlich.

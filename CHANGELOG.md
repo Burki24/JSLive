@@ -9,6 +9,14 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Development
 
+- JSLive auf Wartung fuer Symcon 9.0/9.1 und vorhandene Fehler begrenzt
+  (ADR 0006). Kachelmigration, neue Konfigurationsverteilung und Gauge-
+  Bibliotheksmodernisierung sind keine aktiven Auftraege mehr. Gauge-Praeferenz
+  und separat geplantes ECharts-Modul festgehalten. Anwenderfreundliche
+  Uebernahme vorhandener JSLive-Charts ist als ausdrueckliche Ausnahme
+  eingeplant, nicht ausgeschlossen und noch nicht implementiert. Erfolgreichen
+  Gauge-Kachel-Sichttest des Eigentuemers dokumentiert; keine Laufzeitaenderung.
+
 - Bestehende IPSView-/Output-/Link-Vertraege dokumentiert und mit echtem
   Kind-/Splitter-Code sowie lokalen Symcon-Testdoubles abgesichert. Tests fuer
   Schalterkombinationen, Wiederholungen, Entfernen, Cache, Iframe und Links sind

@@ -10,8 +10,18 @@ Assets bereit. Die Visualisierungsmodule erzeugen daraus HTML-, CSS- und
 JavaScript-Ausgaben für IP-Symcon und bestehende IPSView-Installationen.
 
 Der aktuelle Entwicklungsstand unterstützt IP-Symcon 9.0/9.1 und PHP 8.5.
-Die öffentlichen Modulverträge und vorhandenen Installationen bleiben während
-der weiteren Modernisierung kompatibel.
+JSLive wird als Wartungsprojekt für Symcon 9.0/9.1 fortgeführt: notwendige
+Kompatibilitätsarbeiten und Korrekturen vorhandener Fehler. Ausgenommen von
+dieser Begrenzung ist gezielte Unterstützung für den geplanten Anwenderumstieg.
+Die öffentlichen Modulverträge und vorhandenen Installationen
+bleiben erhalten. Für die zukünftige Weiterentwicklung ist ein separates neues
+Modul auf Basis von ECharts statt Chart.js vorgesehen; kein Engine-Wechsel in
+JSLive. Anwender sollen ihre bestehenden JSLive-Charts möglichst nahtlos in
+das neue ECharts-Modul übernehmen können, ohne sie vollständig neu aufzubauen.
+Dieser Migrationsweg ist eine verbindliche Planungsanforderung, noch keine
+verfügbare Funktion. Nicht automatisch übertragbare Einstellungen müssen
+transparent ausgewiesen werden; bestehende JSLive-Charts bleiben erhalten.
+Siehe [Wartungs- und Migrationsentscheidung](docs/adr/0006-maintenance-scope.md).
 
 ## Projektstatus
 
@@ -30,10 +40,10 @@ der weiteren Modernisierung kompatibel.
   wird auf der aktuellen, über den Symcon-MCP erreichbaren Testebene
   ausgeführt. Die Baseline unter IP-Symcon 9.1 und PHP 8.5.8 ist bestanden;
   die Freigabe als modernisierte stabile Version steht noch aus.
-- Die bestehende Ausgabe über `~HTMLBox` und IPSView bleibt vorerst erhalten.
+- Die bestehende Ausgabe über `~HTMLBox` und IPSView bleibt erhalten.
   [Ausgabe-, IPSView- und Link-Verträge](docs/VISUALIZATION_OUTPUT_CONTRACTS.md)
-  sind durch lokale Charakterisierungstests abgesichert. Eine native
-  Kacheldarstellung wird später schrittweise ergänzt.
+  sind durch lokale Charakterisierungstests abgesichert. Die bisher geplante
+  native Kachelmigration ist nicht mehr Teil des aktiven JSLive-Plans.
 - Die Standardvorlagen verwenden jQuery 4.0.0 und setzen aktuelle Browser bzw.
   WebViews voraus. Ältere Clients werden nicht mehr zugesichert. Der alte
   jQuery-Pfad bleibt für eigene Vorlagen erhalten; siehe
@@ -91,8 +101,8 @@ erkannt werden. Debug daher nur in einer geschützten Testumgebung verwenden.
   Update auf diesen Stand gelöscht werden.
 - Das experimentelle SyncModule wurde ebenfalls entfernt. Vorhandene
   SyncModule-Instanzen müssen vor einem Update auf diesen Stand gelöscht
-  werden. Seine Modul-ID wird nicht wiederverwendet; eine spätere lokale
-  Verteilung von Konfigurationen wird als neue, getrennte Funktion entwickelt.
+  werden. Seine Modul-ID wird nicht wiederverwendet; die früher geplante lokale
+  Konfigurationsverteilung ist nicht mehr Teil des aktiven JSLive-Plans.
 - Das Calendar-Modul wurde entfernt. Vorhandene Calendar-Instanzen müssen vor
   einem Update auf diesen Stand gelöscht werden. Seine Modul-ID und sein Präfix
   werden nicht wiederverwendet.
@@ -105,7 +115,7 @@ erkannt werden. Debug daher nur in einer geschützten Testumgebung verwenden.
   Nutzungs-, Quellen- und Lizenzinventur. Die von den mitgelieferten Templates
   benötigten iro.js- und Font-Ressourcen werden bereits lokal ausgeliefert.
 
-Weitere technische Details, Risiken und der priorisierte Modernisierungsplan
+Weitere technische Details, Risiken und der priorisierte Wartungsplan
 stehen in [`PROJECT_CONTEXT.md`](PROJECT_CONTEXT.md). Die
 [`IPSModuleStrict`-Migration](docs/STRICT_MODULE_MIGRATION.md) dokumentiert die
 implementierten Signaturen, Kompatibilitätsgrenzen und die bestandene

@@ -15,6 +15,15 @@ JSLive. Projektspezifische Fakten und offene Entscheidungen stehen in
 ## Projektspezifische Leitplanken
 
 - Zielplattform sind IP-Symcon 9.0/9.1 und PHP 8.5.
+- JSLive ist ein Wartungsprojekt: nur notwendige Kompatibilitaetsarbeiten fuer
+  Symcon 9.0/9.1 und Korrekturen vorhandener Fehler. Keine neuen Funktionen,
+  Kachelmigration oder Bibliothekswechsel allein zur Modernisierung.
+  Ein neues Modul auf Basis von ECharts wird getrennt geplant. JSLive selbst
+  behaelt seine Engine; Anwender sollen bestehende JSLive-Charts jedoch
+  moeglichst nahtlos in das neue ECharts-Modul uebernehmen koennen.
+  Dafuer notwendige, gezielte Migrationsunterstuetzung ist eine ausdrueckliche
+  Ausnahme vom reinen Wartungsumfang. Umfang, Zuordnung und Rueckfall werden
+  vor der Implementierung spezifiziert und getestet. Massgeblich ist ADR 0006.
 - Bestehende Modul-IDs, Praefixe, Data-IDs, Hook-Pfade, Property-Namen,
   Variablen-Idents, oeffentliche PHP-Funktionen und gespeicherte JSON-Strukturen
   sind oeffentliche Vertraege. Aenderungen daran benoetigen eine dokumentierte

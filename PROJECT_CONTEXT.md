@@ -9,20 +9,38 @@ wurden der lokale und der entfernte `dev`-Stand zuletzt auf Commit
 `7c5a15aa648b67b8e22441cb8f6cf4e37744a4ea` abgeglichen und die nachfolgenden
 Statusangaben nach der `IPSModuleStrict`-Laufzeitabnahme aktualisiert.
 
+Planungsentscheidung vom 03.10.2026: JSLive wird auf Kompatibilitaet mit
+Symcon 9.0/9.1 und Fehlerkorrekturen begrenzt. Diese Wartungsgrenze hat Vorrang
+vor historischen Modernisierungs- und Erweiterungsideen in diesem Dokument.
+Praezisierung vor dem Push: Anwender sollen ihre bestehenden JSLive-Charts
+moeglichst nahtlos in das neue ECharts-Modul uebernehmen koennen. Gezielte
+Migrationsunterstuetzung ist daher eine ausdrueckliche Ausnahme vom
+Wartungsumfang, kein Austausch der Engine innerhalb von JSLive.
+Ausgangsstand 0.90 (`2aaf0ae` / `3770085`), Arbeitsbaum vor der Plananpassung
+sauber. Push, gruene CI und Modulupdate des Ausgabe-Vertragsschritts wurden
+vom Eigentuemer bestaetigt. Details: `docs/adr/0006-maintenance-scope.md`.
+
 ## 1. Zweck und Zielbild
 
 JSLive ist eine IP-Symcon-Modulbibliothek fuer browserbasierte Visualisierungen.
 Ein zentraler Splitter stellt Webhook, statische Assets, gemeinsame Konfiguration
 und den Datenaustausch mit den Visualisierungsmodulen bereit.
 
-Das Modernisierungsziel ist ein unter IP-Symcon 9.0 und 9.1 sowie PHP 8.5
-wartbarer Bestand. Bestehende Installationen, Konfigurationen, Skriptaufrufe und
-IPSView-Nutzung muessen waehrend der Umstellung funktionsfaehig bleiben. Eine
-moderne Kacheldarstellung und eine Minimierung fremder Ressourcen sind spaetere,
-separat zu validierende Ausbaustufen.
+Ziel ist ein unter IP-Symcon 9.0 und 9.1 sowie PHP 8.5 lauffaehiger Bestand
+mit Korrekturen vorhandener Fehler. Bestehende Installationen, Konfigurationen,
+Skriptaufrufe und IPSView-Nutzung bleiben erhalten. Neue Fachfunktionen,
+native Kachelmigration und Bibliothekswechsel allein zur Modernisierung sind
+nicht mehr Teil des aktiven JSLive-Auftrags.
 
-Nicht Ziel der ersten Phase sind neue Fachfunktionen, ein Komplettumbau der
-Architektur oder ein gleichzeitiger Austausch aller Frontend-Bibliotheken.
+Der Eigentuemer plant fuer die Zukunft ein separates neues Modul auf Basis
+von ECharts statt Chart.js. JSLive wird nicht auf ECharts umgebaut; die
+anwenderfreundliche Uebernahme bestehender JSLive-Charts in das neue Modul
+ist jedoch verbindlich einzuplanen. Name, Repository, Architektur, weitere
+Funktionen und der technische Migrationsweg sind noch nicht festgelegt.
+Die Migration soll erneuten manuellen Chart-Aufbau vermeiden und vorhandene
+Konfigurationen sowie Datenbezuege erhalten; nicht automatisch uebertragbare
+Teile muessen sichtbar gemeldet werden. Dessen Implementierung wird nicht
+durch diese Plananpassung gestartet.
 
 ## 2. Repository- und Branch-Stand
 
@@ -453,6 +471,39 @@ Dokumentationsluecken:
 
 ## 12. Priorisierter Arbeitsplan
 
+### Aktiver Wartungsumfang ab 03.10.2026
+
+1. Verbleibende Kompatibilitaets- und Laufzeitluecken fuer Symcon 9.0/9.1
+   gegen den bestehenden Funktionsumfang bewerten. Die aktuelle MCP-Testebene
+   bleibt massgeblich; keine separate 9.0-Installation verlangt. Nicht
+   gepruefte Umgebungen bleiben als solche benannt.
+2. Vorhandene Fehler reproduzieren, einzeln korrigieren und durch passende
+   Regressionstests absichern. Abhaengigkeiten nur bei belegtem Fehler- oder
+   Kompatibilitaetsbedarf aendern, nicht als pauschales Upgradeprogramm.
+3. Gauge ist die vom Eigentuemer bevorzugte Wahl statt AdvTextfield oder
+   Progressbar. Ein neu angelegtes Test-Gauge wird laut Eigentuemer bereits
+   ordentlich in einer Kachel dargestellt; Screenshot am 03.10.2026 vorgelegt.
+   Dies ist ein erfolgreicher Sichttest dieser Konfiguration, kein Nachweis
+   einer nativen HTML-SDK-Implementierung oder aller Gauge-/Transportfaelle.
+   Weitere Pruefungen betreffen konkrete offene Bestandsluecken, keinen
+   pauschalen Neubau der bereits funktionierenden Kachelausgabe.
+4. Bestehende Ausgabe-, IPSView-, Link- und Datenvertraege erhalten; offene
+   Laufzeitnachweise und Freigabegrenzen dokumentieren. IPSView bleibt mangels
+   Testlizenz eine bekannte Testluecke.
+5. Ausdruecklich eingeplante Ausnahme: anwenderfreundlichen Migrationsweg von
+   bestehenden JSLive-Charts in das neue ECharts-Modul spezifizieren. Vor der
+   Umsetzung Ausgangsversionen, Konfigurations-/Datenquellenzuordnung,
+   Vorschau, Bestaetigung, Erhalt des Originals, Wiederholung/Teilfehler und
+   nicht automatisch uebertragbare Einstellungen absichern (ADR 0006).
+   Notwendige JSLive-seitige Vorbereitung ist erlaubt, aber noch nicht
+   implementiert; keine allgemeine Wiederaufnahme der Phase-6-Erweiterungen.
+
+Die folgenden Phasen dokumentieren die bisherige Arbeit. Noch offene Punkte
+werden nur weiterverfolgt, wenn sie in den obigen Wartungsumfang fallen.
+Insbesondere Phase 5 ab Schritt 2 und die Erweiterungen aus Phase 6 sind nicht
+mehr aktive JSLive-Auftraege. Sie werden nicht automatisch in das neue
+ECharts-Modul uebernommen. Siehe ADR 0006.
+
 ### Phase 0 - Bestand einfrieren und absichern
 
 Begonnen: Der erste Vertrags-Snapshot liegt unter
@@ -817,11 +868,15 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
     Push, CI und Symcon-Update des Audits sind vom Eigentuemer bestaetigt.
     Auch der neue Patch ist inzwischen gepusht, CI gruen und Symcon aktualisiert
     (Eigentuemerbestaetigung). Lokaler Stand 0.89 (`7a419a9` / `1729c19`);
-    keine neue unabhaengige MCP-/IPSView-Abnahme behauptet. Weiter mit Phase 5;
-    moderne Gauge-Alternativen bleiben fuer spaeter vorgemerkt.
+    keine neue unabhaengige MCP-/IPSView-Abnahme behauptet. Die anschliessende
+    Ausgabe-Charakterisierung bleibt erhalten; weitere Modernisierung richtet
+    sich nun nach der Wartungsgrenze aus ADR 0006.
     Details: `docs/LOADING_BAR_PATCH.md`.
 
 #### Vorgemerkt fuer ein spaeteres Update: moderne Gauges
+
+Historischer Vorschlag, seit ADR 0006 kein aktiver JSLive-ToDo mehr. Keine
+automatische Uebernahme als Anforderung an das neue ECharts-Modul.
 
 - [ ] Auf Wunsch des Eigentuemers eine modernere bzw. bessere Alternative
   zu Canvas Gauges evaluieren, einschliesslich gepflegter Weiterentwicklungen.
@@ -833,8 +888,8 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
 - [ ] Empfehlung und begrenzten Vergleichsprototyp vor einer Umstellung
   abstimmen. Noch keine Bibliotheksauswahl oder Migration beschlossen.
 
-Dieser Punkt ist fuer spaeter vorgemerkt und aendert nicht den naechsten
-Schritt in Phase 5. Canvas Gauges 2.1.7 bleibt vorerst unveraendert.
+Canvas Gauges 2.1.7 bleibt im Bestand. Aenderungen benoetigen einen konkreten
+Fehler- oder Kompatibilitaetsgrund im Wartungsumfang.
 
 ### Phase 5 - IPSView und Kacheldarstellung
 
@@ -843,17 +898,23 @@ Schritt in Phase 5. Canvas Gauges 2.1.7 bleibt vorerst unveraendert.
    wiederholte Aktualisierung, getrenntes Entfernen, Statussperre, Cache,
    Iframe-Hoehen und Linkmatrix mit echtem Kind-/Splitter-Code sowie lokalen
    Symcon-Testdoubles. Bestandteil der Standardsuite; keine Laufzeitaenderung.
-   Details: `docs/VISUALIZATION_OUTPUT_CONTRACTS.md`. CI nach Push steht aus;
-   IPSView-Laufzeitabnahme bleibt mangels Testlizenz offen.
-2. Ein einfaches Modul als Pilot fuer native WebContent-Darstellung und die
-   Symcon-9.1-HTML-SDK-Kachel waehlen.
-3. Konfigurationsmoeglichkeiten und Theme-/Responsive-Helper am Pilot pruefen.
-4. Erst nach Abnahme modulweise migrieren; IPSView nicht vorzeitig entfernen.
+   Details: `docs/VISUALIZATION_OUTPUT_CONTRACTS.md`. Push, gruene CI und
+   Symcon-Modulupdate sind vom Eigentuemer bestaetigt (0.90). Keine neue
+   unabhaengige MCP-Abnahme; IPSView bleibt mangels Testlizenz offen.
+2. Historisch geplant, nicht mehr aktiv: Pilot fuer native WebContent- und
+   Symcon-9.1-HTML-SDK-Kachel. Der Eigentuemer bevorzugt Gauge statt
+   AdvTextfield/Progressbar; daraus folgt unter ADR 0006 kein Auftrag fuer
+   eine neue JSLive-Kachel.
+3. Historisch geplant, nicht mehr aktiv: Theme-/Responsive-Helper am Pilot.
+4. Historisch geplant, nicht mehr aktiv: modulweise Darstellungsmigration.
+   Bestehende IPSView-/Output-Ausgaben bleiben im Wartungsprojekt erhalten.
 
 ### Phase 6 - Fachliche Weiterentwicklung
 
-Neue Funktionen, UI-Erweiterungen und weitergehende Architekturarbeiten folgen
-erst nach den Sicherheits-, Kompatibilitaets- und Migrationsgrundlagen.
+Historischer Erweiterungsplan, durch ADR 0006 aus dem aktiven JSLive-Auftrag
+genommen. Die nachfolgenden Ideen bleiben zur Nachvollziehbarkeit erhalten,
+sind aber weder auszufuehren noch automatisch fuer das neue Modul beschlossen.
+Fehlerkorrekturen am bestehenden Import/Export bleiben im Wartungsumfang.
 
 1. Den vorhandenen lokalen Konfigurationsimport/-export vor einer Erweiterung
    charakterisieren und absichern. Das Austauschformat erhaelt eine Version;
@@ -890,9 +951,8 @@ erst nach den Sicherheits-, Kompatibilitaets- und Migrationsgrundlagen.
   Tests und Dokumentation wurden entfernt; vorhandene Instanzen muessen vor dem
   Update geloescht werden. Die Entscheidung ist in
   `docs/adr/0001-remove-config-store.md` dokumentiert.
-- Fuer fertig konfigurierte Chart-Ansichten wird nach Abschluss der vorherigen
-  Modernisierungsphasen die in Phase 6 beschriebene lokale,
-  dienstunabhaengige Verteilung mit gemeinsamer Export-/Importbasis umgesetzt.
+- Die in Phase 6 beschriebene lokale Konfigurationsverteilung war als neue
+  Funktion geplant und ist seit ADR 0006 kein aktiver JSLive-Auftrag mehr.
 - Das experimentelle `SyncModule` wurde vollstaendig entfernt. Vorhandene
   Instanzen muessen vor dem Update geloescht werden; Modul-ID und Praefix werden
   nicht wiederverwendet. Die Entscheidung ist in
@@ -903,7 +963,12 @@ erst nach den Sicherheits-, Kompatibilitaets- und Migrationsgrundlagen.
   `docs/adr/0003-remove-calendar-module.md` dokumentiert.
 - Welche IPSView-Versionen und vorhandenen Projekte muessen als reale
   Regressionstestfaelle dienen?
-- Welche Browser und Geraeteklassen sind fuer die Kacheldarstellung verbindlich?
-- Welches kleine Visualisierungsmodul eignet sich als erster Pilot? Aufgrund der
-  begrenzten Komplexitaet sind AdvTextfield oder Progressbar naheliegende
-  Kandidaten; die Entscheidung folgt nach realen Nutzungsdaten.
+- Gauge ist die bevorzugte Wahl des Eigentuemers fuer den zuvor besprochenen
+  Piloten. Eine native Kachel liegt ausserhalb des neuen Wartungsumfangs;
+  weitere Gauge-Arbeit in JSLive betrifft Bestandspruefung und Fehlerkorrektur.
+- Das neue Modul soll ECharts statt Chart.js verwenden. Projektname,
+  Repository, Zielplattformen und Architektur sind separat zu klaeren.
+  Anwender sollen bestehende JSLive-Charts moeglichst nahtlos uebernehmen
+  koennen; das Ob der Migrationsunterstuetzung ist entschieden, ihr technischer
+  Weg und die nachzuweisende Abdeckung bleiben offen. Keine automatische
+  Uebernahme der sonstigen alten Erweiterungsplanung.

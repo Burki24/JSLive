@@ -5,6 +5,12 @@
 - Ersetzt: [ADR 0004](0004-own-realtime-controller.md)
 - Ausgangsstand: JSLive 0.82 mit Streaming 3.1.0; Wartungsfork 3.4.0
 
+Nachtrag 03.10.2026: [ADR 0006](0006-maintenance-scope.md) begrenzt weitere
+JSLive-Arbeit auf Kompatibilitaet und Fehlerkorrekturen. Diese Entscheidung
+bleibt der Nachweis des bestehenden Streaming-Lieferwegs; sie ist kein Auftrag
+fuer neue JSLive-Funktionen. Der separate Fork wird dadurch weder entfernt
+noch stillgelegt.
+
 ## Kontext und Entscheidung
 
 Der isolierte Controller ueber oeffentliche Chart.js-APIs konnte die Funktion,
