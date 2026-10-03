@@ -121,7 +121,8 @@ gemaess [ADR 0006](adr/0006-maintenance-scope.md) kein aktiver JSLive-Auftrag
 mehr. Gauge ist die bevorzugte Wahl des Eigentuemers, im Wartungsumfang jedoch
 nur fuer Bestandspruefung und Fehlerkorrekturen. Bestehende Idents, Legacy-
 Ausgaben, Linkmethoden und eigene Templates bleiben erhalten. Fuer das neue
-ECharts-Modul ist eine anwenderfreundliche Uebernahme bestehender JSLive-Charts
-ausdruecklich eingeplant. Der Migrationsweg soll die Originale erhalten und
-nicht automatisch uebertragbare Anpassungen offen ausweisen; er ist noch
+Modul SymconEcharts ist eine anwenderfreundliche Uebernahme bestehender
+JSLive-Charts ausdruecklich eingeplant: JSLive erhaelt die Exportfunktion,
+SymconEcharts die Uebernahmefunktion. Der Migrationsweg soll die Originale
+erhalten und nicht automatisch uebertragbare Anpassungen offen ausweisen; er ist noch
 nicht implementiert. Ein Austausch der Engine in JSLive ist davon getrennt.

@@ -9,6 +9,12 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Development
 
+- Planung an die Community-Zusage angepasst: notwendige Ressourcenupdates,
+  JSLive-Chart-Export und Uebernahme in SymconEcharts festgehalten. Nicht durch
+  ECharts ersetzte Funktionen (z.B. Colorpicker) bleiben gepflegt, bei Bedarf
+  mit alternativen oder eigenen Ressourcen. Keine Laufzeitaenderung und noch
+  keine Implementierung des zugesagten Migrationswegs.
+
 - JSLive auf Wartung fuer Symcon 9.0/9.1 und vorhandene Fehler begrenzt
   (ADR 0006). Kachelmigration, neue Konfigurationsverteilung und Gauge-
   Bibliotheksmodernisierung sind keine aktiven Auftraege mehr. Gauge-Praeferenz

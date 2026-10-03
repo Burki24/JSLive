@@ -4,6 +4,7 @@
 - Datum: 03.10.2026
 - Ausgangsstand: JSLive 0.90 (`2aaf0ae` / `3770085`)
 - Begrenzt: bisherige Modernisierungsplanung, insbesondere Phase 5 und Phase 6
+- Konkretisiert: durch den vom Eigentuemer im Chat bereitgestellten Community-Beitrag vom 03.10.2026
 
 ## Kontext
 
@@ -26,42 +27,63 @@ bestehende JSLive-Charts moeglichst nahtlos in das neue ECharts-Modul uebernehme
 koennen. Der Ausschluss eines Engine-Umbaus innerhalb von JSLive schliesst
 diese anwenderseitige Migration ausdruecklich nicht aus.
 
+Die anschliessend mitgeteilte oeffentliche Community-Zusage konkretisiert die
+Zustaendigkeiten: Der Nachfolger heisst `SymconEcharts`; JSLive liefert den
+Export, SymconEcharts die Uebernahmefunktion. Noch notwendige Ressourcenupdates
+bleiben Teil der Stabilisierung. JSLive bleibt fuer nicht durch ECharts
+ersetzte Funktionen wie den Colorpicker erhalten und gepflegt, einschliesslich
+Alternativen oder eigener Ersatzloesungen bei eingestellten Ressourcen.
+Diese Konkretisierung ersetzt die zuvor zu enge Begrenzung auf Fehlerkorrektur
+und einen noch voellig offenen Migrationsweg. Quelle ist der bereitgestellte
+Beitrag; eine unabhaengige Pruefung der Community-Veroeffentlichung erfolgte nicht.
+
 ## Entscheidung
 
 1. JSLive bleibt ein Wartungsprojekt fuer Symcon 9.0/9.1 mit der bestehenden
    PHP-8.5-Zielbasis. Bestehende Funktionen, gespeicherte Konfigurationen,
    Ausgabevariablen, Hook-Pfade und oeffentliche Schnittstellen bleiben erhalten.
-2. Zulässig sind notwendige Kompatibilitaetsarbeiten, Korrekturen vorhandener
-   Fehler und die dazu erforderlichen Tests und Dokumentation. Als ausdrueckliche
-   Ausnahme ist gezielte Unterstuetzung fuer die Uebernahme vorhandener Charts
-   in das neue ECharts-Modul eingeplant. Sonstige neue Funktionen,
-   eine native Kachelmigration und Bibliothekswechsel allein zur Modernisierung
-   werden nicht weiterverfolgt. Erweiterte Konfigurationsverteilung und die
-   Suche nach einer moderneren Gauge-Engine entfallen als aktive JSLive-ToDos.
+2. Notwendige Kompatibilitaetsarbeiten, ausstehende Ressourcenupdates,
+   Fehlerkorrekturen sowie zugehoerige Tests und Dokumentation bleiben im
+   Umfang. Es gibt keine allgemeine Weiterentwicklung der Modulsammlung und
+   keine neue native Kachelmigration. Export und dauerhafte Pflege der nicht
+   ersetzten Funktionen sind gesondert zugesagt. Die allgemeine
+   Konfigurationsverteilung und ein rein gestalterischer Gauge-Engine-Wechsel
+   werden dadurch nicht wieder zu aktiven Auftraegen.
 3. Gauge wird als bevorzugte Wahl festgehalten. Unter dem neuen Umfang kann
    das bestehende Gauge-Modul auf Kompatibilitaet und Fehler geprueft werden;
    eine neue Gauge-Kachel ist damit nicht freigegeben. Eine Ausnahme von der
    Wartungsgrenze benoetigt eine gesonderte Entscheidung des Eigentuemers.
-4. ECharts gehoert in ein separates neues Modul, nicht in einen Engine-Umbau
-   von JSLive. Die Uebernahme bestehender JSLive-Charts wird als verbindliche
-   Anwenderfunktion des Uebergangs eingeplant. Projektname, Repository,
-   Architektur, genaue Versionen, weitere Funktionen und der technische
-   Migrationsweg sind noch nicht festgelegt.
-   Es werden weder ein neues Repository noch ein neuer Task oder Prototyp angelegt.
+4. Das separate Modul `SymconEcharts` verwendet Apache ECharts. JSLive erhaelt
+   eine Exportfunktion fuer bestehende Charts; SymconEcharts die zugehoerige
+   Uebernahmefunktion. Kein Engine-Umbau innerhalb von JSLive. Repository,
+   Architektur, genaue Versionen, Austauschformat, Oberflaeche und Abdeckung
+   sind separat festzulegen. In diesem Schritt werden weder ein neues
+   Repository noch ein neuer Task oder Prototyp angelegt.
 5. Die bestehende Chart.js-/Streaming-Integration bleibt erhalten.
    [ADR 0005](0005-maintained-streaming-fork.md) dokumentiert ihren Lieferweg;
    diese Entscheidung entfernt keine Bundles und aendert nicht den separaten
    Fork. Dessen weitere Wartung oder Stilllegung ist gesondert zu entscheiden.
+6. Nicht durch ECharts ersetzte JSLive-Funktionen bleiben erhalten und werden
+   weiter gepflegt. Colorpicker ist ausdruecklich genannt; eine abschliessende
+   Zuordnung aller Module ist noch offen. Bei Entwicklungsstopp der externen
+   Ressourcen werden Alternativen gesucht und integriert oder eigene
+   Ersatzloesungen entwickelt. Lizenz, bestehende Vertraege und Regressionen
+   sind vor einem Wechsel zu pruefen. Daraus folgt weder eine allgemeine
+   Funktionserweiterung noch die Pflicht, alle alten Ressourcen zu forken.
 
 ## Anforderungen an den Anwenderumstieg
 
 Ziel ist ein moeglichst nahtloser Umstieg ohne vollstaendigen manuellen Neuaufbau
-der Charts. Die Funktion ist noch nicht implementiert. Vor einer Umsetzung
-muessen mindestens folgende Punkte spezifiziert und mit Tests belegt werden:
+der Charts. JSLive ist fuer den Export zustaendig, SymconEcharts fuer die
+Uebernahme. Diese spezielle Migrationsfunktion ist noch nicht implementiert;
+der vorhandene JSLive-Konfigurationsexport allein belegt keine Kompatibilitaet
+mit SymconEcharts. Vor einer Umsetzung muessen mindestens folgende Punkte
+spezifiziert und mit Tests belegt werden:
 
 - Unterstuetzte JSLive-Ausgangsversionen und Chart-Varianten sowie ein
-  nachvollziehbarer, versionierter Uebernahmevertrag; der konkrete Lieferweg
-  (beispielsweise Import oder Assistent) bleibt offen.
+  gemeinsamer versionierter Export-/Uebernahmevertrag. Bestehenden Export
+  samt Regressionstests auf Wiederverwendung pruefen und kompatibel erhalten;
+  konkrete Datei-/Datenstruktur und Bedienoberflaeche bleiben offen.
 - Zuordnung von Datenreihen, Variablen-/Archivbezuegen, Zeitbereichen, Achsen,
   Einheiten, Beschriftungen und Darstellungsoptionen. Bestehende Quelldaten
   und Archivhistorien duerfen durch den Umstieg nicht veraendert werden.
@@ -75,9 +97,10 @@ muessen mindestens folgende Punkte spezifiziert und mit Tests belegt werden:
 - Sichere Wiederholung, kontrollierter Umgang mit Teilfehlern und
   Regressionstests anhand repraesentativer anonymisierter Konfigurationen.
 
-Gezielte Vorbereitung auf der JSLive-Seite ist innerhalb dieser Ausnahme
-zulaessig, sofern fuer den beschlossenen Migrationsweg erforderlich. Sie wird
-getrennt spezifiziert und umgesetzt. Die frueher geplante allgemeine
+Die zugesagte Exportfunktion auf der JSLive-Seite wird getrennt spezifiziert
+und umgesetzt, abgestimmt auf die Uebernahme in SymconEcharts. Die bestehende
+Konfigurationsuebertragung und ihre Tests dienen als Ausgangspunkt fuer die
+Analyse. Die frueher geplante allgemeine
 Konfigurationsverteilung ist dadurch nicht wieder freigegeben.
 
 ## Folgen und Nachweise
@@ -94,5 +117,6 @@ Konfigurationsverteilung ist dadurch nicht wieder freigegeben.
 
 Naechster moeglicher Wartungsschritt ist eine begrenzte Bestandspruefung von
 Gauge anhand der vorhandenen Tests und offenen Laufzeitluecken. Konkrete
-Fehler sind vor einer Korrektur nachzuweisen; die ECharts-Neuentwicklung wird
-separat beauftragt und geplant.
+Fehler sind vor einer Korrektur nachzuweisen. Fuer die Migration ist der
+naechste Planungsschritt die Spezifikation des gemeinsamen Export-/Uebernahme-
+vertrags; Arbeiten in SymconEcharts bleiben von diesem Repository getrennt.

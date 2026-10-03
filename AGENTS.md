@@ -15,15 +15,21 @@ JSLive. Projektspezifische Fakten und offene Entscheidungen stehen in
 ## Projektspezifische Leitplanken
 
 - Zielplattform sind IP-Symcon 9.0/9.1 und PHP 8.5.
-- JSLive ist ein Wartungsprojekt: nur notwendige Kompatibilitaetsarbeiten fuer
-  Symcon 9.0/9.1 und Korrekturen vorhandener Fehler. Keine neuen Funktionen,
-  Kachelmigration oder Bibliothekswechsel allein zur Modernisierung.
-  Ein neues Modul auf Basis von ECharts wird getrennt geplant. JSLive selbst
-  behaelt seine Engine; Anwender sollen bestehende JSLive-Charts jedoch
-  moeglichst nahtlos in das neue ECharts-Modul uebernehmen koennen.
-  Dafuer notwendige, gezielte Migrationsunterstuetzung ist eine ausdrueckliche
-  Ausnahme vom reinen Wartungsumfang. Umfang, Zuordnung und Rueckfall werden
-  vor der Implementierung spezifiziert und getestet. Massgeblich ist ADR 0006.
+- JSLive wird fuer Symcon 9.0/9.1 stabilisiert: notwendige Ressourcenupdates
+  und Fehlerkorrekturen bleiben im Umfang, eine allgemeine Weiterentwicklung
+  der Modulsammlung oder native Kachelmigration ist nicht geplant.
+- Der separate Nachfolger fuer die Chart-Darstellung heisst `SymconEcharts`
+  und basiert auf Apache ECharts. JSLive erhaelt eine Exportfunktion fuer
+  bestehende Charts, SymconEcharts die passende Uebernahmefunktion. JSLive
+  behaelt seine bestehende Engine. Format, Zuordnung, Abdeckung und Rueckfall
+  werden vor der Implementierung spezifiziert und getestet; bestehende
+  Exportvertraege duerfen nicht stillschweigend gebrochen werden.
+- JSLive-Funktionen ohne Ersatz durch ECharts, insbesondere der Colorpicker,
+  werden weiter gepflegt. Bei Entwicklungsstopp ihrer externen Ressourcen
+  werden geeignete Alternativen gesucht und integriert oder eigene Loesungen
+  entwickelt. Dies ist erlaubte Bestandspflege, kein pauschaler Auftrag fuer
+  neue Funktionen oder die Uebernahme aller Abhaengigkeiten als Wartungsforks.
+  Massgeblich ist ADR 0006 mit der oeffentlichen Community-Zusage.
 - Bestehende Modul-IDs, Praefixe, Data-IDs, Hook-Pfade, Property-Namen,
   Variablen-Idents, oeffentliche PHP-Funktionen und gespeicherte JSON-Strukturen
   sind oeffentliche Vertraege. Aenderungen daran benoetigen eine dokumentierte

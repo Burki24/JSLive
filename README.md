@@ -10,17 +10,24 @@ Assets bereit. Die Visualisierungsmodule erzeugen daraus HTML-, CSS- und
 JavaScript-Ausgaben für IP-Symcon und bestehende IPSView-Installationen.
 
 Der aktuelle Entwicklungsstand unterstützt IP-Symcon 9.0/9.1 und PHP 8.5.
-JSLive wird als Wartungsprojekt für Symcon 9.0/9.1 fortgeführt: notwendige
-Kompatibilitätsarbeiten und Korrekturen vorhandener Fehler. Ausgenommen von
-dieser Begrenzung ist gezielte Unterstützung für den geplanten Anwenderumstieg.
-Die öffentlichen Modulverträge und vorhandenen Installationen
-bleiben erhalten. Für die zukünftige Weiterentwicklung ist ein separates neues
-Modul auf Basis von ECharts statt Chart.js vorgesehen; kein Engine-Wechsel in
-JSLive. Anwender sollen ihre bestehenden JSLive-Charts möglichst nahtlos in
-das neue ECharts-Modul übernehmen können, ohne sie vollständig neu aufzubauen.
-Dieser Migrationsweg ist eine verbindliche Planungsanforderung, noch keine
-verfügbare Funktion. Nicht automatisch übertragbare Einstellungen müssen
-transparent ausgewiesen werden; bestehende JSLive-Charts bleiben erhalten.
+JSLive wird für Symcon 9.0/9.1 stabilisiert: notwendige Ressourcenupdates und
+Fehlerkorrekturen werden umgesetzt, eine allgemeine Weiterentwicklung der
+Modulsammlung ist nicht geplant. Die öffentlichen Modulverträge und
+vorhandenen Installationen bleiben erhalten.
+
+Die zukünftige Chart-Weiterentwicklung erfolgt im separaten Modul
+**SymconEcharts** auf Basis von Apache ECharts. Dafür erhält JSLive eine
+Exportfunktion für bestehende Charts und SymconEcharts die passende
+Übernahmefunktion. Ziel ist ein möglichst nahtloser Umstieg ohne vollständigen
+manuellen Neuaufbau. Dieser spezielle Migrationsweg ist angekündigt, noch
+nicht implementiert. Nicht automatisch übertragbare Einstellungen müssen
+transparent ausgewiesen werden; die Original-Charts bleiben erhalten.
+Die bestehende Chart.js-Engine in JSLive wird nicht ausgetauscht.
+
+JSLive bleibt außerdem für Funktionen bestehen, die nicht durch ECharts
+ersetzt werden, beispielsweise den Colorpicker. Diese werden weiter gepflegt.
+Wird die Entwicklung ihrer externen Ressourcen eingestellt, werden geeignete
+Alternativen gesucht und eingebaut oder eigene Lösungen entwickelt.
 Siehe [Wartungs- und Migrationsentscheidung](docs/adr/0006-maintenance-scope.md).
 
 ## Projektstatus
