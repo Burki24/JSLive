@@ -62,6 +62,12 @@ der vendorten Bibliotheken und Schriften sind in der zentralen
 Frontend-Inventur dokumentiert. Benutzerdefinierte Templates können weiterhin
 eigene externe Ressourcen einbinden.
 
+Alle mitgelieferten HTML-Vorlagen laden die vollständige jQuery-4.0.0-Distribution
+aus `js/jquery/4.0.0/`. Ältere Browser/WebViews fallen aus dem zugesicherten
+Umfang. Der unversionierte `js/jquery.min.js`-Pfad bleibt mit 3.6.0 für eigene
+Vorlagen erhalten. Eigene Skripte werden nicht automatisch angepasst;
+[Migration, Tests und Rückfall](../docs/JQUERY_MIGRATION.md) beachten.
+
 Die unbenutzten Dateien `mc-calendar/mc-calendar.min.js`,
 `css/DateTimePicker1.css` und `css/font-face.css` werden nicht mehr ausgeliefert.
 Eigene Templates vor dem Update anhand der

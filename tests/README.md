@@ -9,6 +9,15 @@ php tests/run.php
 Der Runner verwendet neben PHP auch Python 3 fuer die Metadaten- und
 Helper-Pruefungen sowie Node.js fuer die JavaScript-Renderingvertraege.
 
+`node tests/jquery-browser.js` ist ein optionaler, isolierter Browservergleich
+mit bereits vorhandenem Playwright. Er prueft echte jQuery-3.6.0-/4.0.0-Ajax-
+Callbacks mit den originalen Chart-/Formularfunktionen und kontrollierten
+HTTP-Antworten (inklusive Fehlerfaellen und vertauschter Reihenfolge).
+`node tests/chart-streaming-browser.js` ergaenzt die echte Chart-Darstellung.
+Beide akzeptieren `JSLIVE_BROWSER_EXECUTABLE`, installieren keine Pakete,
+kontaktieren kein Symcon und sind nicht Teil der PHP-CI. Aufruf und Grenzen:
+[jQuery-Migration](../docs/JQUERY_MIGRATION.md).
+
 Der isolierte Echtzeit-Prototyp wird mit `node tests/realtime-window.js`
 deterministisch geprueft; dieser Test ist im Runner enthalten. Ein optionaler
 Browser-/Lastvergleich mit bereits vorhandenem Playwright steht in

@@ -293,6 +293,9 @@ foreach (['css/DatePicker1.css', 'css/fonts/Roboto.css'] as $stylesheetAsset) {
 }
 foreach ([
     'chartjs/chart.js',
+    'jquery.min.js',
+    'jquery/4.0.0/jquery.min.js',
+    'jquery/4.0.0/jquery.min.map',
     'chartjs/chart.min.js',
     'chartjs/4.5.1/chart.umd.min.js',
     'chartjs/4.5.1/chart.umd.min.js.map',
@@ -310,7 +313,7 @@ foreach ([
     assertWebhookRouting(
         $chartResponse['statusCode'] === 200
             && $chartResponse['output'] === file_get_contents(dirname(__DIR__) . '/SymconJSLive/js/' . $chartAsset),
-        'Active Chart.js bundles and plugins must remain available without substitution: ' . $chartAsset
+        'Active frontend bundles and plugins must remain available without substitution: ' . $chartAsset
     );
 }
 foreach ([

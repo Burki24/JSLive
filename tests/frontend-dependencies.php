@@ -23,6 +23,7 @@ foreach (array_keys($contracts['modules']) as $moduleDirectory) {
 
 foreach ([
     'jQuery 3.6.0',
+    'jQuery 4.0.0',
     'Chart.js 4.3.3',
     'Chart.js 4.4.1',
     'Chart.js 4.5.1',
@@ -50,6 +51,34 @@ $templateDirectories = [
     $root . '/SymconJSLive/templates',
     $root . '/SymconJSLive/htmlbox'
 ];
+
+$jqueryDirectory = $root . '/SymconJSLive/js/jquery/4.0.0/';
+$jquerySources = is_file($jqueryDirectory . 'SOURCES.md')
+    ? file_get_contents($jqueryDirectory . 'SOURCES.md') : false;
+foreach ([
+    'jquery.min.js'  => '2526ee3df5d907ad4374102b8cfbec025e5992f99fe9abbb0e9b22cb23beb861',
+    'jquery.min.map' => 'e2f9377576b10edc8ca4ec3e6399b59ae1bd3a89b9248ce9026098377d70406c',
+    'LICENSE.txt'    => 'd4db9ebe6f29f5168eac45ad713f055623ac5d0dcd5ba92da23d650ae012020d'
+] as $jqueryAsset => $expectedHash) {
+    if (!is_file($jqueryDirectory . $jqueryAsset) || hash_file('sha256', $jqueryDirectory . $jqueryAsset) !== $expectedHash) {
+        throw new RuntimeException('Missing or modified jQuery distribution file: ' . $jqueryAsset . '.');
+    }
+    if ($jquerySources === false || !str_contains($jquerySources, $jqueryAsset) || !str_contains($jquerySources, $expectedHash)) {
+        throw new RuntimeException('jQuery source inventory must record ' . $jqueryAsset . ' and its SHA-256.');
+    }
+}
+$legacyJquery = file_get_contents($root . '/SymconJSLive/js/jquery.min.js');
+if (hash('sha256', str_replace("\r\n", "\n", $legacyJquery)) !== 'ff1523fb7389539c84c65aba19260648793bb4f5e29329d2ee8804bc37a3fe6e') {
+    throw new RuntimeException('The historical jQuery 3.6.0 compatibility asset must remain unchanged.');
+}
+foreach ($templateDirectories as $templateDirectory) {
+    foreach (glob($templateDirectory . '/*.html') ?: [] as $templatePath) {
+        preg_match_all('#<script\b[^>]*\bsrc="([^"]*jquery[^"\s]*)"#i', file_get_contents($templatePath), $jqueryScripts);
+        if ($jqueryScripts[1] !== ['/hook/JSLive/js/jquery/4.0.0/jquery.min.js']) {
+            throw new RuntimeException(basename($templatePath) . ' must load the full jQuery 4.0.0 bundle exactly once.');
+        }
+    }
+}
 
 $sharedChartReference = '/hook/JSLive/js/chartjs/4.5.1/chart.umd.min.js';
 foreach (['Chart.html', 'Doughnut-PIE.html', 'RadarChart.html'] as $chartTemplate) {

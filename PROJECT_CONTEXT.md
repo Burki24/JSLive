@@ -771,10 +771,23 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
     Nachweise stehen im Fork unter `docs/JSLIVE_COMPATIBILITY.md`.
     Die getrennte Integration von 3.6.0 in die Standard-Chartvorlage ist lokal
     umgesetzt: neuer versionierter Assetpfad, MIT-Lizenz, Herkunft und Hashes;
-    der alte 3.1.0-Pfad bleibt unveraendert. Lokale Nachweise und offene
-    JSLive-CI/installierte Abnahme: `docs/STREAMING_INTEGRATION.md`.
+    der alte 3.1.0-Pfad bleibt unveraendert. Auf 0.84 (`5fe45ad` / `8bc5e02`)
+    sind CI und die gezielte installierte Pruefung von Asset-Hashes, Realtime,
+    Tooltips, Pull und Reload bestanden. WebSocket-Handshake 101 bestaetigt;
+    ein echter eingehender Datenwechsel wurde nicht beobachtet. Der Zeitachsen-
+    wechsel wurde nur browserlokal geprueft. Gesamtstatus bleibt PARTIAL:
+    echte IPSView-Geraete sind mangels Lizenz auf der Testebene nicht pruefbar.
+    Die Entwicklung wird auf ausdruecklichen Wunsch trotzdem fortgesetzt.
+    Nachweise und Grenzen: `docs/STREAMING_INTEGRATION.md`.
     Moment bleibt vorerst erhalten;
     weitere Bibliotheken folgen einzeln, iro.js bleibt unveraendert.
+13. Lokal umgesetzt: direkter Wechsel von jQuery 3.6.0 auf 4.0.0 in allen
+    19 mitgelieferten HTML-Vorlagen. Wegfall aelterer Browser/WebViews ist
+    ausdruecklich freigegeben. Neuer versionierter Full-Bundle mit Lizenz,
+    Source Map und Integritaetsnachweisen; Altpfad bleibt erhalten.
+    Zwoelf Ajax-/Formularfaelle und acht Chart-Browserdurchlaeufe bestanden.
+    JSLive-CI und installierte Abnahme dieses Kandidaten folgen nach Push/Update;
+    IPSView bleibt eine bekannte Testluecke. Details: `docs/JQUERY_MIGRATION.md`.
 
 ### Phase 5 - IPSView und Kacheldarstellung
 

@@ -37,6 +37,11 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Changed
 
+- Alle mitgelieferten HTML-Vorlagen laden jQuery 4.0.0 aus einem versionierten
+  lokalen Pfad mit MIT-Lizenz, Source Map und Integritaetsnachweisen. Der
+  bisherige 3.6.0-Pfad bleibt fuer eigene Templates unveraendert. Aeltere
+  Browser/WebViews werden nach ausdruecklicher Freigabe nicht mehr zugesichert.
+  Ajax-/Formularregressionen sowie Migrations- und Rueckfallhinweise sind ergaenzt.
 - Die Standard-Chartvorlage verwendet den eigenen Streaming-Wartungsfork 3.6.0
   mit versioniertem Assetpfad, MIT-Lizenz und Commit-/Hash-Nachweisen. Der alte
   3.1.0-Pfad bleibt fuer eigene Vorlagen unveraendert. Chart.js, Moment, Adapter,

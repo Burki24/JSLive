@@ -1,6 +1,7 @@
 # Integration des Streaming-Wartungsforks 3.6.0
 
-Stand: 02.10.2026. Lokal umgesetzt und geprueft, noch nicht in Symcon abgenommen.
+Stand: 03.10.2026. Lokal umgesetzt; gezielte installierte Pruefung von 0.84
+bestanden, Gesamtabnahme weiterhin PARTIAL (siehe Fortschreibung unten).
 Ausgangspunkt: JSLive 0.83, `ff22ac2`; Entscheidung: [ADR 0005](adr/0005-maintained-streaming-fork.md).
 
 ## Lieferumfang und Herkunft
@@ -80,6 +81,20 @@ Konfigurationen oder spaetere Zustaende mit absichtlich korrigierten Tooltips.
 
 ## Noch offene Abnahme und Rueckfall
 
+Fortschreibung 03.10.2026: JSLive 0.84 (`5fe45ad` / `8bc5e02`) war lokal,
+auf GitHub und auf MCP-CURRENT synchron; Tests, Style und CodeQL gruen.
+Neuer Asset-Hash stimmt exakt. Beim alten Bundle erklaert ausschliesslich
+CRLF statt LF den abweichenden Rohhash. Alle elf Instanzen aktiv, keine
+JSLive-Logfehler im geprueften Zeitraum. Installierte Chart-Ansicht: Realtime,
+Tooltipwerte, lesender Pull-Aufruf und Reload bestanden; WebSocket dreimal
+HTTP 101, aber kein eingehender Datenwechsel beobachtet. Zeitachsenwechsel
+nur browserlokal. Die einzige HTTP-Fehlermeldung betraf `/favicon.ico` (404),
+nicht JSLive. Keine Konfigurationsaenderungen oder ApplyChanges-Aufrufe durch
+den Pruefer. Echte IPSView-Abnahme auf der Testebene ist aus Lizenzgruenden
+nicht verfuegbar; Entwicklung wird auf Wunsch des Eigentuemers fortgesetzt.
+Die folgende urspruengliche Checkliste bleibt als Ablauf erhalten; Punkte 1/2
+sind fuer 0.84 erledigt, Punkt 3 ist nur im oben genannten Umfang nachgewiesen.
+
 1. Eigentuemer: Commit/Push in JSLive, CI abwarten und Bot-Metadaten lokal pullen.
 2. Modulupdate in Symcon; `ApplyChanges()` laeuft dabei automatisch. Ansichten
    neu laden. Kein gesonderter Aufruf oder Dienstneustart fuer diesen Assetwechsel.
@@ -88,8 +103,8 @@ Konfigurationen oder spaetere Zustaende mit absichtlich korrigierten Tooltips.
    Perioden sowie eingesetzten IPSView-Geraeten abnehmen. Konsole/Logs pruefen.
 
 Kein Symcon-Schreibzugriff wurde fuer die lokale Integration ausgefuehrt.
-CI und installierte Abnahme dieser JSLive-Aenderung sind noch offen; die
-frueheren installierten Ergebnisse gelten nicht automatisch fuer den neuen Bundle.
+Die installierte Gesamtabnahme bleibt wegen der oben genannten Luecken offen;
+fruehere Ergebnisse gelten nicht automatisch fuer spaetere Aenderungen.
 [Migrations- und Rueckfallanleitung](FRONTEND_ASSET_MIGRATION.md): vorherigen
 JSLive-Stand `ff22ac2` (0.83) vollstaendig wiederherstellen, Modulupdate und
 Neuladen; eigene Templates bei Bedarf aus separater Sicherung zuruecksetzen.

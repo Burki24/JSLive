@@ -1,5 +1,14 @@
 # Bereinigung historischer Frontend-Assets
 
+## Aktueller Schritt: jQuery 4.0.0
+
+Ausgangspunkt 0.84 (`8bc5e02`). Die 18 Standardvorlagen und der HTMLBox-Lader
+wechseln auf `jquery/4.0.0/jquery.min.js`; der alte `jquery.min.js` bleibt auf
+3.6.0 erhalten. Der Eigentuemer hat den Wegfall aelterer Browser/WebViews
+freigegeben. Eigene Vorlagen werden nicht automatisch migriert. Vollstaendiger
+Umfang, Browservoraussetzungen, Nachweise und Rueckfall:
+[jQuery-Migration](JQUERY_MIGRATION.md).
+
 ## Erster Schritt: MCDatepicker und unbenutzte CSS-Dateien
 
 Ausgangspunkt ist Commit `78f9131` (Lokalisierung von iro.js und Fonts).

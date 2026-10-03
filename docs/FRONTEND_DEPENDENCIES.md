@@ -1,6 +1,6 @@
 # Frontend-Abhaengigkeiten
 
-Stand: 02.10.2026. Diese Inventur bildet die mitgelieferten Templates und die
+Stand: 03.10.2026. Diese Inventur bildet die mitgelieferten Templates und die
 vom Splitter unter `/hook/JSLive/js/` ausgelieferten Dateien ab. Die zuvor
 extern geladenen Ressourcen sind lokalisiert; Bibliotheksversionen wurden dabei
 nicht aktualisiert. MCDatepicker, zwei unbenutzte CSS-Dateien sowie die
@@ -16,16 +16,16 @@ Lieferumfang der Library.
 
 | Modul | Template(s) | Aktiv geladene Frontend-Bausteine |
 | --- | --- | --- |
-| `SymconJSLive` | `htmlbox/HtmlBox-Chart.html` | jQuery 3.6.0, `util.js`, `init.js`; danach indirekt `loader.js`, `jslive/Chart.js` und die ausgewaehlten lokalen Font-CSS-/WOFF2-Dateien |
-| `SymconJSLiveAdvTextfield` | `Textfield1.html`, `Textfield2.html`, `FormExample.html` | jQuery 3.6.0, `util.js`, `css/TextField.css` oder `css/FormExample.css` |
-| `SymconJSLiveChart` | `Chart.html` | jQuery 3.6.0, Chart.js 4.5.1, Moment.js 2.31.0, chartjs-adapter-moment 1.0.1, chartjs-plugin-streaming 3.6.0, chartjs-plugin-datalabels 2.2.0, `util.js` |
-| `SymconJSLiveColorPicker` | `ColorPicker.html` | jQuery 3.6.0, `util.js`, lokale iro.js 5.5.0 |
-| `SymconJSLiveCustom` | `Default.html` oder benutzerdefiniertes Template | Das mitgelieferte Default-Template nutzt jQuery 3.6.0 und `util.js`; benutzerdefinierte Skripte liegen ausserhalb dieser Inventur |
-| `SymconJSLiveDateTimePicker` | `TimePicker1.html`, `TimePicker2.html`, `TimePicker3.html`, `DatePicker1.html`, `DateTimePicker1.html` | jQuery 3.6.0, `util.js` und die jeweilige Template-CSS-Datei; DatePicker und DateTimePicker verwenden beide `css/DatePicker1.css` |
-| `SymconJSLiveDoughnutPie` | `Doughnut-PIE.html` | jQuery 3.6.0, Chart.js 4.5.1, Moment.js 2.31.0, chartjs-adapter-moment 1.0.1, chartjs-plugin-datalabels 2.2.0, `util.js` |
-| `SymconJSLiveGauge` | vier `CanvasGauges-*.html`-Templates | jQuery 3.6.0, Canvas Gauges 2.1.7, `util.js` |
-| `SymconJSLiveProgressbar` | `Progressbar.html` | jQuery 3.6.0, Loading Bar/`ldBar` mit nicht im Asset ausgewiesener Version, `loading-bar.css`, `util.js` |
-| `SymconJSLiveRadarChart` | `RadarChart.html` | jQuery 3.6.0, Chart.js 4.5.1, Moment.js 2.31.0, chartjs-adapter-moment 1.0.1, chartjs-plugin-datalabels 2.2.0, `util.js` |
+| `SymconJSLive` | `htmlbox/HtmlBox-Chart.html` | jQuery 4.0.0, `util.js`, `init.js`; danach indirekt `loader.js`, `jslive/Chart.js` und die ausgewaehlten lokalen Font-CSS-/WOFF2-Dateien |
+| `SymconJSLiveAdvTextfield` | `Textfield1.html`, `Textfield2.html`, `FormExample.html` | jQuery 4.0.0, `util.js`, `css/TextField.css` oder `css/FormExample.css` |
+| `SymconJSLiveChart` | `Chart.html` | jQuery 4.0.0, Chart.js 4.5.1, Moment.js 2.31.0, chartjs-adapter-moment 1.0.1, chartjs-plugin-streaming 3.6.0, chartjs-plugin-datalabels 2.2.0, `util.js` |
+| `SymconJSLiveColorPicker` | `ColorPicker.html` | jQuery 4.0.0, `util.js`, lokale iro.js 5.5.0 |
+| `SymconJSLiveCustom` | `Default.html` oder benutzerdefiniertes Template | Das mitgelieferte Default-Template nutzt jQuery 4.0.0 und `util.js`; benutzerdefinierte Skripte liegen ausserhalb dieser Inventur |
+| `SymconJSLiveDateTimePicker` | `TimePicker1.html`, `TimePicker2.html`, `TimePicker3.html`, `DatePicker1.html`, `DateTimePicker1.html` | jQuery 4.0.0, `util.js` und die jeweilige Template-CSS-Datei; DatePicker und DateTimePicker verwenden beide `css/DatePicker1.css` |
+| `SymconJSLiveDoughnutPie` | `Doughnut-PIE.html` | jQuery 4.0.0, Chart.js 4.5.1, Moment.js 2.31.0, chartjs-adapter-moment 1.0.1, chartjs-plugin-datalabels 2.2.0, `util.js` |
+| `SymconJSLiveGauge` | vier `CanvasGauges-*.html`-Templates | jQuery 4.0.0, Canvas Gauges 2.1.7, `util.js` |
+| `SymconJSLiveProgressbar` | `Progressbar.html` | jQuery 4.0.0, Loading Bar/`ldBar` mit nicht im Asset ausgewiesener Version, `loading-bar.css`, `util.js` |
+| `SymconJSLiveRadarChart` | `RadarChart.html` | jQuery 4.0.0, Chart.js 4.5.1, Moment.js 2.31.0, chartjs-adapter-moment 1.0.1, chartjs-plugin-datalabels 2.2.0, `util.js` |
 
 Alle mitgelieferten Visualisierungstemplates verwenden damit jQuery und
 `util.js`. Die Schriftwahl wird zentral durch `JSLiveModule.php` beziehungsweise
@@ -36,7 +36,8 @@ im historischen HTMLBox-Lader auf eine der Dateien unter
 
 | Paket/Baustein | Lokaler Bestand | Laufzeitstatus | Lizenznachweis im Repository |
 | --- | --- | --- | --- |
-| jQuery 3.6.0 | `SymconJSLive/js/jquery.min.js` | aktiv in allen mitgelieferten Templates | MIT-Hinweis im Dateikopf |
+| jQuery 4.0.0 | `SymconJSLive/js/jquery/4.0.0/jquery.min.js`, zugehoerige `.map` | vollstaendige Distribution, aktiv in allen mitgelieferten Templates | MIT-Lizenz, npm-Integritaet und SHA-256 in `SymconJSLive/js/jquery/4.0.0/SOURCES.md` |
+| jQuery 3.6.0 | `SymconJSLive/js/jquery.min.js` | unveraenderter Kompatibilitaetspfad fuer eigene Vorlagen | MIT-Hinweis im Dateikopf |
 | JSLive-Browserlaufzeit | `SymconJSLive/js/util.js`, `SymconJSLive/js/init.js`, `SymconJSLive/js/loader.js`, `SymconJSLive/js/jslive/Chart.js` | `util.js` direkt aktiv; die drei uebrigen Dateien indirekt aktiv ueber `HtmlBox-Chart.html` | Projektlizenz `LICENSE` (GPL-3.0) |
 | Chart.js 4.5.1 | `SymconJSLive/js/chartjs/4.5.1/chart.umd.min.js`, zugehoerige `.map` | aktiv in allen drei Chart-Modulen; offizielle npm-Distribution | MIT-Texte fuer Chart.js und eingebettetes @kurkle/color 0.3.2, Quellen und SHA-256 in `SymconJSLive/js/chartjs/4.5.1/SOURCES.md` |
 | Chart.js 4.3.3 | `SymconJSLive/js/chartjs/chart.js` | unveraenderter Kompatibilitaetspfad fuer eigene Vorlagen | MIT-Hinweis im Dateikopf |

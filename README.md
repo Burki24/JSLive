@@ -32,6 +32,10 @@ der weiteren Modernisierung kompatibel.
   die Freigabe als modernisierte stabile Version steht noch aus.
 - Die bestehende Ausgabe über `~HTMLBox` und IPSView bleibt vorerst erhalten.
   Eine native Kacheldarstellung wird später schrittweise ergänzt.
+- Die Standardvorlagen verwenden jQuery 4.0.0 und setzen aktuelle Browser bzw.
+  WebViews voraus. Ältere Clients werden nicht mehr zugesichert. Der alte
+  jQuery-Pfad bleibt für eigene Vorlagen erhalten; siehe
+  [Migration und Prüfgrenzen](docs/JQUERY_MIGRATION.md).
 - Splitter und Visualisierungsmodule sind im aktuellen Arbeitsstand koordiniert
   auf `IPSModuleStrict`, automatische Parent-Kompatibilität und die native
   Hook-API umgestellt. Die abschließende MCP-CURRENT-Laufzeitabnahme dieses

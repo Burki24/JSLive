@@ -618,6 +618,17 @@ Details, Testbefehl, Grenzen und noch offene Abnahme stehen in
 JSLive-CI und gezielte installierte WebSocket-/Pull-/IPSView-Abnahme nach
 Modulupdate stehen aus. Kein neuer installierter PASS durch diesen lokalen Test.
 
+## Fortschreibung 03.10.2026
+
+Fortschreibung 03.10.2026: Fuer Streaming 3.6.0 auf JSLive 0.84 sind CI,
+Asset-Integritaet und gezielte installierte Browserpruefungen bestanden.
+Gesamtstatus PARTIAL: kein echter WebSocket-Datenwechsel nachgewiesen,
+Zeitachsenwechsel nur browserlokal, IPSView auf MCP-CURRENT mangels Lizenz
+nicht pruefbar. Details: [Streaming-Integration](STREAMING_INTEGRATION.md).
+Der folgende jQuery-4.0.0-Kandidat ist lokal separat geprueft, noch nicht
+installiert: [jQuery-Migration](JQUERY_MIGRATION.md). Die Weiterentwicklung ist
+ausdruecklich freigegeben; daraus folgt kein vollstaendiger Runtime-PASS.
+
 ## Ergebnisregeln
 
 - `PASS`: alle verpflichtenden Punkte sind mit frischem Laufzeitnachweis grün.
