@@ -69,6 +69,25 @@ foreach ([
     }
 }
 
+$loadingPatchDirectory = $loadingBarDirectory . '0.1.1-jslive.1/';
+$loadingPatchHash = '6e79d56f0c289cdebd4c0351451a8a28a431cacc18405241be4530df4f2a4a86';
+$loadingPatch = file_get_contents($loadingPatchDirectory . 'loading-bar.js');
+$loadingOriginal = str_replace("\r\n", "\n", file_get_contents($loadingBarDirectory . 'loading-bar.js'));
+if (hash('sha256', $loadingPatch) !== $loadingPatchHash
+    || $loadingPatch !== str_replace('v = doTransition' . "\n", 'v = doTransition && dt < dur' . "\n", $loadingOriginal)) {
+    throw new RuntimeException('Loading Bar local patch must contain only the audited animation endpoint change.');
+}
+if (hash_file('sha256', $loadingPatchDirectory . 'LICENSE') !== 'ddefaa5e04ba32fe6f7a8b3a152b8f1f4499bb07e9d5cc727a6b584b22656d53'
+    || !str_contains(file_get_contents($loadingPatchDirectory . 'SOURCES.md'), $loadingPatchHash)) {
+    throw new RuntimeException('Loading Bar patch license or provenance is missing.');
+}
+$progressbarTemplate = file_get_contents($root . '/SymconJSLive/templates/Progressbar.html');
+preg_match_all('#<script\b[^>]*\bsrc="([^"]*loading-Bar[^"\s]*)"#i', $progressbarTemplate, $loadingScripts);
+if ($loadingScripts[1] !== ['/hook/JSLive/js/loading-Bar/0.1.1-jslive.1/loading-bar.js']
+    || !str_contains($progressbarTemplate, 'href="/hook/JSLive/js/loading-Bar/loading-bar.css"')) {
+    throw new RuntimeException('Progressbar must load the local patch exactly once and retain its existing stylesheet.');
+}
+
 $gaugeHash = '44b0a4ac54e0b980371e8788f7ce8215dab5a2181cda460fc344276b50385904';
 $gaugeBundle = file_get_contents($root . '/SymconJSLive/js/canvas-gauges/gauge.min.js');
 if (hash('sha256', str_replace("\r\n", "\n", $gaugeBundle)) !== $gaugeHash) {

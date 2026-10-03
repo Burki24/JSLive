@@ -10,7 +10,7 @@
 
 <script src="/hook/JSLive/js/jquery/4.0.0/jquery.min.js"></script>
 <script src="/hook/JSLive/js/util.js"></script>
-<script src="/hook/JSLive/js/loading-Bar/loading-bar.js"></script>
+<script src="/hook/JSLive/js/loading-Bar/0.1.1-jslive.1/loading-bar.js"></script>
 <style type="text/css">
     path { mask: url(#mask); }
 </style>
@@ -110,10 +110,9 @@
         output["precision"] = configuration.data_precision;
         if(configuration.data_precisionCustom !== 0)  output["precision"] = configuration.data_precisionCustom;
 
-        if(configuration.reverse){
-            value = configuration.data_max - value;
-        }
-        output["value"] = value;
+        output["value"] = configuration.reverse
+            ? configuration.data_min + configuration.data_max - value
+            : value;
         output["min"] = configuration.data_min;
         output["max"] = configuration.data_max;
 
@@ -198,13 +197,10 @@
     function Update(id_val, val){
         if(id_val === configuration.Variable && value !== val){
 
-            if(configuration.reverse){
-                value = configuration.data_max - val;
-            }else{
-                value = val;
-            }
-
-            bar.set(value);
+            value = val;
+            bar.set(configuration.reverse
+                ? configuration.data_min + configuration.data_max - value
+                : value);
         }
     }
 

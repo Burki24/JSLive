@@ -807,6 +807,18 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
     Produktivbestand unveraendert. Naechster Schritt: getrennte Fehlerkorrektur
     mit Entscheidung ueber den Lieferweg eines Upstream-Patches.
     Details: `docs/LOADING_BAR_AUDIT.md`.
+16. Freigegeben und lokal umgesetzt: versionierter lokaler Loading-Bar-Patch
+    `0.1.1-jslive.1`, mit unveraendertem Altpfad und CSS. Animationsendwerte
+    werden vor der bisherigen Genauigkeits-/Bereichsbehandlung exakt gesetzt.
+    Die Progressbar-Vorlage trennt Roh- und Anzeigewert; Reverse funktioniert
+    auch mit positiver/negativer Untergrenze. Beide Fehlernachweise sind gruen,
+    deterministische Regressionen laufen nun in der Standardsuite, 32 echte
+    Browserfaelle bestanden. Ausgangspunkt 0.88 (`8427641` / `063ed18`);
+    Push, CI und Symcon-Update des Audits sind vom Eigentuemer bestaetigt.
+    CI/installierte Abnahme des neuen Patches stehen noch aus. Danach Phase 5
+    mit Charakterisierung der bestehenden Ausgabe-/IPSView-/Link-Vertraege
+    beginnen; moderne Gauge-Alternativen bleiben fuer spaeter vorgemerkt.
+    Details: `docs/LOADING_BAR_PATCH.md`.
 
 #### Vorgemerkt fuer ein spaeteres Update: moderne Gauges
 
@@ -821,7 +833,7 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
   abstimmen. Noch keine Bibliotheksauswahl oder Migration beschlossen.
 
 Dieser Punkt ist fuer spaeter vorgemerkt und aendert nicht den naechsten
-Schritt der Loading-Bar-Fehlerkorrektur. Canvas Gauges 2.1.7 bleibt vorerst unveraendert.
+Abschluss der Loading-Bar-Fehlerkorrektur. Canvas Gauges 2.1.7 bleibt vorerst unveraendert.
 
 ### Phase 5 - IPSView und Kacheldarstellung
 

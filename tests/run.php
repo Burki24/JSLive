@@ -39,6 +39,7 @@ $tests = [
 
 $commands = [
     ['Test Progressbar rendering', 'node tests/progressbar-rendering.js'],
+    ['Test Loading Bar animation', 'node tests/loading-bar-animation.js'],
     ['Test Radar tooltip', 'node tests/radar-tooltip.js'],
     ['Test Chart asynchronous loading', 'node tests/chart-async-loading.js'],
     ['Test Chart Streaming integration', 'node tests/chart-streaming.js'],

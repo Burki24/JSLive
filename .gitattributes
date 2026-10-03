@@ -1,5 +1,6 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+SymconJSLive/js/loading-Bar/0.1.1-jslive.1/* text eol=lf
 SymconJSLive/js/jquery/4.0.0/* text eol=lf
 SymconJSLive/js/chartjs/4.5.1/* text eol=lf
 SymconJSLive/js/moment/2.31.0/* text eol=lf

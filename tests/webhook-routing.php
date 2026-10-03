@@ -298,6 +298,7 @@ foreach ([
     'jquery/4.0.0/jquery.min.map',
     'canvas-gauges/gauge.min.js',
     'loading-Bar/loading-bar.js',
+    'loading-Bar/0.1.1-jslive.1/loading-bar.js',
     'loading-Bar/loading-bar.css',
     'chartjs/chart.min.js',
     'chartjs/4.5.1/chart.umd.min.js',

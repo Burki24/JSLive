@@ -172,6 +172,13 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Fixed
 
+- Progressbar verwendet den lokalen Loading-Bar-Patch `0.1.1-jslive.1`:
+  Animationen extrapolieren bei verspaeteten Frames nicht mehr ueber ihren
+  Zielwert hinaus. Altpfad und CSS bleiben unveraendert.
+- Reverse-Updates vergleichen Rohwerte statt umgekehrter Anzeigewerte;
+  die Spiegelung beruecksichtigt auch nicht bei null beginnende Wertebereiche.
+  Deterministische Regressionen und animierte Browserfaelle sichern dies ab.
+
 - Chart übergibt dem Streaming-Plugin die korrekt geschriebene Option
   `frameRate`. Eingehende Livewerte aktualisieren Realtime-Achsen mit
   `update('quiet')` statt der veralteten `preservation`-Option; gewöhnliche

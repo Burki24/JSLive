@@ -1,5 +1,13 @@
 # Bereinigung historischer Frontend-Assets
 
+## Loading-Bar-Patch nach 0.88
+
+Die Standard-Progressbar laedt den lokalen Patch `0.1.1-jslive.1`; der alte
+JavaScript-Pfad und das CSS bleiben erhalten. Zusaetzlich ist die Reverse-
+Wertbehandlung der Vorlage korrigiert. Eigene Vorlagen werden nicht automatisch
+umgestellt. Update, sichtbare Korrektur bei versetzten Wertebereichen und
+Rueckfall: [Loading-Bar-Patch](LOADING_BAR_PATCH.md).
+
 ## Aktueller Schritt: jQuery 4.0.0
 
 Ausgangspunkt 0.84 (`8bc5e02`). Die 18 Standardvorlagen und der HTMLBox-Lader

@@ -37,12 +37,15 @@ Bibliothek wird derzeit lokal über den JSLive-Hook geladen. Eigene SVG-
 Inhalte und Vorlagen werden im Browser dargestellt und sollten nur aus
 vertrauenswürdigen Quellen übernommen werden.
 
-Der JavaScript-Bestand entspricht dem offiziellen GitHub-Stand vom Oktober
-2019; das veröffentlichte npm-Paket ist älter. Das CSS ist für JSLive-Präfixe
-und -Suffixe angepasst. Die Prüfung hat bestehende Fehler beim Abschluss von
-Animationen und bei bestimmten Reverse-Wertwechseln nachgewiesen; eine
-Korrektur steht aus. Herkunft, Nachweise und Grenzen:
-[Loading-Bar-Audit](../docs/LOADING_BAR_AUDIT.md).
+Die Standardvorlage verwendet den lokalen Patch `0.1.1-jslive.1` auf Basis des
+offiziellen GitHub-Stands von Oktober 2019. Animationen enden auch bei verzögerten
+Frames am Zielwert, unter Beachtung der eingestellten Genauigkeit und Grenzen.
+Reverse spiegelt den Rohwert als `Minimum + Maximum - Rohwert`, auch bei
+Wertebereichen mit einer anderen Untergrenze als null. Wertwechsel werden nicht
+mehr durch einen Vergleich mit dem bereits umgekehrten Anzeigewert übersprungen.
+Der alte JavaScript-Pfad und das angepasste CSS bleiben unverändert. Eigene
+Vorlagen benötigen eine gesonderte Umstellung. Herkunft, Nachweise und Rückfall:
+[Loading-Bar-Patch](../docs/LOADING_BAR_PATCH.md).
 
 ## Technische Daten
 

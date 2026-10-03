@@ -27,7 +27,13 @@ const scenarios = [
     { name: 'circle', options: { shape_preset: 'circle', stroke_dir: 'reverse' } },
     { name: 'fill', options: { Type: 'fill', shape_path: 'M0 0H100V20H0Z' } },
     { name: 'path', options: { shape_path: 'M0 10H100', stroke_Dash1: 3, stroke_Dash2: 6 } },
-    { name: 'svg', options: { shape_svg: true } }
+    { name: 'svg', options: { shape_svg: true } },
+    { name: 'reverse', options: { reverse: true }, initialDisplay: 75,
+        values: [75, 25, 0, 100], expected: [25, 75, 100, 0] },
+    { name: 'reverse-offset', options: { reverse: true, data_min: 20, data_max: 120 }, initialDisplay: 115,
+        values: [75, 25, 20, 120], expected: [65, 115, 120, 20] },
+    { name: 'reverse-negative', options: { reverse: true, data_min: -100, data_max: 0 }, initial: -75, initialDisplay: -25,
+        values: [-25, -75, -100, 0], expected: [-75, -25, 0, -100] }
 ];
 async function check(browser, scenario, width, probeAnimation = false) {
     const context = await browser.newContext({ viewport: { width, height: 500 } });
@@ -59,17 +65,20 @@ async function check(browser, scenario, width, probeAnimation = false) {
     });
     try {
         await page.goto('http://jslive.test/');
-        await page.addScriptTag({ content: `var value = 25; var configuration = ${JSON.stringify({ ...base, ...scenario.options })};\n${functions}` });
+        const initialRaw = scenario.initial ?? 25;
+        const initialDisplay = scenario.initialDisplay ?? 25;
+        await page.addScriptTag({ content: `var value = ${initialRaw}; var configuration = ${JSON.stringify({ ...base, ...scenario.options })};\n${functions}` });
         await page.evaluate(() => Load());
         if (scenario.name === 'svg') {
             await page.waitForFunction(() => bar.inited);
-            // Upstream forces an animation when an image loads, even with transition-in=false.
-            // Let it finish, then isolate the no-animation renderer baseline explicitly.
-            await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-            await page.waitForFunction(() => bar.transition.time.src === undefined);
-            await page.evaluate(() => bar.set(25, false));
+            if (probeAnimation) {
+                await page.clock.runFor(20);
+                await page.clock.fastForward(500);
+            }
         }
-        await page.waitForFunction(() => document.querySelector('.ldBar-label')?.textContent === '25');
+        await page.waitForFunction(expected => document.querySelector('.ldBar-label')?.textContent === String(expected)
+            && bar.transition.time.src === undefined, initialDisplay);
+        assert.equal(await page.evaluate(() => value), initialRaw, 'Initialization must preserve the raw value.');
         const geometry = () => page.evaluate(() => [...document.querySelectorAll('#Bar svg path, #Bar svg rect')]
             .map(node => [node.getAttribute('stroke-dasharray'), node.getAttribute('width'), node.getAttribute('height') ]));
         const initial = await geometry();
@@ -79,27 +88,28 @@ async function check(browser, scenario, width, probeAnimation = false) {
             return [getComputedStyle(label, '::before').content, getComputedStyle(label, '::after').content];
         }), ['"Value: "', '" units"']);
         await page.evaluate(() => Update(99999, 75));
-        assert.equal(await page.evaluate(() => bar.value), 25, 'Ignore unrelated variable updates.');
-        for (const value of [75, 50.5, 0, 100]) {
-            // Baseline isolates rendering via the library's public no-animation API.
-            // The separate probe exercises the unchanged template's animated update.
-            await page.evaluate(({ value, probeAnimation }) => {
-                if (probeAnimation) Update(67890, value);
-                else bar.set(value, false);
-            }, { value, probeAnimation });
+        assert.equal(await page.evaluate(() => bar.value), initialDisplay, 'Ignore unrelated variable updates.');
+        const values = scenario.values || [75, 50.5, 0, 100];
+        const expectedValues = scenario.expected || values;
+        for (const [index, value] of values.entries()) {
+            await page.evaluate(value => Update(67890, value), value);
             if (probeAnimation) {
                 await page.clock.runFor(20);
                 await page.clock.fastForward(500); // Delayed frame, e.g. a temporarily busy tab.
             }
             await page.waitForFunction(value => document.querySelector('.ldBar-label').textContent === String(value)
-                && bar.transition.time.src === undefined, value);
+                && bar.transition.time.src === undefined, expectedValues[index]);
+            assert.equal(await page.evaluate(() => value), value);
+            const animatedGeometry = await geometry();
+            await page.evaluate(value => bar.set(value, false), expectedValues[index]);
+            assert.deepEqual(await geometry(), animatedGeometry, 'Animated and immediate target geometry must agree.');
         }
         assert.notDeepEqual(await geometry(), initial, 'Progress must change the SVG geometry.');
         assert.equal(images, scenario.name === 'svg' ? 1 : 0);
         assert.equal(await page.locator('#Bar > svg').count(), 1);
         assert.equal(await page.evaluate(() => !!document.getElementById('mask')), scenario.name === 'path');
         assert.deepEqual(errors, []);
-        return { scenario: scenario.name, width, result: 'PASS' };
+        return { scenario: scenario.name, width, delayedFrames: probeAnimation, result: 'PASS' };
     } catch (error) {
         throw new Error(JSON.stringify({ scenario: scenario.name, width, errors, state: await page.evaluate(() => ({
             text: document.querySelector('.ldBar-label')?.textContent,
@@ -111,7 +121,9 @@ async function check(browser, scenario, width, probeAnimation = false) {
 async function run(browser, probeAnimation = false) {
     const results = [];
     if (probeAnimation) results.push(await check(browser, scenarios[0], 1024, true));
-    else for (const width of [1024, 390]) for (const scenario of scenarios) results.push(await check(browser, scenario, width));
+    else for (const delayed of [false, true]) for (const width of [1024, 390]) {
+        for (const scenario of scenarios) results.push(await check(browser, scenario, width, delayed));
+    }
     return { browser: browser.version(), results };
 }
 module.exports = run;

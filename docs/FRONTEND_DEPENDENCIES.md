@@ -24,7 +24,7 @@ Lieferumfang der Library.
 | `SymconJSLiveDateTimePicker` | `TimePicker1.html`, `TimePicker2.html`, `TimePicker3.html`, `DatePicker1.html`, `DateTimePicker1.html` | jQuery 4.0.0, `util.js` und die jeweilige Template-CSS-Datei; DatePicker und DateTimePicker verwenden beide `css/DatePicker1.css` |
 | `SymconJSLiveDoughnutPie` | `Doughnut-PIE.html` | jQuery 4.0.0, Chart.js 4.5.1, Moment.js 2.31.0, chartjs-adapter-moment 1.0.1, chartjs-plugin-datalabels 2.2.0, `util.js` |
 | `SymconJSLiveGauge` | vier `CanvasGauges-*.html`-Templates | jQuery 4.0.0, Canvas Gauges 2.1.7, `util.js` |
-| `SymconJSLiveProgressbar` | `Progressbar.html` | jQuery 4.0.0, Loading Bar/`ldBar` aus GitHub-Commit `af5271e` (Paketversion 0.1.1, nach npm-Veröffentlichung), angepasstes `loading-bar.css`, `util.js` |
+| `SymconJSLiveProgressbar` | `Progressbar.html` | jQuery 4.0.0, Loading Bar/`ldBar` mit lokalem Patch `0.1.1-jslive.1` auf GitHub-Stand `af5271e`, angepasstes `loading-bar.css`, `util.js` |
 | `SymconJSLiveRadarChart` | `RadarChart.html` | jQuery 4.0.0, Chart.js 4.5.1, Moment.js 2.31.0, chartjs-adapter-moment 1.0.1, chartjs-plugin-datalabels 2.2.0, `util.js` |
 
 Alle mitgelieferten Visualisierungstemplates verwenden damit jQuery und
@@ -52,7 +52,8 @@ im historischen HTMLBox-Lader auf eine der Dateien unter
 | Moment.js 2.27.0 | `SymconJSLive/js/moment/2.27.0/Moment.js` | unveraenderter Kompatibilitaetspfad fuer eigene Vorlagen | MIT-Hinweis im Dateikopf |
 | Canvas Gauges 2.1.7 | `SymconJSLive/js/canvas-gauges/gauge.min.js` | aktiv in `SymconJSLiveGauge`; unveraenderte offizielle Distribution | vollstaendiger MIT-Text im Dateikopf; npm-Integritaet und LF-normalisierter Hash in `canvas-gauges/SOURCES.md` |
 | iro.js 5.5.0 | `SymconJSLive/js/iro/5.5.0/iro.js` | aktiv im ColorPicker; lokal und fest versioniert | MPL-2.0-Hinweis im Dateikopf und `SymconJSLive/js/iro/5.5.0/LICENSE.txt` |
-| Loading Bar/ldBar | `SymconJSLive/js/loading-Bar/loading-bar.js`, `SymconJSLive/js/loading-Bar/loading-bar.css` | aktiv; JS identisch zu `af5271e` vom 20.10.2019, CSS lokal angepasst | `SymconJSLive/js/loading-Bar/LICENSE` (MIT), Herkunft und Hashes in `loading-Bar/SOURCES.md` |
+| Loading Bar/ldBar `0.1.1-jslive.1` | `SymconJSLive/js/loading-Bar/0.1.1-jslive.1/loading-bar.js` | aktiver lokaler Ein-Zeilen-Patch fuer Animationsendwerte, kein npm-Release | MIT-Lizenz und Hashes in `loading-Bar/0.1.1-jslive.1/SOURCES.md` |
+| Loading Bar/ldBar Altbestand | `SymconJSLive/js/loading-Bar/loading-bar.js`, `SymconJSLive/js/loading-Bar/loading-bar.css` | JS-Kompatibilitaetspfad identisch zu `af5271e`; angepasstes CSS weiterhin aktiv | `SymconJSLive/js/loading-Bar/LICENSE` (MIT), Herkunft und Hashes in `loading-Bar/SOURCES.md` |
 | Template-CSS | `SymconJSLive/js/css/DatePicker1.css`, `SymconJSLive/js/css/FormExample.css`, `SymconJSLive/js/css/TextField.css`, `SymconJSLive/js/css/TimePicker1.css`, `SymconJSLive/js/css/TimePicker2.css`, `SymconJSLive/js/css/TimePicker3.css` | aktiv gemaess Modultabelle | Projektlizenz `LICENSE` (GPL-3.0) |
 | Web Fonts | 20 CSS-Dateien unter `SymconJSLive/js/css/fonts/` und 20 WOFF2-Dateien unter `SymconJSLive/js/fonts/` | bei konfigurierter Schrift dynamisch aktiv; lokal und ueber SHA-256 reproduzierbar | Quellen, Hashes und Lizenzzuordnung in `SymconJSLive/js/fonts/SOURCES.md`; 17 familienbezogene OFL-Texte und Apache-2.0 liegen unter `fonts/licenses/` |
 
@@ -160,8 +161,11 @@ Frontend-Abhaengigkeiten.
 10. Loading Bar/ldBar: Herkunft und CSS-Anpassungen geklaert. npm latest 0.1.1
     ist aelter als das bereits eingesetzte GitHub-Bundle. Kein Update und kein
     Bibliothekswechsel. Zehn statische Browserfaelle bestanden; Animation und
-    Reverse-Updates haben reproduzierte Bestandsfehler. Korrektur folgt separat;
-    siehe `LOADING_BAR_AUDIT.md`. Keine vollstaendige Integrationsfreigabe.
+    Reverse-Updates hatten reproduzierte Bestandsfehler, siehe Audit.
+    Der anschliessend freigegebene lokale Patch `0.1.1-jslive.1` und die
+    Rohwertkorrektur in der Vorlage sind umgesetzt; Altpfad und CSS erhalten.
+    Deterministische Standardtests und 32 animierte Browserfaelle bestanden;
+    CI und installierte Abnahme folgen. Siehe `LOADING_BAR_PATCH.md`.
 
 ## Streaming: Herkunft und Pflegeentscheidung
 

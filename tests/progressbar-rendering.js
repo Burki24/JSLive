@@ -67,18 +67,35 @@ const pathStroke = renderProgressbarConfig({ Type: 'stroke', shape_path: 'M0 0 L
 assert.equal(pathStroke.type, 'stroke', 'A custom path stroke must remain a stroke.');
 assert.equal(pathStroke.path, 'M0 0 L100 0', 'A custom path must remain unchanged.');
 
-if (process.argv.includes('--probe-reverse')) {
-    // Known integration defect; intentionally outside the normal green baseline.
-    // Run explicitly before/after its separate correction; never accept the wrong value.
-    const updateSource = template.slice(template.indexOf('    function Update('), template.indexOf('    function RGBAToHexA'));
+const updateSource = template.slice(template.indexOf('    function Update('), template.indexOf('    function RGBAToHexA'));
+assert.ok(updateSource.includes('function Update('));
+for (const [reverse, min, max, initial, next, firstDisplay, nextDisplay] of [
+    [true, 0, 100, 25, 75, 75, 25],
+    [true, 20, 120, 25, 75, 115, 65],
+    [true, -100, 0, -75, -25, -25, -75],
+    [true, -50, 100, 0, 50, 50, 0],
+    [true, 0, 100, 25.5, 74.5, 74.5, 25.5],
+    [false, 20, 120, 25, 75, 25, 75]
+]) {
+    const calls = [];
     const context = {
-        configuration: { Variable: 67890, reverse: true, data_max: 100 },
-        value: 75, // Raw initial value 25, displayed in reverse as 75.
-        bar: { set(value) { context.displayed = value; } },
-        displayed: 75
+        configuration: { ...baseConfiguration, Variable: 67890, reverse, data_min: min, data_max: max },
+        value: initial,
+        RGBAToHexA: () => '#112233ff',
+        bar: { set(value) { calls.push(value); } }
     };
-    vm.runInNewContext(updateSource + '\nUpdate(67890, 75);', context);
-    assert.equal(context.displayed, 25, 'Reverse mode must not compare a new raw value with the old reversed value.');
+    vm.createContext(context);
+    vm.runInContext(loadBarConfigSource + '\n' + updateSource, context);
+    assert.equal(vm.runInContext('LoadBarConfig().value', context), firstDisplay);
+    assert.equal(context.value, initial, 'Loading the config must preserve the raw value.');
+    assert.equal(vm.runInContext('LoadBarConfig().value', context), firstDisplay, 'Repeated config generation must be idempotent.');
+    vm.runInContext(`Update(99999, ${next}); Update(67890, ${initial});`, context);
+    assert.deepEqual(calls, [], 'Ignore unrelated IDs and unchanged raw values.');
+    vm.runInContext(`Update(67890, ${next}); Update(67890, ${next});`, context);
+    assert.deepEqual(calls, [nextDisplay]);
+    assert.equal(context.value, next);
+    vm.runInContext(`Update(67890, ${initial});`, context);
+    assert.deepEqual(calls, [nextDisplay, firstDisplay], 'Reverse updates must work in both directions.');
 }
 
 console.log('JSLive Progressbar rendering contracts verified.');

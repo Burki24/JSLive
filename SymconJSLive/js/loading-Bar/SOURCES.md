@@ -3,6 +3,10 @@
 Verified on 2026-10-03. Existing public URLs and files remain unchanged.
 All hashes below use CRLF-to-LF normalization.
 
+The bundled Progressbar template now uses local revision `0.1.1-jslive.1`.
+This directory's original JavaScript remains a compatibility asset; see
+`0.1.1-jslive.1/SOURCES.md` for the isolated patch and its own hashes.
+
 ## Actual JavaScript origin
 
 `loading-bar.js` is byte-identical after normalization to `dist/loading-bar.js`

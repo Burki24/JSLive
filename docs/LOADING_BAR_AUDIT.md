@@ -1,5 +1,10 @@
 # Loading Bar / ldBar: Herkunft und Integrationsaudit
 
+Fortschreibung: Beide unten historisch dokumentierten Fehler sind lokal durch
+den freigegebenen [versionierten Patch](LOADING_BAR_PATCH.md) korrigiert.
+Die Fehlerproben sind nun gruene Regressionen; CI und installierte Abnahme des
+Patches stehen aus. Der folgende Text dokumentiert unveraendert den Auditstand.
+
 Stand: 03.10.2026. Ausgangspunkt JSLive 0.87 (`21c6ed4`).
 Ergebnis: Herkunft geklaert, statische Darstellung geprueft; zwei bestaetigte
 Bestandsfehler, deshalb keine vollstaendige Integrationsfreigabe.
