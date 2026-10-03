@@ -22,11 +22,20 @@ erhalten keine voneinander abweichenden Versionen.
    Symcon-9-Abnahmen ausfuehren.
 3. Den Metadaten-Bot auf `dev` abwarten und den exakten Kandidaten-Commit
    festhalten.
-4. **Unreleased** auf die endgueltige Library-Version und das
-   Veroeffentlichungsdatum umstellen.
+4. **Unreleased** auf die erwartete Library-Version nach dem abschliessenden
+   Dokumentationscommit und das geplante Veroeffentlichungsdatum umstellen.
+   Auch Dokumentationscommits erhoehen den Nebenstand: bei genau einem
+   weiteren Commit auf Basis von `0.103` ist daher `0.104` vorzubereiten,
+   nicht erneut `0.103`. Bis zur Pruefung nach dem Botlauf als Kandidat
+   kennzeichnen; `library.json` nicht manuell anpassen.
 5. Die Dokumentationsaenderung committen, erneut den Metadaten-Bot abwarten und
    fuer exakt den resultierenden Commit die Pflichtchecks `tests`, `style` und
    `CodeQL` pruefen.
+   Changelog-Version und `library.json` muessen jetzt uebereinstimmen. Weitere
+   Commits oder ein anderes Veroeffentlichungsdatum erfordern einen erneuten
+   Abgleich. Bei unveraenderten Angaben keinen weiteren reinen
+   Bestaetigungscommit erzeugen; Commit und CI-Nachweis fuer die Freigabe im
+   Pull Request festhalten.
 6. Den geprueften `dev`-Stand per Pull Request kontrolliert nach `main`
    uebernehmen.
 7. Auf dem unveraenderten `main`-Commit dieselben Pflichtchecks erneut pruefen.

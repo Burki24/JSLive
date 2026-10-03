@@ -5,16 +5,21 @@ Die Library-Version folgt dem Format `Hauptversion.Nebenstand` aus
 `library.json`; der dazugehoerige Git-Tag ergaenzt fuer SemVer eine
 Patchstelle, beispielsweise `v0.10.0`.
 
-## Unreleased
+## 0.104 - 2026-10-03 (Beta-Kandidat)
 
 ### Beta-Versionshinweise
 
-Vorbereitet am 03.10.2026 auf Basis von 0.102 (`c36d42b`, Quellstand
-`1e98ff4`). Noch nicht veroeffentlicht. Endgueltige Version, Datum und
-Release-Commit werden nach dem letzten Metadatenlauf gemaess
-[Release-Prozess](docs/RELEASE_PROCESS.md) festgelegt. Der folgende Text
-ist fuer die Beta-Versionsinformation vorgesehen; die Vorbereitungsangaben
-dieses Absatzes gehoeren nicht in den Store-Text.
+Geplanter Beta-Stand fuer den 03.10.2026, noch nicht veroeffentlicht.
+Ausgangsbasis ist 0.103 (`a22cbbb`); genau ein abschliessender
+Dokumentationscommit auf `dev` fuehrt durch die Metadatenautomatik zu 0.104.
+Der erwartete Tag ist `v0.104.0`. Vor Merge und Veroeffentlichung muessen
+`library.json`, diese Versionsueberschrift und die Pflichtchecks auf dem
+resultierenden Commit uebereinstimmen. Bei weiteren Commits ist die
+Zuordnung erneut zu pruefen; keine manuelle Aenderung der Metadaten.
+Die Abnahmegrenzen bleiben im [Beta-Nachtrag](docs/SYCON_RUNTIME_MATRIX.md#beta-vorbereitung-und-ipsview-anwendernachtrag-vom-03102026)
+dokumentiert. Es gilt der [Release-Prozess](docs/RELEASE_PROCESS.md).
+Der folgende Text ist fuer die Beta-Versionsinformation vorgesehen;
+die Vorbereitungsangaben dieses Absatzes gehoeren nicht in den Store-Text.
 
 #### Umfang dieser Beta
 
