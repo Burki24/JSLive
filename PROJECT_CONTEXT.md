@@ -531,15 +531,22 @@ Dokumentationsluecken:
    implementiert; keine allgemeine Wiederaufnahme der Phase-6-Erweiterungen.
    Parallel zur getrennten SymconECharts-Planung wurde der vorhandene Export
    lokal mit 20 wiederholten Faellen fuer die fuenf Diagrammfamilien und deren
-   echten statischen Formularen charakterisiert. Keine Laufzeitaenderung und
-   noch kein neues Format. Zwei Altfehler sind gezielt reproduziert:
-   Skriptexport ohne Opt-in und unwirksames `ignoreExport` bei Listenspalten.
-   Die optionale Fehlerprobe bleibt rot, nicht Teil der gruenen Standardsuite.
+   echten statischen Formularen charakterisiert. Dieser Nachweisschritt ist
+   committed, lokal synchronisiert und laut Eigentuemer CI-gruen auf 0.94
+   (`9249b82` / `5437e27`). Auf dieser Basis sind die zwei reproduzierten
+   Altfehler lokal korrigiert: Skriptexport ohne Opt-in und unwirksames
+   `ignoreExport` bei Listenspalten. Alle neun Receiver reichen Query-Daten
+   korrekt weiter; auch die falsche Argumentposition bei Custom ist behoben.
+   Die frueher rote Probe ist jetzt Pflichtbestandteil der Standardsuite,
+   ergaenzt um 108 Receiver-Faelle, Bibliotheksskripte, Filter-Randfaelle,
+   Bindungserhalt beim Import und vier Splitter-Exportanfragen.
    Zudem fehlen Zeitraum-Steuervariablen und Versions-/Zuordnungsmetadaten.
    Befunde, Nachweisgrenzen und Aufruf: `tests/README.md`, Abschnitt
-   "Chart-family export baseline for SymconEcharts". Naechster abgegrenzter
-   Schritt: Exportfehler einschliesslich Query-Weitergabe in den Receivern
-   getrennt korrigieren; den gemeinsamen Migrationsvertrag erst abstimmen.
+   "Chart-family export baseline for SymconEcharts". CI und installierte
+   Abnahme der Korrektur stehen nach Commit/Push/Modulupdate aus. Die README
+   dokumentiert die Umstellung eigener Aufrufe und den unveraenderten
+   vollstaendigen Konfigurationsexport. Gemeinsamen Migrationsvertrag erst
+   mit SymconECharts abstimmen; noch keine ECharts-Implementierung.
 6. Verbleibende JSLive-Funktionen ohne Ersatz in ECharts zuordnen und weiter
    pflegen; Colorpicker ist explizit genannt. Bei eingestellten Ressourcen
    Alternativen oder eigene Ersatzloesungen pruefen, mit Lizenz-, Vertrags-

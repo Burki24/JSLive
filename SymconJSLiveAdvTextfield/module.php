@@ -66,7 +66,7 @@ class SymconJSLiveAdvTextfield extends JSLiveModule
 
         switch ($buffer['cmd']) {
             case 'exportConfiguration':
-                return $this->ExportConfiguration();
+                return $this->ExportConfiguration(false, $buffer['queryData'] ?? []);
             case 'getContend':
                 return $this->GetOutput();
             case 'getData':

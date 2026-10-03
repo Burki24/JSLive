@@ -59,6 +59,11 @@ spätere Ausbaustufe.
 | Parent-Anforderung | `{751AABD7-E31D-024C-5CC0-82AC15B84095}` |
 | Content-Variable | `Content` (String) |
 
+## Konfigurationsexport
+
+Skriptauswahl, gefilterter/vollständiger Export und Hinweise für eigene Aufrufe:
+[gemeinsamer Exportvertrag](../README.md#bestehender-konfigurationsexport).
+
 ## Lizenz
 
 JSLive steht unter der [GNU General Public License Version 3](../LICENSE).

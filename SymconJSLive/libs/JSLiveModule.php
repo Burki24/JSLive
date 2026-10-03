@@ -59,10 +59,7 @@ class JSLiveModule extends IPSModuleStrict
     public function ExportConfiguration(bool $export_all = false, array $queryData = []): string
     {
         $output = [];
-        $withScript = false;
-
-        if (array_key_exists('scripts', $queryData) && $queryData['scripts'] >= 1) $withScript = true;
-        $withScript = true;
+        $withScript = isset($queryData['scripts']) && is_numeric($queryData['scripts']) && $queryData['scripts'] >= 1;
 
         $output['ModuleID'] = IPS_GetInstance($this->InstanceID)['ModuleInfo']['ModuleID'];
         $output['ModuleName'] = IPS_GetInstance($this->InstanceID)['ModuleInfo']['ModuleName'];
@@ -88,16 +85,22 @@ class JSLiveModule extends IPSModuleStrict
                 if (!is_string($item)) continue;
 
                 $jsonData = json_decode($item, true);
-                if (json_last_error() !== JSON_ERROR_NONE) continue;
+                if (json_last_error() !== JSON_ERROR_NONE || !is_array($jsonData)) continue;
 
+                $changed = false;
                 foreach ($jsonData as $j_key => $j_item) {
+                    if (!is_array($j_item)) continue;
                     foreach ($j_item as $s_key => $s_item) {
                         $name = $key . '_' . $s_key;
                         if (array_key_exists($name, $allowedItems) && $allowedItems[$name]['ignore'] == true) {
                             unset($jsonData[$j_key][$s_key]);
+                            $changed = true;
                             continue;
                         }
                     }
+                }
+                if ($changed) {
+                    $config[$key] = json_encode($jsonData, JSON_PRESERVE_ZERO_FRACTION | JSON_THROW_ON_ERROR);
                 }
             }
 

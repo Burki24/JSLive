@@ -161,31 +161,30 @@ axis/profile references, custom scales, highlight alpha and SVG/path content.
 Explicit template inclusion preserves its content and name. The fixtures are
 synthetic property slices, not complete installations or a new export format.
 
-This invokes the real shared `ExportConfiguration()` implementation. It does
-not exercise child routing, dynamic form processing, a live Symcon system or
-an ECharts importer. In filtered Chart exports the ignored top-level title is
-omitted. The ignored dataset Variable column is deliberately excluded from
-the green comparison: retaining it is a defect, not a compatibility guarantee.
+The formerly optional defect probes now run unconditionally in the standard
+suite. On baseline 0.94 they reproduced unwanted template inclusion and the
+ineffective list-column filter. After the correction the filtered Chart
+comparison requires omission of both title and `Datasets.Variable`; complete
+exports still preserve all fields. Additional checks cover:
 
-Run the optional negative probe separately:
+- Missing, zero, negative, non-numeric, null and array-valued script selectors;
+  numeric opt-in for both template and Custom library scripts; unavailable
+  scripts; unchanged configuration references regardless of script selection.
+- JSON scalars, malformed JSON and mixed list rows without warnings; unchanged
+  strings remain byte-identical, changed lists retain numeric types/order and
+  unmarked nested fields.
+- 108 repeated calls through the real nine child `ReceiveData()` methods,
+  including an absent `queryData` and Custom library inclusion/exclusion.
+- Filtered Chart export/import preserves an existing target row's variable
+  binding and title while applying the allowed fields once.
 
-```text
-php tests/configuration-transfer.php --probe-export-gaps
-```
-
-On the inspected 0.93 source this exits **1**, reporting two existing defects
-in five checks: available template content is included without opt-in (missing
-`scripts` or `scripts=0`, for both complete and filtered export); the filtered
-Chart export retains `Datasets.Variable` despite `ignoreExport=true`. The
-assertions require the desired exclusion, never preservation of the defect.
-This probe is not part of the green standard runner. A follow-up correction
-must move the relevant checks into the required suite.
-
-Source inspection explains the gaps: `$withScript` is unconditionally reset
-to true; modified list data is not assigned back to the configuration string.
-The five child receivers also call `ExportConfiguration()` without forwarding
-query data. Removing the forced flag alone would therefore break explicit
-template export through those receivers. Fix and test that whole path together.
+`webhook-routing.php` additionally verifies four export requests through the
+real splitter with controlled child responses: the missing/zero/one/invalid
+script selector reaches the child unchanged and the JSON download body is
+preserved. These are separate boundary checks, not a live HTTP end-to-end test.
+The tests use the real exporter and static forms with synthetic Symcon API
+doubles. Dynamic form processing, live Symcon and an ECharts importer remain
+outside this proof. The old `--probe-export-gaps` switch is no longer needed.
 
 For migration planning the old format has further limits:
 

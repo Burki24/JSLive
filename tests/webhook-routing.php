@@ -26,6 +26,16 @@ if (!function_exists('IPS_GetConfiguration')) {
 
 require_once dirname(__DIR__) . '/SymconJSLive/module.php';
 
+function IPS_GetInstance($instanceID): array
+{
+    return ['ModuleInfo' => ['ModuleName' => 'SyntheticExportModule']];
+}
+
+function IPS_GetObject($objectID): array
+{
+    return ['ObjectName' => 'SyntheticExportInstance'];
+}
+
 final class WebhookRoutingHarness extends SymconJSLive
 {
     /** @var list<string> */
@@ -679,5 +689,22 @@ assertWebhookRouting(
         && ($loggedRequest['post']['Password'] ?? null) === '***',
     'Webhook Debug exposed a known credential.'
 );
+
+$harness->setDebugEnabled(false);
+$harness->setPassword('synthetic-secret');
+foreach ([null, '0', '1', 'false'] as $scripts) {
+    $harness->resetCapturedData();
+    $harness->setChildResponses(['{"fixture":"export"}']);
+    $query = 'instance=42&pw=synthetic-secret';
+    if ($scripts !== null) {
+        $query .= '&scripts=' . $scripts;
+    }
+    $response = $harness->route('/hook/JSLive/exportConfiguration', $query);
+    assertWebhookRouting($response['output'] === '{"fixture":"export"}', 'Export download changed the child response.');
+    assertWebhookRouting(count($harness->childMessages) === 1, 'Export must route to its child once.');
+    $message = decodeWebhookMessage($harness->childMessages[0]);
+    assertWebhookRouting($message['inner']['cmd'] === 'exportConfiguration', 'Export command changed.');
+    assertWebhookRouting(($message['inner']['queryData']['scripts'] ?? null) === $scripts, 'Splitter lost the script selection.');
+}
 
 echo "JSLive webhook routing contracts verified.\n";

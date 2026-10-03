@@ -198,6 +198,14 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Fixed
 
+- Konfigurationsexport beachtet die Skriptauswahl fuer Templates und Custom-
+  Bibliotheken; alle neun Kindmodule reichen Exportparameter korrekt weiter.
+  Gefilterte JSON-Listen verlieren nur mit `ignoreExport` markierte Spalten,
+  vollstaendige Exporte behalten alle Datenbezuege. JSON-Skalarwerte werden
+  sicher behandelt. Fruehere Fehlerproben sind verpflichtende Regressionen;
+  Umstellung eigener Exportaufrufe in der README dokumentiert. Kein neues
+  Austauschformat und keine Aenderung gespeicherter Konfigurationen.
+
 - Gauge-Highlight-Deckkraft wird nicht mehr mit der Messwertpraezision
   gerundet. Teiltransparente Bereiche bleiben auch bei `precision = 0` oder
   `1` korrekt erhalten; Alpha verwendet wie die uebrigen Farben zwei

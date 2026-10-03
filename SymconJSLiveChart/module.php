@@ -541,7 +541,7 @@ class SymconJSLiveChart extends JSLiveModule
             case 'getFonts':
                 return json_encode($this->GetFonts(), JSON_THROW_ON_ERROR);
             case 'exportConfiguration':
-                return $this->ExportConfiguration();
+                return $this->ExportConfiguration(false, $buffer['queryData'] ?? []);
             case 'getContend':
                 return $this->GetOutput();
             case 'getUpdate':

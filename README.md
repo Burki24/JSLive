@@ -101,6 +101,36 @@ Austauschdaten, auch freie Texte, Skripte und Medien. Bekannte Zugangsdatenfelde
 werden maskiert; beliebig im Inhalt versteckte Geheimnisse können nicht sicher
 erkannt werden. Debug daher nur in einer geschützten Testumgebung verwenden.
 
+## Bestehender Konfigurationsexport
+
+Die Exportkorrektur auf Basis von 0.94 erhält Format und öffentliche
+Funktionssignaturen. Sie ändert folgende bisher fehlerhafte Verhaltensweisen:
+
+- Template- und Custom-Bibliotheksskripte werden nur mit `scripts=1`
+  mitgeliefert (numerische Werte ab 1 werden akzeptiert). Ohne Parameter oder
+  mit `scripts=0` werden diese zusätzlichen Skriptinhalte nicht exportiert.
+  Konfigurierte IDs, URLs und freie Inhalte in `Config` bleiben davon unberührt;
+  dies ist keine vollständige Anonymisierung des Exports.
+- Die normalen Export-Schaltflächen fordern Skripte weiterhin ausdrücklich
+  an. Im Custom-Modul entscheidet die vorhandene Skriptauswahl.
+- Eigene PHP-Aufrufe müssen Skripte ausdrücklich anfordern, zum Beispiel mit
+  `SymconJSLiveChart_ExportConfiguration($id, false, ['scripts' => 1])`.
+  `GetConfigurationLink($id, true)` erzeugt weiterhin einen Link mit Skripten;
+  `false` erzeugt einen ohne. Bereits heruntergeladene Dateien ändern sich nicht.
+- Der gefilterte Export lässt mit `ignoreExport` markierte Felder jetzt auch
+  in Listenspalten aus. Beim Chart betrifft dies neben dem Titel die
+  Variablenbindung der Datensätze. Vorhandene Zielbindungen bleiben beim Import
+  in passende bestehende Zeilen erhalten; fehlende Bindungen sind neu zuzuordnen.
+- Für einen vollständigen Konfigurationsexport über PHP bleibt
+  `ExportConfiguration($id, true, ...)` verfügbar. Er erhält auch die
+  Datenbezüge; die Skriptauswahl ist davon unabhängig.
+
+Gespeicherte Instanzen, Quelldaten und Archivhistorien werden durch den Export
+nicht verändert. Es entsteht dadurch noch kein SymconEcharts-Migrationsformat.
+Nach Commit, grüner CI und Modulupdate ist die installierte Exportfunktion zu
+prüfen; ein zusätzlicher `ApplyChanges()`-Aufruf oder geplanter Dienstneustart
+ist für diese Korrektur nicht erforderlich.
+
 ## Bekannte Einschränkungen
 
 - Der nicht mehr erreichbare, vollständig von einem externen Dienst abhängige

@@ -66,7 +66,7 @@ class SymconJSLiveDateTimePicker extends JSLiveModule
         //if($buffer["instance"] != $this->InstanceID) return;
         switch ($buffer['cmd']) {
             case 'exportConfiguration':
-                return $this->ExportConfiguration();
+                return $this->ExportConfiguration(false, $buffer['queryData'] ?? []);
             case 'getContend':
                 return $this->GetOutput();
             case 'getData':

@@ -68,7 +68,7 @@ class SymconJSLiveCustom extends JSLiveModule
 
         switch ($buffer['cmd']) {
             case 'exportConfiguration':
-                return $this->ExportConfiguration($buffer['queryData']);
+                return $this->ExportConfiguration(false, $buffer['queryData'] ?? []);
             case 'getContend':
                 return $this->GetOutput();
             case 'getData':

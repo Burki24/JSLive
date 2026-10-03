@@ -56,6 +56,11 @@ Vorlagen benötigen eine gesonderte Umstellung. Herkunft, Nachweise und Rückfal
 | Parent-Anforderung | `{751AABD7-E31D-024C-5CC0-82AC15B84095}` |
 | Kindmodul-Schnittstelle | `{79D59629-E9C5-44F1-0F34-0FBC5C88F307}` |
 
+## Konfigurationsexport
+
+Skriptauswahl, gefilterter/vollständiger Export und Hinweise für eigene Aufrufe:
+[gemeinsamer Exportvertrag](../README.md#bestehender-konfigurationsexport).
+
 ## Lizenz
 
 JSLive steht unter der [GNU General Public License Version 3](../LICENSE).
