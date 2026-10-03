@@ -9,6 +9,15 @@ php tests/run.php
 Der Runner verwendet neben PHP auch Python 3 fuer die Metadaten- und
 Helper-Pruefungen sowie Node.js fuer die JavaScript-Renderingvertraege.
 
+`node tests/progressbar-browser.js` prueft optional zehn nicht animierte
+Loading-Bar-Darstellungen mit echten Assets und lokaler SVG-Antwort.
+`--probe-animation` aktiviert den aktuell fehlschlagenden Nachweis eines
+falschen Animationsendwerts. `node tests/progressbar-rendering.js --probe-reverse`
+reproduziert separat den bekannten Reverse-Update-Fehler (ebenfalls Exitcode 1).
+Diese expliziten Fehlerproben sind nicht Teil der gruenen Standard-CI und
+duerfen nicht als bestandene Regressionen gewertet werden. Voraussetzungen,
+Testabgrenzung und Befunde: [Loading-Bar-Audit](../docs/LOADING_BAR_AUDIT.md).
+
 `node tests/jquery-browser.js` ist ein optionaler, isolierter Browservergleich
 mit bereits vorhandenem Playwright. Er prueft echte jQuery-3.6.0-/4.0.0-Ajax-
 Callbacks mit den originalen Chart-/Formularfunktionen und kontrollierten

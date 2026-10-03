@@ -798,6 +798,15 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
     CI der neuen Checks folgt nach Push. Kein installierter Runtime-PASS.
     Details und Grenzen: `docs/GAUGE_AUDIT.md`. Naechster isolierter Schritt:
     Herkunft, Version und Pflege von Loading Bar/ldBar pruefen.
+15. Loading-Bar-Audit abgeschlossen: JavaScript entspricht dem offiziellen
+    GitHub-Commit `af5271e` vom 20.10.2019, nicht dem aelteren npm-0.1.1-Paket.
+    Angepasstes CSS und MIT-Lizenz sind inventarisiert und hashgesichert.
+    Zehn statische Browserfaelle bestanden, aber zwei Bestandsfehler bestaetigt:
+    ungenauer Animationsendwert bei verspaeteten Frames und uebersprungene
+    Reverse-Updates. Explizite Fehlerproben bleiben rot; keine Vollfreigabe.
+    Produktivbestand unveraendert. Naechster Schritt: getrennte Fehlerkorrektur
+    mit Entscheidung ueber den Lieferweg eines Upstream-Patches.
+    Details: `docs/LOADING_BAR_AUDIT.md`.
 
 #### Vorgemerkt fuer ein spaeteres Update: moderne Gauges
 
@@ -812,7 +821,7 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
   abstimmen. Noch keine Bibliotheksauswahl oder Migration beschlossen.
 
 Dieser Punkt ist fuer spaeter vorgemerkt und aendert nicht den naechsten
-Schritt Loading Bar/ldBar. Canvas Gauges 2.1.7 bleibt vorerst unveraendert.
+Schritt der Loading-Bar-Fehlerkorrektur. Canvas Gauges 2.1.7 bleibt vorerst unveraendert.
 
 ### Phase 5 - IPSView und Kacheldarstellung
 

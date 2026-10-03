@@ -37,6 +37,13 @@ Bibliothek wird derzeit lokal über den JSLive-Hook geladen. Eigene SVG-
 Inhalte und Vorlagen werden im Browser dargestellt und sollten nur aus
 vertrauenswürdigen Quellen übernommen werden.
 
+Der JavaScript-Bestand entspricht dem offiziellen GitHub-Stand vom Oktober
+2019; das veröffentlichte npm-Paket ist älter. Das CSS ist für JSLive-Präfixe
+und -Suffixe angepasst. Die Prüfung hat bestehende Fehler beim Abschluss von
+Animationen und bei bestimmten Reverse-Wertwechseln nachgewiesen; eine
+Korrektur steht aus. Herkunft, Nachweise und Grenzen:
+[Loading-Bar-Audit](../docs/LOADING_BAR_AUDIT.md).
+
 ## Technische Daten
 
 | Eintrag | Wert |

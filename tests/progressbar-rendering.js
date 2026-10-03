@@ -67,4 +67,18 @@ const pathStroke = renderProgressbarConfig({ Type: 'stroke', shape_path: 'M0 0 L
 assert.equal(pathStroke.type, 'stroke', 'A custom path stroke must remain a stroke.');
 assert.equal(pathStroke.path, 'M0 0 L100 0', 'A custom path must remain unchanged.');
 
+if (process.argv.includes('--probe-reverse')) {
+    // Known integration defect; intentionally outside the normal green baseline.
+    // Run explicitly before/after its separate correction; never accept the wrong value.
+    const updateSource = template.slice(template.indexOf('    function Update('), template.indexOf('    function RGBAToHexA'));
+    const context = {
+        configuration: { Variable: 67890, reverse: true, data_max: 100 },
+        value: 75, // Raw initial value 25, displayed in reverse as 75.
+        bar: { set(value) { context.displayed = value; } },
+        displayed: 75
+    };
+    vm.runInNewContext(updateSource + '\nUpdate(67890, 75);', context);
+    assert.equal(context.displayed, 25, 'Reverse mode must not compare a new raw value with the old reversed value.');
+}
+
 console.log('JSLive Progressbar rendering contracts verified.');

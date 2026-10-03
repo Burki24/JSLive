@@ -52,6 +52,23 @@ $templateDirectories = [
     $root . '/SymconJSLive/htmlbox'
 ];
 
+$loadingBarDirectory = $root . '/SymconJSLive/js/loading-Bar/';
+$loadingBarSources = is_file($loadingBarDirectory . 'SOURCES.md')
+    ? file_get_contents($loadingBarDirectory . 'SOURCES.md') : false;
+foreach ([
+    'loading-bar.js'  => '6edf7feefaa7ae547fe7674ffb66d746e35a9e10a66fe6d2221a4ee3b7dcbe16',
+    'loading-bar.css' => 'b42f3187ec8aa70fa17024cb5260ccd481bbaddf70ae0423b44c5c0fc2541131',
+    'LICENSE'         => 'ddefaa5e04ba32fe6f7a8b3a152b8f1f4499bb07e9d5cc727a6b584b22656d53'
+] as $loadingBarAsset => $expectedHash) {
+    $loadingBarContent = file_get_contents($loadingBarDirectory . $loadingBarAsset);
+    if (hash('sha256', str_replace("\r\n", "\n", $loadingBarContent)) !== $expectedHash) {
+        throw new RuntimeException('Loading Bar audited asset changed: ' . $loadingBarAsset);
+    }
+    if ($loadingBarSources === false || !str_contains($loadingBarSources, $expectedHash)) {
+        throw new RuntimeException('Loading Bar needs source and integrity records for ' . $loadingBarAsset);
+    }
+}
+
 $gaugeHash = '44b0a4ac54e0b980371e8788f7ce8215dab5a2181cda460fc344276b50385904';
 $gaugeBundle = file_get_contents($root . '/SymconJSLive/js/canvas-gauges/gauge.min.js');
 if (hash('sha256', str_replace("\r\n", "\n", $gaugeBundle)) !== $gaugeHash) {

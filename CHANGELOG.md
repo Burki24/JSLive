@@ -9,6 +9,11 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Development
 
+- Loading-Bar-Herkunft und JSLive-CSS-Anpassungen dokumentiert; Hash-/Webhook-
+  Tests und zehn statische Browserfaelle ergaenzt. Separate Fehlernachweise
+  reproduzieren falsche Animationsendwerte und uebersprungene Reverse-Updates.
+  Beide Korrekturen stehen aus; Produktivbestand unveraendert.
+
 - Canvas Gauges 2.1.7 gegen die offizielle Distribution abgeglichen;
   Quellen-/Hashnachweis, Asset-/Webhook-Vertraege und acht isolierte
   Gauge-Browserfaelle ergaenzt. Pflege- und Laufzeitgrenzen dokumentiert;
