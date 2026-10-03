@@ -513,8 +513,12 @@ Produktivsystem. Keine Erweiterung des JSLive-Funktionsumfangs.
    eine weitere Sperre: mehrere Steuerereignisse derselben Sekunde wurden
    verworfen, bevor der Generationenschutz griff. Diese Zeitstempel-Sperre
    ist jetzt lokal entfernt; 53 Ladeszenarien und acht Browservarianten
-   bestanden. Erneute CI und installierter Nachtest nach Modulupdate bleiben
-   erforderlich, danach folgt die separate Gauge-Animationskorrektur.
+   bestanden. Stand 0.98 (`7abe597` / `be9a96a`) ist lokal/remote/installiert
+   synchron und CI gruen. Der anschliessende Live-Nachtest bestand drei schnelle
+   Offsetfolgen und gemischte Perioden-/Relativwechsel in 335-449 ms; letzte
+   Auswahl korrekt, Steuerwerte zurueckgesetzt, Konfigurationen unveraendert,
+   keine Browserfehler oder JSLive-Warnungen im Pruefzeitraum. Chart-Fix damit
+   gezielt live bestaetigt, keine Gesamtfreigabe.
    Details: `docs/SYCON_RUNTIME_MATRIX.md`.
 2. Noch notwendige Ressourcenupdates anhand der bestehenden Inventur bestimmen
    und einzeln absichern. Vorhandene Fehler reproduzieren, korrigieren und durch
@@ -544,8 +548,11 @@ Produktivsystem. Keine Erweiterung des JSLive-Funktionsumfangs.
    aufeinanderfolgenden Werten nur auf numerische Naehe statt auf Animationsende.
    Die Wartebedingung ist lokal korrigiert. Dabei bestaetigter Bibliotheksfehler:
    Ein neuer Wert waehrend laufender Animation kann am Ende auf den alten
-   Zielwert zurueckfallen. Bundle und Gauge-Vorlagen bleiben unveraendert;
-   dieser getrennte Wartungsfehler ist vor abschliessender Freigabe zu beheben.
+   Zielwert zurueckfallen. Jetzt lokal korrigiert als reproduzierbarer Assetpatch
+   `2.1.7-jslive.1`; die vier Standardvorlagen laden den Patch, der Originalpfad
+   bleibt unveraendert. 34 deterministische Faelle und zwoelf Browservarianten
+   mit 108 unterbrochenen Wertfolgen bestanden. Keine neue Gauge-Engine oder
+   Wartungsfork. CI und installierter Nachtest nach Push/Modulupdate stehen aus.
 4. Bestehende Ausgabe-, IPSView-, Link- und Datenvertraege erhalten; offene
    Laufzeitnachweise und Freigabegrenzen dokumentieren. IPSView bleibt mangels
    Testlizenz eine bekannte Testluecke.

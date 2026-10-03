@@ -57,15 +57,30 @@ Beide akzeptieren `JSLIVE_BROWSER_EXECUTABLE`, installieren keine Pakete,
 kontaktieren kein Symcon und sind nicht Teil der PHP-CI. Aufruf und Grenzen:
 [jQuery-Migration](../docs/JQUERY_MIGRATION.md).
 
+`node tests/gauge-animation.js` prueft 34 deterministische Animationsfaelle
+mit den echten Bibliothekssettern und dem Scheduler: unterbrochene Animationen,
+wechselnde Richtung, Rueckkehr, identische Ziele, Stopp am Zwischenwert,
+sofortige Werte, Initialanimation und kuerzester Kompass-Drehweg. Nur Canvas/
+Ereignissenke und die Uhr sind Testdoubles. `scripts/build-gauge-patch.js --check`
+sichert die reproduzierbare Ableitung vom hashgeprueften Original. Beide sind
+Teil der Standard-CI. `JSLIVE_GAUGE_BASELINE` erlaubt einen gezielten Vergleich
+mit einer vertrauenswuerdigen lokalen Bibliotheksdatei (Altbestand: rot).
+
 `node tests/gauge-browser.js` prueft optional die vier Gauge-Vorlagen mit den
 echten Bibliotheken, lokal beantworteten Ajax-Anfragen und synthetischer
-Konfiguration. Acht Faelle decken zwei Fensterbreiten, Werteumrechnung,
-Formatierung, Animation und Destroy ab. Voraussetzungen und Grenzen stehen
+Konfiguration. Zwoelf Faelle decken zwei Fensterbreiten, radiale Nadel-/Platten-
+Animation, Werteumrechnung, Formatierung, Animation und Destroy ab. Je Fall
+zusaetzlich neun unterbrochene Wertfolgen (108 insgesamt), mit sofortigem,
+fruehem und spaetem Folgeupdate sowie Vergleich von Ziel, gerendertem Wert,
+Werttext und abschliessendem Canvas mit direktem Ziel-Redraw.
+Voraussetzungen und Grenzen stehen
 im [Gauge-Audit](../docs/GAUGE_AUDIT.md); kein Zugriff auf Symcon, keine
 automatische Paketinstallation und kein Bestandteil der PHP-CI.
 Die aufeinanderfolgenden Werte warten auf das oeffentliche `animationEnd`-
-Ereignis, nicht nur auf numerische Naehe zum Ziel. Unterbrochene Animationen
-sind ein separat bestaetigter Altfehler, siehe `docs/GAUGE_AUDIT.md`.
+Ereignis, nicht nur auf numerische Naehe zum Ziel. Fuer absichtlich unterbrochene
+Animationen wird die Uhr kontrolliert; sie wird vor dem Bibliotheksladen
+installiert, damit Scheduler und Zeitmessung dieselbe Zeitbasis verwenden.
+Der separate Altfehler wird durch `2.1.7-jslive.1` korrigiert; siehe Audit.
 
 Der isolierte Echtzeit-Prototyp wird mit `node tests/realtime-window.js`
 deterministisch geprueft; dieser Test ist im Runner enthalten. Ein optionaler

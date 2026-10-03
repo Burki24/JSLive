@@ -756,13 +756,20 @@ einschliesslich Helper unter PHP 8.5.10, JavaScript-Syntax, PHP-CS-Fixer-Trocken
 
 Aktive Restpunkte fuer den Wartungsabschluss:
 
-1. Chart-Zeitstempel-Fix committen/pushen, CI und Metadaten abgleichen, Modulupdate,
-   Ansicht ausdruecklich neu laden und schnelle Zeitraumwechsel live nachpruefen.
-   Kein zusaetzliches ApplyChanges und kein geplanter Dienstneustart.
-2. Separaten Canvas-Gauges-Fehler bei unterbrochenen Animationen korrigieren;
+1. Chart-Zeitstempel-Fix gezielt live bestanden auf 0.98 (`7abe597` / `be9a96a`):
+   lokal/remote/installiert synchron, CI gruen. Drei schnelle Offsetfolgen und
+   gemischte Perioden-/Relativwechsel in 335-449 ms zeigten ohne Zwischen-Reload
+   die richtige letzte Auswahl. Anschliessend Stundenansicht und alle fuenf
+   Steuerwerte wiederhergestellt, Konfigurationen unveraendert; keine Browser-
+   oder JSLive-Logfehler/-Warnungen im geprueften Zeitraum. Kein Stable-PASS.
+2. Canvas-Gauges-Fehler bei unterbrochenen Animationen lokal korrigiert als
+   `2.1.7-jslive.1`. 34 deterministische Faelle und zwoelf Browservarianten mit
+   108 unterbrochenen Wertfolgen bestanden; alter Assetpfad bleibt unveraendert.
+   Commit/Push, gruene CI, Metadatenabgleich, Modulupdate und installierter
+   Gauge-Nachtest stehen aus. Ansicht ausdruecklich neu laden; kein separates
+   ApplyChanges oder Dienstneustart. Details:
    siehe [Gauge-Audit](GAUGE_AUDIT.md#abschlussabgleich-auf-basis-096-animationsgrenze).
-   Der zuvor sporadische Test wartet jetzt korrekt auf Animationsende; daraus
-   folgt keine Freigabe fuer schnelle Gauge-Wertwechsel.
+   Lokale synthetische Browsernachweise ersetzen keine installierte Abnahme.
 3. IPSView-Abnahme durch den Eigentuemer auf dem Produktivsystem nach Abschluss
    der Fehlerkorrekturen. Aktuelle WebViews, eigene Templates und verwendete
    Darstellungen pruefen; Desktop-Browsertests ersetzen diese Abnahme nicht.

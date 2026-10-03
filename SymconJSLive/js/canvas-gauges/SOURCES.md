@@ -27,3 +27,7 @@ ownership of a fork requires a separate decision. JSLive's four templates
 expose numerous library-specific presentation options, so another engine is
 not a demonstrated drop-in replacement. See `docs/GAUGE_AUDIT.md` for coverage
 and remaining risks.
+
+Maintenance follow-up: the four standard templates now use the local
+`2.1.7-jslive.1` animation patch. This original file and URL remain unchanged.
+See [patch provenance and reproduction](2.1.7-jslive.1/SOURCES.md).

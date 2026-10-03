@@ -43,10 +43,22 @@ Die Standardvorlagen verwenden die lokal im JSLive-Hook ausgelieferte
 Canvas-Gauges-Bibliothek. Eigene Vorlagen laufen als HTML/JavaScript im Browser
 und müssen vertrauenswürdig sein.
 
-Canvas Gauges bleibt auf der offiziellen Version 2.1.7. Herkunft und
-Dateiintegrität sowie die vier vorhandenen Vorlagen sind abgesichert; eine
-aktive Upstream-Pflege ist nicht belegt. Umfang und Grenzen der lokalen Tests:
-[Gauge-Audit](../docs/GAUGE_AUDIT.md). Assetpfad und Konfiguration bleiben erhalten.
+Die vier Standardvorlagen verwenden Canvas Gauges 2.1.7 mit dem lokalen Patch
+`2.1.7-jslive.1`. Bei schnellen Wertwechseln endet die Animation am zuletzt
+angeforderten Ziel, statt auf einen überholten Wert zurückzuspringen. Wiederholte
+Zielwerte unterbrechen die laufende Animation nicht. Werteumrechnung,
+Formatierung und Konfiguration bleiben erhalten; keine neue Gauge-Engine.
+Herkunft und Dateiintegrität sind abgesichert; aktive Upstream-Pflege ist nicht
+belegt. Umfang und Grenzen: [Gauge-Audit](../docs/GAUGE_AUDIT.md).
+
+Der alte Pfad `canvas-gauges/gauge.min.js` bleibt unverändert. Eigene
+`TemplateScriptID`-Vorlagen werden nicht automatisch umgestellt und behalten
+gegebenenfalls den alten Fehler. Für sie den Bibliothekspfad auf
+`canvas-gauges/2.1.7-jslive.1/gauge.min.js` umstellen und separat prüfen;
+nicht beide Bibliotheken in derselben Seite laden.
+Nach dem Modulupdate die Ansicht ausdrücklich neu laden, bei Bedarf ohne
+Browser-Cache. `ApplyChanges()` erfolgt automatisch; kein zusätzlicher Aufruf
+oder Dienstneustart ist für diese Korrektur erforderlich.
 
 ## Technische Daten
 

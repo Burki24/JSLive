@@ -189,3 +189,61 @@ Zwei getrennte Ergebnisse:
   unterbrochene Animationen. Eine getrennte kompatible Korrektur samt gezielter
   Regression ist vor abschliessender Freigabe erforderlich; kein neuer Fork
   oder Wechsel der Gauge-Engine ist damit beschlossen.
+
+## Lokale Animationskorrektur auf Basis 0.98
+
+Die Standardvorlagen laden jetzt den lokalen Assetpatch `2.1.7-jslive.1`.
+Kein Upstream-Update, neuer Wartungsfork oder Wechsel der Gauge-Engine.
+Der bisherige Bundle und seine URL bleiben bytegleich fuer eigene Vorlagen.
+Die Versionskennung der Bibliothek bleibt 2.1.7; die lokale Revision steht im
+Pfad und im zusaetzlichen Banner. Lizenz, Hash und exakte Reproduktion:
+[Patch-SOURCES](../SymconJSLive/js/canvas-gauges/2.1.7-jslive.1/SOURCES.md).
+
+Der gemeinsame Setter verwirft nun die vorherige Animation und uebernimmt das
+neueste Ziel, interpoliert aber weiter vom gerade gerenderten Wert. Ein bereits
+laufendes identisches Ziel wird weder abgebrochen noch vorzeitig angesprungen.
+Ein Stopp am Zwischenwert und direkte Werte bei deaktivierter Animation
+beenden alte Frames. Fuer RadialGauge wird der Originalzielwert getrennt vom
+kuerzesten Interpolationswinkel uebergeben; Drehungen ueber Nord bleiben kurz
+und enden beim angeforderten Originalwert. Scheduler, Easing, Zeichencode,
+Werteumrechnung, Textformatierung und gespeicherte Konfiguration bleiben gleich.
+
+Nachweise:
+
+- Vor Aenderungen Gesamtsuite und 59 PHP-Syntaxchecks gruen.
+- `tests/gauge-animation.js`: 34 deterministische Faelle mit echten Settern
+  und Scheduler aus dem Bundle, nur Uhr, Canvas-Ausgabe und Ereignissenke als
+  Doubles. Der Originalbundle scheiterte bei 180 -> 360 mit Zielwert 180;
+  der Patch besteht. Steigend/fallend, Mehrfachwechsel, Rueckkehr, Anfang/Mitte/
+  kurz vor Ende, Duplikate, Zwischenwert-Stopp, sofortige/initiale Werte und
+  kuerzester Weg ueber Nord in beide Richtungen. Teil der Standard-CI.
+- `scripts/build-gauge-patch.js --check`: Originalhash und exakt reproduzierter
+  Patch ohne Compiler oder Netzwerk. Nur der BaseGauge-Setter, eine radiale
+  Zielwertuebergabe, Banner und abschliessender Zeilenumbruch unterscheiden sich.
+- `tests/gauge-browser.js`: zwoelf Varianten, vier Vorlagen, zwei Breiten,
+  Nadel-/Plattenanimation bei Radial/Compass. Pro Variante neun unterbrochene
+  Folgen, insgesamt 108; neuestes Ziel, gerenderter Wert, Rohwerttext und Canvas
+  nach direktem Ziel-Redraw geprueft. Echte Assets, lokales HTTP; kein Symcon.
+  Die vorhandenen sequentiellen Animationen und Destroy bleiben geprueft.
+- Asset-/Lizenzhash und genau eine neue Einbindung in allen vier Vorlagen;
+  alter und neuer Pfad ueber den echten PHP-Webhook mit HTTP 200/Dateiinhalt.
+
+Bei der Browser-Testentwicklung musste die virtuelle Uhr vor dem Bibliotheks-
+laden installiert werden: der Bundle merkt sich requestAnimationFrame beim
+Laden. Spaeteres Ersetzen vermischte reale Frames mit virtueller Zeit. Der
+Canvas-Vergleich nutzt draw() statt update(), weil update() auch Geometrie und
+statische Canvas-Caches erneuert. Diese Testkorrekturen aendern keinen Produktcode.
+
+Update: Eigentuemer committet/pusht, wartet gruene CI ab, pullt Metadaten und
+aktualisiert das Symcon-Modul. Danach Ansicht ausdruecklich neu laden, bei
+Bedarf ohne Browser-Cache; kein zusaetzliches ApplyChanges oder Dienstneustart.
+Eigene Templates werden nicht automatisch migriert und koennen den alten
+Fehler behalten. Nur einen Gauge-Bundle je Seite laden. Rueckfall auf den
+vollstaendigen Stand `be9a96a` (0.98) bringt bewusst auch den Altfehler zurueck.
+Installierter Gauge-Nachtest und IPSView-Abnahme bleiben offen; kein Stable-PASS.
+
+Abschluss lokal: Gesamtsuite einschliesslich Patchreproduktion, Animation,
+Asset-/Webhook- und 120 PHP-Renderingfaellen bestanden. 59 PHP-Syntaxchecks
+(PHP 8.5.10), JavaScript-Syntax, PHP-CS-Fixer-Trockenlauf (47 Dateien, keine
+Aenderungen) und `git diff --check` gruen. Browser: Edge 155.0.4283.18,
+Node 24.19.0, Playwright 1.63.0. CI folgt nach Push; kein Live-System geaendert.

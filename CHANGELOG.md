@@ -204,6 +204,12 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Fixed
 
+- Gauge-Animationen enden bei schnellen Wertwechseln am neuesten Ziel.
+  Versionierter lokaler Canvas-Gauges-Patch `2.1.7-jslive.1` fuer die vier
+  Standardvorlagen; Altpfad und eigene Templates bleiben unveraendert.
+  Wiederholte Ziele, Zwischenwert-Stopp und kuerzester Kompass-Drehweg sind
+  durch deterministische Regressionen abgesichert.
+
 - Chart verarbeitet mehrere Zeitraum-Steueraenderungen innerhalb derselben
   Sekunde. Die bisherige reine Zeitstempel-Sperre entfaellt; der Generationen-
   Schutz laesst weiterhin nur den letzten Abruf rendern. Regressionen fuer

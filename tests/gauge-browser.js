@@ -39,14 +39,14 @@ function functionsFrom(template, compass) {
     return (template.slice(start, connect) + template.slice(update, pull))
         .replaceAll('{INSTANCE}', '12345').replaceAll('{PASSWORD}', 'synthetic');
 }
-async function check(browser, name, width) {
+async function check(browser, name, width, animationTarget = 'needle') {
     const context = await browser.newContext({ viewport: { width, height: 600 } });
     const page = await context.newPage();
     page.setDefaultTimeout(5000);
     const errors = [];
     let requests = 0;
     const compass = name === 'Compass';
-    const config = { ...configuration, ...(compass ? { max: 360 } : {}) };
+    const config = { ...configuration, animation_target: animationTarget, ...(compass ? { max: 360 } : {}) };
     const template = read(`SymconJSLive/templates/CanvasGauges-${name}.html`);
     const sources = [...template.matchAll(/<script src="\/hook\/JSLive\/(js\/[^"\s]+)"><\/script>/g)].map(m => m[1]);
     assert.equal(sources.length, 3);
@@ -66,6 +66,8 @@ async function check(browser, name, width) {
         return route.abort();
     });
     try {
+        // Install before the bundle captures requestAnimationFrame.
+        await page.clock.install();
         await page.goto('http://jslive.test/');
         for (const source of sources) await page.addScriptTag({ content: read('SymconJSLive/' + source) });
         await page.addScriptTag({ content: `let gauge;
@@ -118,13 +120,40 @@ async function check(browser, name, width) {
         }
         assert.notEqual(await page.evaluate(() => document.getElementById('gauge').toDataURL()), state.image, 'Value changes must change the rendered canvas.');
         assert.equal(await page.evaluate(() => animationEnds), 3, 'All value animations must finish.');
+        // Deliberately interrupt real animation frames; no numerical-close wait.
+        await page.clock.pauseAt(new Date(Date.now() + 1000));
+        await page.evaluate(() => gauge.update({ animationDuration: 100 }));
+        for (const gap of [0, 25, 99]) {
+            for (const [inputs, expected, text] of compass
+                ? [[[90, 180, 270], 270], [[180, 90], 90], [[-1, 400], 360]]
+                : [[[100, 500, 750], 2500 / 3, '750,0'], [[500, 100], 1000 / 3, '100,0'], [[-50, 1250.5], 1000, '1.250,5']]) {
+                for (const input of inputs) {
+                    await page.evaluate(value => UpdateGauge(67890, value), input);
+                    if (gap) await page.clock.runFor(gap);
+                }
+                await page.clock.runFor(200);
+                const actual = await page.evaluate(() => ({ target: gauge.value, rendered: gauge.options.value,
+                    text: gauge.options.valueText, image: document.getElementById('gauge').toDataURL() }));
+                assert.ok(Math.abs(actual.target - expected) < 0.0001, 'Newest target must survive interruption.');
+                assert.ok(Math.abs(actual.rendered - expected) < 0.0001, 'Needle must end at the latest target.');
+                if (!compass) assert.equal(actual.text, text);
+                // Draw the independently checked target through the same canvas
+                // path (update() also resets canvas geometry/static caches).
+                const reference = await page.evaluate(() => {
+                    gauge.options.value = gauge.value;
+                    gauge.draw();
+                    return document.getElementById('gauge').toDataURL();
+                });
+                assert.ok(actual.image === reference, 'Animated endpoint must match the direct target rendering.');
+            }
+        }
         await page.evaluate(async () => { await document.fonts.ready; gauge.update(); });
         assert.equal(await page.evaluate(() => document.gauges.length), 1);
         await page.evaluate(() => gauge.destroy());
         assert.equal(await page.evaluate(() => document.gauges.length), 0);
         assert.equal(requests, 1);
         assert.deepEqual(errors, []);
-        return { template: name, width, result: 'PASS' };
+        return { template: name, width, animationTarget, interruptedSequences: 9, result: 'PASS' };
     } catch (error) {
         throw new Error(JSON.stringify({ name, width, errors, state: await page.evaluate(() =>
             typeof gauge === 'undefined' ? null : { value: gauge.value, renderedValue: gauge.options.value,
@@ -133,7 +162,11 @@ async function check(browser, name, width) {
 }
 async function run(browser) {
     const results = [];
-    for (const width of [1024, 390]) for (const name of templates) results.push(await check(browser, name, width));
+    for (const width of [1024, 390]) for (const name of templates) {
+        for (const target of name.startsWith('Linear') ? ['needle'] : ['needle', 'plate']) {
+            results.push(await check(browser, name, width, target));
+        }
+    }
     return { browser: browser.version(), results };
 }
 module.exports = run;

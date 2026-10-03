@@ -100,9 +100,17 @@ if (!is_file($gaugeSourcesPath) || !str_contains(file_get_contents($gaugeSources
 foreach (['Compass', 'Linear', 'Linear(vertical)', 'Radial'] as $gaugeTemplate) {
     $gaugeHtml = file_get_contents($root . '/SymconJSLive/templates/CanvasGauges-' . $gaugeTemplate . '.html');
     preg_match_all('#<script\b[^>]*\bsrc="([^"]*canvas-gauges[^"\s]*)"#i', $gaugeHtml, $gaugeScripts);
-    if ($gaugeScripts[1] !== ['/hook/JSLive/js/canvas-gauges/gauge.min.js']) {
-        throw new RuntimeException('Gauge templates must retain the existing verified asset URL.');
+    if ($gaugeScripts[1] !== ['/hook/JSLive/js/canvas-gauges/2.1.7-jslive.1/gauge.min.js']) {
+        throw new RuntimeException('Gauge templates must load the local animation patch exactly once.');
     }
+}
+$gaugePatchDirectory = $root . '/SymconJSLive/js/canvas-gauges/2.1.7-jslive.1/';
+$gaugePatchHash = '2cde1666441e112088cf3094f29e187f0d818ce4a2b9939091b890e9f132520e';
+$gaugePatch = file_get_contents($gaugePatchDirectory . 'gauge.min.js');
+if (hash('sha256', str_replace("\r\n", "\n", $gaugePatch)) !== $gaugePatchHash
+    || !str_contains($gaugePatch, 'The MIT License (MIT)')
+    || !str_contains(file_get_contents($gaugePatchDirectory . 'SOURCES.md'), $gaugePatchHash)) {
+    throw new RuntimeException('Canvas Gauges patch integrity, license or provenance is missing.');
 }
 
 $jqueryDirectory = $root . '/SymconJSLive/js/jquery/4.0.0/';
