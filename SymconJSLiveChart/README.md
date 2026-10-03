@@ -35,6 +35,10 @@ die konfigurierte Reihenfolge bleibt unabhängig von der Antwortreihenfolge
 erhalten. Leere Antworten werden ausgelassen. Bei fehlgeschlagenen Abrufen
 werden die übrigen Datensätze dargestellt und der Fehler mit Datensatzindex
 ohne Anfrage-URL in der Browserkonsole gemeldet.
+Beim Nachladen eines anderen historischen Zeitraums werden Daten und Achsen
+gemeinsam aktualisiert. Ein Wechsel über `Offset` oder `StartDate` benötigt
+kein vollständiges Neuladen der Ansicht; die bisherigen Zeitachsengrenzen
+bleiben dabei nicht stehen.
 
 Nach einem Modulupdate die Ansicht neu laden. `ApplyChanges()` wird beim
 Modulupdate automatisch ausgeführt und erneuert dabei den HTML-Cache;

@@ -629,6 +629,53 @@ Der folgende jQuery-4.0.0-Kandidat ist lokal separat geprueft, noch nicht
 installiert: [jQuery-Migration](JQUERY_MIGRATION.md). Die Weiterentwicklung ist
 ausdruecklich freigegeben; daraus folgt kein vollstaendiger Runtime-PASS.
 
+## Gezielte Abnahme von 0.95 und historischer Achsenfix (03.10.2026)
+
+Ausgangspunkt: Quellcommit `87e020e`, Metadatencommit `c7438cb`, Library 0.95,
+Build 142475790. MCP-CURRENT meldet Symcon 9.1, Revision
+`rust-dab58090190ab6ce72c9c1d036c2e935edff313f`, PHP 8.5.8. Alle elf vorhandenen
+JSLive-Instanzen waren aktiv. Dies ist eine gezielte Pruefung, kein neuer
+Vollmatrix-, Neustart- oder CI-Nachweis.
+
+- PASS: echter synthetischer Messwertwechsel und Ruecksetzung ueber den
+  JSLive-WebSocket (`10603`) empfangen und ohne Reload im installierten Chart
+  sichtbar. Kein ausschliesslicher Handshake- oder browserlokaler Ersatztest.
+- PASS: Minutenansicht aktiviert den bestehenden Pull-Modus (drei Sekunden).
+  Geaenderter synthetischer Wert wird per HTTP geliefert und im Browser
+  dargestellt; im Minutenmodus unterdrueckt die Vorlage den WebSocket-Wertpfad.
+- PASS im geprueften Umfang: 30 HTTP-Exportabrufe fuer zehn Instanzen aller
+  neun Kindmodultypen mit fehlendem `scripts`, `scripts=0` und `scripts=1`.
+  JSON, Downloadheader, `nosniff` und Chart-Listenspaltenfilter korrekt;
+  Konfigurationen unveraendert. Keine Testinstanz hat ein eigenes Template
+  oder exportierbare Bibliotheksskripte: deren positiver Opt-in bleibt durch
+  lokale Regressionen, nicht durch diese Live-Abrufe nachgewiesen.
+- FAIL auf 0.95: Stunde/Minute/Tag und relative/absolute Ansicht wechseln,
+  aber beim historischen Offsetwechsel im asynchronen Modus bleiben die
+  bisherigen Zeitachsengrenzen stehen. Ein zusaetzlicher leerer Tag erscheint.
+  Dieselben Daten sind nach vollstaendigem Browser-Reload korrekt dargestellt.
+  Die HTTP-Antwort enthaelt bereits die richtigen Grenzen; der bestehende
+  Chart bekommt beim partiellen Reload nur die neuen Datensaetze.
+- Keine Browserwarnungen/-fehler oder JSLive-Warnungen/-fehler im geprueften
+  Protokollzeitraum. Die ausdruecklich freigegebenen synthetischen Mess- und
+  Steuerwerte wurden vollstaendig zurueckgesetzt; Konfigurationshashes blieben
+  gleich. Testwertwechsel koennen wie vereinbart im Testarchiv verbleiben.
+
+Lokale Korrektur: Der asynchrone partielle Reload uebernimmt nun wie der
+synchrone Pfad die geladenen Skalen vor `myChart.update()`. Die Instanz wird
+nicht neu erzeugt. Daten und Achsen wechseln gemeinsam nach Abschluss aller
+Datensatzantworten; API, Properties, Datenformate und Bibliotheken bleiben gleich.
+Der neue Regressionstest schlug vorher an der veralteten Startgrenze fehl.
+Alle 19 deterministischen Ladeszenarien sowie acht isolierte Browservarianten
+(Edge 155.0.4283.18, UTC/Berlin, 1024/390 Pixel, Streaming 3.1.0/3.6.0) bestanden.
+Der Browsertest verwendet echte Assets, aber synthetische HTTP-Antworten.
+
+Noch erforderlich: Commit/Push, gruene CI, Metadatenabgleich und Modulupdate
+durch den Eigentuemer; dann Ansicht neu laden und absoluten Tag mit historischem
+Offset sowie Rueckkehr live nachpruefen. Kein zusaetzliches ApplyChanges oder
+Dienstneustart fuer diesen Templatefix. Eigene Templates separat nachziehen.
+IPSView folgt laut Eigentuemer nach Fertigstellung auf dem Produktivsystem.
+SymconECharts-Exportplanung ist bis zur Reife des Nachfolgers zurueckgestellt.
+
 ## Ergebnisregeln
 
 - `PASS`: alle verpflichtenden Punkte sind mit frischem Laufzeitnachweis grün.

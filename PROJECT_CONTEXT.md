@@ -489,10 +489,23 @@ Dokumentationsluecken:
 
 ### Aktiver Wartungsumfang ab 03.10.2026
 
+Priorisierung durch den Eigentuemer: zuerst JSLive fuer Symcon 9.0/9.1
+abschliessen. Der zugesagte SymconECharts-Uebergabevertrag bleibt zurueckgestellt,
+bis der Nachfolger ausreichend weit ist; er ist kein Gate fuer diesen
+Wartungsabschluss. IPSView prueft der Eigentuemer nach Fertigstellung auf seinem
+Produktivsystem. Keine Erweiterung des JSLive-Funktionsumfangs.
+
 1. Verbleibende Kompatibilitaets- und Laufzeitluecken fuer Symcon 9.0/9.1
    gegen den bestehenden Funktionsumfang bewerten. Die aktuelle MCP-Testebene
    bleibt massgeblich; keine separate 9.0-Installation verlangt. Nicht
    gepruefte Umgebungen bleiben als solche benannt.
+   Gezielte Laufzeitpruefung von 0.95: echter WebSocket-Wertwechsel und
+   Minuten-Pull im Browser sowie 30 HTTP-Exportabrufe bestanden. Historischer
+   Offsetwechsel zeigt dagegen veraltete Zeitachsengrenzen im asynchronen
+   Nachladepfad. Die Standardvorlage ist lokal korrigiert; 19 deterministische
+   Ladeszenarien und acht isolierte Browservarianten sind gruen. Installierter
+   Nachtest nach Commit/CI/Modulupdate bleibt offen. Details und Grenzen:
+   `docs/SYCON_RUNTIME_MATRIX.md`, Abschnitt zur gezielten Abnahme von 0.95.
 2. Noch notwendige Ressourcenupdates anhand der bestehenden Inventur bestimmen
    und einzeln absichern. Vorhandene Fehler reproduzieren, korrigieren und durch
    Regressionstests abdecken. Keine Wiedereroeffnung erledigter Updates ohne

@@ -22,7 +22,7 @@ function harness(count, asynchronous = true) {
     const errors = [];
     const configuration = {
         data_loadAsync: asynchronous, Var_List: Array.from({ length: count }, (_, i) => i + 100),
-        Period: 6, Relativ: true, ID_Period: 11, ID_Relativ: 12
+        Period: 6, Relativ: true, ID_Period: 11, ID_Relativ: 12, ID_StartDate: 13
     };
     function Chart(canvas, config) {
         assert.ok(config, 'Chart must receive its complete configuration.');
@@ -46,7 +46,7 @@ function harness(count, asynchronous = true) {
         alert(message) { throw new Error(String(message)); },
         config_global: { DataMode: 1 }, config_dataset: [], config_axes: {}, config_xaxes: {},
         config_legend: {}, config_title: { display: true, text: 'Test chart' }, config_tooltips: {},
-        update_vars: [11, 12], last_reload: 0, isReloading: false, pullMode: false,
+        update_vars: [11, 12, 13], last_reload: 0, isReloading: false, pullMode: false,
         $: {
             getJSON(url, success) {
                 const request = {
@@ -142,4 +142,58 @@ const sync = harness(2, false);
 sync.begin();
 sync.reply('Instance', { Config: sync.configuration, ...sync.axes(), DATASETS: [dataset(0), dataset(1)] });
 assertChart(sync, [0, 1]);
-console.log('JSLive Chart asynchronous loading verified (13 scenarios, including reloads).');
+// A StartDate/offset change keeps Period/Relativ unchanged: update the existing
+// chart's axes together with its data, including an empty dataset collection.
+for (const asynchronous of [true, false]) {
+    for (const count of [0, 1, 2]) {
+        const h = harness(count, asynchronous);
+        h.configuration.Period = 5;
+        h.configuration.Relativ = false;
+        const today = Date.UTC(2024, 0, 3);
+        const day = 86400000;
+        const windows = [today, today - day, today - 2 * day, today];
+        let chart;
+        windows.forEach((start, step) => {
+            const axes = {
+                AXES: { y: { type: 'linear', min: step, max: step + 100 } },
+                XAXES: { type: 'time', suggestedMin: start, suggestedMax: start + day - 1 }
+            };
+            const rows = Array.from({ length: count }, (_, index) => ({
+                ...dataset(index), data: [{ x: start + 3600000, y: index + step + 1 }]
+            }));
+            const previousScales = chart && JSON.stringify(chart.options.scales);
+            const previousData = chart && JSON.stringify(chart.data.datasets);
+            h.context.ReloadChart(13, step + 1, null, step === 0);
+            if (asynchronous) {
+                h.reply('loadConfig', { Config: { ...h.configuration, Now: start === today } });
+                h.reply('loadAxes', axes);
+                for (let index = count - 1; index >= 0; index--) {
+                    if (chart) {
+                        assert.equal(JSON.stringify(chart.options.scales), previousScales,
+                            'Do not apply new axes before every dataset response settles.');
+                        assert.equal(JSON.stringify(chart.data.datasets), previousData);
+                    }
+                    h.reply(`id=${index}`, { DATASETS: [rows[index]] });
+                }
+            } else {
+                h.reply('Instance', { Config: h.configuration, ...axes, DATASETS: rows });
+            }
+            if (!chart) chart = h.context.myChart;
+            assert.equal(h.context.myChart, chart, 'Historical navigation must reuse the chart.');
+            assert.equal(h.created.length, 1);
+            assert.equal(chart.options.scales.x.suggestedMin, start,
+                'Historical navigation must apply the newly loaded time-axis start.');
+            assert.equal(chart.options.scales.x.suggestedMax, start + day - 1);
+            assert.equal(chart.options.scales.x.type, 'time');
+            assert.equal(chart.options.scales.y.min, step);
+            assert.equal(chart.options.scales.y.max, step + 100);
+            assert.equal(JSON.stringify(chart.data.datasets), JSON.stringify(rows));
+            assert.equal(chart.updates, step, 'Exactly one update per completed partial reload.');
+            assert.equal(chart.options.plugins.tooltip.callbacks.label, h.context.UpdateTooltipLabel);
+            assert.equal(h.context.isReloading, false);
+            assert.equal(h.pending.length, 0);
+        });
+        assert.deepEqual(h.errors, []);
+    }
+}
+console.log('JSLive Chart asynchronous loading verified (19 scenarios, including historical axis reloads).');

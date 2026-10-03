@@ -408,6 +408,7 @@
                             UpdateConfiguration();
                         }else{
                             myChart.data.datasets = config_dataset;
+                            myChart.options.scales = Object.assign(config_axes, {x: config_xaxes});
                             myChart.update();
                         }
                         isReloading = false;

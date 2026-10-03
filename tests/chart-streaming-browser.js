@@ -136,6 +136,42 @@ async function check(browser, legacy, timezoneId, width) {
             assert.deepEqual(result, { oldDestroyed: true, instances: 1, type: expected });
             await page.clock.runFor(150);
         }
+        // Real Chart.js scales must follow async historical navigation without
+        // destroying the chart or retaining the previous day's suggested range.
+        await page.evaluate(() => {
+            configuration.data_loadAsync = true;
+            configuration.Var_List = [101, 102];
+            configuration.Period = 5;
+            configuration.Relativ = false;
+            configuration.Now = false;
+            $.getJSON = (url, success) => {
+                const query = new URL(url, 'http://test.invalid').searchParams;
+                const start = window.historicalStart;
+                if (query.has('loadConfig')) success({ Config: { ...configuration } });
+                else if (query.has('loadAxes')) success({
+                    AXES: { y: { type: 'linear', min: 0, max: 60 } },
+                    XAXES: { type: 'time', suggestedMin: start, suggestedMax: start + 86400000 - 1 }
+                });
+                else success({ DATASETS: [{
+                    type: query.get('id') === '0' ? 'line' : 'bar', yAxisID: 'y',
+                    data: [{ x: start + 3600000, y: 25 }, { x: start + 7200000, y: 30 }]
+                }] });
+                return { fail() { return this; }, always(callback) { callback(); return this; } };
+            };
+        });
+        for (const [index, start] of [Date.UTC(2024, 0, 3), Date.UTC(2024, 0, 2), Date.UTC(2024, 0, 3)].entries()) {
+            const state = await page.evaluate(({ index, start }) => {
+                const old = myChart;
+                window.historicalStart = start;
+                ReloadChart(11, 10 + index, null, index === 0);
+                return { reused: old === myChart, instances: Object.keys(Chart.instances).length,
+                    min: myChart.scales.x.min, max: myChart.scales.x.max, type: myChart.scales.x.type,
+                    datasets: myChart.data.datasets.length, loading: isReloading };
+            }, { index, start });
+            assert.deepEqual(state, { reused: index !== 0, instances: 1,
+                min: start, max: start + 86400000 - 1, type: 'time', datasets: 2, loading: false });
+            await page.clock.runFor(150);
+        }
         await page.evaluate(() => myChart.destroy());
         const draws = await page.evaluate(() => window.draws);
         await page.clock.runFor(1200);

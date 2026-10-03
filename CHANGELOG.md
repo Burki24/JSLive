@@ -198,6 +198,12 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Fixed
 
+- Chart uebernimmt beim asynchronen historischen Nachladen die neuen Achsen
+  gemeinsam mit den Datensaetzen. Offset-/StartDate-Wechsel behalten keine
+  veralteten Zeitachsengrenzen mehr bei; die vorhandene Chart-Instanz bleibt
+  erhalten. Regressionen fuer Zeitfenster, Rueckkehr, leere Datensaetze und
+  echte Chart.js-Skalen ergaenzt. Eigene Templates bleiben unveraendert.
+
 - Konfigurationsexport beachtet die Skriptauswahl fuer Templates und Custom-
   Bibliotheken; alle neun Kindmodule reichen Exportparameter korrekt weiter.
   Gefilterte JSON-Listen verlieren nur mit `ignoreExport` markierte Spalten,
