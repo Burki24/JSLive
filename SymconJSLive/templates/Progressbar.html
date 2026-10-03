@@ -37,14 +37,7 @@
     function Load(){
         try {
             item = document.getElementById("Bar");
-            //görße automatisch anpassen
-            item.style.width = (Get_WindowWidth()-40)+"px";
-
-            if(configuration.style_fontPosition === "center"){
-                item.style.height = (Get_WindowHeight()-40)+"px";
-            }else{
-                item.style.height = (Get_WindowHeight()-60-configuration.style_fontSize)+"px";
-            }
+            ResizeProgressbar();
             console.log("Automatic Size: W: " + item.style.width+"px | H: " + item.style.height+ "px");
 
             //wenn text mittig angezeigt werden soll
@@ -74,6 +67,7 @@
 
 
             bar = new ldBar(".myBar", LoadBarConfig());
+            JSLiveObserveSize(ResizeProgressbar);
 
 
             document.querySelectorAll('.ldBar-label').forEach(function(el) {
@@ -89,6 +83,14 @@
         }catch (e) {
             alert(e);
         }
+    }
+
+    function ResizeProgressbar() {
+        const item = document.getElementById('Bar');
+        item.style.width = Math.max(1, Get_WindowWidth() - 40) + 'px';
+        const labelSpace = configuration.style_fontPosition === 'center' ? 40 : 60 + configuration.style_fontSize;
+        item.style.height = Math.max(1, Get_WindowHeight() - labelSpace) + 'px';
+        if (typeof bar !== 'undefined') bar.fit();
     }
 
     function LoadBarConfig(){

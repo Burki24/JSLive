@@ -12,7 +12,7 @@
 <script src="/hook/JSLive/js/canvas-gauges/2.1.7-jslive.1/gauge.min.js"></script>
 
 <body style="text-align: center;">
-<canvas id="gauge"></canvas>
+<canvas id="gauge" style="display: block; margin: 0 auto;"></canvas>
 
 <script>
     let gauge;
@@ -36,7 +36,8 @@
 
             gauge_config = {
                 renderTo: 'gauge',
-                height: Get_WindowHeight() - 20,
+                width: Math.max(1, Math.min(Get_WindowWidth(), Get_WindowHeight()) - 20),
+                height: Math.max(1, Math.min(Get_WindowWidth(), Get_WindowHeight()) - 20),
 
                 value: curValue,
                 minValue: 0,
@@ -118,6 +119,7 @@
 
             gauge = new RadialGauge(gauge_config);
             gauge.draw();
+            JSLiveObserveSize(ResizeGauge);
 
             //laden das aktuellen Wertes
             $.getJSON("/hook/JSLive/getData?Instance={INSTANCE}&pw={PASSWORD}", function (data) {
@@ -125,6 +127,14 @@
             });
         }catch (e) {
             alert(e.message + "\r\n"+ e.stack);
+        }
+    }
+
+    function ResizeGauge() {
+        const width = Math.max(1, Math.min(Get_WindowWidth(), Get_WindowHeight()) - 20);
+        const height = width;
+        if (gauge && (gauge.options.width !== width || gauge.options.height !== height)) {
+            gauge.update({ width: width, height: height });
         }
     }
 

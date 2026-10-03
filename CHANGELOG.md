@@ -204,6 +204,16 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Fixed
 
+- Standardvorlagen passen Gauge, Chart, Doughnut/Pie, Radar, Colorpicker und
+  Progressbar an geaenderte HTMLBox-/Iframe-Abmessungen an, ohne Anzeigen neu
+  anzulegen oder Messwerte zu aendern. Flache Boxen, Seitenraender und mehrere
+  Colorpicker-Komponenten werden bei automatischer Groesse beruecksichtigt.
+  Bewusste Groessenvorgaben und eigene Templates bleiben erhalten.
+- TimePicker1-3 verwenden fuer native Zeitfelder das lokale Format `HH:mm`
+  statt eines nicht existierenden JavaScript-Methodenaufrufs. Der bestehende
+  Schreibvertrag bleibt unveraendert. TimePicker2 verkleinert seine Uhrgrafik
+  in flachen Boxen; das Eingabefeld bleibt bedienbar.
+
 - Gauge-Buildskript nach `.github/scripts` verschoben, damit Symcon den
   Werkzeugordner nicht als ungueltiges Modul ohne `module.json` einliest.
   Strukturpruefung um Stammordnerregeln und Regressionstests ergaenzt;

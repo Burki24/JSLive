@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     {VIEWPORT} <!-- Dont Remove this line, it can be disabled at intstance! -->
     <title>ColorPicker</title>
+    <style>#picker { line-height: 0; } #picker .IroColorPicker { display: inline-block !important; white-space: nowrap; }</style>
 </head>
 <script src="/hook/JSLive/js/jquery/4.0.0/jquery.min.js"></script>
 <script src="/hook/JSLive/js/util.js"></script>
@@ -21,6 +22,7 @@
     let configuration = {CONFIG};
 
     let colorPicker = new iro.ColorPicker("#picker",  LoadPicker());
+    JSLiveObserveSize(ResizePicker);
 
     let last_update = Date.now();
     let last_changes = [];
@@ -51,6 +53,8 @@
                 }
             }
 
+            if (!(configuration.manWidth > 0)) wdh = PickerWidth(laydata);
+
             config = {
                 layoutDirection: configuration.layout_Direction,
                 layout: laydata.output,
@@ -71,6 +75,27 @@
         }catch (e){
             alert("Colorpicker | ",e);
         }
+    }
+
+    function PickerWidth(layout) {
+        const horizontal = configuration.layout_Direction === 'horizontal';
+        const width = Math.max(1, Get_WindowWidth() - 20);
+        const height = Math.max(1, Get_WindowHeight() - 20);
+        // iro uses a 12px margin between components, in either direction.
+        const fixed = layout.output.reduce(function (sum, part) {
+            if (part.component !== iro.ui.Slider || part.options.sliderShape === 'circle') return sum;
+            return sum + (part.options.sliderSize == null ? 12 + 2 * configuration.style_handleRadius : part.options.sliderSize);
+        }, 0) + Math.max(0, layout.output.length - 1) * 12;
+        const primary = horizontal ? width : height;
+        const cross = horizontal ? height : width;
+        return Math.max(1, Math.floor(Math.min(cross, layout.counter_wheelbox > 0
+            ? (primary - fixed) / layout.counter_wheelbox : cross)));
+    }
+
+    function ResizePicker() {
+        // Explicit picker widths remain an owner-controlled layout override.
+        if (configuration.manWidth > 0) return;
+        colorPicker.resize(PickerWidth(GenerateLayoutData()));
     }
 
     function GenerateLayoutData(){

@@ -61,6 +61,26 @@ Die bestehende Legacy-Darstellung bleibt unverändert.
 
 ## Bekannte Einschränkungen
 
+### Automatische HTMLBox-Groesse
+
+Bei `overrideWidth = 0` und `overrideHeight = 0` folgen die Standardanzeigen
+der verfuegbaren Breite und Hoehe ihres Browser-/Iframe-Fensters, auch nach
+Groessenaenderungen. Gauge, Chart, Doughnut/Pie, Radar, Colorpicker und
+Progressbar behalten dabei Instanz und aktuellen Wert. Beim Colorpicker muss
+auch `manWidth = 0` sein. Positive Groessenvorgaben bleiben absichtliche
+Overrides; sie koennen in kleineren Boxen weiterhin ueberlaufen.
+
+`IFrameHeight` betrifft den `Output`-Iframe, nicht das vollstaendige HTML der
+Variable `IPSView`. Bei eigenen `TemplateScriptID`-Vorlagen und Custom-Inhalten
+bleibt das Layout Aufgabe der Vorlage. Native Text-/Datumsfelder behalten ihre
+konfigurierte Schriftgroesse; sehr grosse Schriften, Rahmen oder viele feste
+Slider benoetigen entsprechend Platz. Kein pauschales Abschneiden per CSS.
+
+Nach dem Modulupdate die Ansicht vollstaendig neu laden, bei Bedarf den
+Browser-/WebView-Cache leeren. `ApplyChanges()` erfolgt beim Modulupdate
+automatisch; ein Dienstneustart ist fuer diesen Frontend-Fix nicht erforderlich.
+
+
 Die mitgelieferten Templates und Stylesheets laden ihre Frontend-Ressourcen
 lokal über `/hook/JSLive/js/`. Quellen, Versionen, Hashes und Lizenznachweise
 der vendorten Bibliotheken und Schriften sind in der zentralen

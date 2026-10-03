@@ -75,11 +75,16 @@ Gauge-Nachtest mit schnellen synthetischen Wertfolgen ist bestanden; Messwert
 wiederhergestellt, Konfigurationen unveraendert. Details und Grenzen stehen
 im Abschlussnachtrag der `docs/SYCON_RUNTIME_MATRIX.md`.
 
-Stand fuer die naechste Entscheidung: Die bekannten Chart-, Gauge- und
-Strukturkorrekturen sind gezielt abgenommen. Keine weitere Codeaenderung aus
-diesem Abschlusslauf erforderlich. Naechster Schritt ist die IPSView-Abnahme
-des Eigentuemers auf dem Produktivsystem, danach kontrollierte Release-
-Vorbereitung. Kein Stable-PASS, kein Release und keine ECharts-Migration.
+Nachtrag vom 03.10.2026, Ausgangsstand 0.101 (`ed94b50` / `b677be6`):
+Die anschliessende IPSView-Anwenderpruefung meldete abgeschnittene Gauges bei
+automatischer HTMLBox-Groesse. Lokal korrigiert sind Resize-Behandlung fuer
+alle vier Gauges, Chart, Colorpicker und Progressbar sowie die Begrenzung von
+Doughnut/Pie und Radar auf beide verfuegbaren Achsen. TimePicker1-3 erhalten
+eine getrennte Formatierungskorrektur; TimePicker2 passt die Uhrgrafik an.
+Lokale Browsernachweise und Grenzen stehen in `docs/SYCON_RUNTIME_MATRIX.md`.
+Eigene Templates, feste Vorgaben und Produktivkonfigurationen bleiben erhalten.
+Naechster Schritt: Eigentuemer-Push/CI, Modulupdate und erneute IPSView-Abnahme
+mit frisch geladener Ansicht. Kein Stable-PASS und keine ECharts-Migration.
 
 - Arbeitsbranch: `dev`; vor diesem Kompatibilitaetsschritt waren Arbeitsbaum,
   lokaler Branch und `origin/dev` auf `7c5a15a` synchron.

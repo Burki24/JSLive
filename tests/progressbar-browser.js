@@ -107,7 +107,27 @@ async function check(browser, scenario, width, probeAnimation = false) {
         assert.notDeepEqual(await geometry(), initial, 'Progress must change the SVG geometry.');
         assert.equal(images, scenario.name === 'svg' ? 1 : 0);
         assert.equal(await page.locator('#Bar > svg').count(), 1);
+        await page.evaluate(() => { window.originalBar = bar; window.originalValue = bar.value; });
+        for (const [w, h] of [[480, 220], [940, 390], [320, 600], [220, 150], [1024, 600]]) {
+            await page.setViewportSize({ width: w, height: h });
+            if (probeAnimation) await page.clock.runFor(100);
+            await page.waitForFunction(w => document.getElementById('Bar').style.width === (w - 40) + 'px', w);
+            const size = await page.evaluate(() => {
+                const rect = document.getElementById('Bar').getBoundingClientRect();
+                return { right: rect.right, bottom: rect.bottom, width: rect.width, height: rect.height,
+                    same: originalBar === bar, value: bar.value, originalValue,
+                    scrollWidth: document.documentElement.scrollWidth, scrollHeight: document.documentElement.scrollHeight };
+            });
+            assert.ok(size.width > 0 && size.height > 0 && size.right <= w && size.bottom <= h, JSON.stringify(size));
+            assert.ok(size.scrollWidth <= w && size.scrollHeight <= h, JSON.stringify(size));
+            assert.ok(size.same);
+            assert.equal(size.value, size.originalValue);
+        }
         assert.equal(await page.evaluate(() => !!document.getElementById('mask')), scenario.name === 'path');
+        await page.evaluate(() => { configuration.overrideWidth = 600; configuration.overrideHeight = 300; window.dispatchEvent(new Event('resize')); });
+        if (probeAnimation) await page.clock.runFor(100);
+        await page.waitForFunction(() => document.getElementById('Bar').style.width === '560px');
+        assert.equal(await page.evaluate(() => document.getElementById('Bar').style.height), '260px');
         assert.deepEqual(errors, []);
         return { scenario: scenario.name, width, delayedFrames: probeAnimation, result: 'PASS' };
     } catch (error) {

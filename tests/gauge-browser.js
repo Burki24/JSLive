@@ -56,7 +56,9 @@ async function check(browser, name, width, animationTarget = 'needle') {
     await context.route('**/*', route => {
         const url = new URL(route.request().url());
         if (url.origin === 'http://jslive.test' && route.request().method() === 'GET') {
-            if (url.pathname === '/') return route.fulfill({ contentType: 'text/html', body: '<!doctype html><canvas id="gauge"></canvas>' });
+            if (url.pathname === '/') return route.fulfill({ contentType: 'text/html', body:
+                template.slice(0, template.indexOf('</canvas>') + 9).replace(/<script src="[^"]+"><\/script>/g, '')
+                    .replace('{FONTS}', '').replace('{VIEWPORT}', '') + '</body></html>' });
             if (url.pathname === '/hook/JSLive/getData' && url.searchParams.get('Instance') === '12345') {
                 requests++;
                 return route.fulfill({ json: { Variable: 67890, Value: compass ? 90 : 250 } });
@@ -149,6 +151,33 @@ async function check(browser, name, width, animationTarget = 'needle') {
         }
         await page.evaluate(async () => { await document.fonts.ready; gauge.update(); });
         assert.equal(await page.evaluate(() => document.gauges.length), 1);
+        await page.evaluate(() => { window.originalGauge = gauge; window.originalValue = gauge.value; });
+        await page.clock.resume();
+        for (const [w, h] of [[480, 220], [940, 390], [320, 600], [220, 150], [1024, 600]]) {
+            await page.setViewportSize({ width: w, height: h });
+            await page.waitForFunction(({ w, h, name }) => {
+                const width = name === 'Compass' ? Math.min(w, h) - 20
+                    : name === 'Linear(vertical)' ? Math.min(w - 20, (h - 20) / 2) : w - 20;
+                const height = name === 'Compass' ? width : name === 'Linear' ? Math.min((w - 20) / 4, h - 20) : h - 20;
+                return gauge.options.width === width && gauge.options.height === height;
+            }, { w, h, name });
+            const size = await page.evaluate(() => {
+                const rect = document.getElementById('gauge').getBoundingClientRect();
+                return { right: rect.right, bottom: rect.bottom, width: rect.width, height: rect.height,
+                    same: originalGauge === gauge, value: gauge.value, originalValue,
+                    scrollWidth: document.documentElement.scrollWidth, scrollHeight: document.documentElement.scrollHeight };
+            });
+            assert.ok(size.width > 0 && size.height > 0 && size.right <= w && size.bottom <= h, JSON.stringify(size));
+            assert.ok(size.scrollWidth <= w && size.scrollHeight <= h, JSON.stringify(size));
+            assert.ok(size.same);
+            assert.equal(size.value, size.originalValue);
+        }
+        await page.evaluate(() => { configuration.overrideWidth = 600; configuration.overrideHeight = 300; window.dispatchEvent(new Event('resize')); });
+        await page.waitForFunction(name => gauge.options.width === (name === 'Compass' ? 280 : name === 'Linear(vertical)' ? 140 : 580), name);
+        const fixed = await page.evaluate(() => [gauge.options.width, gauge.options.height]);
+        await page.setViewportSize({ width: 800, height: 400 });
+        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+        assert.deepEqual(await page.evaluate(() => [gauge.options.width, gauge.options.height]), fixed);
         await page.evaluate(() => gauge.destroy());
         assert.equal(await page.evaluate(() => document.gauges.length), 0);
         assert.equal(requests, 1);

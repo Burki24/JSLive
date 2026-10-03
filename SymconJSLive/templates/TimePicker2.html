@@ -159,8 +159,8 @@
 
 
     function unixTimeToString(intVal){
-        dateObj = new Date(intVal * 1000);
-        return dateObj.toLocavarimeString();
+        const dateObj = new Date(intVal * 1000);
+        return String(dateObj.getHours()).padStart(2, '0') + ':' + String(dateObj.getMinutes()).padStart(2, '0');
     }
     function stringToUnixTime(str){
         try{

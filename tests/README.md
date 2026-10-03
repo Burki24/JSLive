@@ -286,6 +286,33 @@ relativen und absoluten Modus sowie ihre Offset-Berechnung. Absolute Bereiche
 muessen das Jahr des vorgegebenen Referenzzeitpunkts verwenden und duerfen
 nicht vom Ausfuehrungsdatum des Tests abhaengen.
 
+## HTMLBox sizing regression checks
+
+`node tests/visualization-sizing.js` is part of `php tests/run.php`. It checks
+coalesced resize/orientation/pageshow handling, hidden frames, fixed overrides,
+observer cleanup and local `HH:mm` formatting in all three TimePicker templates.
+
+Optional local browser checks (caller-supplied Playwright and Chromium/Edge;
+set `JSLIVE_BROWSER_EXECUTABLE` when needed):
+
+```text
+node tests/visualization-sizing-browser.js
+node tests/gauge-browser.js
+node tests/progressbar-browser.js
+```
+
+The sizing matrix uses actual template markup/CSS, resize functions and local
+libraries with synthetic chart/input data, not a Symcon connection. The outer
+browser stays fixed while an initially hidden iframe is shown and resized
+through 1024x600, 480x220, 940x390, 320x600, 220x150 and back to 1024x600.
+It checks growth/shrinkage, element bounds and document scroll extents, fixed
+chart ratios, Colorpicker directions/multiple components, retained instances
+and values, and absence of color-change events during resizing. Native date
+and text fields are characterized with a 14px font. Gauge and Progressbar
+checks additionally resize their real canvases/SVGs, exercise fixed overrides,
+and preserve the existing animation checks. These checks do not claim an
+IPSView product run, arbitrary custom templates or arbitrary font/layout sizes.
+
 ## Progressbar rendering harness
 
 `progressbar-rendering.js` fuehrt die reale `LoadBarConfig()`-Funktion aus der

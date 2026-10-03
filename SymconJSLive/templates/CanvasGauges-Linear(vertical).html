@@ -12,7 +12,7 @@
 <script src="/hook/JSLive/js/canvas-gauges/2.1.7-jslive.1/gauge.min.js"></script>
 
 <body style="text-align: center;">
-<canvas id="gauge"></canvas>
+<canvas id="gauge" style="display: block; margin: 0 auto;"></canvas>
 
 <script>
     let gauge;
@@ -43,8 +43,8 @@
 
                 //alert("H:"+Get_WindowHeight()+"px|W:"+Get_WindowWidth()+"px");
 
-                h_val = Get_WindowHeight()-20;
-                w_val = Get_WindowWidth()-20;
+                h_val = Math.max(1, Get_WindowHeight()-20);
+                w_val = Math.max(1, Get_WindowWidth()-20);
 
                 if(w_val > (h_val / 2)){
                     w_val = h_val / 2;
@@ -150,9 +150,18 @@
 
                 gauge = new LinearGauge(gauge_config);
                 gauge.draw();
+                JSLiveObserveSize(ResizeGauge);
             });
         }catch (e){
             alert(e.message + "\r\n"+ e.stack);
+        }
+    }
+
+    function ResizeGauge() {
+        const height = Math.max(1, Get_WindowHeight() - 20);
+        const width = Math.max(1, Math.min(Get_WindowWidth() - 20, height / 2));
+        if (gauge && (gauge.options.width !== width || gauge.options.height !== height)) {
+            gauge.update({ width: width, height: height });
         }
     }
 

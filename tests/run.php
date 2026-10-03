@@ -41,6 +41,7 @@ $tests = [
 ];
 
 $commands = [
+    ['Test visualization sizing and time formatting', 'node tests/visualization-sizing.js'],
     ['Test Progressbar rendering', 'node tests/progressbar-rendering.js'],
     ['Test Loading Bar animation', 'node tests/loading-bar-animation.js'],
     ['Verify Canvas Gauges patch', 'node .github/scripts/build-gauge-patch.js --check'],

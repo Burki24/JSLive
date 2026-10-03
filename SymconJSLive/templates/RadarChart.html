@@ -510,18 +510,19 @@
     window.addEventListener('orientationchange', ResizeChart);
 
     function ResizeChart() {
-        ratio = configuration.Ratio;
+        var width = Math.max(1, Get_WindowWidth() - 20);
+        var height = Math.max(1, Get_WindowHeight() - 20);
+        var ratio = configuration.Ratio;
         if(ratio === 0){
-            ratio = Get_WindowWidth() / Get_WindowHeight();
+            ratio = width / height;
         }
 
-        var size = Get_WindowHeight();
-        if(size < Get_WindowHeight()) size = Get_WindowWidth();
+        var size = Math.min(height, width / ratio);
 
         //reload
         var ctx = document.getElementById('chart-container');
-        ctx.style.width = (size*ratio)-20+"px";
-        ctx.style.height = size-20+"px";
+        ctx.style.width = (size * ratio)+"px";
+        ctx.style.height = size+"px";
 
         if(typeof myChart !== "undefined") myChart.options.aspectRatio = ratio;
     }

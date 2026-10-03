@@ -62,6 +62,13 @@ oder Dienstneustart ist für diese Korrektur erforderlich.
 
 ## Technische Daten
 
+Die vier Standardvorlagen passen ihre vorhandene Canvas-Anzeige auch nach
+Groessenaenderungen an die HTMLBox an. Automatische Abmessungen benoetigen
+`overrideWidth = 0` und `overrideHeight = 0`. Die horizontale Anzeige begrenzt
+ihre Hoehe zusaetzlich auf den verfuegbaren Platz; der Kompass passt als Quadrat
+in beide Achsen. Positive Overrides bleiben bewusst gesetzte Vorgaben.
+
+
 | Eintrag | Wert |
 | --- | --- |
 | Modul-ID | `{71B93700-9659-97C6-AD83-984C2B44139F}` |

@@ -859,6 +859,33 @@ Bei erfolgreicher Abnahme folgt ausschliesslich der kontrollierte
 [Release-Prozess](RELEASE_PROCESS.md). Merge, Tag und Veroeffentlichung fuehrt
 der Eigentuemer aus. Die ECharts-Uebergabe bleibt bewusst zurueckgestellt.
 
+## Lokaler HTMLBox-Groessenfix vom 03.10.2026
+
+Ausgangsstand 0.101 (`ed94b50` / `b677be6`), noch kein installierter Nachweis
+fuer diese Aenderung. Anlass: Anwenderbild mit abgeschnittenem Gauge in IPSView,
+`overrideWidth/overrideHeight/IFrameHeight = 0`, Standardvorlage.
+
+- Lokale Edge-155-Pruefung: 12 Gauge-Faelle (vier Vorlagen, beide radialen
+  Animationsziele, zwei Startbreiten), 32 Progressbar-Faelle und 16 Iframe-
+  Sizing-Faelle bestanden. Bestehende Instanzen und Werte bleiben erhalten;
+  gepruefte Elementgrenzen und Dokumentgroessen ohne Ueberlauf.
+- Groessenfolge: 1024x600, 480x220, 940x390, 320x600, 220x150 und zurueck;
+  Gauge-/Progressbar-Nachtests mit positiven Overrides. Die Iframe-Matrix
+  beginnt verborgen, prueft Chart, Doughnut/Pie, Radar, Colorpicker (beide
+  Richtungen, mehrere Komponenten), alle DateTimePicker- und Textfield-Vorlagen.
+- TimePicker1-3: ungueltigen Methodenaufruf durch lokales `HH:mm` ersetzt;
+  TimePicker2-Uhrgrafik flexibel. Keine Aenderung der gespeicherten Werte oder
+  des bisherigen Schreibvertrags. Eigene Templates/Custom bleiben separat.
+- Gemeinsamer HTML-SDK-Responsive-Helper ist CSS-orientiert und bietet keine
+  Canvas-/SVG-Lebenszyklusbehandlung. Daher eng begrenzte, opt-in Resize-
+  Funktion in bestehender `util.js`; keine Helper-Kopie und keine neue Engine.
+
+Ergebnis: **lokale Regression bestanden, IPSView-Nachabnahme offen**.
+Nach Eigentuemer-Push und gruener CI Modulupdate ausfuehren und Ansicht ohne
+alten Browser-/WebView-Cache laden. Anschliessend betroffene HTMLBox verkleinern,
+vergroessern und View erneut oeffnen. Keine produktiven Werte oder Einstellungen
+wurden fuer diesen Fix veraendert; kein neuer MCP-/Symcon- oder Stable-PASS.
+
 ## Ergebnisregeln
 
 - `PASS`: alle verpflichtenden Punkte sind mit frischem Laufzeitnachweis grün.

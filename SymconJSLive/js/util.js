@@ -1,3 +1,31 @@
+// Opt-in for standard templates. Do not change sizing of user-supplied templates.
+function JSLiveObserveSize(resize) {
+    let frame = null;
+    let previous = '';
+    function schedule() {
+        if (frame !== null) return;
+        frame = requestAnimationFrame(function () {
+            frame = null;
+            // Hidden HTMLBox frames must be measured again when they become visible.
+            if (window.innerWidth <= 0 || window.innerHeight <= 0) return;
+            const size = Get_WindowWidth() + ':' + Get_WindowHeight();
+            if (size === previous) return;
+            previous = size;
+            resize();
+        });
+    }
+    const events = ['resize', 'orientationchange', 'pageshow'];
+    events.forEach(event => window.addEventListener(event, schedule));
+    const observer = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(schedule);
+    if (observer) observer.observe(document.documentElement);
+    schedule();
+    return function () {
+        events.forEach(event => window.removeEventListener(event, schedule));
+        if (observer) observer.disconnect();
+        if (frame !== null) cancelAnimationFrame(frame);
+    };
+}
+
 function filterKeys(obj, func) {
     return Array.prototype.filter.call(Object.keys(obj), func, obj);
 }
