@@ -137,3 +137,22 @@ HTML-Ausgabe; ein zusaetzlicher Aufruf oder geplanter Dienstneustart ist fuer
 diesen Fix nicht erforderlich. Die installierte Abnahme soll an einem Gauge
 mit Teiltransparenz und Messwertpraezision 0/1 erfolgen. Bestehende Ansichten
 koennen durch die nun korrekt angewendete Deckkraft sichtbar anders aussehen.
+
+### Abnahme-Nachtrag fuer 0.93
+
+Der Eigentuemer bestaetigte Push, lokalen Abgleich und Symcon-Modulupdate.
+Lokal und auf der MCP-Testebene wurde Version 0.93 nachgewiesen
+(Quellcommit `e9b51e5`, Metadatencommit `69c96c5`). Die lesende MCP-Pruefung
+fand die feste zweistellige Alpha-Formatierung im installierten Gauge-Code
+und eine aktive Gauge-Instanz. Deren Konfiguration hatte jedoch keine
+Highlights und Messwertpraezision 2; der konkrete Fehlerfall konnte dort
+ohne Konfigurationsaenderung nicht geprueft werden. Der lokale PHP-Test
+bestand erneut mit 120 Faellen. Es wurden keine Live-Werte oder Properties
+veraendert und kein zusaetzliches ApplyChanges ausgefuehrt.
+
+Anschliessend bestaetigte der Eigentuemer den Live-Test auf einem anderen
+Produktivsystem. Damit ist der gezielte Gauge-Fix abgeschlossen. Die Aussage
+zum Produktivsystem ist eine Anwenderbestaetigung, kein unabhaengiger MCP-
+Nachweis; genaue dortige Testparameter wurden nicht uebermittelt. Weder eine
+neue Gesamtmatrix-/IPSView-Abnahme noch ein unabhaengig abgerufener CI-Status
+wird daraus abgeleitet.

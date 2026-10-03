@@ -18,6 +18,7 @@ $GLOBALS['jsliveConfigTransferState'] = [
     'configuration'     => [],
     'configurationForm' => [],
     'instances'         => [],
+    'scripts'           => [],
     'setConfiguration'  => [],
     'applyChanges'      => []
 ];
@@ -52,8 +53,18 @@ if (!function_exists('IPS_GetConfigurationForm')) {
 if (!function_exists('IPS_ScriptExists')) {
     function IPS_ScriptExists(int $scriptID): bool
     {
-        return false;
+        return isset($GLOBALS['jsliveConfigTransferState']['scripts'][$scriptID]);
     }
+}
+
+function IPS_GetScriptContent(int $scriptID): string
+{
+    return $GLOBALS['jsliveConfigTransferState']['scripts'][$scriptID]['content'];
+}
+
+function IPS_GetObject(int $objectID): array
+{
+    return ['ObjectName' => $GLOBALS['jsliveConfigTransferState']['scripts'][$objectID]['name']];
 }
 
 if (!function_exists('IPS_SetConfiguration')) {
@@ -87,7 +98,7 @@ final class ConfigurationTransferHarness extends JSLiveModule
 
     public function ReadPropertyInteger(string $name): int
     {
-        return 0;
+        return $GLOBALS['jsliveConfigTransferState']['configuration'][$this->InstanceID][$name] ?? 0;
     }
 
     public function ReadPropertyBoolean(string $name): bool
@@ -124,6 +135,14 @@ function decodeExportedConfiguration(string $json): array
     assertConfigurationTransfer(is_array($data), 'The exported configuration must be a JSON object.');
 
     return $data;
+}
+
+function datasetWithoutVariableReferences(string $json): array
+{
+    return array_map(
+        static fn (array $row): array => array_diff_key($row, ['Variable' => true]),
+        json_decode($json, true, 512, JSON_THROW_ON_ERROR)
+    );
 }
 
 $state = &$GLOBALS['jsliveConfigTransferState'];
@@ -292,3 +311,128 @@ assertConfigurationTransfer(
 );
 
 echo "JSLive configuration transfer contracts verified.\n";
+
+// Representative property slices, not complete installations or a new exchange format.
+// IDs, names, SVG and script content below are entirely synthetic.
+$moduleCases = [
+    'SymconJSLiveChart' => [
+        'title_text' => 'Synthetic time chart',
+        'Datasets'   => json_encode([
+            ['Variable' => 41001, 'Axes' => 'temperature', 'Offset' => 1, 'Title' => 'Fixture series']
+        ], JSON_THROW_ON_ERROR),
+        'Axes' => json_encode([
+            ['Ident' => 'temperature', 'Profile' => 'Fixture.Temperature', 'Minimum' => -20, 'Maximum' => 50]
+        ], JSON_THROW_ON_ERROR)
+    ],
+    'SymconJSLiveDoughnutPie' => [
+        'type'     => 'doughnut',
+        'Datasets' => json_encode([
+            ['Order' => 1, 'Variables' => [
+                ['Variable' => 41002, 'Label' => 'Fixture A'],
+                ['Variable' => 41003, 'Label' => 'Fixture B']
+            ]]
+        ], JSON_THROW_ON_ERROR)
+    ],
+    'SymconJSLiveRadarChart' => [
+        'customScale_mode' => true,
+        'customScale'      => json_encode([
+            ['Order' => 0, 'Value' => 0, 'Alias' => 'Fixture north'],
+            ['Order' => 1, 'Value' => 180, 'Alias' => 'Fixture south']
+        ], JSON_THROW_ON_ERROR),
+        'Datasets' => json_encode([
+            ['Variable' => 41004, 'Reference' => 41005, 'Mode' => 'counter', 'Offset' => 1]
+        ], JSON_THROW_ON_ERROR)
+    ],
+    'SymconJSLiveGauge' => [
+        'Variable'   => 41006,
+        'precision'  => 0,
+        'template'   => 'CanvasGauges-Radial',
+        'Ticks'      => json_encode([['Value' => 0], ['Value' => 100]], JSON_THROW_ON_ERROR),
+        'Highlights' => json_encode([
+            ['From' => 20, 'To' => 40, 'HighlightColor' => 1122867, 'HighlightColor_Alpha' => 0.25]
+        ], JSON_THROW_ON_ERROR)
+    ],
+    'SymconJSLiveProgressbar' => [
+        'Variable'   => 41007,
+        'Type'       => 'fill',
+        'data_min'   => -20,
+        'data_max'   => 80,
+        'shape_path' => 'M0 0 L100 0',
+        'shape_svg'  => '<svg xmlns="http://www.w3.org/2000/svg"><rect width="10" height="20"/></svg>'
+    ]
+];
+
+$exportCases = 0;
+foreach ($moduleCases as $moduleName => $properties) {
+    $moduleRoot = dirname(__DIR__) . '/' . $moduleName;
+    $metadata = json_decode(file_get_contents($moduleRoot . '/module.json'), true, 512, JSON_THROW_ON_ERROR);
+    $state['instances'][42] = ['ModuleInfo' => ['ModuleID' => $metadata['id'], 'ModuleName' => $metadata['name']]];
+    $state['configurationForm'][42] = json_decode(file_get_contents($moduleRoot . '/form.json'), true, 512, JSON_THROW_ON_ERROR);
+
+    foreach ([false, true] as $withTemplate) {
+        $state['scripts'] = $withTemplate ? [49001 => ['name' => 'Synthetic template', 'content' => '<p>Fixture template</p>']] : [];
+        $state['configuration'][42] = $properties + ['TemplateScriptID' => $withTemplate ? 49001 : 0];
+        foreach ([false, true] as $complete) {
+            resetConfigurationTransferMutations();
+            $before = $state;
+            // Only explicit inclusion is a compatibility requirement. Exclusion is probed separately.
+            $query = ['scripts' => $withTemplate ? 1 : 0];
+            $json = $harness->ExportConfiguration($complete, $query);
+            $export = decodeExportedConfiguration($json);
+            $context = $moduleName . ($complete ? ' complete' : ' filtered') . ($withTemplate ? ' with template' : ' without template');
+            assertConfigurationTransfer($harness->ExportConfiguration($complete, $query) === $json, 'Export is not repeatable: ' . $context);
+            assertConfigurationTransfer($state === $before, 'Export mutated source state: ' . $context);
+            assertConfigurationTransfer($export['ModuleID'] === $metadata['id'] && $export['ModuleName'] === $metadata['name'], 'Module identity changed: ' . $context);
+            assertConfigurationTransfer(
+                array_keys($export) === ($withTemplate ? ['ModuleID', 'ModuleName', 'Config', 'Script', 'ScriptName'] : ['ModuleID', 'ModuleName', 'Config']),
+                'Legacy export envelope changed: ' . $context
+            );
+            if ($withTemplate) {
+                assertConfigurationTransfer($export['Script'] === '<p>Fixture template</p>' && $export['ScriptName'] === 'Synthetic template', 'Explicit template export changed: ' . $context);
+            }
+
+            $expected = $state['configuration'][42];
+            $actual = $export['Config'];
+            if (!$complete && $moduleName === 'SymconJSLiveChart') {
+                unset($expected['title_text']);
+                // Do not freeze the known ignoreExport list-column defect as compatibility.
+                // Other dataset fields still have to survive. The probe below expects exclusion.
+                $expected['Datasets'] = datasetWithoutVariableReferences($expected['Datasets']);
+                $actual['Datasets'] = datasetWithoutVariableReferences($actual['Datasets']);
+            }
+            assertConfigurationTransfer($actual === $expected, 'Configuration data changed: ' . $context);
+            $exportCases++;
+        }
+    }
+}
+echo 'JSLive chart-family exports verified (' . $exportCases . " cases, repeated exports, real static forms).\n";
+
+// Optional defect reproduction, deliberately outside the green compatibility suite.
+// Success means the gaps have been fixed; failure reports desired behavior, never requires a leak.
+if (in_array('--probe-export-gaps', $argv, true)) {
+    $state['scripts'] = [49001 => ['name' => 'Synthetic template', 'content' => '<p>Fixture template</p>']];
+    $state['configuration'][42]['TemplateScriptID'] = 49001;
+    $failures = [];
+    foreach ([false, true] as $complete) {
+        foreach ([[], ['scripts' => 0]] as $query) {
+            $export = decodeExportedConfiguration($harness->ExportConfiguration($complete, $query));
+            if (isset($export['Script']) || isset($export['ScriptName'])) {
+                $failures[] = 'Template included without opt-in: ' . json_encode(['complete' => $complete, 'query' => $query], JSON_THROW_ON_ERROR);
+            }
+        }
+    }
+    $chartMetadata = json_decode(file_get_contents(dirname(__DIR__) . '/SymconJSLiveChart/module.json'), true, 512, JSON_THROW_ON_ERROR);
+    $state['instances'][42] = ['ModuleInfo' => ['ModuleID' => $chartMetadata['id'], 'ModuleName' => $chartMetadata['name']]];
+    $state['configurationForm'][42] = json_decode(file_get_contents(dirname(__DIR__) . '/SymconJSLiveChart/form.json'), true, 512, JSON_THROW_ON_ERROR);
+    $state['configuration'][42] = $moduleCases['SymconJSLiveChart'] + ['TemplateScriptID' => 0];
+    $state['scripts'] = [];
+    $export = decodeExportedConfiguration($harness->ExportConfiguration(false));
+    $datasets = json_decode($export['Config']['Datasets'], true, 512, JSON_THROW_ON_ERROR);
+    if (array_key_exists('Variable', $datasets[0])) {
+        $failures[] = 'Filtered Chart export retains Datasets.Variable despite ignoreExport=true.';
+    }
+    foreach ($failures as $failure) {
+        fwrite(STDERR, 'Export gap: ' . $failure . "\n");
+    }
+    exit($failures === [] ? 0 : 1);
+}

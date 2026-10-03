@@ -150,6 +150,61 @@ configuration. A valid import updates known properties, preserves omitted
 properties, ignores unknown fields, records the uploaded payload and applies the
 target instance exactly once.
 
+### Chart-family export baseline for SymconEcharts
+
+The same harness additionally runs 20 cases against the real static forms and
+module metadata of Chart, DoughnutPie, RadarChart, Gauge and Progressbar:
+complete/filtered export, each with/without an available template. All cases
+are repeated and verify that the synthetic source state is unchanged. Complete
+exports preserve representative variable/reference IDs, nested JSON strings,
+axis/profile references, custom scales, highlight alpha and SVG/path content.
+Explicit template inclusion preserves its content and name. The fixtures are
+synthetic property slices, not complete installations or a new export format.
+
+This invokes the real shared `ExportConfiguration()` implementation. It does
+not exercise child routing, dynamic form processing, a live Symcon system or
+an ECharts importer. In filtered Chart exports the ignored top-level title is
+omitted. The ignored dataset Variable column is deliberately excluded from
+the green comparison: retaining it is a defect, not a compatibility guarantee.
+
+Run the optional negative probe separately:
+
+```text
+php tests/configuration-transfer.php --probe-export-gaps
+```
+
+On the inspected 0.93 source this exits **1**, reporting two existing defects
+in five checks: available template content is included without opt-in (missing
+`scripts` or `scripts=0`, for both complete and filtered export); the filtered
+Chart export retains `Datasets.Variable` despite `ignoreExport=true`. The
+assertions require the desired exclusion, never preservation of the defect.
+This probe is not part of the green standard runner. A follow-up correction
+must move the relevant checks into the required suite.
+
+Source inspection explains the gaps: `$withScript` is unconditionally reset
+to true; modified list data is not assigned back to the configuration string.
+The five child receivers also call `ExportConfiguration()` without forwarding
+query data. Removing the forced flag alone would therefore break explicit
+template export through those receivers. Fix and test that whole path together.
+
+For migration planning the old format has further limits:
+
+- Its envelope contains `ModuleID`, `ModuleName`, `Config` and optional script
+  fields, but no format/source-version marker or semantic ECharts mapping.
+- JSON list properties remain JSON-encoded strings inside `Config`; they are
+  not normalized datasets. The current filter is not a strict allow-list.
+- Chart's current `Period`, `Now`, `Relativ`, `Offset` and `StartDate`, and
+  Radar's `Period`/`Relativ`, are instance variables, not configuration
+  properties. `ExportConfiguration()` does not capture their values.
+- Profile names and object IDs are references only. The export does not
+  resolve them on a different installation or include profile definitions or
+  archive history. Template contents may contain user-supplied sensitive data.
+
+The existing export is thus a useful configuration source, not an already
+complete SymconEcharts migration contract. Do not silently change its envelope
+or enable it as the new importer input. Agree source versions, field mapping,
+template handling, warnings and original-instance preservation separately.
+
 ## MessageSink registration harness
 
 `message-sink-registration.php` prueft die inkrementelle Verwaltung der

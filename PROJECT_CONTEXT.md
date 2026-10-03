@@ -509,8 +509,14 @@ Dokumentationsluecken:
    korrigiert. Die Deckkraft wird mit zwei Nachkommastellen unabhaengig von
    `precision` ausgegeben; Messwerte und Bereichsgrenzen bleiben unveraendert.
    120 neue Standardtestfaelle und acht vorhandene isolierte Browserfaelle
-   bestanden. CI und installierte Fix-Abnahme nach Modulupdate stehen aus;
-   kein neuer MCP-/IPSView-PASS. Details: `docs/GAUGE_AUDIT.md`.
+   bestanden. Nachtrag: Push, lokaler Metadatenabgleich und Modulupdate auf
+   0.93 (`e9b51e5` / `69c96c5`) sind bestaetigt. Die lesende MCP-Pruefung
+   bestaetigte Version, installierten Fix und aktiven Gauge-Status; mangels
+   Highlights war der Fehlerfall dort nicht pruefbar. Der Eigentuemer hat
+   anschliessend den Live-Test auf einem anderen Produktivsystem bestaetigt.
+   Der gezielte Fix ist damit abgeschlossen; kein neuer Gesamtmatrix- oder
+   IPSView-PASS und kein separat abgerufener CI-Nachweis fuer diesen Commit.
+   Details: `docs/GAUGE_AUDIT.md`.
 4. Bestehende Ausgabe-, IPSView-, Link- und Datenvertraege erhalten; offene
    Laufzeitnachweise und Freigabegrenzen dokumentieren. IPSView bleibt mangels
    Testlizenz eine bekannte Testluecke.
@@ -523,6 +529,17 @@ Dokumentationsluecken:
    nicht automatisch uebertragbare Einstellungen absichern (ADR 0006).
    Die SymconEcharts-spezifische Export-/Uebernahmefunktion ist noch nicht
    implementiert; keine allgemeine Wiederaufnahme der Phase-6-Erweiterungen.
+   Parallel zur getrennten SymconECharts-Planung wurde der vorhandene Export
+   lokal mit 20 wiederholten Faellen fuer die fuenf Diagrammfamilien und deren
+   echten statischen Formularen charakterisiert. Keine Laufzeitaenderung und
+   noch kein neues Format. Zwei Altfehler sind gezielt reproduziert:
+   Skriptexport ohne Opt-in und unwirksames `ignoreExport` bei Listenspalten.
+   Die optionale Fehlerprobe bleibt rot, nicht Teil der gruenen Standardsuite.
+   Zudem fehlen Zeitraum-Steuervariablen und Versions-/Zuordnungsmetadaten.
+   Befunde, Nachweisgrenzen und Aufruf: `tests/README.md`, Abschnitt
+   "Chart-family export baseline for SymconEcharts". Naechster abgegrenzter
+   Schritt: Exportfehler einschliesslich Query-Weitergabe in den Receivern
+   getrennt korrigieren; den gemeinsamen Migrationsvertrag erst abstimmen.
 6. Verbleibende JSLive-Funktionen ohne Ersatz in ECharts zuordnen und weiter
    pflegen; Colorpicker ist explizit genannt. Bei eingestellten Ressourcen
    Alternativen oder eigene Ersatzloesungen pruefen, mit Lizenz-, Vertrags-

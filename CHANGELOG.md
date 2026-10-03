@@ -9,6 +9,13 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Development
 
+- Bestehenden Konfigurationsexport mit 20 wiederholten Faellen fuer Chart,
+  DoughnutPie, RadarChart, Gauge und Progressbar charakterisiert. Reale
+  statische Formulare, synthetische Daten, keine Laufzeitaenderung. Separate
+  Fehlerprobe belegt Skriptexport ohne Opt-in und unwirksamen Listenspalten-
+  Filter; beide Fehler bleiben fuer einen getrennten Korrekturschritt offen.
+  Migrationsgrenzen und gezielten Gauge-Abschluss auf 0.93 dokumentiert.
+
 - Planung an die Community-Zusage angepasst: notwendige Ressourcenupdates,
   JSLive-Chart-Export und Uebernahme in SymconEcharts festgehalten. Nicht durch
   ECharts ersetzte Funktionen (z.B. Colorpicker) bleiben gepflegt, bei Bedarf
