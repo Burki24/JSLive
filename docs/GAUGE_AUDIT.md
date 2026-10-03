@@ -82,3 +82,10 @@ Symcon-Modulupdate oder Dienstneustart erforderlich. CI der neuen Checks folgt
 nach Commit/Push. Danach steht die getrennte Herkunfts-, Versions- und
 Pflegepruefung von Loading Bar/ldBar an; iro.js bleibt vereinbarungsgemaess
 unveraendert.
+
+Als spaeteres Update ist auf Wunsch des Eigentuemers die Suche nach einer
+moderneren bzw. besseren Gauge-Alternative oder gepflegten Weiterentwicklung
+vorgemerkt. Vergleichskriterien und Entscheidungsschritte stehen im
+[Projektplan](../PROJECT_CONTEXT.md#vorgemerkt-fuer-ein-spaeteres-update-moderne-gauges).
+Dies ist ein offener ToDo-Punkt, keine bereits erfolgte Auswahl oder Freigabe
+eines Bibliothekswechsels.

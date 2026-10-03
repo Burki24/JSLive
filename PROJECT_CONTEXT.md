@@ -799,6 +799,21 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
     Details und Grenzen: `docs/GAUGE_AUDIT.md`. Naechster isolierter Schritt:
     Herkunft, Version und Pflege von Loading Bar/ldBar pruefen.
 
+#### Vorgemerkt fuer ein spaeteres Update: moderne Gauges
+
+- [ ] Auf Wunsch des Eigentuemers eine modernere bzw. bessere Alternative
+  zu Canvas Gauges evaluieren, einschliesslich gepflegter Weiterentwicklungen.
+  Kandidaten nach Pflegeaktivitaet, Lizenz, Abhaengigkeiten, Gestaltung,
+  Performance sowie Browser-/WebView-Unterstuetzung vergleichen.
+- [ ] Abdeckung der bestehenden radialen/linearen Anzeigen und des Kompasses,
+  der nichtlinearen Skalen, Highlights, Wertformatierung und Animationen
+  pruefen; Aufwand fuer kompatible Properties und eigene Templates bewerten.
+- [ ] Empfehlung und begrenzten Vergleichsprototyp vor einer Umstellung
+  abstimmen. Noch keine Bibliotheksauswahl oder Migration beschlossen.
+
+Dieser Punkt ist fuer spaeter vorgemerkt und aendert nicht den naechsten
+Schritt Loading Bar/ldBar. Canvas Gauges 2.1.7 bleibt vorerst unveraendert.
+
 ### Phase 5 - IPSView und Kacheldarstellung
 
 1. Bestehenden `IPSView`-/`Output`-/Link-Vertrag als Kompatibilitaetsschicht
