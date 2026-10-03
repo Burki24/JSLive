@@ -81,7 +81,11 @@ node tests/chart-streaming-browser.js
 
 Die Browsertests sind nicht Teil der PHP-CI. Eine vollstaendige visuelle
 Abnahme aller Module, anderer Browserengines und realer IPSView-Geraete ist
-damit nicht behauptet. CI und installierte Abnahme dieses Kandidaten stehen aus.
+damit nicht behauptet. Fortschreibung: Der Eigentuemer hat Push, gruene CI,
+Metadaten-Pull und Symcon-Modulupdate sowie einen erfolgreichen lokalen
+Chrome-Test bestaetigt. Lokal liegt 0.85 (`0aa3f50` / `fc9a80a`) vor.
+Dies ist eine Anwenderbestaetigung, keine neue unabhaengige MCP-Abnahme;
+die reale IPSView-Testluecke bleibt bestehen.
 
 ## Update und Rueckfall
 

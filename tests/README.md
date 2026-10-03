@@ -18,6 +18,13 @@ Beide akzeptieren `JSLIVE_BROWSER_EXECUTABLE`, installieren keine Pakete,
 kontaktieren kein Symcon und sind nicht Teil der PHP-CI. Aufruf und Grenzen:
 [jQuery-Migration](../docs/JQUERY_MIGRATION.md).
 
+`node tests/gauge-browser.js` prueft optional die vier Gauge-Vorlagen mit den
+echten Bibliotheken, lokal beantworteten Ajax-Anfragen und synthetischer
+Konfiguration. Acht Faelle decken zwei Fensterbreiten, Werteumrechnung,
+Formatierung, Animation und Destroy ab. Voraussetzungen und Grenzen stehen
+im [Gauge-Audit](../docs/GAUGE_AUDIT.md); kein Zugriff auf Symcon, keine
+automatische Paketinstallation und kein Bestandteil der PHP-CI.
+
 Der isolierte Echtzeit-Prototyp wird mit `node tests/realtime-window.js`
 deterministisch geprueft; dieser Test ist im Runner enthalten. Ein optionaler
 Browser-/Lastvergleich mit bereits vorhandenem Playwright steht in

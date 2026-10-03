@@ -52,6 +52,23 @@ $templateDirectories = [
     $root . '/SymconJSLive/htmlbox'
 ];
 
+$gaugeHash = '44b0a4ac54e0b980371e8788f7ce8215dab5a2181cda460fc344276b50385904';
+$gaugeBundle = file_get_contents($root . '/SymconJSLive/js/canvas-gauges/gauge.min.js');
+if (hash('sha256', str_replace("\r\n", "\n", $gaugeBundle)) !== $gaugeHash) {
+    throw new RuntimeException('Canvas Gauges must remain the verified upstream 2.1.7 distribution.');
+}
+$gaugeSourcesPath = $root . '/SymconJSLive/js/canvas-gauges/SOURCES.md';
+if (!is_file($gaugeSourcesPath) || !str_contains(file_get_contents($gaugeSourcesPath), $gaugeHash)) {
+    throw new RuntimeException('Canvas Gauges needs a source and integrity record.');
+}
+foreach (['Compass', 'Linear', 'Linear(vertical)', 'Radial'] as $gaugeTemplate) {
+    $gaugeHtml = file_get_contents($root . '/SymconJSLive/templates/CanvasGauges-' . $gaugeTemplate . '.html');
+    preg_match_all('#<script\b[^>]*\bsrc="([^"]*canvas-gauges[^"\s]*)"#i', $gaugeHtml, $gaugeScripts);
+    if ($gaugeScripts[1] !== ['/hook/JSLive/js/canvas-gauges/gauge.min.js']) {
+        throw new RuntimeException('Gauge templates must retain the existing verified asset URL.');
+    }
+}
+
 $jqueryDirectory = $root . '/SymconJSLive/js/jquery/4.0.0/';
 $jquerySources = is_file($jqueryDirectory . 'SOURCES.md')
     ? file_get_contents($jqueryDirectory . 'SOURCES.md') : false;

@@ -50,7 +50,7 @@ im historischen HTMLBox-Lader auf eine der Dateien unter
 | chartjs-plugin-streaming 3.1.0 | `SymconJSLive/js/chartjs/plugins/chartjs-plugin-streaming.min.js` | unveraenderter Kompatibilitaetspfad fuer eigene Vorlagen | MIT-Hinweis im Dateikopf |
 | Moment.js 2.31.0 | `SymconJSLive/js/moment/2.31.0/moment.min.js`, zugehoerige `.map` | aktiv in den drei Chart-Modulen; offizielle npm-Distribution | MIT-Lizenz, Quellen, Paketintegritaet und SHA-256 in `SymconJSLive/js/moment/2.31.0/SOURCES.md` |
 | Moment.js 2.27.0 | `SymconJSLive/js/moment/2.27.0/Moment.js` | unveraenderter Kompatibilitaetspfad fuer eigene Vorlagen | MIT-Hinweis im Dateikopf |
-| Canvas Gauges 2.1.7 | `SymconJSLive/js/canvas-gauges/gauge.min.js` | aktiv in `SymconJSLiveGauge` | vollstaendiger MIT-Text im Dateikopf |
+| Canvas Gauges 2.1.7 | `SymconJSLive/js/canvas-gauges/gauge.min.js` | aktiv in `SymconJSLiveGauge`; unveraenderte offizielle Distribution | vollstaendiger MIT-Text im Dateikopf; npm-Integritaet und LF-normalisierter Hash in `canvas-gauges/SOURCES.md` |
 | iro.js 5.5.0 | `SymconJSLive/js/iro/5.5.0/iro.js` | aktiv im ColorPicker; lokal und fest versioniert | MPL-2.0-Hinweis im Dateikopf und `SymconJSLive/js/iro/5.5.0/LICENSE.txt` |
 | Loading Bar/ldBar | `SymconJSLive/js/loading-Bar/loading-bar.js`, `SymconJSLive/js/loading-Bar/loading-bar.css` | aktiv in `SymconJSLiveProgressbar`; Version im Bestand nicht ausgewiesen | `SymconJSLive/js/loading-Bar/LICENSE` (MIT) |
 | Template-CSS | `SymconJSLive/js/css/DatePicker1.css`, `SymconJSLive/js/css/FormExample.css`, `SymconJSLive/js/css/TextField.css`, `SymconJSLive/js/css/TimePicker1.css`, `SymconJSLive/js/css/TimePicker2.css`, `SymconJSLive/js/css/TimePicker3.css` | aktiv gemaess Modultabelle | Projektlizenz `LICENSE` (GPL-3.0) |
@@ -145,9 +145,18 @@ Frontend-Abhaengigkeiten.
    Abnahme von 0.78 sind ebenfalls bestanden. Der Prototyp nach ADR 0004 bestand
    das Performancegate nicht. ADR 0005 legt jetzt den eigenen Wartungsfork als
    Entwicklungsweg fest. Dessen Bundle 3.6.0 ist jetzt getrennt ueber einen
-   versionierten Pfad integriert; JSLive-CI und installierte Abnahme stehen aus.
-   jQuery und die Einzelwert-Bibliotheken folgen getrennt; iro.js bleibt auf
-   Wunsch unveraendert.
+   versionierten Pfad integriert. CI und gezielte installierte Pruefung auf
+   0.84 bestanden; Gesamtabnahme PARTIAL, siehe `STREAMING_INTEGRATION.md`.
+8. Erledigt: jQuery 4.0.0 in allen 19 mitgelieferten HTML-Vorlagen;
+   Altpfad erhalten. Der Eigentuemer bestaetigt Push, CI, Modulupdate und
+   lokalen Chrome-Test von 0.85. Grenzen: `JQUERY_MIGRATION.md`.
+9. Canvas Gauges 2.1.7 ist weiterhin die neueste offizielle Version und
+   nach LF-Normalisierung identisch zum vorhandenen Bundle. Herkunft und
+   Einbindung sind jetzt durch Hash-/Webhook-Tests und acht isolierte
+   Browserfaelle abgesichert. Seit April 2020 kein neuer Release oder
+   Default-Branch-Commit beobachtet: Pflege bleibt ein Risiko. Kein Wechsel
+   von Engine, Bundle oder Pfad. Siehe `GAUGE_AUDIT.md`.
+   Als Naechstes folgt Loading Bar/ldBar; iro.js bleibt auf Wunsch unveraendert.
 
 ## Streaming: Herkunft und Pflegeentscheidung
 
@@ -156,7 +165,8 @@ Versuch einer eigenen Echtzeitsteuerung nach [ADR 0004](adr/0004-own-realtime-co
 wurde durch [ADR 0005](adr/0005-maintained-streaming-fork.md) abgeloest.
 [Prototyp und Messungen](REALTIME_PROTOTYPE.md) bleiben historisch erhalten.
 Die Entwicklung erfolgt im eigenen Wartungsfork. Die getrennte lokale
-Integration von 3.6.0 ist umgesetzt; dies ist noch keine installierte Abnahme.
+Integration von 3.6.0 ist umgesetzt; die gezielte installierte Pruefung von
+0.84 ist bestanden, die Gesamtabnahme bleibt PARTIAL (siehe Integrationsnachweis).
 
 Pruefstand 02.10.2026: Der historische unversionierte Bundle ist bytegleich mit
 `dist/@qultoltd/chartjs-plugin-streaming.min.js` aus

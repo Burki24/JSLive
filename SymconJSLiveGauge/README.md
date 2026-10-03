@@ -38,6 +38,11 @@ Die Standardvorlagen verwenden die lokal im JSLive-Hook ausgelieferte
 Canvas-Gauges-Bibliothek. Eigene Vorlagen laufen als HTML/JavaScript im Browser
 und müssen vertrauenswürdig sein.
 
+Canvas Gauges bleibt auf der offiziellen Version 2.1.7. Herkunft und
+Dateiintegrität sowie die vier vorhandenen Vorlagen sind abgesichert; eine
+aktive Upstream-Pflege ist nicht belegt. Umfang und Grenzen der lokalen Tests:
+[Gauge-Audit](../docs/GAUGE_AUDIT.md). Assetpfad und Konfiguration bleiben erhalten.
+
 ## Technische Daten
 
 | Eintrag | Wert |

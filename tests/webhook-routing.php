@@ -296,6 +296,7 @@ foreach ([
     'jquery.min.js',
     'jquery/4.0.0/jquery.min.js',
     'jquery/4.0.0/jquery.min.map',
+    'canvas-gauges/gauge.min.js',
     'chartjs/chart.min.js',
     'chartjs/4.5.1/chart.umd.min.js',
     'chartjs/4.5.1/chart.umd.min.js.map',

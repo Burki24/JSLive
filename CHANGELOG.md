@@ -9,6 +9,11 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Development
 
+- Canvas Gauges 2.1.7 gegen die offizielle Distribution abgeglichen;
+  Quellen-/Hashnachweis, Asset-/Webhook-Vertraege und acht isolierte
+  Gauge-Browserfaelle ergaenzt. Pflege- und Laufzeitgrenzen dokumentiert;
+  keine Aenderung an Bundle, Vorlagen oder Modulkonfiguration.
+
 - ADR 0005 dokumentiert den beschlossenen eigenen Streaming-Wartungsfork als
   weiteren Entwicklungsweg. ADR 0004, Prototyp und Performanceversuche bleiben
   historisch erhalten; Plan und Freigabegrenzen sind nachgezogen. Keine

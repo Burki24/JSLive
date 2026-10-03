@@ -781,13 +781,23 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
     Nachweise und Grenzen: `docs/STREAMING_INTEGRATION.md`.
     Moment bleibt vorerst erhalten;
     weitere Bibliotheken folgen einzeln, iro.js bleibt unveraendert.
-13. Lokal umgesetzt: direkter Wechsel von jQuery 3.6.0 auf 4.0.0 in allen
+13. Erledigt: direkter Wechsel von jQuery 3.6.0 auf 4.0.0 in allen
     19 mitgelieferten HTML-Vorlagen. Wegfall aelterer Browser/WebViews ist
     ausdruecklich freigegeben. Neuer versionierter Full-Bundle mit Lizenz,
     Source Map und Integritaetsnachweisen; Altpfad bleibt erhalten.
     Zwoelf Ajax-/Formularfaelle und acht Chart-Browserdurchlaeufe bestanden.
-    JSLive-CI und installierte Abnahme dieses Kandidaten folgen nach Push/Update;
+    Push, CI, Metadaten-Pull und Modulupdate sind vom Eigentuemer bestaetigt,
+    ebenso der erfolgreiche lokale Chrome-Test. Lokaler Stand 0.85
+    (`0aa3f50` / `fc9a80a`); keine neue unabhaengige MCP-Abnahme behauptet.
     IPSView bleibt eine bekannte Testluecke. Details: `docs/JQUERY_MIGRATION.md`.
+14. Canvas-Gauges-Audit abgeschlossen: 2.1.7 ist weiter npm-/GitHub-Latest;
+    Bestand nach LF-Normalisierung identisch zur offiziellen Distribution.
+    Letzter Release/Default-Branch-Commit von April 2020: Pflege bleibt ein
+    Risiko. Bundle und vier Vorlagen unveraendert; neue Herkunfts-/Hash- und
+    Webhook-Vertraege sowie acht isolierte Gauge-Browserfaelle bestanden.
+    CI der neuen Checks folgt nach Push. Kein installierter Runtime-PASS.
+    Details und Grenzen: `docs/GAUGE_AUDIT.md`. Naechster isolierter Schritt:
+    Herkunft, Version und Pflege von Loading Bar/ldBar pruefen.
 
 ### Phase 5 - IPSView und Kacheldarstellung
 
