@@ -8,6 +8,14 @@ historischen Chart.js-3.x-Dateien und unbenutzten Plugin-Kopien sind entfernt.
 Die drei Standard-Diagrammvorlagen verwenden nun gemeinsam Chart.js 4.5.1.
 Die alten URLs mit 4.3.3 und 4.4.1 bleiben fuer eigene Vorlagen unveraendert.
 
+Die folgenden Abnahmemarkierungen dokumentieren die jeweiligen Einzelschritte.
+Den aktuellen kumulativen Stand und echte Restpunkte fuehrt die
+[Laufzeitmatrix](SYCON_RUNTIME_MATRIX.md#fortschreibung-nach-abnahme-von-096-03102026).
+Insbesondere sind WebSocket/Pull und sequentielle historische Chart-Wechsel
+inzwischen live geprueft; ueberlappende Reloads sind lokal korrigiert. Fuer
+Canvas Gauges bleibt der neu nachgewiesene Fehler bei unterbrochenen
+Animationen offen. Keine erneute pauschale Aktualisierung aller Ressourcen.
+
 Benutzerdefinierte Templates aus `TemplateScriptID` koennen weitere, hier nicht
 kontrollierbare Abhaengigkeiten laden. Sie gehoeren nicht zum reproduzierbaren
 Lieferumfang der Library.

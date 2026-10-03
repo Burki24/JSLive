@@ -1,7 +1,10 @@
 # Integration des Streaming-Wartungsforks 3.6.0
 
-Stand: 03.10.2026. Lokal umgesetzt; gezielte installierte Pruefung von 0.84
-bestanden, Gesamtabnahme weiterhin PARTIAL (siehe Fortschreibung unten).
+Stand: 03.10.2026. Die folgenden Abschnitte beschreiben den Integrationsstand
+0.84. WebSocket-/Minuten-Pull-Nachweise wurden auf 0.95, historische
+Zeitraumwechsel auf 0.96 ergaenzt. Der lokale Schutz gegen ueberholte
+Chart-Antworten ist noch nicht installiert; IPSView bleibt Anwenderabnahme.
+Aktuelle Freigabegrenzen: [Laufzeitmatrix](SYCON_RUNTIME_MATRIX.md#fortschreibung-nach-abnahme-von-096-03102026).
 Ausgangspunkt: JSLive 0.83, `ff22ac2`; Entscheidung: [ADR 0005](adr/0005-maintained-streaming-fork.md).
 
 ## Lieferumfang und Herkunft
@@ -74,8 +77,10 @@ gleich (SHA-256 ueber die PNG-Data-URL):
 | Europe/Berlin | 390 | `27503ddc38e937b56f6b428f466ea981abd0bc04f8d1a73c48f58224c7196470` |
 
 Dies ist kein Vollseiten-, echter Touch-/IPSView-, WebSocket-/Pull- oder
-installierter Symcon-Test. Der asynchrone Datenladezweig bleibt durch die
-bestehenden Node-Regressionen abgesichert, nicht durch diesen neuen Browsercheck.
+installierter Symcon-Test. Fortschreibung: Die Browsermatrix prueft inzwischen
+auch den asynchronen historischen Datenladezweig, einschliesslich zuletzt
+eintreffender ueberholter Datensatzantworten. 37 Node-Szenarien ergaenzen die
+Pruefung aller HTTP-Stufen und Antwortreihenfolgen.
 Die Bildgleichheit betrifft den definierten Ausgangszustand, nicht alle
 Konfigurationen oder spaetere Zustaende mit absichtlich korrigierten Tooltips.
 

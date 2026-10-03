@@ -71,7 +71,8 @@ async function check(browser, asset, version, scenario) {
                 ChartDataLabels: {}, Get_WindowWidth: () => 800, Get_WindowHeight: () => 600,
                 checkIsStreaming: () => ({ frameRate: 30 }), UpdateTooltipLabel: () => 'value',
                 checkOffsetisSet: () => false, UpdateConfiguration() {}, PullNewData() {},
-                update_vars: [11, 12], last_reload: 0, isReloading: false, pullMode: false,
+                update_vars: [11, 12], last_reload: 0, reloadGeneration: 0,
+                reloadFullRequired: false, isReloading: false, pullMode: false,
                 created: [], failures: [], completed: []
             });
             // Chart records the completed config; jQuery's transport and callbacks are real.

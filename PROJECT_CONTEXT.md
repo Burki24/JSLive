@@ -501,11 +501,16 @@ Produktivsystem. Keine Erweiterung des JSLive-Funktionsumfangs.
    gepruefte Umgebungen bleiben als solche benannt.
    Gezielte Laufzeitpruefung von 0.95: echter WebSocket-Wertwechsel und
    Minuten-Pull im Browser sowie 30 HTTP-Exportabrufe bestanden. Historischer
-   Offsetwechsel zeigt dagegen veraltete Zeitachsengrenzen im asynchronen
-   Nachladepfad. Die Standardvorlage ist lokal korrigiert; 19 deterministische
-   Ladeszenarien und acht isolierte Browservarianten sind gruen. Installierter
-   Nachtest nach Commit/CI/Modulupdate bleibt offen. Details und Grenzen:
-   `docs/SYCON_RUNTIME_MATRIX.md`, Abschnitt zur gezielten Abnahme von 0.95.
+   Offsetwechsel zeigte dort veraltete Zeitachsengrenzen. Der gezielte
+   installierte Nachtest von 0.96 ist bestanden: heute/gestern/vorgestern/heute
+   ohne Zwischen-Reload, danach Echtzeitansicht; Werte wiederhergestellt,
+   Konfigurationen unveraendert. Browser-Cache musste zuerst neu geladen werden.
+   Der anschliessende Abschlussabgleich fand einen weiteren lokalen Fehler:
+   ueberlappende Reloads koennen alte Daten mit neuen Achsen mischen. Lokal
+   werden jetzt ueberholte Antworten an allen Reload-Grenzen verworfen;
+   37 Ladeszenarien und acht Browservarianten sichern dies ab. CI und installierter
+   Nachtest dieses neuen Fixes bleiben erforderlich. Details und Grenzen:
+   `docs/SYCON_RUNTIME_MATRIX.md`, Fortschreibung nach der Abnahme von 0.96.
 2. Noch notwendige Ressourcenupdates anhand der bestehenden Inventur bestimmen
    und einzeln absichern. Vorhandene Fehler reproduzieren, korrigieren und durch
    Regressionstests abdecken. Keine Wiedereroeffnung erledigter Updates ohne
@@ -530,6 +535,12 @@ Produktivsystem. Keine Erweiterung des JSLive-Funktionsumfangs.
    Der gezielte Fix ist damit abgeschlossen; kein neuer Gesamtmatrix- oder
    IPSView-PASS und kein separat abgerufener CI-Nachweis fuer diesen Commit.
    Details: `docs/GAUGE_AUDIT.md`.
+   Neuer Befund beim Abschlussabgleich: Der optionale Browsertest wartete bei
+   aufeinanderfolgenden Werten nur auf numerische Naehe statt auf Animationsende.
+   Die Wartebedingung ist lokal korrigiert. Dabei bestaetigter Bibliotheksfehler:
+   Ein neuer Wert waehrend laufender Animation kann am Ende auf den alten
+   Zielwert zurueckfallen. Bundle und Gauge-Vorlagen bleiben unveraendert;
+   dieser getrennte Wartungsfehler ist vor abschliessender Freigabe zu beheben.
 4. Bestehende Ausgabe-, IPSView-, Link- und Datenvertraege erhalten; offene
    Laufzeitnachweise und Freigabegrenzen dokumentieren. IPSView bleibt mangels
    Testlizenz eine bekannte Testluecke.

@@ -74,10 +74,21 @@ async function check(browser, name, width) {
             let config_highlights = [{from:100,to:500,color:'rgba(0,128,0,0.3)'}];
             let curValue = 0, separator_char = '', fontLoaded = false;
             ${functionsFrom(template, compass)}` });
-        await page.evaluate(() => { UpdateGauge(67890, 0); LoadGauge(); });
+        await page.evaluate(compass => {
+            UpdateGauge(67890, 0);
+            LoadGauge();
+            window.animationEnds = 0;
+            // Compass is constructed immediately, then animates its Ajax value.
+            // The other templates construct the gauge with the fetched value.
+            if (compass) gauge.on('animationEnd', () => animationEnds++);
+        }, compass);
         await page.waitForFunction(value => typeof gauge !== 'undefined' && Math.abs(gauge.value - value) < 0.0001, compass ? 90 : 458.3333333333333);
-        await page.waitForFunction(() => Math.abs(gauge.options.value - gauge.value) < 0.0001);
-        await page.evaluate(() => { window.animationEnds = 0; gauge.on('animationEnd', () => animationEnds++); });
+        await page.waitForFunction(compass => (!compass || animationEnds === 1)
+            && Math.abs(gauge.options.value - gauge.value) < 0.0001, compass);
+        await page.evaluate(compass => {
+            window.animationEnds = 0;
+            if (!compass) gauge.on('animationEnd', () => animationEnds++);
+        }, compass);
         const state = await page.evaluate(() => ({ version: document.gauges.version,
             type: gauge instanceof LinearGauge ? 'linear' : 'radial',
             text: gauge.options.valueText, highlights: gauge.options.highlights,
@@ -91,12 +102,18 @@ async function check(browser, name, width) {
             assert.ok(Math.abs(state.highlights[0].from - 1000 / 3) < 0.0001);
             assert.ok(Math.abs(state.highlights[0].to - 2000 / 3) < 0.0001);
         }
+        let finishedAnimations = 0;
         for (const [input, expected, text] of compass
             ? [[-1, 0], [180, 180], [400, 360]]
             : [[-50, 0, '-50,0'], [500, 2000 / 3, '500,0'], [1250.5, 1000, '1.250,5']]) {
             await page.evaluate(value => UpdateGauge(67890, value), input);
-            await page.waitForFunction(value => Math.abs(gauge.value - value) < 0.0001
-                && Math.abs(gauge.options.value - value) < 0.0001, expected);
+            finishedAnimations++;
+            // Floating-point closeness can occur one frame before completion.
+            // This matrix tests sequential animations, not interrupted ones.
+            await page.waitForFunction(({ value, ends }) => animationEnds === ends
+                && Math.abs(gauge.value - value) < 0.0001
+                && Math.abs(gauge.options.value - value) < 0.0001,
+            { value: expected, ends: finishedAnimations });
             if (!compass) assert.equal(await page.evaluate(() => gauge.options.valueText), text);
         }
         assert.notEqual(await page.evaluate(() => document.getElementById('gauge').toDataURL()), state.image, 'Value changes must change the rendered canvas.');
@@ -110,7 +127,8 @@ async function check(browser, name, width) {
         return { template: name, width, result: 'PASS' };
     } catch (error) {
         throw new Error(JSON.stringify({ name, width, errors, state: await page.evaluate(() =>
-            typeof gauge === 'undefined' ? null : { value: gauge.value, renderedValue: gauge.options.value, text: gauge.options.valueText }) }), { cause: error });
+            typeof gauge === 'undefined' ? null : { value: gauge.value, renderedValue: gauge.options.value,
+                text: gauge.options.valueText, animationEnds: window.animationEnds }) }), { cause: error });
     } finally { await context.close(); }
 }
 async function run(browser) {

@@ -39,12 +39,18 @@ Beim Nachladen eines anderen historischen Zeitraums werden Daten und Achsen
 gemeinsam aktualisiert. Ein Wechsel über `Offset` oder `StartDate` benötigt
 kein vollständiges Neuladen der Ansicht; die bisherigen Zeitachsengrenzen
 bleiben dabei nicht stehen.
+Bei überlappenden Zeitraumabrufen darf nur die zuletzt gestartete Abfrage
+die Ansicht aktualisieren. Verspätete Antworten älterer Abrufe werden verworfen,
+auch im kombinierten Ladepfad bei deaktiviertem asynchronem Laden.
 
 Nach einem Modulupdate die Ansicht neu laden. `ApplyChanges()` wird beim
 Modulupdate automatisch ausgeführt und erneuert dabei den HTML-Cache;
 ein zusätzlicher Aufruf ist nicht erforderlich. Ein Dienstneustart ist für
 diese Template-Korrektur nicht erforderlich. Eigene `TemplateScriptID`-Vorlagen
 werden nicht automatisch geändert.
+Bei aktiviertem Browser-Cache kann auch eine neu geöffnete Ansicht noch die
+alte Vorlage verwenden. Nach dem Modulupdate deshalb ausdrücklich neu laden,
+bei Bedarf unter Umgehung des Browser-Caches.
 
 ## Daten- und Webhook-Befehle
 

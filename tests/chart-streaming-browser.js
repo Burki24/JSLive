@@ -51,7 +51,8 @@ async function check(browser, legacy, timezoneId, width) {
                     data_loadAsync: false, data_precision: 2, data_highResSteps: 1,
                     animation_duration: 0, animation_easing: 'linear', datalabels_fontSize: 12,
                     datalabels_fontFamily: 'Arial', datalabels_fontColor: '#111' },
-                update_vars: [11, 12], last_reload: 0, isReloading: false, pullMode: false,
+                update_vars: [11, 12], last_reload: 0, reloadGeneration: 0,
+                reloadFullRequired: false, isReloading: false, pullMode: false,
                 Get_WindowWidth: () => window.innerWidth, Get_WindowHeight: () => window.innerHeight,
                 // Background transport/configuration loops are deliberately outside this fixture.
                 UpdateConfiguration() {}, PullNewData() {}, draws: 0, labels: 0
@@ -172,6 +173,38 @@ async function check(browser, legacy, timezoneId, width) {
                 min: start, max: start + 86400000 - 1, type: 'time', datasets: 2, loading: false });
             await page.clock.runFor(150);
         }
+        // Hold old dataset replies until the new selection has rendered. Use
+        // real Chart.js to catch range expansion from stale points as well.
+        const overlapping = await page.evaluate(() => {
+            const originalGetJSON = $.getJSON;
+            const held = [];
+            const previous = myChart;
+            $.getJSON = (url, success) => {
+                if (!new URL(url, 'http://test.invalid').searchParams.has('id')) {
+                    return originalGetJSON(url, success);
+                }
+                let payload;
+                originalGetJSON(url, data => { payload = data; });
+                const request = { finish() { success(payload); this.complete(); },
+                    fail() { return this; }, always(callback) { this.complete = callback; return this; } };
+                held.push(request);
+                return request;
+            };
+            window.historicalStart = Date.UTC(2024, 0, 4);
+            ReloadChart(11, 20);
+            window.historicalStart = Date.UTC(2024, 0, 5);
+            ReloadChart(11, 21);
+            held[3].finish(); held[2].finish(); // latest selection, reverse dataset order
+            held[0].finish(); held[1].finish(); // obsolete replies arrive last
+            $.getJSON = originalGetJSON;
+            return { reused: myChart === previous, instances: Object.keys(Chart.instances).length,
+                min: myChart.scales.x.min, max: myChart.scales.x.max,
+                points: myChart.data.datasets.map(d => d.data[0].x), loading: isReloading };
+        });
+        const latestDay = Date.UTC(2024, 0, 5);
+        assert.deepEqual(overlapping, { reused: true, instances: 1,
+            min: latestDay, max: latestDay + 86399999,
+            points: [latestDay + 3600000, latestDay + 3600000], loading: false });
         await page.evaluate(() => myChart.destroy());
         const draws = await page.evaluate(() => window.draws);
         await page.clock.runFor(1200);

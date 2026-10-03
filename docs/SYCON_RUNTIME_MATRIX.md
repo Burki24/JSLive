@@ -676,6 +676,72 @@ Dienstneustart fuer diesen Templatefix. Eigene Templates separat nachziehen.
 IPSView folgt laut Eigentuemer nach Fertigstellung auf dem Produktivsystem.
 SymconECharts-Exportplanung ist bis zur Reife des Nachfolgers zurueckgestellt.
 
+## Fortschreibung nach Abnahme von 0.96 (03.10.2026)
+
+Diese Fortschreibung ordnet die historischen Offen-Markierungen oben ein;
+sie ersetzt keinen Gesamtmatrixdurchlauf. Gepruefter installierter Stand:
+Quellcommit `24731c9123289fbee85160300d1af581e2a6e3a6`, Metadatencommit
+`817046f9a8e74147a530a29e931e03ac5032c2a4`, Library 0.96, Build 38220233.
+Lokal und GitHub-dev synchron; Tests, Style und CodeQL fuer exakt diesen
+Metadatencommit erfolgreich. Alle elf JSLive-Instanzen Status 102.
+
+Der gezielte installierte Achsennachtest auf MCP-CURRENT bestand:
+heute -> gestern -> vorgestern -> heute ohne Zwischen-Reload, anschliessend
+Rueckkehr zur relativen Stundenansicht. Jeweils nur der ausgewaehlte Tag statt
+eines zusaetzlichen leeren Tages. Alle fuenf Steuerwerte wiederhergestellt,
+Konfigurationen unveraendert, keine JSLive-Warnungen/-Fehler im geprueften Log.
+Anfangs enthielt das frisch geoeffnete Browserdokument noch die alte Vorlage;
+erst ausdrueckliches Neuladen revalidierte den aktivierten Browser-Cache.
+Waehrend einer Zwischenruecksetzung trat ein Browserfehler mit einem
+Epochendatum auf. Im anschliessenden eigentlichen Nachtest und seiner
+Ruecksetzung keine neuen Browserfehler; der Zwischenfehler wird nicht als
+unabhaengig behoben ausgegeben.
+
+Der danach durchgefuehrte lokale Abschlussabgleich bestaetigte einen weiteren
+Fehler: Ueberlappende Reloads verwenden gemeinsame Konfiguration/Skalen und
+nehmen verspaetete Antworten alter Abrufe an. Bei zwei gueltigen Tagesfenstern
+konnten nach Abschluss aller Abrufe Daten des vorherigen Tages unter der
+neuen Achse stehen. Das erklaert eine Fehlerklasse, beweist aber nicht die
+vollstaendige Ursache des zuvor beobachteten Epochendatum-Fehlers.
+
+Lokale Korrektur: Jeder akzeptierte Reload bekommt eine fortlaufende Generation.
+Alte Konfigurations-, Achsen-, Datensatz-, Fehler- und Abschlusscallbacks sowie
+kombinierte Antworten werden verworfen. Nur der aktuelle Abruf rendert und
+beendet den Ladezustand. Ein noch erforderlicher Vollreload wird uebernommen.
+Die bisherige Ereignis-/Zeitstempel-Deduplizierung, HTTP-Vertraege, Properties,
+Bibliotheken und gespeicherte Daten bleiben unveraendert.
+
+37 lokale Ladeszenarien (19 bestehende, 18 Ueberholungsfaelle) und acht echte
+Chart.js-Browservarianten bestanden. Die neue Regression war vor dem Fix rot;
+die Browsermatrix prueft auch, dass zuletzt eintreffende alte Daten die reale
+Zeitachse nicht wieder vergroessern. HTTP bleibt synthetisch, kein installierter
+Nachweis fuer diesen neuen Fix. Gesamtsuite, 47 PHP-Syntaxchecks (PHP 8.5.10),
+JavaScript-Syntax, PHP-CS-Fixer-Trockenlauf, JSON und `git diff --check` bestanden.
+Auch zwoelf jQuery-Browserfaelle und drei vollstaendige sequentielle Gauge-
+Durchlaeufe mit je acht Faellen bestanden (Edge 155.0.4283.18, Node 24.19.0).
+Die neue CI und Live-Abnahme folgen nach Commit/Push und Modulupdate.
+
+Aktive Restpunkte fuer den Wartungsabschluss:
+
+1. Neuen Chart-Fix committen/pushen, CI und Metadaten abgleichen, Modulupdate,
+   Ansicht ausdruecklich neu laden und schnelle Zeitraumwechsel live nachpruefen.
+   Kein zusaetzliches ApplyChanges und kein geplanter Dienstneustart.
+2. Separaten Canvas-Gauges-Fehler bei unterbrochenen Animationen korrigieren;
+   siehe [Gauge-Audit](GAUGE_AUDIT.md#abschlussabgleich-auf-basis-096-animationsgrenze).
+   Der zuvor sporadische Test wartet jetzt korrekt auf Animationsende; daraus
+   folgt keine Freigabe fuer schnelle Gauge-Wertwechsel.
+3. IPSView-Abnahme durch den Eigentuemer auf dem Produktivsystem nach Abschluss
+   der Fehlerkorrekturen. Aktuelle WebViews, eigene Templates und verwendete
+   Darstellungen pruefen; Desktop-Browsertests ersetzen diese Abnahme nicht.
+4. Exakten Release-Kandidaten nach [Release-Prozess](RELEASE_PROCESS.md)
+   vorbereiten und kontrolliert freigeben. Noch kein Stable-PASS.
+
+WebSocket-/Minuten-Pull-Luecken sind durch die gezielte 0.95-Abnahme geschlossen;
+der historische Achsenfix durch 0.96. Positive Exporte eigener Skriptinhalte sind
+lokal abgesichert, mangels passender Live-Testkonfiguration nicht live nachgewiesen.
+Die ECharts-Uebergabe bleibt zurueckgestellt. Historische Prototyp-, native
+Kachel- und allgemeine Erweiterungsplaene sind keine aktiven Freigabepunkte.
+
 ## Ergebnisregeln
 
 - `PASS`: alle verpflichtenden Punkte sind mit frischem Laufzeitnachweis grün.

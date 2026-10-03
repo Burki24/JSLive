@@ -9,6 +9,12 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Development
 
+- Gauge-Browserpruefung wartet bei aufeinanderfolgenden Werten auf das echte
+  Animationsende. Der dabei nachgewiesene Altfehler bei unterbrochenen
+  Canvas-Gauges-Animationen bleibt als separater Wartungspunkt dokumentiert.
+- Laufzeitnachweis von 0.96 und verbleibende Freigabepunkte fortgeschrieben;
+  IPSView bleibt Anwenderabnahme, ECharts-Uebergabe bleibt zurueckgestellt.
+
 - Bestehenden Konfigurationsexport mit 20 wiederholten Faellen fuer Chart,
   DoughnutPie, RadarChart, Gauge und Progressbar charakterisiert. Reale
   statische Formulare, synthetische Daten, keine Laufzeitaenderung. Separate
@@ -197,6 +203,11 @@ Patchstelle, beispielsweise `v0.10.0`.
   mehreren Datensatzzeilen nur noch einmal.
 
 ### Fixed
+
+- Chart-Nachladevorgaenge ignorieren ueberholte Konfigurations-, Achsen- und
+  Datensatzantworten. Schnelle Zeitraumwechsel koennen dadurch keine alten
+  Daten unter neuen Achsen anzeigen; ein benoetigter Vollreload bleibt erhalten.
+  Gilt auch fuer kombinierte Abrufe bei deaktiviertem asynchronem Laden.
 
 - Chart uebernimmt beim asynchronen historischen Nachladen die neuen Achsen
   gemeinsam mit den Datensaetzen. Offset-/StartDate-Wechsel behalten keine

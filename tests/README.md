@@ -9,15 +9,19 @@ php tests/run.php
 Der Runner verwendet neben PHP auch Python 3 fuer die Metadaten- und
 Helper-Pruefungen sowie Node.js fuer die JavaScript-Renderingvertraege.
 
-`node tests/chart-async-loading.js` prueft 19 Szenarien mit den originalen
+`node tests/chart-async-loading.js` prueft 37 Szenarien mit den originalen
 Templatefunktionen: Antwortreihenfolge, leere/fehlgeschlagene Datensaetze und
 historische Achsenwechsel mit Rueckkehr zum aktuellen Tag. Neue Daten und
 Achsen werden erst nach Abschluss aller Datensatzantworten gemeinsam auf die
 bestehende Chart-Instanz angewendet; synchrone und asynchrone Pfade werden
-verglichen. Teil des Standardrunners, ohne Symcon-Zugriff.
+verglichen. 18 weitere Faelle halten alte Antworten an Konfigurations-, Achsen-,
+Datensatz- und kombiniertem Ladepfad zurueck: alte Antwort zuerst/zuletzt,
+Erfolg/Fehler und erforderlicher Vollreload nach Ueberholung. Teil des
+Standardrunners, ohne Symcon-Zugriff.
 Der optionale `chart-streaming-browser.js` prueft zusaetzlich die tatsaechlichen
 Chart.js-Zeitachsengrenzen beim asynchronen historischen Nachladen in seinen
-acht Browservarianten. HTTP-Antworten bleiben synthetisch; kein Live-Nachweis.
+acht Browservarianten, auch wenn alte Datensatzantworten zuletzt eintreffen.
+HTTP-Antworten bleiben synthetisch; kein Live-Nachweis.
 
 `php tests/gauge-rendering.php` prueft die echte PHP-HTML-Erzeugung des Gauge-
 Moduls: 120 Kombinationen aus vier Standardvorlagen/eigener Vorlage, allen
@@ -56,6 +60,9 @@ Konfiguration. Acht Faelle decken zwei Fensterbreiten, Werteumrechnung,
 Formatierung, Animation und Destroy ab. Voraussetzungen und Grenzen stehen
 im [Gauge-Audit](../docs/GAUGE_AUDIT.md); kein Zugriff auf Symcon, keine
 automatische Paketinstallation und kein Bestandteil der PHP-CI.
+Die aufeinanderfolgenden Werte warten auf das oeffentliche `animationEnd`-
+Ereignis, nicht nur auf numerische Naehe zum Ziel. Unterbrochene Animationen
+sind ein separat bestaetigter Altfehler, siehe `docs/GAUGE_AUDIT.md`.
 
 Der isolierte Echtzeit-Prototyp wird mit `node tests/realtime-window.js`
 deterministisch geprueft; dieser Test ist im Runner enthalten. Ein optionaler

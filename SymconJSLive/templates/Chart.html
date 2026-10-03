@@ -43,6 +43,8 @@
     let last_update = Date.now();
     let offset_isSet = false;
     let last_reload = 0; //Damit der Chart nur einmal neugeladen wird!
+    let reloadGeneration = 0;
+    let reloadFullRequired = false;
     let isReloading = true;
     let pullMode = false;
     let pullModeStopping = false;
@@ -348,14 +350,17 @@
         if(!update_vars.includes(id_val)) return;
         last_reload = dt_val;
         isReloading = true;
+        // Only the newest accepted reload may change shared state or render.
+        const generation = ++reloadGeneration;
+        reloadFullRequired = reloadFullRequired || fullReload;
 
         if(configuration.ID_Period === id_val && val !== null){
             configuration.Period = val;
-            fullReload = true;
+            reloadFullRequired = true;
         }
         if(configuration.ID_Relativ === id_val && val !== null){
             configuration.Relativ = val;
-            fullReload = true;
+            reloadFullRequired = true;
         }
 
         if(configuration.data_loadAsync){
@@ -365,14 +370,16 @@
 
             //First Load Config!!
             $.getJSON("/hook/JSLive/getUpdate?Instance={INSTANCE}&pw={PASSWORD}&loadConfig=1", function( data ) {
+                if (generation !== reloadGeneration) return;
                 if(configuration.Period != data.Config.Period || configuration.Relativ != data.Config.Relativ){
-                    fullReload = true;
+                    reloadFullRequired = true;
                 }
                 configuration = data.Config;
                 console.log("Configuration: ", JSON.stringify(data));
 
                 //then load XAxes
                 $.getJSON("/hook/JSLive/getUpdate?Instance={INSTANCE}&pw={PASSWORD}&loadAxes=1", function (data) {
+                    if (generation !== reloadGeneration) return;
                     //console.log("update Offset: ", data);
                     Object.assign(config_axes, data.AXES);
                     config_axes = data.AXES;
@@ -393,11 +400,12 @@
                     var loadedDatasets = [];
                     var remainingDatasets = configuration.Var_List.length;
                     function renderLoadedDatasets() {
+                        if (generation !== reloadGeneration) return;
                         // Empty/failed responses must not leave holes in Chart.js datasets.
                         config_dataset = loadedDatasets.filter(function (dataset) {
                             return dataset !== undefined;
                         });
-                        if (fullReload || typeof myChart === "undefined") {
+                        if (reloadFullRequired || typeof myChart === "undefined") {
                             console.log("RELOAD CHART Full!");
                             if(typeof myChart !== "undefined") myChart.destroy();
                             var ctx = document.getElementById('myChart');
@@ -411,6 +419,7 @@
                             myChart.options.scales = Object.assign(config_axes, {x: config_xaxes});
                             myChart.update();
                         }
+                        reloadFullRequired = false;
                         isReloading = false;
                     }
                     if (remainingDatasets === 0) {
@@ -418,6 +427,7 @@
                     }
                     configuration.Var_List.forEach(function (Variable, index) {
                         $.getJSON("/hook/JSLive/getUpdate?Instance={INSTANCE}&pw={PASSWORD}&id=" + index, function (data) {
+                            if (generation !== reloadGeneration) return;
                             //console.log("update Offset: ", data);
                             if(data.DATASETS.length == 0){
                                 console.log("Async Dataset " + Variable + " not Defined/Set!");
@@ -427,8 +437,10 @@
                             loadedDatasets[index] = data.DATASETS[0];
                             console.log("Async Dataset " + Variable + " loaded");
                         }).fail(function () {
+                            if (generation !== reloadGeneration) return;
                             console.error("Async dataset request failed at index " + index);
                         }).always(function () {
+                            if (generation !== reloadGeneration) return;
                             remainingDatasets--;
                             if (remainingDatasets === 0) {
                                 renderLoadedDatasets();
@@ -440,8 +452,9 @@
         }else{
             //sync load of all Data
             $.getJSON( "/hook/JSLive/getUpdate?Instance={INSTANCE}&pw={PASSWORD}", function( data ) {
+                if (generation !== reloadGeneration) return;
                 if(configuration.Period != data.Config.Period || configuration.Relativ != data.Config.Relativ){
-                    fullReload = true;
+                    reloadFullRequired = true;
                 }
 
                 config_dataset = data.DATASETS;
@@ -451,7 +464,7 @@
                 configuration = data.Config;
 
                 //neuerstellen (aufgrund des livestreming plugins!
-                if(fullReload){
+                if(reloadFullRequired || typeof myChart === "undefined"){
                     console.log("RELOAD CHART Full!");
                     if(typeof myChart !== "undefined") myChart.destroy();
                     var ctx = document.getElementById('myChart');
@@ -468,6 +481,7 @@
                 offset_isSet = checkOffsetisSet();
                 UpdateConfiguration();
 
+                reloadFullRequired = false;
                 isReloading = false;
 
                 //pullmod at Minute

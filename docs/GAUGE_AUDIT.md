@@ -156,3 +156,36 @@ zum Produktivsystem ist eine Anwenderbestaetigung, kein unabhaengiger MCP-
 Nachweis; genaue dortige Testparameter wurden nicht uebermittelt. Weder eine
 neue Gesamtmatrix-/IPSView-Abnahme noch ein unabhaengig abgerufener CI-Status
 wird daraus abgeleitet.
+
+## Abschlussabgleich auf Basis 0.96: Animationsgrenze
+
+Bei der erneuten Browsermatrix trat einmal ein Kompass-Timeout auf; ein
+anschliessender Einzellauf bestand. Eine begrenzte Diagnose mit Ereignisfolge
+reproduzierte den Fehler erneut im siebten Kompass-Durchlauf. Keine Symcon-
+Verbindung, keine Aenderung am ausgelieferten Gauge-Bundle oder Template.
+
+Die Wartebedingung `abs(gerendert - Ziel) < 0.0001` kann vor dem tatsaechlichen
+Animationsende zutreffen. Beobachtet wurde `179.99999994635587` fuer Ziel 180;
+das `animationEnd`-Ereignis war noch nicht eingetroffen. Der Test schickte dann
+bereits 400 (durch die Vorlage auf 360 begrenzt). Canvas Gauges interpolierte
+bis 360, setzte am Ende aber wieder den vorherigen Zielwert 180.
+
+Zwei getrennte Ergebnisse:
+
+- Testkorrektur: Die Matrix fuer aufeinanderfolgende Animationen wartet jetzt
+  auf `animationEnd` UND den erwarteten Wert. Der Listener fuer die initiale
+  Kompassanimation wird vor der Ajax-Antwort registriert. Die drei anderen
+  Vorlagen erzeugen ihr Gauge dagegen erst mit dem gelesenen Initialwert.
+  Die Wert-, Bild-, Ereigniszahl- und Destroy-Pruefungen bleiben erhalten;
+  weder laengerer Timeout noch Wiederholung bis zum Erfolg kaschieren den Fehler.
+  Nach Korrektur bestanden drei vollstaendige Durchlaeufe mit jeweils acht
+  Faellen in Edge 155.0.4283.18 / Node 24.19.0. Dies ist ein begrenzter
+  Wiederholungsnachweis fuer sequentielle Animationen, kein Langlauftest.
+- Offener Bibliotheksfehler: Ein Update waehrend einer laufenden Animation
+  behaelt im BaseGauge-Setter einen bereits gesetzten internen Zielwert bei.
+  Der Abschlusscallback verwendet diesen alten Wert. Dies kann auch reale
+  schnell aufeinanderfolgende Updates betreffen und ist kein reiner Testfehler.
+  Die korrigierte sequentielle Testmatrix ist ausdruecklich kein Nachweis fuer
+  unterbrochene Animationen. Eine getrennte kompatible Korrektur samt gezielter
+  Regression ist vor abschliessender Freigabe erforderlich; kein neuer Fork
+  oder Wechsel der Gauge-Engine ist damit beschlossen.

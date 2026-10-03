@@ -46,7 +46,8 @@ function harness(count, asynchronous = true) {
         alert(message) { throw new Error(String(message)); },
         config_global: { DataMode: 1 }, config_dataset: [], config_axes: {}, config_xaxes: {},
         config_legend: {}, config_title: { display: true, text: 'Test chart' }, config_tooltips: {},
-        update_vars: [11, 12, 13], last_reload: 0, isReloading: false, pullMode: false,
+        update_vars: [11, 12, 13], last_reload: 0, reloadGeneration: 0,
+        reloadFullRequired: false, isReloading: false, pullMode: false,
         $: {
             getJSON(url, success) {
                 const request = {
@@ -67,7 +68,12 @@ function harness(count, asynchronous = true) {
             return params.has(key) && (value === undefined || params.get(key) === value);
         });
         assert.ok(index >= 0, `Missing request ${parameter}.`);
-        const request = pending.splice(index, 1)[0];
+        settle(pending[index], data, failed);
+    }
+    function settle(request, data, failed = false) {
+        const index = pending.indexOf(request);
+        assert.ok(index >= 0, 'Only pending requests can complete.');
+        pending.splice(index, 1);
         if (failed) request.failures.forEach(callback => callback());
         else request.success(data);
         request.completions.forEach(callback => callback());
@@ -80,7 +86,7 @@ function harness(count, asynchronous = true) {
             reply('loadAxes', axes());
         }
     }
-    return { context, created, errors, pending, reply, begin, axes, configuration };
+    return { context, created, errors, pending, reply, settle, begin, axes, configuration };
 }
 
 function dataset(index) {
@@ -196,4 +202,75 @@ for (const asynchronous of [true, false]) {
         assert.deepEqual(h.errors, []);
     }
 }
-console.log('JSLive Chart asynchronous loading verified (19 scenarios, including historical axis reloads).');
+// A request generation may be superseded at any HTTP boundary. In particular,
+// an old dataset completing last must not replace the most recent selection.
+let overlapScenarios = 0;
+for (const stage of ['config', 'axes', 'datasets', 'combined']) {
+    for (const oldFirst of [true, false]) {
+        for (const failed of [false, true]) {
+            const h = harness(1, stage !== 'combined');
+            const firstDay = Date.UTC(2024, 0, 1);
+            const lastDay = firstDay + 86400000;
+            const config = { ...h.configuration, Period: 5, Relativ: false, Now: false };
+            const payload = start => ({ Config: { ...config },
+                AXES: { y: { type: 'linear' } },
+                XAXES: { type: 'time', suggestedMin: start, suggestedMax: start + 86399999 },
+                DATASETS: [{ ...dataset(0), data: [{ x: start + 3600000, y: 42 }] }] });
+            function start(stamp, day, stopAt) {
+                h.context.ReloadChart(13, stamp, null, stamp === 1);
+                if (stage !== 'combined') {
+                    if (stopAt === 'config') return;
+                    h.reply('loadConfig', payload(day));
+                    if (stopAt === 'axes') return;
+                    h.reply('loadAxes', payload(day));
+                }
+                if (!stopAt) h.reply(stage === 'combined' ? 'Instance' : 'id=0', payload(day));
+            }
+            start(1, lastDay);
+            const chart = h.context.myChart;
+            start(2, firstDay, stage);
+            const stale = h.pending[0];
+            // Hold the old response aside while driving the new request chain.
+            h.pending.splice(0, 1);
+            start(3, lastDay, 'datasets');
+            h.pending.push(stale);
+            const before = JSON.stringify(chart.data);
+            if (oldFirst) {
+                h.settle(stale, payload(firstDay), failed);
+                assert.equal(JSON.stringify(chart.data), before, 'Superseded response must not render.');
+                assert.equal(h.context.isReloading, true, 'Old completion must not release the active reload.');
+            }
+            h.reply(stage === 'combined' ? 'Instance' : 'id=0', payload(lastDay));
+            if (!oldFirst) h.settle(stale, payload(firstDay), failed);
+            assert.equal(h.context.myChart, chart, 'Historical reload must keep the existing chart.');
+            assert.equal(chart.updates, 1, 'Only the latest request may render.');
+            assert.equal(chart.data.datasets[0].data[0].x, lastDay + 3600000);
+            assert.equal(chart.options.scales.x.suggestedMin, lastDay);
+            assert.equal(h.context.isReloading, false);
+            assert.equal(h.pending.length, 0, 'Stale callbacks must not start further HTTP requests.');
+            assert.deepEqual(h.errors, [], 'Failures belonging to an obsolete request are ignored.');
+            overlapScenarios++;
+        }
+    }
+}
+// Recreating a chart remains necessary when a full reload is superseded by a
+// partial one after the new configuration has already arrived.
+for (const asynchronous of [true, false]) {
+    const h = harness(1, asynchronous);
+    h.begin();
+    h.reply(asynchronous ? 'id=0' : 'Instance', { Config: h.configuration, ...h.axes(), DATASETS: [dataset(0)] });
+    const previous = h.context.myChart;
+    h.begin(2, true);
+    const stale = h.pending[0];
+    h.pending.splice(0, 1);
+    h.begin(3, false);
+    h.pending.push(stale);
+    h.reply(asynchronous ? 'id=0' : 'Instance', { Config: h.configuration, ...h.axes(), DATASETS: [dataset(0)] });
+    assert.equal(previous.destroyed, true, 'A superseded full reload must not become a partial update.');
+    assert.equal(h.created.length, 2);
+    h.settle(stale, { Config: h.configuration, ...h.axes(), DATASETS: [dataset(1)] });
+    assert.equal(h.created.length, 2, 'Late full reload must not recreate the chart again.');
+    assertChart(h, [0]);
+    overlapScenarios++;
+}
+console.log(`JSLive Chart loading verified (19 existing + ${overlapScenarios} overlapping-request scenarios).`);
