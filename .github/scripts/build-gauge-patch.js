@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
-const root = path.resolve(__dirname, '..');
+const root = path.resolve(__dirname, '..', '..');
 const directory = path.join(root, 'SymconJSLive/js/canvas-gauges');
 const source = fs.readFileSync(path.join(directory, 'gauge.min.js'), 'utf8').replace(/\r\n/g, '\n');
 assert.equal(crypto.createHash('sha256').update(source).digest('hex'),

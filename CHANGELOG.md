@@ -204,6 +204,11 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Fixed
 
+- Gauge-Buildskript nach `.github/scripts` verschoben, damit Symcon den
+  Werkzeugordner nicht als ungueltiges Modul ohne `module.json` einliest.
+  Strukturpruefung um Stammordnerregeln und Regressionstests ergaenzt;
+  Gauge-Bundle und Modulvertraege bleiben unveraendert.
+
 - Gauge-Animationen enden bei schnellen Wertwechseln am neuesten Ziel.
   Versionierter lokaler Canvas-Gauges-Patch `2.1.7-jslive.1` fuer die vier
   Standardvorlagen; Altpfad und eigene Templates bleiben unveraendert.

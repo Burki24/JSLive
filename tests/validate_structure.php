@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+require_once __DIR__ . '/support/module-directories.php';
+
 $root = dirname(__DIR__);
 $errors = [];
 
@@ -143,11 +145,7 @@ if ($library !== null) {
     }
 }
 
-$discoveredModules = [];
-foreach (glob($root . '/*/module.json') ?: [] as $modulePath) {
-    $discoveredModules[basename(dirname($modulePath))] = $modulePath;
-}
-ksort($discoveredModules);
+$discoveredModules = discoverModuleDirectories($root, $errors);
 
 $expectedNames = array_keys($expectedModules);
 $actualNames = array_keys($discoveredModules);

@@ -14,8 +14,8 @@ Patched `gauge.min.js` SHA-256 (LF):
 
 ## Reproduction and exact scope
 
-`node scripts/build-gauge-patch.js` emits the asset to stdout.
-`node scripts/build-gauge-patch.js --check` verifies the checked-in asset.
+`node .github/scripts/build-gauge-patch.js` emits the asset to stdout.
+`node .github/scripts/build-gauge-patch.js --check` verifies the checked-in asset.
 No compiler, network or package installation required. The script verifies the
 original hash, replaces the BaseGauge value setter, changes one RadialGauge
 target handoff, adds the local-revision banner and normalizes LF/final newline.

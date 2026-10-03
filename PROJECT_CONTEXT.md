@@ -60,6 +60,16 @@ pauschale Stilllegung noch automatische Uebernahme aller Ressourcen als Forks.
 
 ## 2. Repository- und Branch-Stand
 
+Aktueller Wartungsnachtrag vom 03.10.2026 (Ausgangsstand 0.99,
+Quellcommit `cf99ef9`, Metadatencommit `52642d2`): Symcon meldet den neuen
+Stammordner `scripts` als ungueltiges Modul ohne `module.json`. Das Gauge-
+Buildskript liegt nun unter `.github/scripts`; Gauge-Bundle, Modulcode und
+Metadaten bleiben unveraendert. Die Strukturpruefung kontrolliert auch bisher
+uebersehene Stammordner ohne Manifest, mit isolierten Regressionstests fuer
+die offiziellen Ausnahmen. Leere lokale Altordner werden nicht von Git
+ausgeliefert und bleiben unangetastet. Lokale Nachweise ersetzen keine erneute
+Symcon-Abnahme: Push, CI und Modulupdate dieses Strukturfixes stehen noch aus.
+
 - Arbeitsbranch: `dev`; vor diesem Kompatibilitaetsschritt waren Arbeitsbaum,
   lokaler Branch und `origin/dev` auf `7c5a15a` synchron.
 - `dev` lag zu diesem Zeitpunkt 148 Commits vor `main` und vor

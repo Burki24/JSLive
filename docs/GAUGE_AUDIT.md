@@ -217,7 +217,7 @@ Nachweise:
   der Patch besteht. Steigend/fallend, Mehrfachwechsel, Rueckkehr, Anfang/Mitte/
   kurz vor Ende, Duplikate, Zwischenwert-Stopp, sofortige/initiale Werte und
   kuerzester Weg ueber Nord in beide Richtungen. Teil der Standard-CI.
-- `scripts/build-gauge-patch.js --check`: Originalhash und exakt reproduzierter
+- `node .github/scripts/build-gauge-patch.js --check`: Originalhash und exakt reproduzierter
   Patch ohne Compiler oder Netzwerk. Nur der BaseGauge-Setter, eine radiale
   Zielwertuebergabe, Banner und abschliessender Zeilenumbruch unterscheiden sich.
 - `tests/gauge-browser.js`: zwoelf Varianten, vier Vorlagen, zwei Breiten,

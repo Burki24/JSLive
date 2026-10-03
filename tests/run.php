@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 $tests = [
+    __DIR__ . '/module-directories.php',
     __DIR__ . '/validate_structure.php',
     __DIR__ . '/public-contracts.php',
     __DIR__ . '/connect-address.php',
@@ -42,7 +43,7 @@ $tests = [
 $commands = [
     ['Test Progressbar rendering', 'node tests/progressbar-rendering.js'],
     ['Test Loading Bar animation', 'node tests/loading-bar-animation.js'],
-    ['Verify Canvas Gauges patch', 'node scripts/build-gauge-patch.js --check'],
+    ['Verify Canvas Gauges patch', 'node .github/scripts/build-gauge-patch.js --check'],
     ['Test Gauge animation', 'node tests/gauge-animation.js'],
     ['Test Radar tooltip', 'node tests/radar-tooltip.js'],
     ['Test Chart asynchronous loading', 'node tests/chart-async-loading.js'],

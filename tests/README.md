@@ -9,6 +9,13 @@ php tests/run.php
 Der Runner verwendet neben PHP auch Python 3 fuer die Metadaten- und
 Helper-Pruefungen sowie Node.js fuer die JavaScript-Renderingvertraege.
 
+`php tests/module-directories.php` prueft die Symcon-Stammordnerregeln mit
+isolierten Dateisystem-Fixtures. Der Strukturvalidator lehnt nicht ausgenommene
+Stammordner ohne `module.json` ab, auch neue Werkzeugordner wie `scripts`.
+Ausgenommen sind `libs`, `docs`, `imgs`, `tests`, `actions` und Punktordner.
+Leere lokale Altordner werden ignoriert, da Git sie nicht ausliefert.
+Unbekannte Module mit Manifest bleiben Teil der bestehenden Inventarpruefung.
+
 `node tests/chart-async-loading.js` prueft 53 Szenarien mit den originalen
 Templatefunktionen: Antwortreihenfolge, leere/fehlgeschlagene Datensaetze und
 historische Achsenwechsel mit Rueckkehr zum aktuellen Tag. Neue Daten und
@@ -61,7 +68,7 @@ kontaktieren kein Symcon und sind nicht Teil der PHP-CI. Aufruf und Grenzen:
 mit den echten Bibliothekssettern und dem Scheduler: unterbrochene Animationen,
 wechselnde Richtung, Rueckkehr, identische Ziele, Stopp am Zwischenwert,
 sofortige Werte, Initialanimation und kuerzester Kompass-Drehweg. Nur Canvas/
-Ereignissenke und die Uhr sind Testdoubles. `scripts/build-gauge-patch.js --check`
+Ereignissenke und die Uhr sind Testdoubles. `node .github/scripts/build-gauge-patch.js --check`
 sichert die reproduzierbare Ableitung vom hashgeprueften Original. Beide sind
 Teil der Standard-CI. `JSLIVE_GAUGE_BASELINE` erlaubt einen gezielten Vergleich
 mit einer vertrauenswuerdigen lokalen Bibliotheksdatei (Altbestand: rot).
