@@ -42,7 +42,6 @@
 
     let last_update = Date.now();
     let offset_isSet = false;
-    let last_reload = 0; //Damit der Chart nur einmal neugeladen wird!
     let reloadGeneration = 0;
     let reloadFullRequired = false;
     let isReloading = true;
@@ -345,10 +344,9 @@
         }
     }
     function ReloadChart(id_val, dt_val, val = null, fullReload = false){
-        //deoppelten Reload verhinden!
-        if(last_reload == dt_val) return;
         if(!update_vars.includes(id_val)) return;
-        last_reload = dt_val;
+        // Timestamps have second precision: distinct control changes can share
+        // one timestamp. Accept them all; generations discard obsolete replies.
         isReloading = true;
         // Only the newest accepted reload may change shared state or render.
         const generation = ++reloadGeneration;

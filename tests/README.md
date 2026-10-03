@@ -9,18 +9,21 @@ php tests/run.php
 Der Runner verwendet neben PHP auch Python 3 fuer die Metadaten- und
 Helper-Pruefungen sowie Node.js fuer die JavaScript-Renderingvertraege.
 
-`node tests/chart-async-loading.js` prueft 37 Szenarien mit den originalen
+`node tests/chart-async-loading.js` prueft 53 Szenarien mit den originalen
 Templatefunktionen: Antwortreihenfolge, leere/fehlgeschlagene Datensaetze und
 historische Achsenwechsel mit Rueckkehr zum aktuellen Tag. Neue Daten und
 Achsen werden erst nach Abschluss aller Datensatzantworten gemeinsam auf die
 bestehende Chart-Instanz angewendet; synchrone und asynchrone Pfade werden
 verglichen. 18 weitere Faelle halten alte Antworten an Konfigurations-, Achsen-,
 Datensatz- und kombiniertem Ladepfad zurueck: alte Antwort zuerst/zuletzt,
-Erfolg/Fehler und erforderlicher Vollreload nach Ueberholung. Teil des
-Standardrunners, ohne Symcon-Zugriff.
+Erfolg/Fehler und erforderlicher Vollreload nach Ueberholung. Weitere 16 Faelle
+pruefen identische Zeitstempel: Offset-Rueckkehr, verschiedene Steuerwerte,
+wertlose Poll-Aufrufe und erforderlicher Vollreload, jeweils asynchron/kombiniert
+und mit alten Antworten zuerst/zuletzt. Teil des Standardrunners, ohne Symcon-Zugriff.
 Der optionale `chart-streaming-browser.js` prueft zusaetzlich die tatsaechlichen
 Chart.js-Zeitachsengrenzen beim asynchronen historischen Nachladen in seinen
-acht Browservarianten, auch wenn alte Datensatzantworten zuletzt eintreffen.
+acht Browservarianten, auch wenn alte Datensatzantworten zuletzt eintreffen
+und drei schnelle Zeitraumwechsel denselben Zeitstempel tragen.
 HTTP-Antworten bleiben synthetisch; kein Live-Nachweis.
 
 `php tests/gauge-rendering.php` prueft die echte PHP-HTML-Erzeugung des Gauge-

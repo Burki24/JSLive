@@ -42,6 +42,9 @@ bleiben dabei nicht stehen.
 Bei überlappenden Zeitraumabrufen darf nur die zuletzt gestartete Abfrage
 die Ansicht aktualisieren. Verspätete Antworten älterer Abrufe werden verworfen,
 auch im kombinierten Ladepfad bei deaktiviertem asynchronem Laden.
+Mehrere Steueränderungen mit demselben Sekunden-Zeitstempel werden ebenfalls
+verarbeitet; auch eine schnelle Rückkehr zum ursprünglichen Zeitraum geht
+nicht verloren. Der Zeitstempel allein wird nicht als Ereigniskennung genutzt.
 
 Nach einem Modulupdate die Ansicht neu laden. `ApplyChanges()` wird beim
 Modulupdate automatisch ausgeführt und erneuert dabei den HTML-Cache;

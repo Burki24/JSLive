@@ -46,7 +46,7 @@ function harness(count, asynchronous = true) {
         alert(message) { throw new Error(String(message)); },
         config_global: { DataMode: 1 }, config_dataset: [], config_axes: {}, config_xaxes: {},
         config_legend: {}, config_title: { display: true, text: 'Test chart' }, config_tooltips: {},
-        update_vars: [11, 12, 13], last_reload: 0, reloadGeneration: 0,
+        update_vars: [11, 12, 13], reloadGeneration: 0,
         reloadFullRequired: false, isReloading: false, pullMode: false,
         $: {
             getJSON(url, success) {
@@ -273,4 +273,67 @@ for (const asynchronous of [true, false]) {
     assertChart(h, [0]);
     overlapScenarios++;
 }
-console.log(`JSLive Chart loading verified (19 existing + ${overlapScenarios} overlapping-request scenarios).`);
+// Second-resolution timestamps are not event identities. Exercise both
+// WebSocket values and the value-less calls used by polling/forced reloads.
+let sameStampScenarios = 0;
+for (const asynchronous of [true, false]) {
+    for (const oldFirst of [true, false]) {
+        for (const kind of ['offset', 'mixed', 'poll', 'forced']) {
+            const h = harness(1, asynchronous);
+            h.context.update_vars.push(14);
+            if (kind !== 'mixed') {
+                h.configuration.Period = 5;
+                h.configuration.Relativ = false;
+            }
+            h.begin();
+            h.reply(asynchronous ? 'id=0' : 'Instance', {
+                Config: h.configuration, ...h.axes(), DATASETS: [dataset(0)]
+            });
+            const previous = h.context.myChart;
+            const changes = kind === 'mixed' ? [[11, 5], [12, false], [14, 0]]
+                : kind === 'poll' ? [[13, null], [14, null], [13, null]]
+                : [[14, 1], [14, 2], [14, 0]];
+            for (const [index, [id, value]] of changes.entries()) {
+                h.context.ReloadChart(id, 2, value, kind === 'forced' && index === 1);
+            }
+            assert.equal(h.pending.length, 3, `${kind}: every same-second change must start a reload.`);
+            h.context.ReloadChart(999, 2, 42);
+            assert.equal(h.pending.length, 3, 'Unrelated measurements must not trigger reloads.');
+            const requests = h.pending.slice();
+            const today = Date.UTC(2024, 0, 3);
+            const payload = start => ({
+                Config: { ...h.configuration, Period: 5, Relativ: false },
+                AXES: { y: { type: 'linear' } },
+                XAXES: { type: 'time', suggestedMin: start, suggestedMax: start + 86399999 },
+                DATASETS: [{ ...dataset(0), data: [{ x: start + 3600000, y: 42 }] }]
+            });
+            const discardOld = () => {
+                requests.slice(0, 2).forEach((request, index) => {
+                    h.settle(request, payload(today - (index + 1) * 86400000));
+                });
+            };
+            if (oldFirst) discardOld();
+            h.settle(requests[2], payload(today));
+            if (asynchronous) {
+                h.reply('loadAxes', payload(today));
+                h.reply('id=0', payload(today));
+            }
+            if (!oldFirst) discardOld();
+            const chart = h.context.myChart;
+            assert.equal(chart.options.scales.x.suggestedMin, today);
+            assert.equal(chart.options.scales.x.suggestedMax, today + 86399999);
+            assert.equal(chart.data.datasets[0].data[0].x, today + 3600000);
+            assert.equal(h.context.configuration.Period, 5);
+            assert.equal(h.context.configuration.Relativ, false);
+            const recreate = kind === 'mixed' || kind === 'forced';
+            assert.equal(previous.destroyed === true, recreate, 'Preserve required full reloads across same-second events.');
+            assert.equal(h.created.length, recreate ? 2 : 1);
+            assert.equal(chart.updates, recreate ? 0 : 1, 'Only the latest event renders, including a return to the original value.');
+            assert.equal(h.context.isReloading, false);
+            assert.equal(h.pending.length, 0, 'Obsolete events must not continue loading.');
+            assert.deepEqual(h.errors, []);
+            sameStampScenarios++;
+        }
+    }
+}
+console.log(`JSLive Chart loading verified (19 existing + ${overlapScenarios} overlapping-request + ${sameStampScenarios} same-timestamp scenarios).`);

@@ -79,7 +79,8 @@ gleich (SHA-256 ueber die PNG-Data-URL):
 Dies ist kein Vollseiten-, echter Touch-/IPSView-, WebSocket-/Pull- oder
 installierter Symcon-Test. Fortschreibung: Die Browsermatrix prueft inzwischen
 auch den asynchronen historischen Datenladezweig, einschliesslich zuletzt
-eintreffender ueberholter Datensatzantworten. 37 Node-Szenarien ergaenzen die
+eintreffender ueberholter Datensatzantworten, auch bei drei Wechseln mit gleichem
+Sekunden-Zeitstempel. 53 Node-Szenarien ergaenzen die
 Pruefung aller HTTP-Stufen und Antwortreihenfolgen.
 Die Bildgleichheit betrifft den definierten Ausgangszustand, nicht alle
 Konfigurationen oder spaetere Zustaende mit absichtlich korrigierten Tooltips.

@@ -508,9 +508,14 @@ Produktivsystem. Keine Erweiterung des JSLive-Funktionsumfangs.
    Der anschliessende Abschlussabgleich fand einen weiteren lokalen Fehler:
    ueberlappende Reloads koennen alte Daten mit neuen Achsen mischen. Lokal
    werden jetzt ueberholte Antworten an allen Reload-Grenzen verworfen;
-   37 Ladeszenarien und acht Browservarianten sichern dies ab. CI und installierter
-   Nachtest dieses neuen Fixes bleiben erforderlich. Details und Grenzen:
-   `docs/SYCON_RUNTIME_MATRIX.md`, Fortschreibung nach der Abnahme von 0.96.
+   37 Ladeszenarien und acht Browservarianten sicherten dies ab. Stand 0.97
+   ist lokal/remote/installiert abgeglichen, CI gruen. Der Live-Nachtest zeigte
+   eine weitere Sperre: mehrere Steuerereignisse derselben Sekunde wurden
+   verworfen, bevor der Generationenschutz griff. Diese Zeitstempel-Sperre
+   ist jetzt lokal entfernt; 53 Ladeszenarien und acht Browservarianten
+   bestanden. Erneute CI und installierter Nachtest nach Modulupdate bleiben
+   erforderlich, danach folgt die separate Gauge-Animationskorrektur.
+   Details: `docs/SYCON_RUNTIME_MATRIX.md`.
 2. Noch notwendige Ressourcenupdates anhand der bestehenden Inventur bestimmen
    und einzeln absichern. Vorhandene Fehler reproduzieren, korrigieren und durch
    Regressionstests abdecken. Keine Wiedereroeffnung erledigter Updates ohne

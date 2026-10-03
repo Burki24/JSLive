@@ -721,9 +721,42 @@ Auch zwoelf jQuery-Browserfaelle und drei vollstaendige sequentielle Gauge-
 Durchlaeufe mit je acht Faellen bestanden (Edge 155.0.4283.18, Node 24.19.0).
 Die neue CI und Live-Abnahme folgen nach Commit/Push und Modulupdate.
 
+### Nachtest 0.97 und Korrektur gleicher Ereigniszeitstempel
+
+Stand 0.97 (`8c453d7`, Metadaten `bf04cf1`) wurde lokal, remote und ueber MCP
+installiert abgeglichen. Tests, Style und CodeQL waren gruen. Nach explizitem
+Browser-Reload war der Generationenschutz im ausgelieferten Dokument vorhanden.
+Der gezielte schnelle Live-Test ist dennoch **FAIL**: drei Offsetwechsel
+innerhalb von 413 ms endeten serverseitig beim aktuellen Tag, die Anzeige
+blieb dagegen auf dem vorletzten Tag. Getrennte Wechsel funktionierten.
+Die bisherige Sperre `last_reload == dt_val` verwirft unterschiedliche
+Steuerereignisse derselben Sekunde vor dem Generationenschutz. Alle fuenf
+Test-Steuerwerte wurden wiederhergestellt, Chart-/Splitter-Konfigurationen
+blieben unveraendert; keine Browserfehler oder JSLive-Warnungen/-Fehler im
+geprueften Zeitraum. Keine Messwert- oder Produktivkonfiguration geaendert.
+
+Die anschliessende lokale Korrektur entfernt ausschliesslich diese globale
+Zeitstempel-Sperre und ihren Zustand. Jeder relevante Aufruf wird angenommen;
+ueberholte Antworten werden weiterhin ueber Generationen verworfen. Dies kann
+bei mehreren Steuerereignissen mehr Abrufe ausloesen; eine Sekunde ist keine
+gueltige Ereigniskennung. Keine neue Timer-/Debounce-Schicht, keine Aenderung
+an PHP, Assets, Transportvertraegen oder eigenen Vorlagen.
+
+53 lokale Ladeszenarien bestanden, davon 16 neue Faelle mit gleichem Zeitstempel
+(asynchron/kombiniert, alte Antworten zuerst/zuletzt, Offset-Rueckkehr,
+verschiedene Steuerwerte, Poll-Aufrufe ohne Wert und erhaltener Vollreload).
+Die neue Regression schlug vor dem Fix mit einem statt drei Abrufen fehl.
+Acht reale Chart.js-Browservarianten bestanden auch mit drei gleich datierten
+Wechseln und zuletzt eintreffenden alten Daten; zwoelf jQuery-Faelle bestanden.
+HTTP-Antworten sind synthetisch. Kein installierter PASS fuer diese Korrektur:
+CI und erneuter MCP-/Browser-Nachtest folgen erst nach Push und Modulupdate.
+Die PHP-Gesamtsuite (inklusive Struktur-/Vertragspruefungen), 59 PHP-Syntaxchecks
+einschliesslich Helper unter PHP 8.5.10, JavaScript-Syntax, PHP-CS-Fixer-Trockenlauf
+(47 konfigurierte Dateien, keine Aenderungen) und `git diff --check` bestanden.
+
 Aktive Restpunkte fuer den Wartungsabschluss:
 
-1. Neuen Chart-Fix committen/pushen, CI und Metadaten abgleichen, Modulupdate,
+1. Chart-Zeitstempel-Fix committen/pushen, CI und Metadaten abgleichen, Modulupdate,
    Ansicht ausdruecklich neu laden und schnelle Zeitraumwechsel live nachpruefen.
    Kein zusaetzliches ApplyChanges und kein geplanter Dienstneustart.
 2. Separaten Canvas-Gauges-Fehler bei unterbrochenen Animationen korrigieren;

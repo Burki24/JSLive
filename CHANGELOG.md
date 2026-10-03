@@ -204,6 +204,11 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Fixed
 
+- Chart verarbeitet mehrere Zeitraum-Steueraenderungen innerhalb derselben
+  Sekunde. Die bisherige reine Zeitstempel-Sperre entfaellt; der Generationen-
+  Schutz laesst weiterhin nur den letzten Abruf rendern. Regressionen fuer
+  gleiche Zeitstempel, mehrere Steuerwerte und Rueckkehr zur Ausgangsauswahl.
+
 - Chart-Nachladevorgaenge ignorieren ueberholte Konfigurations-, Achsen- und
   Datensatzantworten. Schnelle Zeitraumwechsel koennen dadurch keine alten
   Daten unter neuen Achsen anzeigen; ein benoetigter Vollreload bleibt erhalten.
