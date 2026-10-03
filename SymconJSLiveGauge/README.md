@@ -25,6 +25,11 @@ Eine `SymconJSLiveGauge`-Instanz anlegen, `Variable`, `min`, `max` und
 | Ausgabe | HTMLBox/IPSView, eigene Vorlage über `TemplateScriptID`, Viewport und IFrame-Größe |
 | Betrieb | Browser-Cache und Debug |
 
+Die Deckkraft `HighlightColor_Alpha` der Hervorhebungsbereiche wird mit zwei
+Nachkommastellen ausgegeben, unabhängig von `precision` für Messwerte und
+Bereichsgrenzen. Auch bei ganzzahliger Anzeige bleibt beispielsweise eine
+Deckkraft von `0.25` erhalten.
+
 ## Daten- und Webhook-Befehle
 
 Der bestehende Vertrag umfasst `getContend`, `getData` und

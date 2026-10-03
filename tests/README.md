@@ -9,6 +9,13 @@ php tests/run.php
 Der Runner verwendet neben PHP auch Python 3 fuer die Metadaten- und
 Helper-Pruefungen sowie Node.js fuer die JavaScript-Renderingvertraege.
 
+`php tests/gauge-rendering.php` prueft die echte PHP-HTML-Erzeugung des Gauge-
+Moduls: 120 Kombinationen aus vier Standardvorlagen/eigener Vorlage, allen
+vier Messwertpraezisionen und sechs Alpha-Werten. Highlight-Deckkraft bleibt
+von Messwertpraezision unabhaengig; Bereichsrundung, Sortierung, RGB-Werte und
+Konfigurationserhalt sind abgesichert. Teil des Standardrunners, nur synthetische
+Symcon-Testdoubles. Details: [Gauge-Audit](../docs/GAUGE_AUDIT.md).
+
 `php tests/visualization-output-contracts.php` prueft den echten gemeinsamen
 Kind-/Splitter-Code mit prozesslokalen Symcon-Testdoubles: IPSView-/Output-
 Schaltermatrix, wiederholte Aktualisierung, getrenntes Entfernen, Statussperre,

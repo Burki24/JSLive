@@ -504,6 +504,13 @@ Dokumentationsluecken:
    einer nativen HTML-SDK-Implementierung oder aller Gauge-/Transportfaelle.
    Weitere Pruefungen betreffen konkrete offene Bestandsluecken, keinen
    pauschalen Neubau der bereits funktionierenden Kachelausgabe.
+   Naechster Wartungsschritt lokal umgesetzt auf Basis 0.92 (`8860c44` /
+   `ad94f5e`): PHP-Renderingfehler fuer Highlight-Alpha reproduziert und
+   korrigiert. Die Deckkraft wird mit zwei Nachkommastellen unabhaengig von
+   `precision` ausgegeben; Messwerte und Bereichsgrenzen bleiben unveraendert.
+   120 neue Standardtestfaelle und acht vorhandene isolierte Browserfaelle
+   bestanden. CI und installierte Fix-Abnahme nach Modulupdate stehen aus;
+   kein neuer MCP-/IPSView-PASS. Details: `docs/GAUGE_AUDIT.md`.
 4. Bestehende Ausgabe-, IPSView-, Link- und Datenvertraege erhalten; offene
    Laufzeitnachweise und Freigabegrenzen dokumentieren. IPSView bleibt mangels
    Testlizenz eine bekannte Testluecke.

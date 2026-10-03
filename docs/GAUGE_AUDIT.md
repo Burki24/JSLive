@@ -98,3 +98,42 @@ Gauge-Ausgabe. Dies ist ein erfolgreicher anwenderseitiger Sichttest einer
 Konfiguration. Verwendete Transportart, Browser und genaue Laufzeitversion
 sind damit nicht separat belegt; kein HTML-SDK- oder IPSView-Gesamtnachweis.
 Ein Neubau der Kachelausgabe wird daraus nicht erforderlich.
+
+## Wartungsschritt: Highlight-Deckkraft am 03.10.2026
+
+Ausgangsstand 0.92, Quellcommit `8860c44`, Metadatencommit `ad94f5e`.
+Bei der begrenzten Gauge-Bestandspruefung wurde ein PHP-Renderingfehler
+nachgewiesen: `GenerateHighlights()` verwendete die Messwert-Property
+`precision` auch fuer die Alpha-Komponente der Farbe. Dadurch wurde
+beispielsweise `HighlightColor_Alpha = 0.25` bei `precision = 0` zu `0`
+(unsichtbar) und bei `precision = 1` zu `0.3`.
+
+Die bestehende Formularspalte definiert Alpha mit zwei Nachkommastellen,
+ebenso behandelt `GetConfigurationData()` die anderen Gauge-Farben. Die
+Ein-Zeilen-Korrektur verwendet daher auch fuer Highlight-Alpha fest zwei
+Nachkommastellen. Bereichsgrenzen und Messwerte folgen weiter `precision`;
+Properties, gespeicherte Konfiguration, Bibliothek und Vorlagen sind unveraendert.
+
+`tests/gauge-rendering.php` rendert ueber das echte Gauge-Modul die vier
+Standardvorlagen und eine synthetische eigene Vorlage mit allen vier
+Messwertpraezisionen sowie Alpha 0, 0.01, 0.25, 0.75, 0.99 und 1. Insgesamt
+120 Faelle pruefen die erzeugten Highlight-Farben, sortierte/gerundete
+Bereichsgrenzen, Vergleich mit Platten-Alpha und unveraenderte Konfiguration.
+Die eigene Vorlage prueft zusaetzlich den formatierten Messwert.
+Vor dem Fix scheiterte der Test gezielt bei Radial/precision 0/Alpha 0.25
+mit `rgba(17, 34, 51, 0)`; nach der Korrektur bestehen alle Faelle.
+Der neue Test ist ueber `tests/run.php` Teil der Standard-CI.
+
+Auch die acht vorhandenen isolierten Faelle in `tests/gauge-browser.js`
+bestanden erneut mit Edge 155.0.4283.18. Diese Browsermatrix verwendet
+synthetische Konfiguration und ist kein Ende-zu-Ende-Nachweis des PHP-Fixes.
+Der neue PHP-Test belegt dessen tatsaechliche Templateausgabe; auch der
+Kompassfall prueft nur den erzeugten Highlight-Datenblock, nicht sichtbare
+Kompass-Highlight-Bereiche. Keine neue Symcon-/WebSocket-/Pull-/IPSView-Abnahme.
+
+Nach Push und gruener CI: Modulupdate, danach betroffene Ansicht neu laden.
+`ApplyChanges()` erfolgt beim Modulupdate automatisch und erneuert die
+HTML-Ausgabe; ein zusaetzlicher Aufruf oder geplanter Dienstneustart ist fuer
+diesen Fix nicht erforderlich. Die installierte Abnahme soll an einem Gauge
+mit Teiltransparenz und Messwertpraezision 0/1 erfolgen. Bestehende Ansichten
+koennen durch die nun korrekt angewendete Deckkraft sichtbar anders aussehen.

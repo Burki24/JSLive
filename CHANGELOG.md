@@ -191,6 +191,12 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Fixed
 
+- Gauge-Highlight-Deckkraft wird nicht mehr mit der Messwertpraezision
+  gerundet. Teiltransparente Bereiche bleiben auch bei `precision = 0` oder
+  `1` korrekt erhalten; Alpha verwendet wie die uebrigen Farben zwei
+  Nachkommastellen. 120 PHP-Renderingfaelle sichern den Fix ab, ohne Bundle-,
+  Template-, Property- oder Datenmigration.
+
 - Progressbar verwendet den lokalen Loading-Bar-Patch `0.1.1-jslive.1`:
   Animationen extrapolieren bei verspaeteten Frames nicht mehr ueber ihren
   Zielwert hinaus. Altpfad und CSS bleiben unveraendert.

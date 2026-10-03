@@ -272,7 +272,7 @@ class SymconJSLiveGauge extends JSLiveModule
             $highlight_item['to'] = number_format($item['To'], $this->ReadPropertyInteger('precision'), '.', '');
 
             $rgbdata = $this->HexToRGB($item['HighlightColor']);
-            $highlight_item['color'] = 'rgba(' . $rgbdata['R'] . ', ' . $rgbdata['G'] . ', ' . $rgbdata['B'] . ', ' . number_format($item['HighlightColor_Alpha'], $this->ReadPropertyInteger('precision'), '.', '') . ')';
+            $highlight_item['color'] = 'rgba(' . $rgbdata['R'] . ', ' . $rgbdata['G'] . ', ' . $rgbdata['B'] . ', ' . number_format($item['HighlightColor_Alpha'], 2, '.', '') . ')';
 
             $highlights[] = $highlight_item;
         }
