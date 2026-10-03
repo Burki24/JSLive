@@ -14,27 +14,41 @@ Patchstelle, beispielsweise `v0.10.0`.
   und ausdruecklicher Stable-Freigabe. Den fuer die Strukturpruefung benoetigten
   Abschnitt `Unreleased` auch bei vorbereiteten Release-Eintraegen erhalten.
 
-## 0.104 - 2026-10-03 (Beta-Kandidat)
+- Erstveroeffentlichung auf Testing umgestellt; gemeinsame neue Versionierung
+  in Library- und Modul-READMEs erklaert. Tags und GitHub-Releases sind keine
+  Voraussetzung dieser Store-Vorabveroeffentlichung.
 
-### Beta-Versionshinweise
+## 0.105 - 2026-10-03 (Testing-Kandidat)
 
-Geplanter Beta-Stand fuer den 03.10.2026, noch nicht veroeffentlicht.
-Der Metadatenlauf fuer `ee6f450` scheiterte am fehlenden `Unreleased`-Abschnitt;
-die Library blieb auf 0.103. Ein einzelner Korrekturcommit im naechsten Push
-auf `dev` erwartet daher weiterhin 0.104. Der erwartete Tag ist `v0.104.0`.
-Die offizielle Beta wird direkt aus `dev` eingereicht, ohne vorherigen
-Merge nach `main`. Vor Veroeffentlichung muessen
+### Testing-Versionshinweise
+
+Geplanter Testing-Stand, noch nicht veroeffentlicht. Ausgangsstand ist 0.104
+(`14aac25`); bei einem einzelnen Dokumentationscommit erwartet der naechste
+Metadatenlauf 0.105. Keine manuelle Aenderung von `library.json`.
+Die erste Ausgabe wird direkt aus `dev` im Kanal Testing eingereicht, ohne
+vorherigen Merge nach `main` und ohne erforderlichen Tag oder GitHub-Release.
+Vor Veroeffentlichung muessen
 `library.json`, diese Versionsueberschrift und die Pflichtchecks auf dem
 resultierenden Commit uebereinstimmen. Bei weiteren Commits ist die
 Zuordnung erneut zu pruefen; keine manuelle Aenderung der Metadaten.
 Die Abnahmegrenzen bleiben im [Beta-Nachtrag](docs/SYCON_RUNTIME_MATRIX.md#beta-vorbereitung-und-ipsview-anwendernachtrag-vom-03102026)
 dokumentiert. Es gilt der [Release-Prozess](docs/RELEASE_PROCESS.md).
-Der folgende Text ist fuer die Beta-Versionsinformation vorgesehen;
+Der folgende Text ist fuer die Testing-Versionsinformation vorgesehen;
 die Vorbereitungsangaben dieses Absatzes gehoeren nicht in den Store-Text.
 
-#### Umfang dieser Beta
+#### Neue Versionierung
 
-JSLive wird fuer IP-Symcon 9.0/9.1 und PHP 8.5 stabilisiert. Diese Beta
+Die bisherige Version `0.9.9.9` wurde durch `Hauptversion.Nebenstand` ersetzt,
+beginnend mit `0.10`. Alle zehn Module verwenden eine gemeinsame Library-Version.
+Der Nebenstand zaehlt fortlaufend als ganze Zahl: `0.99`, `0.100`, `0.101` usw.
+Der Metadatenworkflow auf `dev` erhoeht ihn fuer neue Nicht-Bot-Commits, auch
+bei Dokumentationsaenderungen, und pflegt Build und Datum automatisch.
+Testing, Beta und Stable sind Veroeffentlichungskanaele, keine Versionszusätze.
+Die Versionen eingebundener JavaScript-Bibliotheken bleiben davon unabhaengig.
+
+#### Umfang dieser Testing-Ausgabe
+
+JSLive wird fuer IP-Symcon 9.0/9.1 und PHP 8.5 stabilisiert. Diese Testing-Ausgabe
 aktualisiert benoetigte Frontend-Ressourcen und korrigiert Bestandsfehler.
 Die bisherige Chart.js-Engine, Splitter-/Kindmodul-Architektur und die
 HTMLBox-/IPSView-Ausgabe bleiben erhalten.
@@ -79,7 +93,7 @@ HTMLBox-/IPSView-Ausgabe bleiben erhalten.
    `overrideWidth = 0`, `overrideHeight = 0` und beim Colorpicker zusaetzlich
    `manWidth = 0` verwenden. Positive Werte bleiben bewusste Groessenvorgaben.
 
-#### Bekannte Grenzen und Beta-Testhinweise
+#### Bekannte Grenzen und Testhinweise
 
 Die lokale Testsuite und gezielte Browser-/Symcon-Pruefungen sind dokumentiert.
 Ein Anwender-Sichttest bestaetigt die korrigierte Gauge-Darstellung in einer
@@ -98,9 +112,9 @@ Inhalte enthalten. Eigene Templates und Custom-Inhalte bleiben in der
 Verantwortung des Anwenders. Details: [Sicherheitsmodell](docs/WEBHOOK_SECURITY_MODEL.md).
 
 SymconEcharts wird separat entwickelt. Eine Uebernahme vorhandener JSLive-Charts
-ist geplant, aber in dieser Beta noch nicht enthalten. Es gibt keine
+ist geplant, aber in dieser Testing-Ausgabe noch nicht enthalten. Es gibt keine
 Chart.js-zu-ECharts-Umstellung innerhalb von JSLive und keine neue native
-Kachelmigration. Die Beta ist keine Stable-/Gesamtmatrix-Freigabe.
+Kachelmigration. Die Testing-Ausgabe ist keine Beta- oder Stable-/Gesamtmatrix-Freigabe.
 
 ### Development
 

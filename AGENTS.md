@@ -55,8 +55,10 @@ JSLive. Projektspezifische Fakten und offene Entscheidungen stehen in
 
 - `dev` ist der dauerhafte Entwicklungs- und Integrationsbranch. `main`
   enthaelt ausschliesslich kontrolliert freigegebene stabile Produktstaende.
-- Offizielle Betas werden aus einem exakt geprueften `dev`-Commit nach dem
-  Metadatenlauf veroeffentlicht. Eine vorherige Uebernahme nach `main` ist
+- Die erste modernisierte Ausgabe erscheint zunaechst als Testing, nicht Beta.
+  Testing und spaetere Betas werden aus einem exakt geprueften `dev`-Commit nach dem
+  Metadatenlauf veroeffentlicht. Tag und GitHub-Release sind fuer diese Store-
+  Vorabveroeffentlichung nicht erforderlich. Eine vorherige Uebernahme nach `main` ist
   nicht erforderlich. `main` folgt erst nach der Community-Testphase ohne
   offene Fehlermeldungen und ausdruecklicher Freigabe des Eigentuemers.
 - Die Library verwendet eine gemeinsame Version im Format
@@ -67,7 +69,7 @@ JSLive. Projektspezifische Fakten und offene Entscheidungen stehen in
   `date`; manuelle Aenderungen dieser Felder sind allein Teil einer
   ausdruecklichen Metadaten- oder Migrationsaufgabe.
 - Wesentliche Aenderungen werden im Abschnitt `Unreleased` von `CHANGELOG.md`
-  gepflegt. Der verbindliche Ablauf fuer Beta aus `dev`, spaetere Stable-
+  gepflegt. Der verbindliche Ablauf fuer Testing/Beta aus `dev`, spaetere Stable-
   Freigabe nach `main`, Tags und Ruecksynchronisierung steht in
   `docs/RELEASE_PROCESS.md`.
 - Tags und Releases werden nie verschoben oder ueberschrieben. Die

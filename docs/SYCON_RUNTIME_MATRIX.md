@@ -937,11 +937,21 @@ mit eigener CI-Abnahme. Versionsmetadaten wurden nicht manuell geaendert.
 
 Ergebnis: **Gauge-Sichttest bestaetigt; Beta-Unterlagen vorbereitet, keine
 Gesamtfreigabe**. Die verbliebenen Pruefgrenzen sind in den
-[Beta-Versionshinweisen](../CHANGELOG.md#beta-versionshinweise) sichtbar.
+[aktuellen Testing-Versionshinweisen](../CHANGELOG.md#testing-versionshinweise) sichtbar.
 Vor Einreichung sind offene Nachweise zu ergaenzen oder, soweit die geltenden
 Freigaberegeln dies zulassen, verbleibende Beta-Risiken ausdruecklich vom
 Eigentuemer zu akzeptieren. Pflichtchecks werden dadurch nicht erlassen.
 Merge, Tag, Release und Store-Einreichung bleiben Eigentuemerschritte.
+
+### Aktualisierte Kanalentscheidung
+
+Der Eigentuemer hat den Store-Zugriff und die Einreichungsfelder als geregelt
+bestaetigt. Die erste Ausgabe wird als **Testing** statt Beta eingereicht;
+Tag und GitHub-Release sind dafuer nicht erforderlich. Die oben dokumentierten
+Pruefgrenzen bleiben bestehen, werden vom Eigentuemer fuer diese Vorabversion
+jedoch nicht als zusaetzlicher Veroeffentlichungsstopp gewertet. Dies ersetzt
+keine fehlenden Testergebnisse und aendert keine historischen Nachweise.
+Massgeblich ist der aktualisierte `docs/RELEASE_PROCESS.md`.
 
 ## Ergebnisregeln
 

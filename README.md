@@ -32,7 +32,8 @@ Siehe [Wartungs- und Migrationsentscheidung](docs/adr/0006-maintenance-scope.md)
 
 ## Projektstatus
 
-- Die [Beta-Versionshinweise](CHANGELOG.md#beta-versionshinweise) sind
+- Die erste modernisierte Ausgabe wird im Kanal **Testing** vorbereitet,
+  nicht als Beta oder Stable. Die [Testing-Versionshinweise](CHANGELOG.md#testing-versionshinweise) sind
   vorbereitet, einschliesslich Update-Voraussetzungen und bekannten Grenzen.
   Der [Abnahmenachtrag](docs/SYCON_RUNTIME_MATRIX.md#beta-vorbereitung-und-ipsview-anwendernachtrag-vom-03102026)
   trennt den bestaetigten Gauge-Sichttest in IPSView von noch offenen Pruefungen.
@@ -65,6 +66,28 @@ Siehe [Wartungs- und Migrationsentscheidung](docs/adr/0006-maintenance-scope.md)
   Hook-API umgestellt. Die abschließende MCP-CURRENT-Laufzeitabnahme dieses
   Migrationsstands einschließlich Dienstneustart ist bestanden.
 
+## Versionierung und Veröffentlichung
+
+Die bisherige Versionsnummer `0.9.9.9` wurde durch das gemeinsame Schema
+`Hauptversion.Nebenstand` ersetzt, beginnend mit `0.10`. Alle zehn Module
+tragen dieselbe Library-Version; sie werden nicht einzeln versioniert.
+Der Nebenstand ist eine fortlaufende ganze Zahl, keine Dezimalstelle:
+Auf `0.99` folgt `0.100`, auf `0.104` folgt `0.105`.
+
+Auf `dev` erhöht die Metadatenautomatik den Nebenstand für neue, nicht vom
+Bot erzeugte Commits; auch Dokumentationsänderungen zählen. Build und Datum
+werden ebenfalls automatisch gepflegt. Maßgeblich ist die `library.json`
+des ausgewählten Commits nach dem Botlauf. Die Library-Version ist unabhängig
+von den Versionsnummern der eingebundenen JavaScript-Bibliotheken.
+
+Die erste modernisierte Ausgabe erscheint zunächst im Store-Kanal **Testing**.
+Eine spätere Beta oder Stable wird gesondert freigegeben; der Kanal ist kein
+Zusatz zur Versionsnummer. Testing und Beta kommen aus einem geprüften
+`dev`-Commit, `main` folgt erst nach der Testphase und Stable-Freigabe.
+Ein Git-Tag oder GitHub-Release ist für diese Store-Vorabveröffentlichung
+nicht erforderlich. Falls Tags verwendet werden, ergänzt ihr Schema eine
+Patchstelle, zum Beispiel `v0.105.0` zur Library-Version `0.105`.
+
 ## Module
 
 | Modul | Aufgabe |
@@ -85,7 +108,8 @@ Instanz.
 
 ## Installation und Verwendung
 
-Für Entwicklungs- und Testinstallationen kann das Repository
+Die Store-Erstveröffentlichung dieses modernisierten Stands ist für **Testing**
+vorgesehen. Alternativ kann für Entwicklungs- und Testinstallationen das Repository
 `https://github.com/Burki24/JSLive` in der IP-Symcon-Modulverwaltung eingebunden
 und der Zweig `dev` gewählt werden.
 
@@ -178,7 +202,7 @@ GitHub Actions führt zusätzlich die gemeinsamen Prüfungen aus
 JavaScript-/TypeScript-Quellen aus.
 
 Wesentliche Änderungen werden im [Changelog](CHANGELOG.md) festgehalten. Die
-Freigabe von `dev` nach `main`, Tagging und Rücksynchronisierung sind im
+Testing-/Beta-Einreichung aus `dev`, spätere Stable-Freigabe nach `main` und Rücksynchronisierung sind im
 [Release-Prozess](docs/RELEASE_PROCESS.md) beschrieben.
 
 ## Lizenz

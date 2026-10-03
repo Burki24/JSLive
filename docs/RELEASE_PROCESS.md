@@ -8,21 +8,22 @@ erhalten keine voneinander abweichenden Versionen.
 
 - Die Symcon-Library-Version ist der Wert aus `library.json`, beispielsweise
   `0.10`.
-- Der Git-Tag ergaenzt die SemVer-Patchstelle: `v0.10.0`.
-- Tag, Release-Titel, `library.json` und Changelog muessen dieselbe Version
-  nennen.
+- Falls ein Git-Tag verwendet wird, ergaenzt er die SemVer-Patchstelle: `v0.10.0`.
+- `library.json` und Changelog sowie gegebenenfalls Tag und Release-Titel
+  muessen dieselbe Version nennen.
 - Die Metadatenautomatik aktualisiert auf `dev` Version, Build und Datum. Ihr
   Lauf muss abgeschlossen sein, bevor der endgueltige Kandidaten-Commit
   gewaehlt wird.
 
 ## Kanal- und Branch-Regel
 
-Die offizielle Beta wird aus einem exakt geprueften `dev`-Commit veroeffentlicht.
+Die erste modernisierte Ausgabe wird zunaechst im Kanal **Testing** veroeffentlicht.
+Testing und spaetere Betas stammen aus einem exakt geprueften `dev`-Commit.
 `main` bleibt waehrend der Community-Testphase unveraendert. Erst wenn keine
 offenen Fehlermeldungen aus dieser Phase vorliegen und der Eigentuemer die
 stabile Freigabe ausdruecklich erteilt, folgt die Uebernahme nach `main`.
 Ausbleibende Meldungen allein ersetzen weder Pflichtchecks noch Freigabe.
-Eine Beta-Einreichung bezieht sich auf eine feste Commit-ID, nicht auf den
+Eine Testing-/Beta-Einreichung bezieht sich auf eine feste Commit-ID, nicht auf den
 spaeter beweglichen Branch-Kopf.
 
 ## Kandidat vorbereiten
@@ -37,8 +38,8 @@ spaeter beweglichen Branch-Kopf.
    geplante Veroeffentlichungsdatum uebernehmen. Die Ueberschrift **Unreleased**
    fuer weitere Aenderungen stehen lassen; die Strukturpruefung verlangt sie.
    Auch Dokumentationscommits erhoehen den Nebenstand: bei genau einem
-   weiteren Commit auf Basis von `0.103` ist daher `0.104` vorzubereiten,
-   nicht erneut `0.103`. Bis zur Pruefung nach dem Botlauf als Kandidat
+   weiteren Commit auf Basis von `0.104` ist daher `0.105` vorzubereiten,
+   nicht erneut `0.104`. Bis zur Pruefung nach dem Botlauf als Kandidat
    kennzeichnen; `library.json` nicht manuell anpassen.
 5. Die Dokumentationsaenderung committen, erneut den Metadaten-Bot abwarten und
    fuer exakt den resultierenden Commit die Pflichtchecks `tests`, `style` und
@@ -46,22 +47,25 @@ spaeter beweglichen Branch-Kopf.
    Changelog-Version und `library.json` muessen jetzt uebereinstimmen. Weitere
    Commits oder ein anderes Veroeffentlichungsdatum erfordern einen erneuten
    Abgleich. Bei unveraenderten Angaben keinen weiteren reinen
-   Bestaetigungscommit erzeugen; Commit und CI-Nachweis fuer die Beta-
+   Bestaetigungscommit erzeugen; Commit und CI-Nachweis fuer die Testing-/Beta-
    Einreichung festhalten, spaeter auch im Stable-Pull-Request.
 
-## Beta veroeffentlichen
+## Testing und spaeter Beta veroeffentlichen
 
-1. Den signierten oder annotierten Tag `v<Library-Version>.0` exakt auf dem
-   geprueften `dev`-Commit erstellen.
-2. Den Tag pushen und einen GitHub Release als **Pre-release** mit dem
-   entsprechenden Changelog-Text anlegen; keine Stable-Veroeffentlichung.
-3. Installation und Update ueber den veroeffentlichten Stand stichprobenartig
-   pruefen.
-4. Falls der Symcon Module Store verwendet wird, exakt diesen `dev`-Commit
-   fuer den Kanal **Beta** einreichen. Kein vorheriger Merge nach `main`.
-5. Community-Rueckmeldungen dem Beta-Stand zuordnen. Fehler auf `dev` beheben,
-   testen und erforderlichenfalls eine neue Beta mit eigener Version
-   veroeffentlichen. Einreichung, Tags und Releases bleiben Eigentuemerschritte.
+1. Nach Metadatenlauf und gruenen Pflichtchecks exakt den geprueften `dev`-
+   Commit im Store fuer **Testing** auswaehlen. Eine spaetere Beta wird
+   gesondert vom Eigentuemer freigegeben. Kein vorheriger Merge nach `main`.
+2. Store-Versionshinweise und Update-Voraussetzungen fuer den gewaehlten Kanal
+   uebernehmen. Die dokumentierten Pruefgrenzen bleiben sichtbar; sie sind
+   keine Behauptung einer vollstaendigen Laufzeitabnahme.
+3. Tag und GitHub-Release sind nach Entscheidung des Eigentuemers keine
+   Voraussetzung dieser Store-Vorabveroeffentlichung. Falls gewuenscht,
+   `v<Library-Version>.0` auf exakt demselben Commit und einen **Pre-release**
+   verwenden, niemals bestehende Tags verschieben.
+4. Rueckmeldungen dem jeweiligen Testing-/Beta-Stand zuordnen. Fehler auf
+   `dev` beheben, testen und erforderlichenfalls einen neuen Stand mit eigener
+   Version veroeffentlichen. Einreichung, Tags und Releases bleiben
+   Eigentuemerschritte.
 
 ## Nach der Community-Testphase: Stable
 
@@ -80,7 +84,7 @@ spaeter beweglichen Branch-Kopf.
 
 Die Metadatenautomatik erzeugt selbst weder Tags noch Releases. Kein Tag wird
 verschoben und kein veroeffentlichter Release ueberschrieben. Eine Korrektur
-erhaelt eine neue Library-Version und einen neuen Tag.
+erhaelt eine neue Library-Version und, falls Tags verwendet werden, einen neuen Tag.
 
 ## Ruecksynchronisierung
 
@@ -91,5 +95,5 @@ den neuen Entwicklungsstand auf `dev`; Konflikte in `CHANGELOG.md`,
 `library.json` und synchronisierten Helper-Manifesten muessen kumulativ geloest
 werden.
 
-Eine Beta aus `dev` erzeugt keinen `main`-Merge und benoetigt deshalb keine
+Testing oder Beta aus `dev` erzeugt keinen `main`-Merge und benoetigt deshalb keine
 Ruecksynchronisierung aus `main`.

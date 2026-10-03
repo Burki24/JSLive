@@ -7,6 +7,12 @@ Fortschrittsbalken und Hervorhebungsbereiche.
 
 ## Voraussetzungen und Installation
 
+Die erste modernisierte Ausgabe wird zunächst im Kanal **Testing** bereitgestellt.
+Dieses Modul verwendet die gemeinsame JSLive-Version im Format
+`Hauptversion.Nebenstand`, nicht eine eigene Modulversion. Details und
+Update-Hinweise: [Versionierung](../README.md#versionierung-und-veröffentlichung)
+und [Testing-Versionshinweise](../CHANGELOG.md#testing-versionshinweise).
+
 - IP-Symcon 9.0 oder 9.1 mit PHP 8.5
 - eine JSLive-Splitterinstanz (`SymconJSLive`)
 - eine numerische Symcon-Variable als Datenquelle
