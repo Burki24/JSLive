@@ -861,8 +861,8 @@ der Eigentuemer aus. Die ECharts-Uebergabe bleibt bewusst zurueckgestellt.
 
 ## Lokaler HTMLBox-Groessenfix vom 03.10.2026
 
-Ausgangsstand 0.101 (`ed94b50` / `b677be6`), noch kein installierter Nachweis
-fuer diese Aenderung. Anlass: Anwenderbild mit abgeschnittenem Gauge in IPSView,
+Ausgangsstand 0.101 (`ed94b50` / `b677be6`), zum Zeitpunkt der lokalen Umsetzung
+noch kein installierter Nachweis. Anlass: Anwenderbild mit abgeschnittenem Gauge in IPSView,
 `overrideWidth/overrideHeight/IFrameHeight = 0`, Standardvorlage.
 
 - Lokale Edge-155-Pruefung: 12 Gauge-Faelle (vier Vorlagen, beide radialen
@@ -880,11 +880,66 @@ fuer diese Aenderung. Anlass: Anwenderbild mit abgeschnittenem Gauge in IPSView,
   Canvas-/SVG-Lebenszyklusbehandlung. Daher eng begrenzte, opt-in Resize-
   Funktion in bestehender `util.js`; keine Helper-Kopie und keine neue Engine.
 
-Ergebnis: **lokale Regression bestanden, IPSView-Nachabnahme offen**.
+Ergebnis zum Zeitpunkt der Umsetzung: **lokale Regression bestanden,
+IPSView-Nachabnahme offen**. Spaetere Anwenderbestaetigung siehe Nachtrag unten.
 Nach Eigentuemer-Push und gruener CI Modulupdate ausfuehren und Ansicht ohne
 alten Browser-/WebView-Cache laden. Anschliessend betroffene HTMLBox verkleinern,
 vergroessern und View erneut oeffnen. Keine produktiven Werte oder Einstellungen
 wurden fuer diesen Fix veraendert; kein neuer MCP-/Symcon- oder Stable-PASS.
+
+## Beta-Vorbereitung und IPSView-Anwendernachtrag vom 03.10.2026
+
+Bezugsstand der Vorbereitung: Library 0.102, Metadatencommit
+`c36d42b506d8b76bf83a670ba2c065202e6c6f73`, Quellcommit
+`1e98ff4d226cb9c5927546c240601412ed881be0`. Lokal auf `dev` synchronisiert;
+die anschliessende Dokumentationsaenderung ist noch kein Release-Kandidat
+mit eigener CI-Abnahme. Versionsmetadaten wurden nicht manuell geaendert.
+
+### Bestaetigter Umfang
+
+- Der Eigentuemer bestaetigte die Groessenkorrektur mit Rueckmeldung
+  "Perfekt." und einem Screenshot seiner IPSView-Ansicht. Darauf ist das
+  radiale Gauge vollstaendig in der HTMLBox dargestellt, ohne sichtbares
+  Abschneiden oder Scrollbalken. Das bestaetigt die konkrete Darstellung.
+- Die vorausgehende Fehlermeldung betraf eine Standardvorlage ohne feste
+  Groessenvorgaben. Die korrigierte Ansicht wird dem Groessenfix zugeordnet;
+  der Screenshot selbst zeigt keine installierte Library-/Client-Version.
+  Deshalb wird daraus kein unabhaengiger Nachweis eines exakten installierten
+  Commits oder einer bestimmten IPSView-Version abgeleitet.
+- In der vorangegangenen Beta-Vorpruefung waren `tests`, `style` und
+  `Analyze (javascript-typescript)` auf GitHub fuer exakt `c36d42b` erfolgreich.
+  Nachweise: [Tests](https://github.com/Burki24/JSLive/actions/runs/37138031261),
+  [Style](https://github.com/Burki24/JSLive/actions/runs/37138031325),
+  [CodeQL](https://github.com/Burki24/JSLive/actions/runs/37138031253).
+- Die dokumentierten 12 Gauge-, 32 Progressbar-, 16 Iframe-Sizing- und acht
+  Chart-Streaming-Browserfaelle bleiben lokale Nachweise des Quellstands.
+  Sie sind keine nachtraegliche IPSView- oder Symcon-Laufzeitabnahme.
+
+### Nicht nachgewiesen und weiter offen
+
+- Vollstaendige IPSView-Abnahme aller Module, Gauge-Varianten und eigenen
+  Templates; beliebige Browser/WebViews, Langlauf und durchgehende
+  Wiederholungspruefung nach Speichern/Schliessen/Oeffnen der View.
+- Ein eigener aktueller MCP-Lauf fuer den HTMLBox-Fix. Fruehere Symcon-
+  Abnahmen behalten ihre dokumentierte Versionszuordnung; es wird keine
+  separate Symcon-9.0-Testebene nachtraeglich behauptet.
+- Vollstaendige erneute manuelle Durchsicht aller Altcode-Pfade und des
+  gesamten Modernisierungsdiffs. Der statische Store-Preflight meldete keine
+  automatischen Blocker und 45 Review-Signale. Das sind Pruefhinweise, weder
+  45 bestaetigte Fehler noch eine Sicherheits-/Store-Freigabe.
+- Endgueltiger Release-Commit, passende Changelog-Version und Pflichtchecks
+  nach dem letzten Metadatenlauf sowie nach Uebernahme nach `main`.
+- Zugriff auf den bisherigen Store-Eintrag und Vollstaendigkeit seiner
+  Einreichungsfelder. Dieser Dokumentationsschritt prueft oder aendert den
+  Store nicht und erklaert ihn nicht fuer einreichungsreif.
+
+Ergebnis: **Gauge-Sichttest bestaetigt; Beta-Unterlagen vorbereitet, keine
+Gesamtfreigabe**. Die verbliebenen Pruefgrenzen sind in den
+[Beta-Versionshinweisen](../CHANGELOG.md#beta-versionshinweise) sichtbar.
+Vor Einreichung sind offene Nachweise zu ergaenzen oder, soweit die geltenden
+Freigaberegeln dies zulassen, verbleibende Beta-Risiken ausdruecklich vom
+Eigentuemer zu akzeptieren. Pflichtchecks werden dadurch nicht erlassen.
+Merge, Tag, Release und Store-Einreichung bleiben Eigentuemerschritte.
 
 ## Ergebnisregeln
 

@@ -83,8 +83,19 @@ Doughnut/Pie und Radar auf beide verfuegbaren Achsen. TimePicker1-3 erhalten
 eine getrennte Formatierungskorrektur; TimePicker2 passt die Uhrgrafik an.
 Lokale Browsernachweise und Grenzen stehen in `docs/SYCON_RUNTIME_MATRIX.md`.
 Eigene Templates, feste Vorgaben und Produktivkonfigurationen bleiben erhalten.
-Naechster Schritt: Eigentuemer-Push/CI, Modulupdate und erneute IPSView-Abnahme
-mit frisch geladener Ansicht. Kein Stable-PASS und keine ECharts-Migration.
+Fortschreibung fuer die Beta-Vorbereitung: Der Groessenfix ist als `1e98ff4`
+committed; Metadatenstand 0.102 (`c36d42b`) liegt lokal vor. Tests, Style und
+CodeQL fuer `c36d42b` wurden in der Vorpruefung gruen verifiziert. Der
+Eigentuemer bestaetigt mit "Perfekt." und Screenshot das vollstaendige radiale
+Gauge in seiner IPSView-HTMLBox. Das ist ein gezielter Sichttest, keine
+vollstaendige IPSView-Abnahme; installierte Versionsnummern sind im Bild
+nicht ausgewiesen. Details und weitere Grenzen stehen im Beta-Nachtrag der
+Laufzeitmatrix. Changelog und kopierbare Beta-Versionshinweise sind vorbereitet.
+Naechster Schritt: Dokumentation committen/pushen, letzten Metadatenlauf
+abwarten, endgueltige Version/Changelog und Pflichtchecks abgleichen; danach
+kontrollierte Uebernahme nach `main` gemaess Release-Prozess. Store-Zugriff und
+Einreichungsfelder sind noch offen. Kein Stable-PASS, keine Veroeffentlichung
+und keine ECharts-Migration durch diesen Dokumentationsschritt.
 
 - Arbeitsbranch: `dev`; vor diesem Kompatibilitaetsschritt waren Arbeitsbaum,
   lokaler Branch und `origin/dev` auf `7c5a15a` synchron.

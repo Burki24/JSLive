@@ -7,11 +7,95 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ## Unreleased
 
+### Beta-Versionshinweise
+
+Vorbereitet am 03.10.2026 auf Basis von 0.102 (`c36d42b`, Quellstand
+`1e98ff4`). Noch nicht veroeffentlicht. Endgueltige Version, Datum und
+Release-Commit werden nach dem letzten Metadatenlauf gemaess
+[Release-Prozess](docs/RELEASE_PROCESS.md) festgelegt. Der folgende Text
+ist fuer die Beta-Versionsinformation vorgesehen; die Vorbereitungsangaben
+dieses Absatzes gehoeren nicht in den Store-Text.
+
+#### Umfang dieser Beta
+
+JSLive wird fuer IP-Symcon 9.0/9.1 und PHP 8.5 stabilisiert. Diese Beta
+aktualisiert benoetigte Frontend-Ressourcen und korrigiert Bestandsfehler.
+Die bisherige Chart.js-Engine, Splitter-/Kindmodul-Architektur und die
+HTMLBox-/IPSView-Ausgabe bleiben erhalten.
+
+- Umstellung der verbliebenen Module auf `IPSModuleStrict` sowie Korrekturen
+  fuer PHP 8.5, Datenfluss, Webhook-Antworten und Konfigurationsformulare.
+- Standardvorlagen mit Chart.js 4.5.1, Moment.js 2.31.0, Moment-Adapter 1.0.1,
+  Datalabels 2.2.0, Streaming-Wartungsfork 3.6.0 und jQuery 4.0.0.
+  Colorpicker und benoetigte Schriften werden lokal ausgeliefert.
+- Korrigiertes Chart-Nachladen bei schnellen Zeitraumwechseln, ueberholten
+  Antworten und mehreren Ereignissen mit gleichem Zeitstempel; korrigierte
+  Radar-Tooltips und Datumsbereiche.
+- Gauge-Animationen erreichen bei schnellen Wertwechseln den neuesten Wert;
+  Highlight-Deckkraft sowie Progressbar-Animationen und Reverse-Updates sind
+  korrigiert.
+- Automatische Groessenanpassung der Standardanzeigen an HTMLBox/Iframe,
+  auch nach Verkleinern und Vergroessern. TimePicker1-3 liefern gueltige
+  Uhrzeitwerte fuer die Eingabefelder; TimePicker2 passt die Uhrgrafik an
+  flache Boxen an.
+- Korrigierte Skriptauswahl und Listenfilter im bestehenden Konfigurationsexport.
+  Der Export ist noch kein Austauschformat fuer SymconEcharts.
+- Statische Webhook-Pfade sind begrenzt, Anfragewerte werden kontrolliert
+  verarbeitet und bekannte Zugangsdatenformen in Diagnosen maskiert.
+
+#### Vor dem Update
+
+1. Vollstaendige Symcon-Sicherung erstellen und den bisherigen JSLive-Stand
+   fuer einen Rueckfall festhalten.
+2. Vorhandene **ConfigStore-, SyncModule- und Calendar-Instanzen vor dem
+   Bibliotheksupdate entfernen**. Diese Module wurden entfernt; es gibt keine
+   automatische Migration oder Rekonstruktion. Fuer einen Rueckfall werden
+   die Sicherung und der alte Modulstand benoetigt.
+3. IP-Symcon 9.0/9.1 sowie aktuelle Browser/WebViews verwenden. Aeltere Clients
+   werden mit jQuery 4.0.0 nicht mehr zugesichert.
+4. Eigene Templates auf entfallene Ressourcenpfade pruefen:
+   [Asset-Migration](docs/FRONTEND_ASSET_MIGRATION.md). Eigene Vorlagen werden
+   nicht automatisch auf neue Bibliotheken oder Groessenlogik umgestellt.
+   Eigene Export- und Formularcallback-Aufrufe anhand der README und der
+   nachfolgenden Detailaenderungen pruefen.
+5. Nach dem Update die Visualisierung vollstaendig neu laden, bei Bedarf
+   Browser-/WebView-Cache leeren. Fuer automatische Standardlayouts
+   `overrideWidth = 0`, `overrideHeight = 0` und beim Colorpicker zusaetzlich
+   `manWidth = 0` verwenden. Positive Werte bleiben bewusste Groessenvorgaben.
+
+#### Bekannte Grenzen und Beta-Testhinweise
+
+Die lokale Testsuite und gezielte Browser-/Symcon-Pruefungen sind dokumentiert.
+Ein Anwender-Sichttest bestaetigt die korrigierte Gauge-Darstellung in einer
+IPSView-HTMLBox. Eine vollstaendige IPSView-Abnahme aller Module, Vorlagen und
+Clients ist damit nicht nachgewiesen. Die verbindliche Symcon-Testebene ist
+das vorhandene 9.1-System; eine separate 9.0-Laufzeitpruefung liegt nicht vor.
+Bitte verwendete Module mit echten Ansichten pruefen und bei Fehlern
+Library-Version, Symcon-/Client-Version, Vorlagentyp und Reproduktionsschritte
+angeben. Zugangsdaten und private Installationsdaten nicht mitveroeffentlichen.
+
+Der JSLive-Webhook verwendet weiterhin Kennwoerter in URLs, Wildcard-CORS und
+GET fuer Schreibzugriffe; er darf nicht ungeschuetzt oeffentlich bereitgestellt
+werden. Debug ist standardmaessig aus. Bei aktiviertem Debug koennen freie
+Texte, Skripte und Medien trotz Maskierung bekannter Passwortfelder sensible
+Inhalte enthalten. Eigene Templates und Custom-Inhalte bleiben in der
+Verantwortung des Anwenders. Details: [Sicherheitsmodell](docs/WEBHOOK_SECURITY_MODEL.md).
+
+SymconEcharts wird separat entwickelt. Eine Uebernahme vorhandener JSLive-Charts
+ist geplant, aber in dieser Beta noch nicht enthalten. Es gibt keine
+Chart.js-zu-ECharts-Umstellung innerhalb von JSLive und keine neue native
+Kachelmigration. Die Beta ist keine Stable-/Gesamtmatrix-Freigabe.
+
 ### Development
+
+Die folgenden Eintraege dokumentieren historische Entwicklungsschritte und
+sind keine aktuelle Liste offener Aufgaben. Spaetere Korrekturen stehen unter
+**Fixed**; Prototypen und Messungen sind keine zusaetzlichen Beta-Funktionen.
 
 - Gauge-Browserpruefung wartet bei aufeinanderfolgenden Werten auf das echte
   Animationsende. Der dabei nachgewiesene Altfehler bei unterbrochenen
-  Canvas-Gauges-Animationen bleibt als separater Wartungspunkt dokumentiert.
+  Canvas-Gauges-Animationen wurde anschliessend mit dem unter **Fixed**
+  beschriebenen lokalen Patch korrigiert.
 - Laufzeitnachweis von 0.96 und verbleibende Freigabepunkte fortgeschrieben;
   IPSView bleibt Anwenderabnahme, ECharts-Uebergabe bleibt zurueckgestellt.
 
@@ -19,7 +103,8 @@ Patchstelle, beispielsweise `v0.10.0`.
   DoughnutPie, RadarChart, Gauge und Progressbar charakterisiert. Reale
   statische Formulare, synthetische Daten, keine Laufzeitaenderung. Separate
   Fehlerprobe belegt Skriptexport ohne Opt-in und unwirksamen Listenspalten-
-  Filter; beide Fehler bleiben fuer einen getrennten Korrekturschritt offen.
+  Filter; beide Fehler wurden anschliessend im unter **Fixed** beschriebenen
+  Export-Korrekturschritt behoben.
   Migrationsgrenzen und gezielten Gauge-Abschluss auf 0.93 dokumentiert.
 
 - Planung an die Community-Zusage angepasst: notwendige Ressourcenupdates,
@@ -44,7 +129,8 @@ Patchstelle, beispielsweise `v0.10.0`.
 - Loading-Bar-Herkunft und JSLive-CSS-Anpassungen dokumentiert; Hash-/Webhook-
   Tests und zehn statische Browserfaelle ergaenzt. Separate Fehlernachweise
   reproduzieren falsche Animationsendwerte und uebersprungene Reverse-Updates.
-  Beide Korrekturen stehen aus; Produktivbestand unveraendert.
+  Der Produktivbestand blieb bei diesem Audit unveraendert; beide Fehler
+  wurden anschliessend unter **Fixed** korrigiert.
 
 - Canvas Gauges 2.1.7 gegen die offizielle Distribution abgeglichen;
   Quellen-/Hashnachweis, Asset-/Webhook-Vertraege und acht isolierte

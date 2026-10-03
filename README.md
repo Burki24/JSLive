@@ -32,6 +32,11 @@ Siehe [Wartungs- und Migrationsentscheidung](docs/adr/0006-maintenance-scope.md)
 
 ## Projektstatus
 
+- Die [Beta-Versionshinweise](CHANGELOG.md#beta-versionshinweise) sind
+  vorbereitet, einschliesslich Update-Voraussetzungen und bekannten Grenzen.
+  Der [Abnahmenachtrag](docs/SYCON_RUNTIME_MATRIX.md#beta-vorbereitung-und-ipsview-anwendernachtrag-vom-03102026)
+  trennt den bestaetigten Gauge-Sichttest in IPSView von noch offenen Pruefungen.
+  Dies ist noch keine Veroeffentlichung oder Stable-Freigabe.
 - Entwicklungszweig: `dev`
 - Die Bibliotheksversion und der Build werden auf `dev` automatisch aus dem
   jeweiligen Quellcommit erzeugt. Die Felder in `library.json` werden nicht
