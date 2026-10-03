@@ -44,6 +44,11 @@ Die Kindmodule sprechen über den Hook unter anderem die bestehenden Aktionen
 `exportConfiguration` an. Die Namen und JSON-Strukturen sind öffentliche
 Verträge und werden bei der Modernisierung rückwärtskompatibel behandelt.
 
+Das Zusammenspiel der Ausgabevariablen `IPSView` und `Output`, ihrer Schalter,
+des HTML-Caches und der öffentlichen Linkmethoden ist im
+[Ausgabevertrag](../docs/VISUALIZATION_OUTPUT_CONTRACTS.md) dokumentiert.
+Die bestehende Legacy-Darstellung bleibt unverändert.
+
 ## Technische Daten
 
 | Eintrag | Wert |

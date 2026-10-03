@@ -9,6 +9,13 @@ php tests/run.php
 Der Runner verwendet neben PHP auch Python 3 fuer die Metadaten- und
 Helper-Pruefungen sowie Node.js fuer die JavaScript-Renderingvertraege.
 
+`php tests/visualization-output-contracts.php` prueft den echten gemeinsamen
+Kind-/Splitter-Code mit prozesslokalen Symcon-Testdoubles: IPSView-/Output-
+Schaltermatrix, wiederholte Aktualisierung, getrenntes Entfernen, Statussperre,
+Cache, Iframe-Hoehen und Linkbildung. Der Test ist Teil des Standardrunners;
+kein Symcon-Zugriff und keine Browser-/IPSView-Abnahme. Vertrag und Grenzen:
+[Visualisierungsausgaben](../docs/VISUALIZATION_OUTPUT_CONTRACTS.md).
+
 `node tests/progressbar-browser.js` prueft optional 32 animierte Loading-Bar-
 Faelle mit echten Assets, lokaler SVG-Antwort, normalen/verzoegerten Frames
 und drei Reverse-Bereichen. `--probe-animation` ist der gezielte Kurzlauf.

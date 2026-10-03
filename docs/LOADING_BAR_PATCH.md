@@ -87,7 +87,9 @@ Helper), PHP-CS-Fixer-Trockenlauf, JSON-Pruefung, JavaScript-Syntaxchecks und
 `git diff --check`. PHP lokal 8.5.10. Die 32 Browserfaelle wurden nach Integration
 erneut erfolgreich ausgefuehrt, ebenso der gezielte Animations-Kurzlauf.
 
-CI und installierte Abnahme dieses neuen Kandidaten stehen aus. Kein
+Nachtrag 03.10.2026: Push, gruene CI und Symcon-Update wurden vom Eigentuemer
+bestaetigt; lokal liegt 0.89 (`7a419a9` / `1729c19`) vor. Keine zusaetzliche
+unabhaengige MCP-Abnahme durch diesen Nachtrag. Kein
 vollstaendiger Template-Startup-, Transport-, Langlauf- oder IPSView-Nachweis.
 Die bekannte fehlende IPSView-Testlizenz bleibt eine Testluecke. Die lokale
 Korrektur begruendet keine aktive Pflegezusage fuer die alte Upstream-Bibliothek.

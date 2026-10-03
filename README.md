@@ -31,7 +31,9 @@ der weiteren Modernisierung kompatibel.
   ausgeführt. Die Baseline unter IP-Symcon 9.1 und PHP 8.5.8 ist bestanden;
   die Freigabe als modernisierte stabile Version steht noch aus.
 - Die bestehende Ausgabe über `~HTMLBox` und IPSView bleibt vorerst erhalten.
-  Eine native Kacheldarstellung wird später schrittweise ergänzt.
+  [Ausgabe-, IPSView- und Link-Verträge](docs/VISUALIZATION_OUTPUT_CONTRACTS.md)
+  sind durch lokale Charakterisierungstests abgesichert. Eine native
+  Kacheldarstellung wird später schrittweise ergänzt.
 - Die Standardvorlagen verwenden jQuery 4.0.0 und setzen aktuelle Browser bzw.
   WebViews voraus. Ältere Clients werden nicht mehr zugesichert. Der alte
   jQuery-Pfad bleibt für eigene Vorlagen erhalten; siehe

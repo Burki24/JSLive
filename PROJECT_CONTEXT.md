@@ -815,9 +815,10 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
     deterministische Regressionen laufen nun in der Standardsuite, 32 echte
     Browserfaelle bestanden. Ausgangspunkt 0.88 (`8427641` / `063ed18`);
     Push, CI und Symcon-Update des Audits sind vom Eigentuemer bestaetigt.
-    CI/installierte Abnahme des neuen Patches stehen noch aus. Danach Phase 5
-    mit Charakterisierung der bestehenden Ausgabe-/IPSView-/Link-Vertraege
-    beginnen; moderne Gauge-Alternativen bleiben fuer spaeter vorgemerkt.
+    Auch der neue Patch ist inzwischen gepusht, CI gruen und Symcon aktualisiert
+    (Eigentuemerbestaetigung). Lokaler Stand 0.89 (`7a419a9` / `1729c19`);
+    keine neue unabhaengige MCP-/IPSView-Abnahme behauptet. Weiter mit Phase 5;
+    moderne Gauge-Alternativen bleiben fuer spaeter vorgemerkt.
     Details: `docs/LOADING_BAR_PATCH.md`.
 
 #### Vorgemerkt fuer ein spaeteres Update: moderne Gauges
@@ -833,12 +834,17 @@ Template-, Platzhalter-, CSS- und Cache-Verhalten charakterisiert.
   abstimmen. Noch keine Bibliotheksauswahl oder Migration beschlossen.
 
 Dieser Punkt ist fuer spaeter vorgemerkt und aendert nicht den naechsten
-Abschluss der Loading-Bar-Fehlerkorrektur. Canvas Gauges 2.1.7 bleibt vorerst unveraendert.
+Schritt in Phase 5. Canvas Gauges 2.1.7 bleibt vorerst unveraendert.
 
 ### Phase 5 - IPSView und Kacheldarstellung
 
 1. Bestehenden `IPSView`-/`Output`-/Link-Vertrag als Kompatibilitaetsschicht
-   dokumentieren und testen.
+   dokumentieren und testen. Lokal umgesetzt: acht Schalterkombinationen,
+   wiederholte Aktualisierung, getrenntes Entfernen, Statussperre, Cache,
+   Iframe-Hoehen und Linkmatrix mit echtem Kind-/Splitter-Code sowie lokalen
+   Symcon-Testdoubles. Bestandteil der Standardsuite; keine Laufzeitaenderung.
+   Details: `docs/VISUALIZATION_OUTPUT_CONTRACTS.md`. CI nach Push steht aus;
+   IPSView-Laufzeitabnahme bleibt mangels Testlizenz offen.
 2. Ein einfaches Modul als Pilot fuer native WebContent-Darstellung und die
    Symcon-9.1-HTML-SDK-Kachel waehlen.
 3. Konfigurationsmoeglichkeiten und Theme-/Responsive-Helper am Pilot pruefen.

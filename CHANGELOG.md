@@ -9,6 +9,11 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Development
 
+- Bestehende IPSView-/Output-/Link-Vertraege dokumentiert und mit echtem
+  Kind-/Splitter-Code sowie lokalen Symcon-Testdoubles abgesichert. Tests fuer
+  Schalterkombinationen, Wiederholungen, Entfernen, Cache, Iframe und Links sind
+  Teil der Standardsuite. Keine Laufzeitaenderung oder native Kachelmigration.
+
 - Loading-Bar-Herkunft und JSLive-CSS-Anpassungen dokumentiert; Hash-/Webhook-
   Tests und zehn statische Browserfaelle ergaenzt. Separate Fehlernachweise
   reproduzieren falsche Animationsendwerte und uebersprungene Reverse-Updates.
