@@ -67,8 +67,19 @@ Buildskript liegt nun unter `.github/scripts`; Gauge-Bundle, Modulcode und
 Metadaten bleiben unveraendert. Die Strukturpruefung kontrolliert auch bisher
 uebersehene Stammordner ohne Manifest, mit isolierten Regressionstests fuer
 die offiziellen Ausnahmen. Leere lokale Altordner werden nicht von Git
-ausgeliefert und bleiben unangetastet. Lokale Nachweise ersetzen keine erneute
-Symcon-Abnahme: Push, CI und Modulupdate dieses Strukturfixes stehen noch aus.
+ausgeliefert und bleiben unangetastet. Push, Pull und Modulupdate sind erfolgt.
+Abnahme auf 0.100 (`d070040` / `84a20fa`): lokal/installiert identische
+Metadaten, Symcon-Strukturpruefung gueltig, elf Instanzen aktiv; Tests, Style
+und CodeQL fuer den exakten Metadatencommit gruen. Der installierte radiale
+Gauge-Nachtest mit schnellen synthetischen Wertfolgen ist bestanden; Messwert
+wiederhergestellt, Konfigurationen unveraendert. Details und Grenzen stehen
+im Abschlussnachtrag der `docs/SYCON_RUNTIME_MATRIX.md`.
+
+Stand fuer die naechste Entscheidung: Die bekannten Chart-, Gauge- und
+Strukturkorrekturen sind gezielt abgenommen. Keine weitere Codeaenderung aus
+diesem Abschlusslauf erforderlich. Naechster Schritt ist die IPSView-Abnahme
+des Eigentuemers auf dem Produktivsystem, danach kontrollierte Release-
+Vorbereitung. Kein Stable-PASS, kein Release und keine ECharts-Migration.
 
 - Arbeitsbranch: `dev`; vor diesem Kompatibilitaetsschritt waren Arbeitsbaum,
   lokaler Branch und `origin/dev` auf `7c5a15a` synchron.
@@ -562,7 +573,11 @@ Produktivsystem. Keine Erweiterung des JSLive-Funktionsumfangs.
    `2.1.7-jslive.1`; die vier Standardvorlagen laden den Patch, der Originalpfad
    bleibt unveraendert. 34 deterministische Faelle und zwoelf Browservarianten
    mit 108 unterbrochenen Wertfolgen bestanden. Keine neue Gauge-Engine oder
-   Wartungsfork. CI und installierter Nachtest nach Push/Modulupdate stehen aus.
+   Wartungsfork. CI und installierter radialer Nachtest auf 0.100 bestanden:
+   drei schnelle Wertfolgen erreichen jeweils das letzte Ziel. Synthetischer
+   Messwert zurueckgesetzt, Konfigurationen unveraendert. Alle vier Vorlagen
+   bleiben lokal durch die zwoelf Browservarianten abgesichert; kein Live-
+   Nachweis fuer jede Vorlage. IPSView und kontrollierter Release bleiben offen.
 4. Bestehende Ausgabe-, IPSView-, Link- und Datenvertraege erhalten; offene
    Laufzeitnachweise und Freigabegrenzen dokumentieren. IPSView bleibt mangels
    Testlizenz eine bekannte Testluecke.

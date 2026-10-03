@@ -766,10 +766,11 @@ Aktive Restpunkte fuer den Wartungsabschluss:
    `2.1.7-jslive.1`. 34 deterministische Faelle und zwoelf Browservarianten mit
    108 unterbrochenen Wertfolgen bestanden; alter Assetpfad bleibt unveraendert.
    Commit/Push, gruene CI, Metadatenabgleich, Modulupdate und installierter
-   Gauge-Nachtest stehen aus. Ansicht ausdruecklich neu laden; kein separates
-   ApplyChanges oder Dienstneustart. Details:
+   radialer Gauge-Nachtest sind auf 0.100 bestanden (Nachtrag unten).
+   Ansicht ausdruecklich neu laden; kein separates ApplyChanges oder
+   Dienstneustart. Details:
    siehe [Gauge-Audit](GAUGE_AUDIT.md#abschlussabgleich-auf-basis-096-animationsgrenze).
-   Lokale synthetische Browsernachweise ersetzen keine installierte Abnahme.
+   Die weiteren Gauge-Vorlagen sind lokal, nicht alle separat live geprueft.
 3. IPSView-Abnahme durch den Eigentuemer auf dem Produktivsystem nach Abschluss
    der Fehlerkorrekturen. Aktuelle WebViews, eigene Templates und verwendete
    Darstellungen pruefen; Desktop-Browsertests ersetzen diese Abnahme nicht.
@@ -781,6 +782,82 @@ der historische Achsenfix durch 0.96. Positive Exporte eigener Skriptinhalte sin
 lokal abgesichert, mangels passender Live-Testkonfiguration nicht live nachgewiesen.
 Die ECharts-Uebergabe bleibt zurueckgestellt. Historische Prototyp-, native
 Kachel- und allgemeine Erweiterungsplaene sind keine aktiven Freigabepunkte.
+
+## Wartungsabschluss fuer die IPSView-Abnahme am 03.10.2026
+
+Gepruefter Stand: JSLive 0.100, Quellcommit
+`d07004080ea1c41b99e081ea83b235f80772ffb5`, Metadatencommit
+`84a20faeea69ff8eb5ab40e5562b59e45fe5a828`, Build `218562624`.
+Lokal und installiert stimmen Version, Build und Datum ueberein.
+MCP-CURRENT: Symcon 9.1, Revision
+`rust-dab58090190ab6ce72c9c1d036c2e935edff313f`, PHP 8.5.8,
+Windows amd64. Updatepfad 0.99 -> 0.100 laut Eigentuemer abgeschlossen.
+Kein zusaetzliches ApplyChanges und kein neuer Dienstneustart ausgefuehrt;
+die vorhandenen Baseline-Nachweise bleiben historisch zugeordnet.
+
+Frische Nachweise fuer diesen Stand:
+
+- GitHub [Tests](https://github.com/Burki24/JSLive/actions/runs/37131331181),
+  [Style](https://github.com/Burki24/JSLive/actions/runs/37131331125) und
+  [CodeQL](https://github.com/Burki24/JSLive/actions/runs/37131331124) erfolgreich
+  fuer exakt den Metadatencommit. Der Metadatenlauf darauf ist erwartungsgemaess
+  uebersprungen; der Lauf auf dem Quellcommit war erfolgreich.
+- Symcon-MCP meldet `JSLive is valid.`; zehn Modulmanifeste vorhanden,
+  elf JSLive-Instanzen aktiv (Status 102). Buildskript unter `.github/scripts`,
+  kein ausgeliefertes Root-`scripts`-Buildskript. Installierter Gauge-Patchhash
+  stimmt mit dem lokalen Bundle ueberein.
+- Gesamtsuite, 63 PHP-Syntaxchecks unter PHP 8.5.10, PHP-CS-Fixer-Trockenlauf
+  fuer 49 konfigurierte Dateien und `git diff --check` bestanden.
+- Isolierter Gauge-Browsertest erneut bestanden: zwoelf Varianten, vier
+  Vorlagen, zwei Breiten, insgesamt 108 unterbrochene Wertfolgen.
+  Edge 155.0.4283.18, Node 24.19.0; synthetische HTTP-Antworten.
+- Installierte Standard-Radialanzeige mit dem echten Webhook, Patchbundle
+  und WebSocket getestet: Folgen 10 -> 80 -> 35, 90 -> 20 -> 70 und
+  15 -> 60 -> 15, je 100 ms zwischen Schreibvorgaengen bei 500 ms Animation.
+  Alle drei Endziele wurden sowohl als Ziel als auch als gerenderter Wert
+  erreicht. Zehn WebSocket-Frames einschliesslich Ruecksetzung empfangen.
+  Ausgangswert wiederhergestellt, Gauge-/Splitter-Konfigurationen unveraendert.
+  Nur freigegebene synthetische Testwerte geaendert; diese Wechsel koennen im
+  Testarchiv verbleiben. Keine Produktivwerte oder Konfigurationen geaendert.
+- Im ersten Beobachtungslauf eine nicht zugeordnete HTTP-404-Konsolenmeldung;
+  nicht als behoben oder als Faviconfehler bewertet. Gezielter Nachlauf mit
+  HTTP-Status-Erfassung ohne fehlgeschlagene HTTP-Antworten oder JavaScript-
+  Ausnahmen. Keine JSLive-Warnungen/-Fehler im geprueften Symcon-Logzeitraum.
+
+Ergebnis: **PASS fuer den gezielten Gauge- und Struktur-Nachtest**.
+Die bekannten Wartungsfehler sind damit gezielt abgesichert; bereit fuer die
+anwenderseitige IPSView-Abnahme, aber **kein Stable-/Gesamtmatrix-PASS**.
+Nicht neu nachgewiesen sind alle Gauge-Vorlagen in Symcon, eigene Templates,
+beliebige WebViews, Langlauf und positive Live-Exporte eigener Skriptinhalte.
+Vorherige Chart-/Transportabnahmen bleiben ihren jeweiligen Versionen zugeordnet.
+
+### Kurze IPSView-Abnahme durch den Eigentuemer
+
+Vor dem Produktivupdate Symcon-Sicherung und bisherigen Modulstand festhalten.
+Danach Ansichten neu laden, damit alte Browser-/WebView-Caches nicht den
+vorherigen JavaScript-Stand verwenden. Nur tatsaechlich genutzte Funktionen
+pruefen und nicht verwendete Module als solche notieren:
+
+1. Vorhandene Views oeffnen: keine leeren Elemente, Lade- oder Skriptfehler;
+   Groesse, Skalierung, Schrift und Layout auf den verwendeten Clients pruefen.
+2. Chart: Live-Werte, gestern/heute, schnelle Zeitraumwechsel und Rueckkehr zur
+   Echtzeit; Achse und Daten muessen jeweils zur letzten Auswahl passen.
+3. Gauge/Progressbar: Werte und Endanzeige vergleichen, schnelle Aenderungen
+   beobachten, Highlights und Formatierung kontrollieren; auch vorhandene
+   Doughnut-/Radaransichten auf Daten, Legenden und Tooltips pruefen.
+4. Colorpicker, DateTimePicker, AdvTextfield und Custom nur soweit genutzt
+   pruefen. Schreibende Bedienaktionen nur bewusst an geeigneten Testzielen
+   ausfuehren; keine unkontrollierten Aktionen an produktiven Geraeten.
+5. Eigene Templates gesondert pruefen: Sie werden nicht automatisch auf den
+   Gauge-Patch umgestellt. Vorlagen mit altem Assetpfad koennen den alten
+   Animationsfehler weiterhin enthalten.
+6. View speichern, schliessen und erneut oeffnen; Client-/IPSView-Version,
+   gepruefte Library-Version und Ergebnis melden. Den zuvor als unabhaengig
+   von JSLive eingegrenzten IPSView-Speicherfehler getrennt bewerten.
+
+Bei erfolgreicher Abnahme folgt ausschliesslich der kontrollierte
+[Release-Prozess](RELEASE_PROCESS.md). Merge, Tag und Veroeffentlichung fuehrt
+der Eigentuemer aus. Die ECharts-Uebergabe bleibt bewusst zurueckgestellt.
 
 ## Ergebnisregeln
 

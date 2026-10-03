@@ -242,6 +242,17 @@ Fehler behalten. Nur einen Gauge-Bundle je Seite laden. Rueckfall auf den
 vollstaendigen Stand `be9a96a` (0.98) bringt bewusst auch den Altfehler zurueck.
 Installierter Gauge-Nachtest und IPSView-Abnahme bleiben offen; kein Stable-PASS.
 
+Fortschreibung auf 0.100 am 03.10.2026: Der installierte Standard-Radial-
+Nachtest ist bestanden. Drei synthetische Folgen mit 100-ms-Wertabstand bei
+500-ms-Animation erreichen jeweils exakt das letzte Ziel; WebSocket-Transport
+und Ruecksetzung nachgewiesen, Gauge-/Splitter-Konfigurationen unveraendert.
+Auch die zwoelf lokalen Browservarianten mit 108 Unterbrechungsfolgen erneut
+bestanden. Strukturfehler durch den Root-Werkzeugordner nach Verschiebung nach
+`.github/scripts` von Symcon nicht mehr beanstandet. CI fuer den exakten
+Metadatencommit gruen. Details, Nachweisgrenzen und IPSView-Checkliste:
+[Laufzeitmatrix](SYCON_RUNTIME_MATRIX.md#wartungsabschluss-fuer-die-ipsview-abnahme-am-03102026).
+IPSView-Abnahme und kontrollierter Release bleiben offen; kein Stable-PASS.
+
 Abschluss lokal: Gesamtsuite einschliesslich Patchreproduktion, Animation,
 Asset-/Webhook- und 120 PHP-Renderingfaellen bestanden. 59 PHP-Syntaxchecks
 (PHP 8.5.10), JavaScript-Syntax, PHP-CS-Fixer-Trockenlauf (47 Dateien, keine
