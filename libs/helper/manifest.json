@@ -3,10 +3,10 @@
     "source_repository": "Burki24/Symcon_ModuleHelper",
     "helpers": {
         "ConfigurationFormHelper": {
-            "version": "1.0.0",
-            "sha256": "fa87dd4c67f43a3838fe87110387e4c1a1b98685c13403eeb52c189246045678",
+            "version": "1.0.1",
+            "sha256": "bd45f15a1c2f6e2800eff51eefeb3094f5745a3469434d6a57b98d54f30d363f",
             "path": "libs/helper/ConfigurationFormHelper.php",
-            "source_sha": "19ce63ec77843ed3cf845b82b346e21f10412d1a"
+            "source_sha": "c2690313db70d2c2c9fd7d2549461f43a50384e9"
         },
         "DataFlowHelper": {
             "version": "1.0.0",
@@ -15,10 +15,10 @@
             "source_sha": "19ce63ec77843ed3cf845b82b346e21f10412d1a"
         },
         "DebugHelper": {
-            "version": "1.0.2",
-            "sha256": "3bc98238da59682b149d981e7641f1a1af8103047d05ce520dec0a2abcbe7d2b",
+            "version": "1.0.3",
+            "sha256": "b58cd75c9c2c01fc0a6e2610b3f41d817e9799400f08179d380eaa81791864e3",
             "path": "libs/helper/DebugHelper.php",
-            "source_sha": "9d7e2d759c6e650b105f672a23a7a3aa346d403e"
+            "source_sha": "c2690313db70d2c2c9fd7d2549461f43a50384e9"
         },
         "HttpResponseHelper": {
             "version": "1.1.0",
@@ -33,10 +33,10 @@
             "source_sha": "19ce63ec77843ed3cf845b82b346e21f10412d1a"
         },
         "ResponsiveVisualizationHelper": {
-            "version": "1.0.0",
-            "sha256": "0cebd0f08e6416a6d7d4d5fdbb19bf96d457d3e2d51fcf2a1d3e6adf5e967451",
+            "version": "1.0.2",
+            "sha256": "158d643156820c7c1e6979d4b28099b6b0e2f71eafbd8c6a7feb717200b6c700",
             "path": "libs/helper/ResponsiveVisualizationHelper.php",
-            "source_sha": "19ce63ec77843ed3cf845b82b346e21f10412d1a"
+            "source_sha": "c2690313db70d2c2c9fd7d2549461f43a50384e9"
         },
         "VariableHelper": {
             "version": "1.2.0",
@@ -45,16 +45,30 @@
             "source_sha": "19ce63ec77843ed3cf845b82b346e21f10412d1a"
         },
         "VariablePresentationHelper": {
-            "version": "2.0.0",
-            "sha256": "ce620078e72bcbffed1adfdd02e8f64baf5f2b2e8e1531e3bb1ae7b32b390fb8",
+            "version": "2.1.1",
+            "sha256": "c3212189b2dffda2e582a59ab8ba5d7f2a563dc2f3ea841ec9e877e4400de650",
             "path": "libs/helper/VariablePresentationHelper.php",
-            "source_sha": "19ce63ec77843ed3cf845b82b346e21f10412d1a"
+            "source_sha": "c2690313db70d2c2c9fd7d2549461f43a50384e9"
         },
         "VisualizationAssetHelper": {
-            "version": "1.0.0",
-            "sha256": "1693b2399bcf95d270a6d9a01df6534caad906497bd4ba9489916a951abaffcc",
+            "version": "1.1.0",
+            "sha256": "a9f5e0c8ea21c021646189fedda6757724b7897b539ead378c2a2f012895e1ee",
             "path": "libs/helper/VisualizationAssetHelper.php",
-            "source_sha": "19ce63ec77843ed3cf845b82b346e21f10412d1a"
+            "source_sha": "c2690313db70d2c2c9fd7d2549461f43a50384e9",
+            "assets": [
+                {
+                    "path": "libs/helper/visualization/http-origin.js",
+                    "sha256": "c6c8dd8355b426ddaa38d1789164aac06b4d7d0ccfb8196fcaa88b2ebc2c0456"
+                },
+                {
+                    "path": "libs/helper/visualization/interaction.js",
+                    "sha256": "830baf8049e7274d3796386d93186c45bcb65102e4bf4a8a704171187fb22c96"
+                },
+                {
+                    "path": "libs/helper/visualization/interaction.min.js",
+                    "sha256": "851bb2e77a7111da86fbcd0dc0acb554fd68c6cffa826b1af132eb6847d65959"
+                }
+            ]
         },
         "VisualizationThemeHelper": {
             "version": "1.1.0",
@@ -89,6 +103,12 @@
                     "source_sha": "19ce63ec77843ed3cf845b82b346e21f10412d1a"
                 }
             ]
+        },
+        "VariablePresentationNormalizationHelper": {
+            "version": "1.0.0",
+            "sha256": "1385757d6c2b2190c6c11c01a0d8c1a44af789ca4132fbd3ac9d3ec39c052db9",
+            "path": "libs/helper/VariablePresentationNormalizationHelper.php",
+            "source_sha": "c2690313db70d2c2c9fd7d2549461f43a50384e9"
         }
     }
 }
