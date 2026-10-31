@@ -7,7 +7,9 @@ festgelegt. Kanonische Fassung ist
 Der Vertrag erfasst vollstaendige fachliche Konfiguration, Steuerzustaende,
 Quellen-/Archivregeln und Gestaltung. Profile werden vollstaendig in native
 Darstellungsdefinitionen uebersetzt; Quellen, Actions, Archivwerte und Designs
-bleiben unveraendert. Exporter, Importer und Vergleichsabnahme sind noch offen.
+bleiben unveraendert. Der erste Producer und die gemeinsame Normalisierung sind
+lokal implementiert; Schnittstellen, Verteilungsfolge und offene Grenzen stehen
+im [Exportbericht](docs/ECHARTS_EXPORT.md). Importer und Vergleichsabnahme sind noch offen.
 Dieser Nachtrag konkretisiert die Spezifikationsanforderung aus ADR 0006;
 historische Aussagen zum damals noch offenen Format sind keine aktuelle Planung.
 

@@ -14,6 +14,46 @@ class JSLiveModule extends IPSModuleStrict
     use \Burki24\SymconModuleHelper\DataFlowHelper;
     use \Burki24\SymconModuleHelper\DebugHelper;
 
+    /** Export a complete migration package; the legacy exporter remains independent. */
+    public function ExportECharts(bool $includeScripts = false): string
+    {
+        $helper = dirname(__DIR__, 2) . '/libs/helper/VariablePresentationNormalizationHelper.php';
+        if (!is_file($helper)) {
+            throw new RuntimeException('VariablePresentationNormalizationHelper is not installed. Complete the regular helper sync first.');
+        }
+        require_once $helper;
+        require_once __DIR__ . '/JSLiveEChartsExport.php';
+        $identities = [];
+        foreach (IPS_GetInstanceListByModuleID('{9FFF3FC0-FD51-C289-FA36-BC1C370946CF}') as $id) {
+            if (function_exists('SymconJSLive_GetMigrationInstallationID')) {
+                $identity = SymconJSLive_GetMigrationInstallationID($id);
+                if ($identity !== '') {
+                    $identities[$identity] = true;
+                }
+            }
+        }
+        if (count($identities) !== 1) {
+            throw new RuntimeException('Migration identity is missing or conflicting. Update all JSLive splitters before export.');
+        }
+        $reader = function (string $name, array $arguments): mixed
+        {
+            $allowed = ['GetGlobalConfiguration', 'GetCorrectStartDate', 'GetOffsetDate', 'GetConfigurationData', 'GenerateTitleData',
+                'GenerateLegendData', 'GenerateTooltipData', 'GenerateYAxesData', 'GenerateTicks', 'GenerateHighlights', 'GenerateLabels'];
+            if (!in_array($name, $allowed, true)) {
+                throw new RuntimeException('Unsupported export model reader.');
+            }
+            return (new ReflectionMethod($this, $name))->invokeArgs($this, $arguments);
+        };
+        return (new JSLiveEChartsExport($this->InstanceID, $reader))->Export(array_key_first($identities), $includeScripts);
+    }
+
+    /** Download link for the new authenticated chart export, without changing old URLs. */
+    public function GetEChartsExportLink(bool $includeScripts = false): string
+    {
+        $link = $this->GetConfigurationLink($includeScripts);
+        return str_replace('/exportConfiguration?', '/exportECharts?', $link);
+    }
+
     //confuguration and link
     public function LoadOtherConfiguration(int $id): mixed
     {

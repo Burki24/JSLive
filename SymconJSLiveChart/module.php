@@ -540,6 +540,8 @@ class SymconJSLiveChart extends JSLiveModule
                 return json_encode(['Config' => $conf, 'ModuleID' => $mid], JSON_THROW_ON_ERROR);
             case 'getFonts':
                 return json_encode($this->GetFonts(), JSON_THROW_ON_ERROR);
+            case 'exportECharts':
+                return $this->ExportECharts(($buffer['queryData']['scripts'] ?? '') === '1');
             case 'exportConfiguration':
                 return $this->ExportConfiguration(false, $buffer['queryData'] ?? []);
             case 'getContend':

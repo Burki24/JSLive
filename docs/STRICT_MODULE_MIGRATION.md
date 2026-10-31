@@ -242,6 +242,12 @@ deklariert `library.json` IP-Symcon 9.0 als Mindestversion.
 
 ## Bereits gehärtete Formular-Callbacks
 
+Der additive ECharts-Export ergänzt `ExportECharts(bool $includeScripts = false)`
+und `GetEChartsExportLink(bool $includeScripts = false)` am gemeinsamen
+`JSLiveModule` sowie `GetMigrationInstallationID()` am Splitter, jeweils mit
+Rückgabe `string`. Die Methoden sind im öffentlichen Inventar erfasst; die
+74 bisherigen Signaturen bleiben erhalten. Der Inventartest zählt jetzt 77.
+
 Die öffentlich exportierten Formular-Callbacks verwenden bereits die vom
 Legacy-Modullader unterstützten skalaren Parametertypen. Dynamische
 Formularwerte werden als String übertragen und intern wieder in Boolean- oder

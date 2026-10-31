@@ -1,6 +1,6 @@
 # ADR 0007: Gemeinsamer Export-/Importvertrag fuer SymconECharts
 
-- Status: Angenommen; Spezifikation, noch kein implementierter Exporter
+- Status: Angenommen; erster Producer lokal implementiert, Live-Abnahme offen
 - Datum: 2026-10-31
 - Ergaenzt: [ADR 0006](0006-maintenance-scope.md)
 
@@ -46,5 +46,8 @@ insbesondere historisches Radar wird nicht als aktuelles EChartsRadar ausgegeben
 Die bestehenden Exporttests belegen diese neue Funktion noch nicht.
 
 Mit dieser ADR ist die Spezifikationsanforderung aus ADR 0006 erfuellt.
-Exporter, Importer und gemeinsame Live-Abnahme bleiben offen. Weder eine
+Der erste Producer und die gemeinsame Darstellungsnormalisierung sind inzwischen
+lokal implementiert. Schnittstellen, Helper-Verteilung, unterstützte Regeln und
+offene Fälle stehen in [ECHARTS_EXPORT.md](../ECHARTS_EXPORT.md).
+Reale Exportabnahme, weitere Sonderregeln, Importer und gemeinsame Live-Abnahme bleiben offen. Weder eine
 JSLive-Engineumstellung noch eine allgemeine Weiterentwicklung ist beauftragt.

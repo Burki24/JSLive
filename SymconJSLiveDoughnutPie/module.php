@@ -89,6 +89,8 @@ class SymconJSLiveDoughnutPie extends JSLiveModule
         if ($buffer['instance'] == 0) return '';
 
         switch ($buffer['cmd']) {
+            case 'exportECharts':
+                return $this->ExportECharts(($buffer['queryData']['scripts'] ?? '') === '1');
             case 'exportConfiguration':
                 return $this->ExportConfiguration(false, $buffer['queryData'] ?? []);
             case 'getContend':

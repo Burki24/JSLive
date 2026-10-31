@@ -135,6 +135,8 @@ class SymconJSLiveGauge extends JSLiveModule
 
         //if($buffer["instance"] != $this->InstanceID) return;
         switch ($buffer['cmd']) {
+            case 'exportECharts':
+                return $this->ExportECharts(($buffer['queryData']['scripts'] ?? '') === '1');
             case 'exportConfiguration':
                 return $this->ExportConfiguration(false, $buffer['queryData'] ?? []);
             case 'getContend':

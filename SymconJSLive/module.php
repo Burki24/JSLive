@@ -19,6 +19,8 @@ class SymconJSLive extends WebHookModule
         //Never delete this line!
         parent::Create();
 
+        $this->RegisterAttributeString('MigrationInstallationID', '');
+
         $this->RegisterPropertyString('Password', $this->GenerateRandomPassword());
         $this->RegisterPropertyString('Address', 'http://127.0.0.1:3777');
 
@@ -46,6 +48,13 @@ class SymconJSLive extends WebHookModule
         //Never delete this line!
         parent::ApplyChanges();
 
+        try {
+            $this->InitializeMigrationIdentity();
+        } catch (Throwable $exception) {
+            // An export prerequisite must not interrupt existing visualizations.
+            $this->SendSafeDebug('Migration identity unavailable', $exception->getMessage());
+        }
+
         $this->SetStatus(102);
 
         //update all submoduls
@@ -57,6 +66,12 @@ class SymconJSLive extends WebHookModule
                 'Buffer'     => json_encode($sendData, JSON_THROW_ON_ERROR)
             ]
         ));
+    }
+
+    /** Persistent migration origin; read-only access from children and peer splitters. */
+    public function GetMigrationInstallationID(): string
+    {
+        return $this->ReadAttributeString('MigrationInstallationID');
     }
 
     public function ForwardData(string $JSONString): string
@@ -369,6 +384,10 @@ class SymconJSLive extends WebHookModule
                     . '_' . $date->format('Y-m-d_H-i-s') . '.json';
                 header('Content-Disposition: ' . $this->BuildDownloadContentDisposition($filename));
                 header('Content-Type: application/json');
+            }elseif (strtolower($Type) == 'exportecharts') {
+                header('Content-Disposition: ' . $this->BuildDownloadContentDisposition('JSLive_' . $queryData['instance'] . '.jslive-echarts.json'));
+                header('Content-Type: application/json; charset=utf-8');
+                header('Cache-Control: no-store, max-age=0');
             }elseif (strtolower($Type) == 'loadfile') {
                 //Here Do Nothing
             }elseif (strtolower($Type) == 'getfillimg') {
@@ -507,6 +526,37 @@ class SymconJSLive extends WebHookModule
         $asciiFilename = preg_replace('/[^\x20-\x7E]+/', '_', $filename) ?? 'JSLive-export.json';
 
         return 'attachment; filename="' . $asciiFilename . '"; filename*=UTF-8\'\'' . rawurlencode($filename);
+    }
+
+    private function InitializeMigrationIdentity(): void
+    {
+        if (!IPS_SemaphoreEnter('JSLive.MigrationInstallationID', 5000)) {
+            throw new RuntimeException('Unable to initialize the migration origin.');
+        }
+        try {
+            $identities = [];
+            $own = $this->ReadAttributeString('MigrationInstallationID');
+            if ($own !== '') {
+                $identities[$own] = true;
+            }
+            if (function_exists('SymconJSLive_GetMigrationInstallationID')) {
+                foreach (IPS_GetInstanceListByModuleID('{9FFF3FC0-FD51-C289-FA36-BC1C370946CF}') as $id) {
+                    $identity = SymconJSLive_GetMigrationInstallationID($id);
+                    if ($identity !== '') {
+                        $identities[$identity] = true;
+                    }
+                }
+            }
+            if (count($identities) > 1) {
+                throw new RuntimeException('Conflicting JSLive migration origins; no identity was overwritten.');
+            }
+            if ($own === '') {
+                require_once __DIR__ . '/libs/JSLiveEChartsExport.php';
+                $this->WriteAttributeString('MigrationInstallationID', array_key_first($identities) ?? JSLiveEChartsExport::UUID());
+            }
+        } finally {
+            IPS_SemaphoreLeave('JSLive.MigrationInstallationID');
+        }
     }
 
     private function IsNotModified(int $lastModified, string $etag): bool

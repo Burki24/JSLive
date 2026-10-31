@@ -1807,6 +1807,24 @@
                     "onClick": " echo SymconJSLiveRadarChart_GetConfigurationLink($id, true);"
                 }
             ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Export for SymconECharts",
+            "expanded": false,
+            "items": [
+                {
+                    "type": "CheckBox",
+                    "name": "EChartsExportScripts",
+                    "caption": "Include custom template contents as inert text",
+                    "value": false
+                },
+                {
+                    "type": "Button",
+                    "label": "Export for SymconECharts",
+                    "onClick": "echo SymconJSLiveRadarChart_GetEChartsExportLink($id, $EChartsExportScripts);"
+                }
+            ]
         }
     ],
     "status": [

@@ -7,6 +7,16 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ## Unreleased
 
+### Neu
+
+- Chart, DoughnutPie, Gauge, RadarChart und Progressbar erhalten einen getrennten
+  vollständigen Export für SymconECharts mit Quellen, Zeitsteuerung, Achsen,
+  Darstellungsdefinitionen und lokalen Ressourcen. Eigene Vorlagen werden nur
+  ausdrücklich als inerte Inhalte beigefügt. Nicht übersetzbare Profile und
+  fehlende Abhängigkeiten werden gemeldet; bestehende Quellen, Archive, Designs
+  und der bisherige Export bleiben erhalten. Der neue gemeinsame Helper muss
+  vor Nutzung regulär verteilt sein. Der ECharts-Importer folgt gesondert.
+
 ### Development
 
 - Release-Regeln praezisiert: offizielle Beta aus einem geprueften `dev`-

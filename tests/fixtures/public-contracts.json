@@ -165,7 +165,8 @@
                 "ForwardData",
                 "LoadConnectAddress",
                 "SetRandomPassword",
-                "UpdateTemplates"
+                "UpdateTemplates",
+                "GetMigrationInstallationID"
             ]
         },
         "SymconJSLiveAdvTextfield/module.php": {
@@ -764,7 +765,9 @@
                 "LoadOtherConfiguration",
                 "MessageSink",
                 "ReceiveData",
-                "ReloadConfigurationForm"
+                "ReloadConfigurationForm",
+                "ExportECharts",
+                "GetEChartsExportLink"
             ]
         },
         "SymconJSLive/libs/WebHookModule.php": {

@@ -85,7 +85,9 @@
             "Load from File": "Einstellungen aus einer Konfigurationsdatei laden",
             "File": "Datei",
             "Export": "Export Konfigurationsdatei",
-            "Status OK!": "Status Ok!"
+            "Status OK!": "Status Ok!",
+            "Export for SymconECharts": "Export für SymconECharts",
+            "Include custom template contents as inert text": "Eigene Vorlageninhalte als inerten Text beifügen"
         }
     }
 }

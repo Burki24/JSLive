@@ -8,7 +8,8 @@
             "ForwardData": "public function ForwardData(string $JSONString): string",
             "UpdateTemplates": "public function UpdateTemplates(int $category): void",
             "LoadConnectAddress": "public function LoadConnectAddress(bool $start = false): ?string",
-            "SetRandomPassword": "public function SetRandomPassword(bool $start = false, bool $override = false): void"
+            "SetRandomPassword": "public function SetRandomPassword(bool $start = false, bool $override = false): void",
+            "GetMigrationInstallationID": "public function GetMigrationInstallationID(): string"
         },
         "SymconJSLive/libs/WebHookModule.php": {
             "__construct": "public function __construct(int $InstanceID, string $hook)",
@@ -32,7 +33,9 @@
             "ReceiveData": "public function ReceiveData(string $JSONString): string",
             "Create": "public function Create(): void",
             "ApplyChanges": "public function ApplyChanges(): void",
-            "Debug_LoadLogFile": "public function Debug_LoadLogFile(int $intID): void"
+            "Debug_LoadLogFile": "public function Debug_LoadLogFile(int $intID): void",
+            "ExportECharts": "public function ExportECharts(bool $includeScripts = false): string",
+            "GetEChartsExportLink": "public function GetEChartsExportLink(bool $includeScripts = false): string"
         },
         "SymconJSLiveAdvTextfield/module.php": {
             "Create": "public function Create(): void",

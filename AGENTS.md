@@ -25,7 +25,9 @@ JSLive. Projektspezifische Fakten und offene Entscheidungen stehen in
   werden vor der Implementierung spezifiziert und getestet; bestehende
   Exportvertraege duerfen nicht stillschweigend gebrochen werden.
 - Der gemeinsame Export-/Importvertrag `de.burki24.jslive-echarts` 1.0 ist
-  gemaess ADR 0007 und SymconECharts ADR 0109 spezifiziert, noch nicht umgesetzt.
+  gemaess ADR 0007 und SymconECharts ADR 0109 spezifiziert. Ein erster Producer
+  fuer die fuenf Chartfamilien ist lokal implementiert; regulaere Helper-Verteilung,
+  weitere Sonderregeln, reale Exportabnahme und ECharts-Importer bleiben offen.
   Kanonische Quelle ist `../SymconECharts/docs/JSLIVE_MIGRATION_CONTRACT.md`.
   Profile werden vollstaendig in profilunabhaengige native Darstellungen
   uebersetzt; bestehende Quellen, Actions, Archive und Designs bleiben erhalten.

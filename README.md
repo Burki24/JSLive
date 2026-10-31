@@ -132,6 +132,25 @@ erkannt werden. Debug daher nur in einer geschützten Testumgebung verwenden.
 
 ## Bestehender Konfigurationsexport
 
+### Zusätzlicher Export für SymconECharts
+
+Chart, DoughnutPie, Gauge, RadarChart und Progressbar bieten einen getrennten
+Bereich **Export für SymconECharts**. Der erzeugte Link lädt ein vollständiges
+Migrationspaket mit Quellen, Zeitsteuerung, Darstellungsinformationen und lokalen
+Ressourcen. Eigene Vorlageninhalte lassen sich ausdrücklich als inerten Text
+beifügen; sie werden nicht ausgeführt. Profile werden in profilunabhängige native
+Darstellungsdefinitionen übersetzt, soweit eine eindeutige Regel vorliegt.
+
+Nicht vollständig übersetzbare Profile, fehlende Quellen und Ressourcen werden
+im Paket als blockierende Probleme ausgewiesen. Quellen, Werte, Archive und
+bestehende Darstellungen bleiben unverändert. Das Paket enthält private
+Installationsdaten und ist nicht zur öffentlichen Weitergabe bestimmt.
+Der neue Export benötigt den regulär verteilten `VariablePresentationNormalizationHelper`-
+Helper und das Modulupdate. Der ECharts-Importer folgt gesondert; ein Export
+allein erzeugt noch kein ECharts-Diagramm. Der bisherige Export bleibt verfügbar.
+
+### Bisherige Schnittstelle
+
 Die Exportkorrektur auf Basis von 0.94 erhält Format und öffentliche
 Funktionssignaturen. Sie ändert folgende bisher fehlerhafte Verhaltensweisen:
 

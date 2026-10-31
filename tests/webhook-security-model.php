@@ -22,14 +22,14 @@ $moduleClasses = [
 
 $expectedCommands = [
     'SymconJSLiveAdvTextfield'   => ['exportConfiguration', 'getContend', 'getData', 'setData'],
-    'SymconJSLiveChart'          => ['getConfiguration', 'getLanguage', 'getFonts', 'exportConfiguration', 'getContend', 'getUpdate', 'getData'],
+    'SymconJSLiveChart'          => ['getConfiguration', 'getLanguage', 'getFonts', 'exportECharts', 'exportConfiguration', 'getContend', 'getUpdate', 'getData'],
     'SymconJSLiveColorPicker'    => ['exportConfiguration', 'getContend', 'getData', 'setData'],
     'SymconJSLiveCustom'         => ['exportConfiguration', 'getContend', 'getData', 'setData', 'loadFile'],
     'SymconJSLiveDateTimePicker' => ['exportConfiguration', 'getContend', 'getData', 'setData'],
-    'SymconJSLiveDoughnutPie'    => ['exportConfiguration', 'getContend', 'getUpdate', 'getData'],
-    'SymconJSLiveGauge'          => ['exportConfiguration', 'getContend', 'getData'],
-    'SymconJSLiveProgressbar'    => ['exportConfiguration', 'getContend', 'getData', 'getSVG', 'getFillImg'],
-    'SymconJSLiveRadarChart'     => ['exportConfiguration', 'getContend', 'getUpdate', 'getData']
+    'SymconJSLiveDoughnutPie'    => ['exportECharts', 'exportConfiguration', 'getContend', 'getUpdate', 'getData'],
+    'SymconJSLiveGauge'          => ['exportECharts', 'exportConfiguration', 'getContend', 'getData'],
+    'SymconJSLiveProgressbar'    => ['exportECharts', 'exportConfiguration', 'getContend', 'getData', 'getSVG', 'getFillImg'],
+    'SymconJSLiveRadarChart'     => ['exportECharts', 'exportConfiguration', 'getContend', 'getUpdate', 'getData']
 ];
 
 $root = dirname(__DIR__);
