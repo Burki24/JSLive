@@ -24,6 +24,12 @@ JSLive. Projektspezifische Fakten und offene Entscheidungen stehen in
   behaelt seine bestehende Engine. Format, Zuordnung, Abdeckung und Rueckfall
   werden vor der Implementierung spezifiziert und getestet; bestehende
   Exportvertraege duerfen nicht stillschweigend gebrochen werden.
+- Der gemeinsame Export-/Importvertrag `de.burki24.jslive-echarts` 1.0 ist
+  gemaess ADR 0007 und SymconECharts ADR 0109 spezifiziert, noch nicht umgesetzt.
+  Kanonische Quelle ist `../SymconECharts/docs/JSLIVE_MIGRATION_CONTRACT.md`.
+  Profile werden vollstaendig in profilunabhaengige native Darstellungen
+  uebersetzt; bestehende Quellen, Actions, Archive und Designs bleiben erhalten.
+  Der neue Export erfasst auch Steuerzustaende und erhaelt den alten Exportvertrag.
 - JSLive-Funktionen ohne Ersatz durch ECharts, insbesondere der Colorpicker,
   werden weiter gepflegt. Bei Entwicklungsstopp ihrer externen Ressourcen
   werden geeignete Alternativen gesucht und integriert oder eigene Loesungen

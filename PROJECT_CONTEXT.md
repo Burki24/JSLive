@@ -1,5 +1,16 @@
 # PROJECT_CONTEXT - JSLive
 
+Aktuelle Ergaenzung vom 31.10.2026: Der gemeinsame Export-/Importvertrag fuer
+SymconECharts ist in [ADR 0007](docs/adr/0007-echarts-migration-contract.md)
+festgelegt. Kanonische Fassung ist
+[`de.burki24.jslive-echarts` 1.0](../SymconECharts/docs/JSLIVE_MIGRATION_CONTRACT.md).
+Der Vertrag erfasst vollstaendige fachliche Konfiguration, Steuerzustaende,
+Quellen-/Archivregeln und Gestaltung. Profile werden vollstaendig in native
+Darstellungsdefinitionen uebersetzt; Quellen, Actions, Archivwerte und Designs
+bleiben unveraendert. Exporter, Importer und Vergleichsabnahme sind noch offen.
+Dieser Nachtrag konkretisiert die Spezifikationsanforderung aus ADR 0006;
+historische Aussagen zum damals noch offenen Format sind keine aktuelle Planung.
+
 Stand dieser Bestandsaufnahme: 27.09.2026, Branch `dev`, Ausgangscommit
 `25fd163340dac13cafdb5b39d32dd14cada2cbb1`. Am 28.09.2026 wurde die
 Bestandsaufnahme um die beschlossene Entfernung von ConfigStore und SyncModule
