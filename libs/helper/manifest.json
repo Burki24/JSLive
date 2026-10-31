@@ -105,10 +105,10 @@
             ]
         },
         "VariablePresentationNormalizationHelper": {
-            "version": "1.0.1",
-            "sha256": "b4499e56002a768c9cb4659bd8b0f574c26d1882de31a2e42fdb88d53f70b3da",
+            "version": "1.0.2",
+            "sha256": "5ce425a8a54872ea2c0ecd4d065a540300ef6a6d6b5e97627e25b075b8d3c0fd",
             "path": "libs/helper/VariablePresentationNormalizationHelper.php",
-            "source_sha": "e4aa563473d8017fbc8715bd31f39ca125997f6d"
+            "source_sha": "b57c4a3cb11e096281c4429f0f604ba8c7c8f6e5"
         }
     }
 }
