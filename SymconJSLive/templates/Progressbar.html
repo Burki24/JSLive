@@ -105,8 +105,11 @@
             output["path"] = configuration.shape_path;
         }
 
-        // loading-bar cannot animate an image as a stroke because its image branch has no stroke path.
-        output["type"] = configuration.shape_svg === true ? "fill" : configuration.Type;
+        // Image-based shapes have no stroke path in loading-bar. Keep the saved
+        // type and use its supported fill mode only for this runtime output.
+        const imageShape = configuration.shape_svg === true
+            || (configuration.shape_path === "" && configuration.shape_preset === "text");
+        output["type"] = imageShape ? "fill" : configuration.Type;
         if(configuration.shape_svg === false && configuration.shape_path === "")  output["preset"] =  configuration.shape_preset; //fan line bubble circle
 
         output["precision"] = configuration.data_precision;

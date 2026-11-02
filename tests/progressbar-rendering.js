@@ -63,6 +63,14 @@ const presetStroke = renderProgressbarConfig({ Type: 'stroke', shape_svg: false 
 assert.equal(presetStroke.type, 'stroke', 'A preset stroke must remain a stroke.');
 assert.equal(presetStroke.preset, 'line', 'A preset stroke must retain its configured shape.');
 
+for (const Type of ['stroke', 'fill']) {
+    const text = renderProgressbarConfig({ Type, shape_preset: 'text' });
+    assert.equal(text.type, 'fill', 'The image-based text preset must use fill before creating Loading Bar.');
+    assert.equal(text.preset, 'text', 'Keep the original text glyph image.');
+}
+const textWithPath = renderProgressbarConfig({ Type: 'stroke', shape_preset: 'text', shape_path: 'M0 0L100 0' });
+assert.equal(textWithPath.type, 'stroke', 'An explicit path takes precedence over the text preset.');
+
 const pathStroke = renderProgressbarConfig({ Type: 'stroke', shape_path: 'M0 0 L100 0' });
 assert.equal(pathStroke.type, 'stroke', 'A custom path stroke must remain a stroke.');
 assert.equal(pathStroke.path, 'M0 0 L100 0', 'A custom path must remain unchanged.');

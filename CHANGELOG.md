@@ -7,6 +7,13 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ## Unreleased
 
+### Fixes
+
+- Die Progressbar-Standardvorlage behandelt das bildbasierte Text-Preset auch
+  bei gespeicherter Stroke-Auswahl im unterstützten Fill-Modus. Der bisherige
+  `attrs`-Abbruch mit bei null stehenbleibender Anzeige entfällt. Eigene Pfade,
+  Konfigurationen, Quellwerte, Archive und die unveränderte Engine bleiben erhalten.
+
 ### Neu
 
 - Chart, DoughnutPie, Gauge, RadarChart und Progressbar erhalten einen getrennten

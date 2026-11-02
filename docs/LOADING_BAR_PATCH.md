@@ -93,3 +93,18 @@ unabhaengige MCP-Abnahme durch diesen Nachtrag. Kein
 vollstaendiger Template-Startup-, Transport-, Langlauf- oder IPSView-Nachweis.
 Die bekannte fehlende IPSView-Testlizenz bleibt eine Testluecke. Die lokale
 Korrektur begruendet keine aktive Pflegezusage fuer die alte Upstream-Bibliothek.
+
+## Nachtrag 02.11.2026: bildbasiertes Text-Preset
+
+Die Standardvorlage verwendet jetzt auch beim Text-Preset ohne eigenen Pfad
+den technisch erforderlichen Fill-Modus. Der bestehende SVG-Fallback wird
+dafuer wiederverwendet. Gespeicherter Type, Originalbild, Farben, Rohwerte,
+Reverse-Logik und Archivbezug bleiben erhalten; ein expliziter Pfad behaelt
+Vorrang. Weder die Engine noch eine veroeffentlichte Assetrevision wird geaendert.
+Eigene TemplateScriptID-Vorlagen muessen den erweiterten Fallback selbst erhalten.
+
+Die neuen Konfigurationsregressionen scheiterten zuvor fuer Text/Stroke. Die
+erweiterte optionale Browsermatrix prueft 48 Faelle mit echten Assets, darunter
+Text/Stroke, Text/Fill, Text/Reverse und Text mit eigenem Pfad in zwei Groessen,
+normalen und verzoegerten Animationen. Alle Konfigurationsfelder bleiben erhalten.
+Eine installierte Live-Abnahme folgt erst nach dem Modulupdate des Eigentuemers.

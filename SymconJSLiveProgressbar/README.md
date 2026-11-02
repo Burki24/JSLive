@@ -30,6 +30,12 @@ Wertebereich und Form konfigurieren und mit dem Splitter verbinden.
 | Ausgabe | HTMLBox/IPSView, eigene Vorlage über `TemplateScriptID`, Viewport und IFrame-Größe |
 | Betrieb | Browser-Cache, Debug sowie optionale Größenüberschreibungen |
 
+Das Text-Preset verwendet wie eine vollständige eigene SVG-Grafik technisch
+den Fill-Modus, auch wenn `Type` auf Stroke steht. Beide Formen sind Bilder
+ohne animierbaren Stroke-Pfad. Die gespeicherte Auswahl, Originalfarben,
+Wertebereiche und Werte bleiben erhalten. Ein ausdrücklich angegebener
+`shape_path` hat weiterhin Vorrang vor dem Text-Preset und unterstützt Stroke.
+
 ## Daten- und Webhook-Befehle
 
 Der bestehende Vertrag umfasst `getContend`, `getData`, `getSVG` und

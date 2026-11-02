@@ -47,9 +47,12 @@ Cache, Iframe-Hoehen und Linkbildung. Der Test ist Teil des Standardrunners;
 kein Symcon-Zugriff und keine Browser-/IPSView-Abnahme. Vertrag und Grenzen:
 [Visualisierungsausgaben](../docs/VISUALIZATION_OUTPUT_CONTRACTS.md).
 
-`node tests/progressbar-browser.js` prueft optional 32 animierte Loading-Bar-
+`node tests/progressbar-browser.js` prueft optional 48 animierte Loading-Bar-
 Faelle mit echten Assets, lokaler SVG-Antwort, normalen/verzoegerten Frames
-und drei Reverse-Bereichen. `--probe-animation` ist der gezielte Kurzlauf.
+und drei Reverse-Bereichen. Text als Stroke/Fill, Text mit Reverse sowie ein
+vorrangiger eigener Pfad pruefen den bildbasierten Laufzeit-Fallback, echte
+Wertwechsel und den Erhalt aller Konfigurationsfelder. `--probe-animation`
+ist der gezielte Kurzlauf.
 Die frueheren Fehlernachweise sind jetzt gruen: Reverse-Vertraege laufen immer
 in `progressbar-rendering.js`, deterministische Animationstests in
 `loading-bar-animation.js`; beide sind in die Standardsuite eingebunden.

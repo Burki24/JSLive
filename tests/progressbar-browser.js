@@ -28,6 +28,11 @@ const scenarios = [
     { name: 'fill', options: { Type: 'fill', shape_path: 'M0 0H100V20H0Z' } },
     { name: 'path', options: { shape_path: 'M0 10H100', stroke_Dash1: 3, stroke_Dash2: 6 } },
     { name: 'svg', options: { shape_svg: true } },
+    { name: 'text-stroke', options: { shape_preset: 'text' } },
+    { name: 'text-fill', options: { shape_preset: 'text', Type: 'fill' } },
+    { name: 'text-reverse', options: { shape_preset: 'text', reverse: true }, initialDisplay: 75,
+        values: [75, 25, 0, 100], expected: [25, 75, 100, 0] },
+    { name: 'text-with-path', options: { shape_preset: 'text', shape_path: 'M0 10H100' } },
     { name: 'reverse', options: { reverse: true }, initialDisplay: 75,
         values: [75, 25, 0, 100], expected: [25, 75, 100, 0] },
     { name: 'reverse-offset', options: { reverse: true, data_min: 20, data_max: 120 }, initialDisplay: 115,
@@ -69,7 +74,7 @@ async function check(browser, scenario, width, probeAnimation = false) {
         const initialDisplay = scenario.initialDisplay ?? 25;
         await page.addScriptTag({ content: `var value = ${initialRaw}; var configuration = ${JSON.stringify({ ...base, ...scenario.options })};\n${functions}` });
         await page.evaluate(() => Load());
-        if (scenario.name === 'svg') {
+        if (scenario.name === 'svg' || scenario.name.startsWith('text-') && scenario.name !== 'text-with-path') {
             await page.waitForFunction(() => bar.inited);
             if (probeAnimation) {
                 await page.clock.runFor(20);
@@ -79,6 +84,7 @@ async function check(browser, scenario, width, probeAnimation = false) {
         await page.waitForFunction(expected => document.querySelector('.ldBar-label')?.textContent === String(expected)
             && bar.transition.time.src === undefined, initialDisplay);
         assert.equal(await page.evaluate(() => value), initialRaw, 'Initialization must preserve the raw value.');
+        assert.deepEqual(await page.evaluate(() => configuration), {...base, ...scenario.options}, 'Runtime fallbacks must preserve every configuration field.');
         const geometry = () => page.evaluate(() => [...document.querySelectorAll('#Bar svg path, #Bar svg rect')]
             .map(node => [node.getAttribute('stroke-dasharray'), node.getAttribute('width'), node.getAttribute('height') ]));
         const initial = await geometry();
