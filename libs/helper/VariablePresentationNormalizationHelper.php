@@ -7,6 +7,11 @@ namespace Burki24\SymconModuleHelper;
 use InvalidArgumentException;
 use Throwable;
 
+// Different Symcon libraries vendor separate copies of this shared declaration.
+if (class_exists(VariablePresentationNormalizationHelper::class, false)) {
+    return;
+}
+
 /**
  * Loss-aware, read-only native/legacy presentation snapshots for migrations.
  * Lists remain arrays until ToSDK(); no variable, profile or value is written.
@@ -14,7 +19,7 @@ use Throwable;
  * Native COLOR and CONTENT_COLOR are retained as independent parameters.
  * Native display/preview settings are preserved without deriving value scaling.
  *
- * @version 1.0.2
+ * @version 1.0.3
  */
 final class VariablePresentationNormalizationHelper
 {
