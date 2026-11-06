@@ -14,7 +14,7 @@ Die Dateien in diesem Verzeichnis stammen aus dem gemeinsamen Repository
 | `VariableHelper.php` | 1.2.0 | `43b205a2ca87553a3a59a9e94f1c5c72fc4643cebedb080a9706139d98b30624` |
 | `VariablePresentationHelper.php` | 2.1.1 | `c3212189b2dffda2e582a59ab8ba5d7f2a563dc2f3ea841ec9e877e4400de650` |
 | `VariablePresentationNormalizationHelper.php` | 1.0.4 | `3f3e3043ed79b469cd7da0f81e464d097e5d526e96b0c04f8740198f653b09a2` |
-| `VisualizationAssetHelper.php` | 1.1.3 | `0014b5d0a6f25f2b3bf3f24e40068138949b7325ae4cffa904ef60b8b2159d21` |
+| `VisualizationAssetHelper.php` | 1.1.4 | `28d2dbdb7c86c45986b78ba391c260510d4f1c6427481298a00cc775983cee47` |
 | `VisualizationThemeConfigurationHelper.php` | 1.0.2 | `a0319239cf638dc42586fc77b16986f33f8b08387dec4bfc8d734dd2c5a1b316` |
 | `HelperTranslationHelper.php` | 1.0.2 | `7c0184b51923e3f4f78fb150d403ea092b0117b0b01fb5c04fdc4568b269ebdd` |
 | `VisualizationThemeHelper.php` | 1.1.2 | `ffd5ba38a26191fd40c5900f8338ae520fa12904474493712eac7975304f4672` |
