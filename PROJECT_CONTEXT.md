@@ -1,9 +1,9 @@
 # PROJECT_CONTEXT - JSLive
 
 Aktuelle Ergaenzung vom 31.10.2026: Der gemeinsame Export-/Importvertrag fuer
-SymconECharts ist in [ADR 0007](docs/adr/0007-echarts-migration-contract.md)
+eCharts ist in [ADR 0007](docs/adr/0007-echarts-migration-contract.md)
 festgelegt. Kanonische Fassung ist
-[`de.burki24.jslive-echarts` 1.0](../SymconECharts/docs/JSLIVE_MIGRATION_CONTRACT.md).
+[`de.burki24.jslive-echarts` 1.0](https://github.com/Burki24/eCharts/blob/dev/docs/JSLIVE_MIGRATION_CONTRACT.md).
 Der Vertrag erfasst vollstaendige fachliche Konfiguration, Steuerzustaende,
 Quellen-/Archivregeln und Gestaltung. Profile werden vollstaendig in native
 Darstellungsdefinitionen uebersetzt; Quellen, Actions, Archivwerte und Designs
@@ -34,8 +34,8 @@ sauber. Push, gruene CI und Modulupdate des Ausgabe-Vertragsschritts wurden
 vom Eigentuemer bestaetigt. Details: `docs/adr/0006-maintenance-scope.md`.
 
 Massgebliche Konkretisierung durch den im Chat bereitgestellten Community-
-Beitrag vom 03.10.2026: Der Nachfolger heisst `SymconEcharts`; JSLive bekommt
-den Chart-Export, SymconEcharts die Uebernahmefunktion. Notwendige Ressourcen-
+Beitrag vom 03.10.2026: Der Nachfolger heisst `eCharts`; JSLive bekommt
+den Chart-Export, eCharts die Uebernahmefunktion. Notwendige Ressourcen-
 updates bleiben eingeplant. Nicht durch ECharts ersetzte JSLive-Funktionen
 (z.B. Colorpicker) werden dauerhaft gepflegt, bei Bedarf auch durch Ersatz
 eingestellter Abhaengigkeiten oder eigene Loesungen. Diese Konkretisierung
@@ -54,15 +54,15 @@ Fehler. Bestehende Installationen, Konfigurationen, Skriptaufrufe und IPSView-
 Nutzung bleiben erhalten. Keine allgemeine Weiterentwicklung der Modulsammlung
 und keine neue native Kachelmigration.
 
-Die neue Chart-Entwicklung erfolgt getrennt in `SymconEcharts` auf Basis von
+Die neue Chart-Entwicklung erfolgt getrennt in `eCharts` auf Basis von
 Apache ECharts statt Chart.js. JSLive wird nicht auf ECharts umgebaut, sondern
-erhaelt eine Exportfunktion fuer bestehende Charts; SymconEcharts erhaelt die
+erhaelt eine Exportfunktion fuer bestehende Charts; eCharts erhaelt die
 passende Uebernahmefunktion. Name und Aufgabenteilung sind damit entschieden.
 Repository, Architektur, Austauschformat, Oberflaeche und genaue Abdeckung
 bleiben separat zu klaeren. Die Migration soll erneuten manuellen Chart-Aufbau
 vermeiden und vorhandene Konfigurationen sowie Datenbezuege erhalten; nicht
 automatisch uebertragbare Teile muessen sichtbar gemeldet werden.
-Der bestehende Konfigurationsexport ist kein belegter SymconEcharts-Export.
+Der bestehende Konfigurationsexport ist kein belegter eCharts-Export.
 Die zugesagte Migrationsfunktion wird nicht durch diese Plananpassung umgesetzt.
 
 JSLive-Funktionen, die ECharts nicht ersetzt (insbesondere Colorpicker), werden
@@ -551,7 +551,7 @@ Dokumentationsluecken:
 ### Aktiver Wartungsumfang ab 03.10.2026
 
 Priorisierung durch den Eigentuemer: zuerst JSLive fuer Symcon 9.0/9.1
-abschliessen. Der zugesagte SymconECharts-Uebergabevertrag bleibt zurueckgestellt,
+abschliessen. Der zugesagte eCharts-Uebergabevertrag bleibt zurueckgestellt,
 bis der Nachfolger ausreichend weit ist; er ist kein Gate fuer diesen
 Wartungsabschluss. IPSView prueft der Eigentuemer nach Fertigstellung auf seinem
 Produktivsystem. Keine Erweiterung des JSLive-Funktionsumfangs.
@@ -622,15 +622,15 @@ Produktivsystem. Keine Erweiterung des JSLive-Funktionsumfangs.
    Laufzeitnachweise und Freigabegrenzen dokumentieren. IPSView bleibt mangels
    Testlizenz eine bekannte Testluecke.
 5. Oeffentlich zugesagten JSLive-Export und die zugehoerige Uebernahmefunktion
-   in SymconEcharts ueber einen gemeinsamen versionierten Vertrag spezifizieren.
+   in eCharts ueber einen gemeinsamen versionierten Vertrag spezifizieren.
    Bestehenden Konfigurationsexport und dessen Tests zuerst auf Wiederverwendung
    pruefen, ohne den veroeffentlichten Vertrag stillschweigend zu aendern.
    Vor der Umsetzung Ausgangsversionen, Konfigurations-/Datenquellenzuordnung,
    Vorschau, Bestaetigung, Erhalt des Originals, Wiederholung/Teilfehler und
    nicht automatisch uebertragbare Einstellungen absichern (ADR 0006).
-   Die SymconEcharts-spezifische Export-/Uebernahmefunktion ist noch nicht
+   Die eCharts-spezifische Export-/Uebernahmefunktion ist noch nicht
    implementiert; keine allgemeine Wiederaufnahme der Phase-6-Erweiterungen.
-   Parallel zur getrennten SymconECharts-Planung wurde der vorhandene Export
+   Parallel zur getrennten eCharts-Planung wurde der vorhandene Export
    lokal mit 20 wiederholten Faellen fuer die fuenf Diagrammfamilien und deren
    echten statischen Formularen charakterisiert. Dieser Nachweisschritt ist
    committed, lokal synchronisiert und laut Eigentuemer CI-gruen auf 0.94
@@ -643,11 +643,11 @@ Produktivsystem. Keine Erweiterung des JSLive-Funktionsumfangs.
    Bindungserhalt beim Import und vier Splitter-Exportanfragen.
    Zudem fehlen Zeitraum-Steuervariablen und Versions-/Zuordnungsmetadaten.
    Befunde, Nachweisgrenzen und Aufruf: `tests/README.md`, Abschnitt
-   "Chart-family export baseline for SymconEcharts". CI und installierte
+   "Chart-family export baseline for eCharts". CI und installierte
    Abnahme der Korrektur stehen nach Commit/Push/Modulupdate aus. Die README
    dokumentiert die Umstellung eigener Aufrufe und den unveraenderten
    vollstaendigen Konfigurationsexport. Gemeinsamen Migrationsvertrag erst
-   mit SymconECharts abstimmen; noch keine ECharts-Implementierung.
+   mit eCharts abstimmen; noch keine ECharts-Implementierung.
 6. Verbleibende JSLive-Funktionen ohne Ersatz in ECharts zuordnen und weiter
    pflegen; Colorpicker ist explizit genannt. Bei eingestellten Ressourcen
    Alternativen oder eigene Ersatzloesungen pruefen, mit Lizenz-, Vertrags-
@@ -1121,8 +1121,8 @@ Fehlerkorrekturen am bestehenden Import/Export bleiben im Wartungsumfang.
 - Gauge ist die bevorzugte Wahl des Eigentuemers fuer den zuvor besprochenen
   Piloten. Eine native Kachel liegt ausserhalb des neuen Wartungsumfangs;
   weitere Gauge-Arbeit in JSLive betrifft Bestandspruefung und Fehlerkorrektur.
-- Der Nachfolger heisst `SymconEcharts` und verwendet Apache ECharts statt
-  Chart.js. JSLive-Export und SymconEcharts-Uebernahmefunktion sind oeffentlich
+- Der Nachfolger heisst `eCharts` und verwendet Apache ECharts statt
+  Chart.js. JSLive-Export und eCharts-Uebernahmefunktion sind oeffentlich
   zugesagt; Austauschformat, Oberflaeche und genaue Abdeckung bleiben offen.
   Repository, Zielplattformen und Architektur werden separat geklaert.
 - JSLive-Funktionen ohne ECharts-Ersatz werden weiter gepflegt, bei Bedarf mit

@@ -9,6 +9,9 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Fixes
 
+- Die fünf Chartmodule zeigen den Export unter dem neuen Bibliotheksnamen
+  **eCharts** an. Vorhandene Exportpakete im Format 1.0 bleiben verwendbar.
+
 - Die Progressbar-Standardvorlage behandelt das bildbasierte Text-Preset auch
   bei gespeicherter Stroke-Auswahl im unterstützten Fill-Modus. Der bisherige
   `attrs`-Abbruch mit bei null stehenbleibender Anzeige entfällt. Eigene Pfade,
@@ -17,7 +20,7 @@ Patchstelle, beispielsweise `v0.10.0`.
 ### Neu
 
 - Chart, DoughnutPie, Gauge, RadarChart und Progressbar erhalten einen getrennten
-  vollständigen Export für SymconECharts mit Quellen, Zeitsteuerung, Achsen,
+  vollständigen Export für eCharts mit Quellen, Zeitsteuerung, Achsen,
   Darstellungsdefinitionen und lokalen Ressourcen. Eigene Vorlagen werden nur
   ausdrücklich als inerte Inhalte beigefügt. Nicht übersetzbare Profile und
   fehlende Abhängigkeiten werden gemeldet; bestehende Quellen, Archive, Designs
@@ -86,7 +89,7 @@ HTMLBox-/IPSView-Ausgabe bleiben erhalten.
   Uhrzeitwerte fuer die Eingabefelder; TimePicker2 passt die Uhrgrafik an
   flache Boxen an.
 - Korrigierte Skriptauswahl und Listenfilter im bestehenden Konfigurationsexport.
-  Der Export ist noch kein Austauschformat fuer SymconEcharts.
+  Der Export ist noch kein Austauschformat fuer eCharts.
 - Statische Webhook-Pfade sind begrenzt, Anfragewerte werden kontrolliert
   verarbeitet und bekannte Zugangsdatenformen in Diagnosen maskiert.
 
@@ -128,7 +131,7 @@ Texte, Skripte und Medien trotz Maskierung bekannter Passwortfelder sensible
 Inhalte enthalten. Eigene Templates und Custom-Inhalte bleiben in der
 Verantwortung des Anwenders. Details: [Sicherheitsmodell](docs/WEBHOOK_SECURITY_MODEL.md).
 
-SymconEcharts wird separat entwickelt. Eine Uebernahme vorhandener JSLive-Charts
+eCharts wird separat entwickelt. Eine Uebernahme vorhandener JSLive-Charts
 ist geplant, aber in dieser Testing-Ausgabe noch nicht enthalten. Es gibt keine
 Chart.js-zu-ECharts-Umstellung innerhalb von JSLive und keine neue native
 Kachelmigration. Die Testing-Ausgabe ist keine Beta- oder Stable-/Gesamtmatrix-Freigabe.
@@ -155,7 +158,7 @@ sind keine aktuelle Liste offener Aufgaben. Spaetere Korrekturen stehen unter
   Migrationsgrenzen und gezielten Gauge-Abschluss auf 0.93 dokumentiert.
 
 - Planung an die Community-Zusage angepasst: notwendige Ressourcenupdates,
-  JSLive-Chart-Export und Uebernahme in SymconEcharts festgehalten. Nicht durch
+  JSLive-Chart-Export und Uebernahme in eCharts festgehalten. Nicht durch
   ECharts ersetzte Funktionen (z.B. Colorpicker) bleiben gepflegt, bei Bedarf
   mit alternativen oder eigenen Ressourcen. Keine Laufzeitaenderung und noch
   keine Implementierung des zugesagten Migrationswegs.

@@ -1411,7 +1411,7 @@
         },
         {
             "type": "ExpansionPanel",
-            "caption": "Export for SymconECharts",
+            "caption": "Export for eCharts",
             "expanded": false,
             "items": [
                 {
@@ -1422,7 +1422,7 @@
                 },
                 {
                     "type": "Button",
-                    "label": "Export for SymconECharts",
+                    "label": "Export for eCharts",
                     "onClick": "echo SymconJSLiveGauge_GetEChartsExportLink($id, $EChartsExportScripts);"
                 }
             ]

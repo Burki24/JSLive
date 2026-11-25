@@ -1,4 +1,4 @@
-# Vollständiger Export für SymconECharts
+# Vollständiger Export für eCharts
 
 Der neue Producer erzeugt `de.burki24.jslive-echarts` 1.0 für Chart,
 DoughnutPie, Gauge, RadarChart und Progressbar. Er ist vom bisherigen
@@ -39,7 +39,7 @@ gemeldet, nie automatisch geladen. Das Paket ist kein Archivbackup.
 ## Darstellungen und Fehler
 
 Die gemeinsame Quelle ist `Symcon_ModuleHelper/src/VariablePresentationNormalizationHelper.php`.
-JSLive und SymconECharts abonnieren denselben Helper. Er erhält vollständige
+JSLive und eCharts abonnieren denselben Helper. Er erhält vollständige
 Originaldefinitionen, native Parameter und eine Konvertierungsbilanz. Unterstützt
 sind native Wertanzeige, Slider und Enumeration sowie gewöhnliche numerische
 Legacy-Profile, Boolean-/String-Zustände und konstante numerische Assoziationen.
@@ -77,7 +77,7 @@ die neuen Abonnements vor dem eigentlichen Sync auf `dev` liegen:
    zusätzlich in `.github/helper-consumers.json` für `dev` registriert; dieser
    Consumer fehlte bislang im tatsächlichen Verteilungsregister.
 2. Als getrennte Abhängigkeitsvorbereitung in JSLive nur `.helper-sync.json`
-   und in SymconECharts `.helper-sync.json`, `tests/validate_structure.php` und
+   und in eCharts `.helper-sync.json`, `tests/validate_structure.php` und
    `tests/helper_integrity.py` committen/pushen. Der Zwischenstand ist noch nicht
    lauffähig für die neue Funktion; die Integritätsprüfung meldet bis zur Lieferung
    die fehlende Abhängigkeit. Kein Release oder Modulupdate dieses Zwischenstands.

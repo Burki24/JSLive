@@ -674,7 +674,7 @@ durch den Eigentuemer; dann Ansicht neu laden und absoluten Tag mit historischem
 Offset sowie Rueckkehr live nachpruefen. Kein zusaetzliches ApplyChanges oder
 Dienstneustart fuer diesen Templatefix. Eigene Templates separat nachziehen.
 IPSView folgt laut Eigentuemer nach Fertigstellung auf dem Produktivsystem.
-SymconECharts-Exportplanung ist bis zur Reife des Nachfolgers zurueckgestellt.
+eCharts-Exportplanung ist bis zur Reife des Nachfolgers zurueckgestellt.
 
 ## Fortschreibung nach Abnahme von 0.96 (03.10.2026)
 

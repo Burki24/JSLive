@@ -86,7 +86,7 @@
             "File": "Datei",
             "Export": "Export Konfigurationsdatei",
             "Status OK!": "Status Ok!",
-            "Export for SymconECharts": "Export für SymconECharts",
+            "Export for eCharts": "Export für eCharts",
             "Include custom template contents as inert text": "Eigene Vorlageninhalte als inerten Text beifügen"
         }
     }

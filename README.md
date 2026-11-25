@@ -15,13 +15,11 @@ Fehlerkorrekturen werden umgesetzt, eine allgemeine Weiterentwicklung der
 Modulsammlung ist nicht geplant. Die öffentlichen Modulverträge und
 vorhandenen Installationen bleiben erhalten.
 
-Die zukünftige Chart-Weiterentwicklung erfolgt im separaten Modul
-**SymconEcharts** auf Basis von Apache ECharts. Dafür erhält JSLive eine
-Exportfunktion für bestehende Charts und SymconEcharts die passende
-Übernahmefunktion. Ziel ist ein möglichst nahtloser Umstieg ohne vollständigen
-manuellen Neuaufbau. Dieser spezielle Migrationsweg ist angekündigt, noch
-nicht implementiert. Nicht automatisch übertragbare Einstellungen müssen
-transparent ausgewiesen werden; die Original-Charts bleiben erhalten.
+Die Chart-Weiterentwicklung erfolgt in der separaten Bibliothek **eCharts** auf
+Basis von Apache ECharts. Du kannst bestehende Charts in JSLive exportieren
+und das Paket im EChartsGateway prüfen. Vor der Neuanlage zeigt Dir die
+Importvorschau, welche Einstellungen übernommen werden und wo Abweichungen
+bestehen. Die Original-Charts bleiben erhalten.
 Die bestehende Chart.js-Engine in JSLive wird nicht ausgetauscht.
 
 JSLive bleibt außerdem für Funktionen bestehen, die nicht durch ECharts
@@ -132,10 +130,10 @@ erkannt werden. Debug daher nur in einer geschützten Testumgebung verwenden.
 
 ## Bestehender Konfigurationsexport
 
-### Zusätzlicher Export für SymconECharts
+### Zusätzlicher Export für eCharts
 
 Chart, DoughnutPie, Gauge, RadarChart und Progressbar bieten einen getrennten
-Bereich **Export für SymconECharts**. Der erzeugte Link lädt ein vollständiges
+Bereich **Export für eCharts**. Der erzeugte Link lädt ein vollständiges
 Migrationspaket mit Quellen, Zeitsteuerung, Darstellungsinformationen und lokalen
 Ressourcen. Eigene Vorlageninhalte lassen sich ausdrücklich als inerten Text
 beifügen; sie werden nicht ausgeführt. Profile werden in profilunabhängige native
@@ -146,8 +144,9 @@ im Paket als blockierende Probleme ausgewiesen. Quellen, Werte, Archive und
 bestehende Darstellungen bleiben unverändert. Das Paket enthält private
 Installationsdaten und ist nicht zur öffentlichen Weitergabe bestimmt.
 Der neue Export benötigt den regulär verteilten `VariablePresentationNormalizationHelper`-
-Helper und das Modulupdate. Der ECharts-Importer folgt gesondert; ein Export
-allein erzeugt noch kein ECharts-Diagramm. Der bisherige Export bleibt verfügbar.
+Helper. Wie Du das Paket prüfst und das neue Diagramm anlegst, erklärt die
+[Migrationsanleitung für eCharts](https://github.com/Burki24/eCharts/blob/dev/docs/JSLIVE_MIGRATION.md).
+Der bisherige Konfigurationsexport bleibt verfügbar.
 
 ### Bisherige Schnittstelle
 
@@ -174,7 +173,7 @@ Funktionssignaturen. Sie ändert folgende bisher fehlerhafte Verhaltensweisen:
   Datenbezüge; die Skriptauswahl ist davon unabhängig.
 
 Gespeicherte Instanzen, Quelldaten und Archivhistorien werden durch den Export
-nicht verändert. Es entsteht dadurch noch kein SymconEcharts-Migrationsformat.
+nicht verändert. Es entsteht dadurch noch kein eCharts-Migrationsformat.
 Nach Commit, grüner CI und Modulupdate ist die installierte Exportfunktion zu
 prüfen; ein zusätzlicher `ApplyChanges()`-Aufruf oder geplanter Dienstneustart
 ist für diese Korrektur nicht erforderlich.

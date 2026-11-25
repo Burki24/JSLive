@@ -1,4 +1,4 @@
-# ADR 0007: Gemeinsamer Export-/Importvertrag fuer SymconECharts
+# ADR 0007: Gemeinsamer Export-/Importvertrag fuer eCharts
 
 - Status: Angenommen; erster Producer lokal implementiert, Live-Abnahme offen
 - Datum: 2026-10-31
@@ -8,14 +8,11 @@
 
 Die zugesagte Migration wird durch den Vertrag `de.burki24.jslive-echarts`,
 Formatversion `1.0`, konkretisiert. Kanonische Definition ist
-[JSLIVE_MIGRATION_CONTRACT.md im Nachfolger](../../../SymconECharts/docs/JSLIVE_MIGRATION_CONTRACT.md).
-Im veroeffentlichten Repository ist sie unter
-[SymconECharts/docs/JSLIVE_MIGRATION_CONTRACT.md](https://github.com/Burki24/SymconECharts/blob/dev/docs/JSLIVE_MIGRATION_CONTRACT.md)
-auffindbar. JSLive pflegt keine abweichende Kopie. Die Gegenentscheidung ist
-SymconECharts ADR 0109. Aenderungen erfolgen abgestimmt in beiden Repositories;
+[JSLIVE_MIGRATION_CONTRACT.md im Nachfolger](https://github.com/Burki24/eCharts/blob/dev/docs/JSLIVE_MIGRATION_CONTRACT.md). JSLive pflegt keine abweichende Kopie. Die Gegenentscheidung ist
+eCharts ADR 0109. Aenderungen erfolgen abgestimmt in beiden Repositories;
 Formatrevisionen sind keine automatischen Library-Versionsaenderungen.
 
-JSLive erhaelt einen eigenen ausdruecklichen Export fuer SymconECharts. Der
+JSLive erhaelt einen eigenen ausdruecklichen Export fuer eCharts. Der
 bestehende Export-/Importvertrag und seine Skriptauswahl bleiben erhalten.
 Der neue Export erfasst die vollstaendige fachliche Konfiguration, Bindungen,
 Achsen, Steuerzustaende, Zeit-/Archivregeln, Gestaltung und benoetigte Ressourcen.
@@ -28,7 +25,7 @@ Die Erfassung bleibt lesend. Bestehende Quellvariablen, Profile, Darstellungen,
 Actions, Archivwerte und Designs werden nicht umgestellt. Historie bleibt bei
 derselben Installation ueber dieselben IDs erreichbar. Eigene Vorlagen werden
 ausdruecklich als inerte Inhalte behandelt, nicht automatisch ausgefuehrt.
-SymconECharts besitzt Vorschau, Feldbericht, konkrete Bestaetigung, Neuanlage
+eCharts besitzt Vorschau, Feldbericht, konkrete Bestaetigung, Neuanlage
 und wiederaufnehmbares Importjournal. Gemeinsame Konverter werden erst mit
 tatsaechlicher Nutzung beider Libraries zentral ueber Symcon_ModuleHelper verteilt.
 

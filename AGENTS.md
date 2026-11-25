@@ -18,17 +18,17 @@ JSLive. Projektspezifische Fakten und offene Entscheidungen stehen in
 - JSLive wird fuer Symcon 9.0/9.1 stabilisiert: notwendige Ressourcenupdates
   und Fehlerkorrekturen bleiben im Umfang, eine allgemeine Weiterentwicklung
   der Modulsammlung oder native Kachelmigration ist nicht geplant.
-- Der separate Nachfolger fuer die Chart-Darstellung heisst `SymconEcharts`
+- Der separate Nachfolger fuer die Chart-Darstellung heisst `eCharts`
   und basiert auf Apache ECharts. JSLive erhaelt eine Exportfunktion fuer
-  bestehende Charts, SymconEcharts die passende Uebernahmefunktion. JSLive
+  bestehende Charts, eCharts die passende Uebernahmefunktion. JSLive
   behaelt seine bestehende Engine. Format, Zuordnung, Abdeckung und Rueckfall
   werden vor der Implementierung spezifiziert und getestet; bestehende
   Exportvertraege duerfen nicht stillschweigend gebrochen werden.
 - Der gemeinsame Export-/Importvertrag `de.burki24.jslive-echarts` 1.0 ist
-  gemaess ADR 0007 und SymconECharts ADR 0109 spezifiziert. Ein erster Producer
+  gemaess ADR 0007 und eCharts ADR 0109 spezifiziert. Ein erster Producer
   fuer die fuenf Chartfamilien ist lokal implementiert; regulaere Helper-Verteilung,
   weitere Sonderregeln, reale Exportabnahme und ECharts-Importer bleiben offen.
-  Kanonische Quelle ist `../SymconECharts/docs/JSLIVE_MIGRATION_CONTRACT.md`.
+  Kanonische Quelle ist [der Migrationsvertrag in eCharts](https://github.com/Burki24/eCharts/blob/dev/docs/JSLIVE_MIGRATION_CONTRACT.md).
   Profile werden vollstaendig in profilunabhaengige native Darstellungen
   uebersetzt; bestehende Quellen, Actions, Archive und Designs bleiben erhalten.
   Der neue Export erfasst auch Steuerzustaende und erhaelt den alten Exportvertrag.

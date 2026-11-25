@@ -195,7 +195,7 @@ configuration. A valid import updates known properties, preserves omitted
 properties, ignores unknown fields, records the uploaded payload and applies the
 target instance exactly once.
 
-### Chart-family export baseline for SymconEcharts
+### Chart-family export baseline for eCharts
 
 The same harness additionally runs 20 cases against the real static forms and
 module metadata of Chart, DoughnutPie, RadarChart, Gauge and Progressbar:
@@ -245,7 +245,7 @@ For migration planning the old format has further limits:
   archive history. Template contents may contain user-supplied sensitive data.
 
 The existing export is thus a useful configuration source, not an already
-complete SymconEcharts migration contract. Do not silently change its envelope
+complete eCharts migration contract. Do not silently change its envelope
 or enable it as the new importer input. Agree source versions, field mapping,
 template handling, warnings and original-instance preservation separately.
 
