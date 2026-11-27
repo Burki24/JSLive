@@ -39,6 +39,15 @@ $writes = [];
 $reads = [];
 $wrongPresentation = false;
 $actionResult = true;
+$nativeWarning = false;
+$nativeFalse = false;
+$warnings = [];
+$warningHandler = static function (int $severity, string $message) use (&$warnings): bool
+{
+    $warnings[] = $message;
+    return true;
+};
+set_error_handler($warningHandler, E_WARNING);
 function IPS_VariableExists(int $id): bool
 {
     return array_key_exists($id, $GLOBALS['values']);
@@ -59,10 +68,15 @@ function IPS_GetVariablePresentation(int $id): array
 {
     return ['PRESENTATION' => '{05CC3CC2-A0B2-5837-A4A7-A07EA0B9DDFB}', 'ENCODING' => $GLOBALS['wrongPresentation'] ? 0 : 4];
 }
-function GetValueColor(int $id): int
+function GetValueColor(int $id): int|false
 {
     $GLOBALS['reads'][] = $id;
-    if (GetValue($id) === '') throw new RuntimeException('Empty color');
+    if (GetValue($id) === '' || ($id === 101 && $GLOBALS['nativeWarning'])) {
+        // Native Symcon failures emit E_WARNING and return false, not exceptions.
+        fopen('php://jslive-invalid-color-stream', 'rb');
+        return false;
+    }
+    if ($id === 101 && $GLOBALS['nativeFalse']) return false;
     return $GLOBALS['rgb'][$id];
 }
 function RequestActionColor(int $id, int $value): bool
@@ -116,11 +130,53 @@ $wrongPresentation = false;
 $values[101] = '';
 $data = json_decode(request('getData'), true, 512, JSON_THROW_ON_ERROR);
 check($data[0]['ColorValue'] === null && $data[0]['Error'] !== '' && $data[1]['ColorValue'] === 0x00FF00, 'One unreadable xy value must not break other handles.');
+check($warnings === [], 'An empty xy value must not emit a native warning into the module response.');
 preg_match('/let config_variabels = (.*);/', $module->Render(), $embedded);
 check(json_decode($embedded[1], true, 512, JSON_THROW_ON_ERROR)[0]['ColorValue'] === null, 'HTML must preserve null for a disabled xy handle.');
 $values[101] = '</script><script>throw new Error("unsafe")</script>';
 check(!str_contains($module->Render(), $values[101]), 'Variable text must not escape the inline script element.');
+$invalidValues = ['', '{', '{}', 'null', '[]', '[0.3,0.3]', '"xy"', '{"x":0.3}',
+    '{"x":null,"y":null}', '{"x":"bad","y":0.3}', '{"x":"0.3","y":0.3}',
+    '{"x":true,"y":0.3}', '{"x":[],"y":0.3}', '{"x":{},"y":0.3}',
+    '{"x":-0.1,"y":0.3}', '{"x":1.1,"y":0.3}', '{"x":0.3,"y":-0.1}',
+    '{"x":0.3,"y":1.1}', '{"x":1e999,"y":0.3}', '{"x":0.3,"y":1e999}'];
+$writesBeforeReads = $writes;
+foreach ($invalidValues as $raw) {
+    $values[101] = $raw;
+    $reads = [];
+    $data = json_decode(request('getData'), true, 512, JSON_THROW_ON_ERROR);
+    check($reads === [102], 'Invalid xy data must be rejected before native conversion: ' . $raw);
+    check($data[0]['Value'] === $raw && $data[0]['ColorValue'] === null && $data[0]['Error'] !== '', 'The invalid handle retains its raw value and reports an error.');
+    check(count($data) === 5 && $data[1]['ColorValue'] === 0x00FF00 && $data[2]['Value'] === 255, 'Other xy and RGB handles remain readable.');
+    preg_match('/let config_variabels = (.*);/', $module->Render(), $embedded);
+    check(json_decode($embedded[1], true, 512, JSON_THROW_ON_ERROR) === $data, 'Initial HTML and polling must isolate the same invalid handle.');
+}
+foreach (['{"x":0,"y":1}', '{"x":1,"y":0}', '{"x":0.3127,"y":0.329}', '{"x":3e-1,"y":6e-1}'] as $raw) {
+    $values[101] = $raw;
+    $reads = [];
+    $data = json_decode(request('getData'), true, 512, JSON_THROW_ON_ERROR);
+    check($reads === [101, 102] && $data[0]['Error'] === '' && is_int($data[0]['ColorValue']), 'Valid numeric xy coordinates recover without reconfiguration.');
+}
+// Cover a changed value/presentation between prevalidation and the native read.
+$nativeWarning = true;
+$data = json_decode(request('getData'), true, 512, JSON_THROW_ON_ERROR);
+check($data[0]['ColorValue'] === null && $data[0]['Error'] !== '' && $data[1]['Error'] === '', 'A native warning is isolated to its handle.');
+check($warnings === [], 'Native warnings must not escape into the module response.');
+$restored = set_error_handler($warningHandler);
+check($restored === $warningHandler, 'The original error handler must be restored after native failure.');
+restore_error_handler();
+$nativeWarning = false;
+$nativeFalse = true;
+$data = json_decode(request('getData'), true, 512, JSON_THROW_ON_ERROR);
+check($data[0]['ColorValue'] === null && $data[0]['Error'] !== '', 'A false native result remains a read failure.');
+$nativeFalse = false;
+$data = json_decode(request('getData'), true, 512, JSON_THROW_ON_ERROR);
+check($data[0]['ColorValue'] === 0xFF0000 && $data[0]['Error'] === '', 'Native warning recovery clears the error.');
+$restored = set_error_handler($warningHandler);
+check($restored === $warningHandler && $writes === $writesBeforeReads, 'Successful reads restore the handler and never write.');
+restore_error_handler();
 foreach ([103 => '65535', 104 => '4500', 105 => '300'] as $id => $value) {
     check(request('setData', ['var' => $id, 'val' => $value]) === 'OK' && end($writes) === ['legacy', $id, $value], 'Legacy writes keep their action contract.');
 }
 echo "ColorPicker xy data flow, target isolation, invalid inputs and legacy modes verified.\n";
+restore_error_handler();

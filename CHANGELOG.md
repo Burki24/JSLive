@@ -9,6 +9,11 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Fixes
 
+- Leere oder fehlerhafte xy-Farbwerte legen nicht mehr die gesamte Colorpicker-
+  Datenabfrage lahm. Der betroffene Griff zeigt einen Fehlerhinweis; andere
+  Lampen bleiben bedienbar. Nach einem gültigen Farbwert erholt sich die Anzeige
+  ohne Neukonfiguration.
+
 - Colorpicker unterstützt Hue-Farbvariablen mit xy-Kodierung über den neuen
   Modus **Farbe (xy)**. Mehrere Lampen bleiben getrennt über ihre Griffe bedienbar;
   eine vorhandene Hue-Gruppenvariable kann mehrere Lampen gemeinsam steuern.

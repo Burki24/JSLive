@@ -1,5 +1,18 @@
 # PROJECT_CONTEXT - JSLive
 
+Korrektur vom 27.11.2026 auf Basis 0.119 (`389e212`): Die MCP-Abnahme bestätigte
+xy-Lesen und getrennte synthetische Actions, zeigte aber HTTP 404 bei leeren,
+fehlerhaften oder unvollständigen xy-Werten. `GetValueColor` meldet diesen Fehler
+als PHP-Warnung und `false`, nicht als Exception. Der lokale Fix validiert das
+JSON-Objekt und endliche numerische x-/y-Koordinaten im Bereich 0 bis 1 vorab.
+Ein ausschließlich um den nativen Aufruf gesetzter Warning-Handler fängt auch
+Änderungen zwischen Vorprüfung und Lesen ab und wird in `finally` zurückgesetzt.
+Die Regression erkennt den Fehler am unveränderten 0.119-Code; die korrigierte
+Lesefunktion wurde zusätzlich isoliert per MCP mit dem echten Symcon-9.1-Kern
+geprüft (inklusive Warnung nach Quellwertwechsel, ohne Deployment). Temporäre
+Testvariablen sind entfernt. Der vollständige Webhook-Nachtest des Fixes folgt
+nach dem nächsten Modulupdate; reale Hue-/IPSView-Abnahme bleibt separat offen.
+
 Nachtrag vom 27.11.2026, Ausgangsstand 0.118 (`8d0766b`): Der Colorpicker
 erhält auf Anwenderwunsch den zusätzlichen Dataset-Modus `xy` für native
 String-Farbvariablen. Symcon übernimmt Lesen und Action-Umrechnung über

@@ -56,6 +56,9 @@ WebSocket-Meldungen lösen für xy einen erneuten, von Symcon umgerechneten Lese
 aus; der Pull-Modus liefert dieselbe Anzeige. Empfangene Werte lösen keine
 Schreibaktionen aus. Ein nicht lesbarer xy-Eintrag zeigt einen Hinweis und einen
 schwarzen, nicht schreibenden Platzhaltergriff; andere Lampen bleiben bedienbar.
+Leere Werte, ungültiges JSON sowie fehlende, nicht numerische oder außerhalb
+von 0 bis 1 liegende x-/y-Koordinaten werden vor der Umrechnung abgefangen.
+Nach einem gültigen Wert wird der Griff beim nächsten Lesen wieder freigegeben.
 Eine deaktivierte/fehlende Variablenaktion wird beim Schaltversuch als Fehler gemeldet.
 
 Bestehende RGB-, Kelvin- und Mired-Einstellungen behalten ihren Modus. Bei eigenen

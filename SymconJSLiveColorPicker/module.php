@@ -184,6 +184,39 @@ class SymconJSLiveColorPicker extends JSLiveModule
         }
     }
 
+    private function ReadXYColor(int $variableID, mixed $rawValue): int
+    {
+        if (!is_string($rawValue)) {
+            throw new RuntimeException('An xy color requires a JSON string.');
+        }
+        $xy = json_decode($rawValue, false, 32, JSON_THROW_ON_ERROR);
+        if (!$xy instanceof stdClass) {
+            throw new RuntimeException('An xy color requires a JSON object.');
+        }
+        foreach (['x', 'y'] as $coordinate) {
+            $value = $xy->$coordinate ?? null;
+            if ((!is_int($value) && !is_float($value)) || !is_finite((float) $value) || $value < 0 || $value > 1) {
+                throw new RuntimeException('Invalid xy coordinate.');
+            }
+        }
+
+        // Symcon emits warnings rather than exceptions on conversion failure.
+        // Guard the native call too: the source can change after validation.
+        set_error_handler(static function (int $severity): never
+        {
+            throw new ErrorException('Native xy color conversion failed.', 0, $severity);
+        }, E_WARNING);
+        try {
+            $color = GetValueColor($variableID);
+        } finally {
+            restore_error_handler();
+        }
+        if (!is_int($color) || $color < 0 || $color > 0xFFFFFF) {
+            throw new RuntimeException('Invalid native color value.');
+        }
+        return $color;
+    }
+
     private function ReplacePlaceholder(string $htmlData)
     {
         // xy values contain JSON strings; preserve quotes/null and keep script text inert.
@@ -219,11 +252,7 @@ class SymconJSLiveColorPicker extends JSLiveModule
                     $s_output['Error'] = '';
                     try {
                         $this->RequireXYColor($item['Variable']);
-                        $color = GetValueColor($item['Variable']);
-                        if (!is_int($color) || $color < 0 || $color > 0xFFFFFF) {
-                            throw new RuntimeException('Invalid native color value.');
-                        }
-                        $s_output['ColorValue'] = $color;
+                        $s_output['ColorValue'] = $this->ReadXYColor($item['Variable'], $s_output['Value']);
                     } catch (Throwable $exception) {
                         $s_output['Error'] = $this->Translate('Cannot read xy color. Check the variable, Color presentation, xy encoding and Symcon update.');
                     }

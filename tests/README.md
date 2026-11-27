@@ -8,6 +8,12 @@ Griffzuordnung, WebSocket-/Pull-Daten, keine Rückschreibschleifen und schnelle
 Eingaben während laufender Requests. Beide gehören zum Standardrunner.
 Die Tests ersetzen keine Abnahme mit realen Hue-Geräten.
 
+Der xy-Test bildet native Konvertierungsfehler als PHP-Warnung mit Rückgabewert
+`false` ab (statt nur als Exception). Er prüft 20 ungültige Rohwerte vor dem
+nativen Aufruf, gültige Grenzwerte, unveränderte Nachbargriffe, konsistente HTML-
+und JSON-Ausgabe, Wiederherstellung gültiger Werte sowie die Rückgabe des
+ursprünglichen Fehlerhandlers nach erfolgreicher und fehlgeschlagener Umrechnung.
+
 Optional führt `node tests/colorpicker-browser.js` die vollständige Standardvorlage
 mit echten iro-Griffen und Mausbedienung in einem vorhandenen Playwright/Chromium
 aus. Alle HTTP-Antworten und WebSocket-Meldungen sind synthetisch; keine Verbindung
