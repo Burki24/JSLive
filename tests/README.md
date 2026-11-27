@@ -1,5 +1,20 @@
 # JSLive tests
 
+`php tests/colorpicker-xy.php` prüft den echten ColorPicker-Datenfluss mit
+Symcon-Funktionsdoubles: getrennte xy-Ziele, native Farb-Action, ungültige Werte,
+Lesefehler und Erhalt der bisherigen Modi. `node tests/colorpicker.js` führt die
+Standardvorlage mit echten iro-Farbmodellen und simuliertem UI/Netzwerk aus:
+Griffzuordnung, WebSocket-/Pull-Daten, keine Rückschreibschleifen und schnelle
+Eingaben während laufender Requests. Beide gehören zum Standardrunner.
+Die Tests ersetzen keine Abnahme mit realen Hue-Geräten.
+
+Optional führt `node tests/colorpicker-browser.js` die vollständige Standardvorlage
+mit echten iro-Griffen und Mausbedienung in einem vorhandenen Playwright/Chromium
+aus. Alle HTTP-Antworten und WebSocket-Meldungen sind synthetisch; keine Verbindung
+zu Symcon, keine Bildschirmaufnahmen. `JSLIVE_BROWSER_EXECUTABLE` erlaubt einen
+bereits installierten Chromium-Browser. Es werden keine Pakete installiert.
+Der Test prüft auch, dass nach Rückmeldungen dieselbe Lampe ausgewählt bleibt.
+
 Run the project checks from the repository root:
 
 ```text

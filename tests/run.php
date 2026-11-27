@@ -34,6 +34,7 @@ $tests = [
     __DIR__ . '/debug-log-access.php',
     __DIR__ . '/gauge-progressbar-debug.php',
     __DIR__ . '/color-datetime-debug.php',
+    __DIR__ . '/colorpicker-xy.php',
     __DIR__ . '/adv-debug.php',
     __DIR__ . '/doughnut-debug.php',
     __DIR__ . '/custom-debug.php',
@@ -44,6 +45,7 @@ $tests = [
 
 $commands = [
     ['Test visualization sizing and time formatting', 'node tests/visualization-sizing.js'],
+    ['Test ColorPicker xy data updates', 'node tests/colorpicker.js'],
     ['Test Progressbar rendering', 'node tests/progressbar-rendering.js'],
     ['Test Loading Bar animation', 'node tests/loading-bar-animation.js'],
     ['Verify Canvas Gauges patch', 'node .github/scripts/build-gauge-patch.js --check'],

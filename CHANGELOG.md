@@ -9,6 +9,15 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ### Fixes
 
+- Colorpicker unterstützt Hue-Farbvariablen mit xy-Kodierung über den neuen
+  Modus **Farbe (xy)**. Mehrere Lampen bleiben getrennt über ihre Griffe bedienbar;
+  eine vorhandene Hue-Gruppenvariable kann mehrere Lampen gemeinsam steuern.
+  Symcon übernimmt die Farbraumumrechnung; Helligkeit bleibt separat.
+  Pull-Aktualisierungen, Rückmeldungen ohne erneutes Schalten, der Erhalt der
+  ausgewählten Lampe und schnelle
+  Eingaben während laufender Schreibanfragen sind korrigiert. Bestehende RGB-,
+  Kelvin- und Mired-Modi bleiben erhalten; eigene Vorlagen müssen angepasst werden.
+
 - Die fünf Chartmodule zeigen den Export unter dem neuen Bibliotheksnamen
   **eCharts** an. Vorhandene Exportpakete im Format 1.0 bleiben verwendbar.
 

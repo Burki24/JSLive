@@ -234,6 +234,10 @@
                                 "value": "color"
                             },
                             {
+                                "caption": "Color (xy)",
+                                "value": "xy"
+                            },
+                            {
                                 "caption": "Kelvin",
                                 "value": "kelvin"
                             },

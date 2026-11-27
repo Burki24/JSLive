@@ -1,5 +1,19 @@
 # PROJECT_CONTEXT - JSLive
 
+Nachtrag vom 27.11.2026, Ausgangsstand 0.118 (`8d0766b`): Der Colorpicker
+erhält auf Anwenderwunsch den zusätzlichen Dataset-Modus `xy` für native
+String-Farbvariablen. Symcon übernimmt Lesen und Action-Umrechnung über
+`GetValueColor`/`RequestActionColor`; keine eigene Farbraummathematik und kein
+iro.js-Update. Rohe Werte bleiben erhalten, die Standardvorlage erhält zusätzlich
+eine RGB-Projektion. Vorhandene RGB-/Kelvin-/Mired-Verträge bleiben bestehen.
+Mehrere Griffe behalten ihre Zielvariable und aktive Auswahl; Pull-Daten,
+Rückschreibschleifen und Eingaben während laufender Requests sind abgesichert.
+Lokale PHP-/JavaScript- und Browsernachweise stehen unter `tests/colorpicker*`.
+Auf der MCP-Testinstallation sind die nativen APIs unter Symcon 9.1 vorhanden
+(nur lesende Fähigkeitsprüfung). Ein echter Hue-Schalttest und eine Abnahme
+des neuen Codes nach Modulupdate in Symcon/IPSView bleiben offen; keine
+Änderungen an Geräten, Live-Konfiguration oder Versionsmetadaten.
+
 Aktuelle Ergaenzung vom 31.10.2026: Der gemeinsame Export-/Importvertrag fuer
 eCharts ist in [ADR 0007](docs/adr/0007-echarts-migration-contract.md)
 festgelegt. Kanonische Fassung ist

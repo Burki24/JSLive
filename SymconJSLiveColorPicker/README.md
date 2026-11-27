@@ -13,7 +13,7 @@ Dieses Modul verwendet die gemeinsame JSLive-Version im Format
 Update-Hinweise: [Versionierung](../README.md#versionierung-und-veröffentlichung)
 und [Testing-Versionshinweise](../CHANGELOG.md#testing-versionshinweise).
 
-- IP-Symcon 9.0 oder 9.1 mit PHP 8.5
+- Symcon 9.0 oder 9.1 mit PHP 8.5
 - eine JSLive-Splitterinstanz (`SymconJSLive`)
 
 Eine `SymconJSLiveColorPicker`-Instanz anlegen, die Variablenliste
@@ -24,16 +24,59 @@ Eine `SymconJSLiveColorPicker`-Instanz anlegen, die Variablenliste
 | Bereich | Eigenschaften |
 | --- | --- |
 | Layout | `Layout`, Richtung sowie Wheel-, Box- und Slider-Komponenten |
-| Farben | HSL/HSV-, RGB-, Kelvin- und Mired-Modi pro Dataset |
+| Farben | RGB (`Farbe`), xy (`Farbe (xy)`), Kelvin und Mired pro Dataset; Wheel/Box/Slider für die Auswahl |
 | Darstellung | Rahmenbreite/-farbe, Griffgröße, Helligkeitsrad und Drehrichtung |
 | Ausgabe | HTMLBox/IPSView, eigene Vorlage über `TemplateScriptID`, Viewport und IFrame-Größe |
 | Betrieb | `DataUpdateRate`, Cache, Debug und optionale Größenüberschreibungen |
 
 ## Daten- und Webhook-Befehle
 
+### Hue-Lampen mit xy-Farbe
+
+Für jede Lampe ihre **String-Farbvariable** in der Variablenliste auswählen und
+den Modus **Farbe (xy)** einstellen. Die Quellvariable muss die native Darstellung
+**Farbe** mit Kodierung **xy** verwenden; ihr Wert ist beispielsweise
+`{"x":0.3127,"y":0.329}`. Die vorhandene Variablenaktion steuert die Lampe.
+Keine zusätzliche RGB-Hilfsvariable und kein Umrechnungsskript sind erforderlich.
+
+Jede eingetragene Variable erhält einen eigenen Griff im Farbkreis. Das Verschieben
+eines Griffs steuert genau diese Lampe. Für eine gemeinsame Farbe mehrerer Lampen
+kann stattdessen die xy-Farbvariable einer vorhandenen Hue-Gruppe verwendet werden.
+JSLive legt selbst keine Lampengruppen an.
+
+Die Umrechnung übernehmen Symcons `GetValueColor()` und `RequestActionColor()`.
+Dabei gilt der Farbraum der jeweiligen Quellvariable. Beide Funktionen müssen im
+installierten Symcon-Build vorhanden sein; sonst Symcon aktualisieren. Die
+Farbkreis-Anzeige bleibt eine RGB-Darstellung, keine CIE-Normfarbtafel. Abweichungen
+bei Farben außerhalb des Lampenfarbraums sind möglich.
+xy speichert nur die Farbart: Die Helligkeit und Ein/Aus werden damit **nicht**
+gesteuert und bleiben separat an der Lampe zu bedienen.
+
+WebSocket-Meldungen lösen für xy einen erneuten, von Symcon umgerechneten Lesezugriff
+aus; der Pull-Modus liefert dieselbe Anzeige. Empfangene Werte lösen keine
+Schreibaktionen aus. Ein nicht lesbarer xy-Eintrag zeigt einen Hinweis und einen
+schwarzen, nicht schreibenden Platzhaltergriff; andere Lampen bleiben bedienbar.
+Eine deaktivierte/fehlende Variablenaktion wird beim Schaltversuch als Fehler gemeldet.
+
+Bestehende RGB-, Kelvin- und Mired-Einstellungen behalten ihren Modus. Bei eigenen
+Vorlagen muss die aktualisierte Standardvorlage übernommen oder die xy-Anbindung
+entsprechend ergänzt werden; Browseransichten nach dem Modulupdate neu laden.
+
+### Schnittstellen
+
 Der Datenvertrag enthält `getContend`, `getData`, `setData` und
 `exportConfiguration`. `LoadOtherConfiguration(int $id)` übernimmt die
 Konfiguration einer anderen ColorPicker-Instanz.
+
+Für `Mode: "xy"` bleiben `Variable`, der rohe JSON-String `Value` und `Mode` im
+Lesepaket erhalten. Zusätzlich enthält es `ColorValue` als RGB-Integer für die
+Anzeige (oder `null` bei einem Lesefehler) und `Error`. `setData` erwartet im
+xy-Modus für `val` einen RGB-Integer von 0 bis 16777215; erst der Server übergibt
+den umgerechneten xy-Wert an die Variablenaktion. Die alten Modi behalten ihr
+bisheriges Datenformat. Eine fehlgeschlagene xy-Aktion liefert kein `OK`.
+
+Offizielle Referenzen: [GetValueColor](https://www.symcon.de/de/service/dokumentation/befehlsreferenz/variablenzugriff/getvaluecolor/)
+und [RequestActionColor](https://www.symcon.de/de/service/dokumentation/befehlsreferenz/variablenzugriff/requestactioncolor/).
 
 ## Frontend und Sicherheit
 

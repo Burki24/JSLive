@@ -14,12 +14,14 @@
 
 <body style="text-align: center;">
 <div id="picker"></div>
+<div id="picker-status" role="status"></div>
 
 <script>
     let config_global = {GLOBAL};
     let config_variabels = {VARIABELS};
     let config_layout = {LAYOUT};
     let configuration = {CONFIG};
+    let writeError = '';
 
     let colorPicker = new iro.ColorPicker("#picker",  LoadPicker());
     JSLiveObserveSize(ResizePicker);
@@ -29,6 +31,9 @@
     let updateId = [];
     let updateVal = [];
     let running = false;
+    let refreshPromise = null;
+    let refreshPending = false;
+    let inputRevision = 0;
 
     function LoadPicker(){
 
@@ -167,12 +172,19 @@
 
     function GenerateColorData(){
         var output = [];
+        const errors = [];
 
         config_variabels.forEach(function (part, index){
             if(part.Variable === 0){
+                output.push('#000000');
                 console.log(Date.now() + " >> GenerateColorData | Überspinge Farbe => keine Variable gesetzt!");
             }else{
                 switch(part.Mode) {
+                    case "xy":
+                        // The server uses Symcon's color space conversion, never a browser guess.
+                        output.push(hexToRgb(Number.isInteger(part.ColorValue) ? part.ColorValue : 0));
+                        if (part.Error) errors.push(part.Variable + ': ' + part.Error);
+                        break;
                     case "color":
                         output.push(hexToRgb(part.Value));
                         break;
@@ -186,21 +198,30 @@
                         output.push(colorTemperatureToRGB(temp));
                         break;
                     default:
+                        output.push('#000000'); // Keep handle indices aligned with the datasets.
                         console.log(Date.now() + " >> GenerateColorData | Überspinge "+part.Variable+" falscher Modus => " + part.Mode);
                         break
                 }
             }
         });
 
+        document.getElementById('picker-status').textContent = [writeError, ...errors].filter(Boolean).join(' ');
         return output;
     }
 
-    colorPicker.on('color:change', function(color) {
+    // iro emits input:change only for user input, unlike color:change/setColors.
+    colorPicker.on('input:change', function(color) {
         console.log(Date.now() + " >> ChangeColor (" + color.index + ") => " + color.rgb);
 
-        id = config_variabels[color.index].Variable;
+        const dataset = config_variabels[color.index];
+        if (!dataset || !dataset.Variable || (dataset.Mode === 'xy' && !Number.isInteger(dataset.ColorValue))) return;
+        writeError = '';
+        inputRevision++;
+        const id = dataset.Variable;
+        let val;
 
-        switch(config_variabels[color.index].Mode) {
+        switch(dataset.Mode) {
+            case "xy":
             case "color":
                 val = hexToInt(color.rgb);
                 break;
@@ -212,16 +233,16 @@
                 val = KelvinToMired(val);
                 break;
             default:
-                console.log(Date.now() + " >> onChange | Überspinge "+part.Variable+" falscher Modus => " + part.Mode);
-                break
+                return;
         }
 
-        config_variabels[color.index].Value = val;
+        if (dataset.Mode === 'xy') dataset.ColorValue = val;
+        else dataset.Value = val;
 
 
         if(updateId.includes(id)){
             //updaten
-            index = updateId.indexOf(id);
+            const index = updateId.indexOf(id);
             updateVal[index] = val;
         }else{
             //anlegen
@@ -236,32 +257,28 @@
 
     async function UpdateWorker(){
         running = true;
-        while (running){
-            await sleep(1);
-            try {
-                //console.log("UpdateWorker => "+ updateVal.length + " | " + updateId.length);
-                if((last_update + configuration.DataUpdateRate) <= Date.now() && updateVal.length > 0 && updateId.length > 0){
-                    last_update = Date.now();
-                    //console.log("UpdateWorker => "+ JSON.stringify(updateVal) + " | " + JSON.stringify(updateId));
-
-                    for (i = 0; i < updateVal.length; i++) {
-                        last_changes.push({var: updateId[i], val: updateVal[i], date: new Date()})
-
-                        console.log(Date.now() + " >> UpdateWorker | Update " + JSON.stringify(updateVal) + " | " + JSON.stringify(updateId));
-                        console.log(Date.now() + " >> UpdateWorker | URL: /hook/JSLive/setData?Instance={INSTANCE}&pw={PASSWORD}&var=" +updateId[i]+ "&val="+updateVal[i]);
-                        var response = await fetch("/hook/JSLive/setData?Instance={INSTANCE}&pw={PASSWORD}&var=" +updateId[i]+ "&val="+updateVal[i]);
-                        console.log(Date.now() + " >> UpdateWorker Response => " + response.statusText + " (" + response.status + ")");
+        try {
+            while (updateId.length) {
+                await sleep(Math.max(1, last_update + configuration.DataUpdateRate - Date.now()));
+                last_update = Date.now();
+                // Detach the batch before awaiting I/O; new edits stay in the next batch.
+                const ids = updateId.splice(0), values = updateVal.splice(0);
+                for (let i = 0; i < ids.length; i++) {
+                    try {
+                        const response = await fetch('/hook/JSLive/setData?Instance={INSTANCE}&pw={PASSWORD}&var='
+                            + encodeURIComponent(ids[i]) + '&val=' + encodeURIComponent(values[i]));
+                        if (!response.ok || (await response.text()).trim() !== 'OK') throw new Error('Color update failed');
+                        last_changes.push({var: ids[i], val: values[i], date: new Date()});
+                    } catch (error) {
+                        writeError = (configuration.ColorUpdateError || 'Color update failed') + ' (' + ids[i] + ')';
+                        document.getElementById('picker-status').textContent = writeError;
                     }
-
-                    updateVal = [];
-                    updateId = [];
-
-                    console.log(Date.now() + " >> UpdateWorker => CLOSE");
-                    running = false;
                 }
-            }catch (e) {
-                console.log(Date.now() + " >> UpdateWorker => ", e);
             }
+        } finally {
+            running = false;
+            // Read back the actual xy coordinates after gamut clipping/device feedback.
+            if (refreshPending || config_variabels.some(part => part.Mode === 'xy')) RefreshColorData().catch(console.error);
         }
     }
 
@@ -283,7 +300,11 @@
                     window.location.reload(false);
                 },1000);
             } else if(data.Message == 10603) {
-                UpdateColorPicker(data.SenderID, data.Data[0]);
+                if (config_variabels.some(part => part.Variable === data.SenderID && part.Mode === 'xy')) {
+                    RefreshColorData().catch(console.error);
+                } else {
+                    UpdateColorPicker(data.SenderID, data.Data[0]);
+                }
             }
         };
 
@@ -300,7 +321,7 @@
         };
     }
 
-    function UpdateColorPicker(id_val, val){
+    function UpdateColorPicker(id_val, val, colorValue, error){
         isUpdated = false;
         now = Date.now();
         if(running ) return;
@@ -329,7 +350,7 @@
             }
         });
 
-        if(itemFound) {
+        if(itemFound && colorValue === undefined) {
             return;
         }
 
@@ -340,29 +361,49 @@
             //änderung farbe
             index = results[0];
 
-            if(config_variabels[index].Value !== val){
+            if(config_variabels[index].Value !== val || (config_variabels[index].Mode === 'xy'
+                && (config_variabels[index].ColorValue !== colorValue || config_variabels[index].Error !== error))){
                 console.log(Date.now() + " >> UpdateColorPicker (Color)" + index + " => " + val + " (" + config_variabels[index].Value + ")");
                 config_variabels[index].Value = val;
+                if (config_variabels[index].Mode === 'xy') {
+                    config_variabels[index].ColorValue = colorValue;
+                    config_variabels[index].Error = error || '';
+                }
                 isUpdated = true;
             }
         }
 
         if(isUpdated){
+            const activeIndex = colorPicker.color ? colorPicker.color.index : 0;
             colorPicker.setColors(GenerateColorData());
+            if (colorPicker.colors[activeIndex]) colorPicker.setActiveColor(activeIndex);
         }
+    }
+
+    async function RefreshColorData() {
+        refreshPending = true;
+        if (running || refreshPromise) return refreshPromise;
+        refreshPromise = (async function () {
+            do {
+                refreshPending = false;
+                const revision = inputRevision;
+                const response = await fetch('/hook/JSLive/getData?Instance={INSTANCE}&pw={PASSWORD}');
+                if (!response.ok) throw new Error('Color read failed');
+                const data = await response.json();
+                if (running) { refreshPending = true; return; }
+                if (revision !== inputRevision) { refreshPending = true; continue; }
+                data.forEach(part => UpdateColorPicker(part.Variable, part.Value, part.ColorValue, part.Error));
+            } while (refreshPending);
+        })();
+        try { await refreshPromise; }
+        finally { refreshPromise = null; }
     }
 
     async function PullNewData(refreshRate){
         refreshRate = refreshRate * 1000;
         while (true){
             try {
-                $.getJSON("/hook/JSLive/getData?Instance={INSTANCE}&pw={PASSWORD}", function (data) {
-                    data.forEach(function (part, index) {
-                        UpdateColorPicker(part.Color.Variable, part.Color.Value);
-                        UpdateColorPicker(part.Temperature.Variable, part.Temperature.Value);
-                        UpdateColorPicker(part.Mode.Variable, part.Mode.Value);
-                    });
-                });
+                await RefreshColorData();
 
                 //Control Variables
             }catch (e) {

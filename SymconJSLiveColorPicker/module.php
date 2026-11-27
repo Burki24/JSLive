@@ -136,9 +136,13 @@ class SymconJSLiveColorPicker extends JSLiveModule
 
         $var_data = json_decode($this->ReadPropertyString('Datasets'), true);
         $var_ids = [];
+        $xyVariable = false;
         foreach ($var_data as $varItem) {
             if ($varItem['Variable'] > 0)
                 $var_ids[] = $varItem['Variable'];
+            if ($varItem['Variable'] == $querydata['var'] && ($varItem['Mode'] ?? '') === 'xy') {
+                $xyVariable = true;
+            }
         }
 
         if (!in_array($querydata['var'], $var_ids)) {
@@ -147,21 +151,52 @@ class SymconJSLiveColorPicker extends JSLiveModule
         }
 
         $this->SendSafeDebug('SetData', 'Update Variable');
+        if ($xyVariable) {
+            $value = $querydata['val'];
+            if ((!is_int($value) && (!is_string($value) || preg_match('/^[0-9]{1,8}$/D', $value) !== 1))
+                || (int) $value < 0 || (int) $value > 0xFFFFFF) {
+                return 'INVALID RGB COLOR!';
+            }
+            try {
+                $this->RequireXYColor((int) $querydata['var']);
+                return RequestActionColor((int) $querydata['var'], (int) $value) ? 'OK' : 'XY COLOR UPDATE FAILED!';
+            } catch (Throwable $exception) {
+                $this->SendSafeDebug('SetData', 'XY COLOR UPDATE FAILED!');
+                return 'XY COLOR UPDATE FAILED!';
+            }
+        }
         RequestAction($querydata['var'], $querydata['val']);
         return 'OK';
     }
 
+    private function RequireXYColor(int $variableID): void
+    {
+        if (!function_exists('GetValueColor') || !function_exists('RequestActionColor')) {
+            throw new RuntimeException('Native color functions are unavailable. Update Symcon.');
+        }
+        if (!IPS_VariableExists($variableID) || IPS_GetVariable($variableID)['VariableType'] !== 3) {
+            throw new RuntimeException('An xy color requires a string variable.');
+        }
+        $presentation = IPS_GetVariablePresentation($variableID);
+        if (($presentation['PRESENTATION'] ?? '') !== '{05CC3CC2-A0B2-5837-A4A7-A07EA0B9DDFB}'
+            || ($presentation['ENCODING'] ?? null) !== 4) {
+            throw new RuntimeException('An xy color requires the Color presentation with xy encoding.');
+        }
+    }
+
     private function ReplacePlaceholder(string $htmlData)
     {
+        // xy values contain JSON strings; preserve quotes/null and keep script text inert.
+        $jsonFlags = JSON_THROW_ON_ERROR | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT;
 
         //configuration Data
-        $htmlData = str_replace('{CONFIG}', $this->json_encode_advanced($this->GetConfigurationData()), $htmlData);
+        $htmlData = str_replace('{CONFIG}', json_encode($this->GetConfigurationData(), $jsonFlags), $htmlData);
 
         //variables
-        $htmlData = str_replace('{VARIABELS}', $this->json_encode_advanced($this->GenerateVariabels()), $htmlData);
+        $htmlData = str_replace('{VARIABELS}', json_encode($this->GenerateVariabels(), $jsonFlags), $htmlData);
 
         //Layout
-        $htmlData = str_replace('{LAYOUT}', $this->json_encode_advanced($this->GenerateLayout()), $htmlData);
+        $htmlData = str_replace('{LAYOUT}', json_encode($this->GenerateLayout(), $jsonFlags), $htmlData);
 
         return $htmlData;
     }
@@ -178,6 +213,21 @@ class SymconJSLiveColorPicker extends JSLiveModule
                 $s_output['Variable'] = $item['Variable'];
                 $s_output['Value'] = GetValue($item['Variable']);
                 $s_output['Mode'] = $item['Mode'];
+                if ($item['Mode'] === 'xy') {
+                    // Preserve the raw value contract; only the picker uses the RGB projection.
+                    $s_output['ColorValue'] = null;
+                    $s_output['Error'] = '';
+                    try {
+                        $this->RequireXYColor($item['Variable']);
+                        $color = GetValueColor($item['Variable']);
+                        if (!is_int($color) || $color < 0 || $color > 0xFFFFFF) {
+                            throw new RuntimeException('Invalid native color value.');
+                        }
+                        $s_output['ColorValue'] = $color;
+                    } catch (Throwable $exception) {
+                        $s_output['Error'] = $this->Translate('Cannot read xy color. Check the variable, Color presentation, xy encoding and Symcon update.');
+                    }
+                }
 
                 $output[] = $s_output;
             }
@@ -218,6 +268,7 @@ class SymconJSLiveColorPicker extends JSLiveModule
 
         unset($output['Layout']);
         unset($output['Datasets']);
+        $output['ColorUpdateError'] = $this->Translate('Color update failed');
         return $output;
     }
 }
