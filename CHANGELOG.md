@@ -7,6 +7,21 @@ Patchstelle, beispielsweise `v0.10.0`.
 
 ## Unreleased
 
+## 0.121 - 2026-11-27 (Beta-Kandidat)
+
+Reiner Dokumentationsstand auf Basis der veroeffentlichten Beta 0.120
+(`fcdf7af`). Die vorhandenen Changelog-Eintraege sind den zugehoerigen
+Ausgaben zugeordnet; das Modulverhalten bleibt unveraendert.
+Bei genau einem weiteren Dokumentationscommit erzeugt die Metadatenautomatik
+0.121. Vor einer weiteren Store-Einreichung muessen diese Version und die
+Pflichtchecks am resultierenden `dev`-Commit bestaetigt werden.
+`library.json` wird nicht manuell angepasst.
+
+## 0.120 - 2026-11-27 (Beta)
+
+Enthaelt die Colorpicker-Aenderungen aus den Entwicklungsstaenden 0.119
+und 0.120 gegenueber Beta 0.118. Veroeffentlichter Commit: `fcdf7af`.
+
 ### Fixes
 
 - Leere oder fehlerhafte xy-Farbwerte legen nicht mehr die gesamte Colorpicker-
@@ -23,8 +38,34 @@ Patchstelle, beispielsweise `v0.10.0`.
   Eingaben während laufender Schreibanfragen sind korrigiert. Bestehende RGB-,
   Kelvin- und Mired-Modi bleiben erhalten; eigene Vorlagen müssen angepasst werden.
 
+### Update-Hinweise und Pruefstand
+
+- Fuer **Farbe (xy)** eine String-Farbvariable mit nativer Farbdarstellung und
+  xy-Kodierung auswaehlen. Der Symcon-Build muss `GetValueColor` und
+  `RequestActionColor` bereitstellen. Ansichten nach dem Update vollstaendig
+  neu laden; eigene Vorlagen benoetigen die entsprechenden Anpassungen.
+- Auf Symcon 9.1/PHP 8.5.8 wurden 193 Webhook-Pruefpunkte mit synthetischen
+  Variablen bestanden, einschliesslich 20 ungueltiger xy-Werte mit und ohne
+  Cache. Reale Hue-Geraete und IPSView wurden fuer dieses Update noch nicht
+  praktisch abgenommen.
+
+## 0.118 - 2026-11-25 (Beta)
+
+### Fixes
+
 - Die fünf Chartmodule zeigen den Export unter dem neuen Bibliotheksnamen
   **eCharts** an. Vorhandene Exportpakete im Format 1.0 bleiben verwendbar.
+
+### Development
+
+- Gemeinsame Helper auf 3.30.10 aktualisiert (Entwicklungsstaende 0.116/0.117).
+
+## 0.115 - 2026-11-04 (Beta)
+
+Enthaelt die Export-Erweiterung aus 0.109, die Progressbar-Korrektur aus
+0.113 und die bis 0.115 ausgelieferten gemeinsamen Helper.
+
+### Fixes
 
 - Die Progressbar-Standardvorlage behandelt das bildbasierte Text-Preset auch
   bei gespeicherter Stroke-Auswahl im unterstützten Fill-Modus. Der bisherige
@@ -38,8 +79,17 @@ Patchstelle, beispielsweise `v0.10.0`.
   Darstellungsdefinitionen und lokalen Ressourcen. Eigene Vorlagen werden nur
   ausdrücklich als inerte Inhalte beigefügt. Nicht übersetzbare Profile und
   fehlende Abhängigkeiten werden gemeldet; bestehende Quellen, Archive, Designs
-  und der bisherige Export bleiben erhalten. Der neue gemeinsame Helper muss
-  vor Nutzung regulär verteilt sein. Der ECharts-Importer folgt gesondert.
+  und der bisherige Export bleiben erhalten. Der gemeinsame Export-Helper ist
+  in der Library enthalten; der Importer wird im separaten eCharts-Projekt
+  entwickelt.
+
+### Development
+
+- Gemeinsame Helper einschliesslich Exportkorrekturen bis 3.30.5 aktualisiert.
+
+## 0.105 - 2026-10-03 (Testing)
+
+Veroeffentlichter Testing-Stand aus `dev`, Commit `456ac79`.
 
 ### Development
 
@@ -52,23 +102,12 @@ Patchstelle, beispielsweise `v0.10.0`.
   in Library- und Modul-READMEs erklaert. Tags und GitHub-Releases sind keine
   Voraussetzung dieser Store-Vorabveroeffentlichung.
 
-## 0.105 - 2026-10-03 (Testing-Kandidat)
-
 ### Testing-Versionshinweise
 
-Geplanter Testing-Stand, noch nicht veroeffentlicht. Ausgangsstand ist 0.104
-(`14aac25`); bei einem einzelnen Dokumentationscommit erwartet der naechste
-Metadatenlauf 0.105. Keine manuelle Aenderung von `library.json`.
-Die erste Ausgabe wird direkt aus `dev` im Kanal Testing eingereicht, ohne
-vorherigen Merge nach `main` und ohne erforderlichen Tag oder GitHub-Release.
-Vor Veroeffentlichung muessen
-`library.json`, diese Versionsueberschrift und die Pflichtchecks auf dem
-resultierenden Commit uebereinstimmen. Bei weiteren Commits ist die
-Zuordnung erneut zu pruefen; keine manuelle Aenderung der Metadaten.
+Die erste Ausgabe wurde direkt aus `dev` im Kanal Testing veroeffentlicht,
+ohne vorherigen Merge nach `main` und ohne Tag oder GitHub-Release.
 Die Abnahmegrenzen bleiben im [Beta-Nachtrag](docs/SYCON_RUNTIME_MATRIX.md#beta-vorbereitung-und-ipsview-anwendernachtrag-vom-03102026)
 dokumentiert. Es gilt der [Release-Prozess](docs/RELEASE_PROCESS.md).
-Der folgende Text ist fuer die Testing-Versionsinformation vorgesehen;
-die Vorbereitungsangaben dieses Absatzes gehoeren nicht in den Store-Text.
 
 #### Neue Versionierung
 
